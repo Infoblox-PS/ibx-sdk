@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import getpass
 import sys
+
 import click
-from ibx_tools.util.ibx_logger import init_logger, increase_log_level
+
+
+from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(
@@ -32,8 +35,8 @@ wapi = WAPI()
     help="Infoblox WAPI version"
 )
 @click.option(
-    '-s', '--service', type=click.Choice(['DNS', 'DHCP', 'DHCPV4', 'DHCPV6', 'ALL']),
-    default='ALL', show_default=True, help='select which service to restart'
+    '-f', '--file', default='database.tgz', show_default=True,
+    help='Infoblox backup file name'
 )
 @click.option(
     '--debug', is_flag=True, help='enable verbose debug output'
@@ -48,14 +51,8 @@ def main(**args):
         f'Enter password for [{wapi.username}]: '
     )
     wapi.connect()
-    wapi.service_restart(
-        # groups: [group1, ...],
-        # or
-        # members: [member1, member2, ...]
-        mode='SEQUENTIAL',
-        restart_option='RESTART_IF_NEEDED',
-        member_services=[args.get('service')]
-    )
+
+    wapi.grid_backup(filename=args.get('file'))
 
     sys.exit()
 

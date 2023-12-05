@@ -2,7 +2,7 @@
 import getpass
 import sys
 import click
-from ibx_tools.util.ibx_logger import init_logger, increase_log_level
+from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(

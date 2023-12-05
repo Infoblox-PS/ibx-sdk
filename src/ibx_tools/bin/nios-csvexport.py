@@ -5,7 +5,7 @@ import sys
 import click
 
 from ibx_tools.nios.wapi import WAPI
-from ibx_tools.util.ibx_logger import (
+from ibx_tools.logger.ibx_logger import (
     init_logger, increase_log_level
 )
 
@@ -37,12 +37,11 @@ wapi = WAPI()
 )
 @click.option(
     '-f', '--file', required=True,
-    help='Infoblox WAPI CSV import file'
+    help='Infoblox WAPI CSV export file name'
 )
 @click.option(
-    '-o', '--operation', required=True,
-    type=click.Choice(['INSERT', 'OVERRIDE', 'MERGE', 'DELETE', 'CUSTOM']),
-    help='CSV import mode'
+    '-o', '--object', default='network',
+    help='WAPI export object type'
 )
 @click.option(
     '--debug', is_flag=True, help='enable verbose debug output'
@@ -58,11 +57,9 @@ def main(**args):
     )
     wapi.connect()
 
-    wapi.csv_import(
-        task_operation=args.get('operation'),
-        csv_import_file=args.get('file'),
-        exit_on_error=False,
-        show_progressbar=True
+    wapi.csv_export(
+        wapi_object=args.get('object'),
+        filename=args.get('file')
     )
 
     sys.exit()

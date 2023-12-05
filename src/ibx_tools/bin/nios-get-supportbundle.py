@@ -4,15 +4,14 @@ import sys
 
 import click
 
-
-from ibx_tools.util.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.logger.ibx_logger import init_logger, set_log_level
+from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
-    logfile_name='wapi.log',
+    logfile_name='support-bundle-example.log',
     logfile_mode='w',
+    level='info',
     console_log=True,
-    level='info'
 )
 wapi = WAPI()
 
@@ -28,32 +27,34 @@ wapi = WAPI()
     help='Infoblox admin username'
 )
 @click.option(
-    '-g', '--gm', required=True, help='Infoblox Grid Manager'
+    '-g', '--gm', default='192.168.1.2', show_default=True, help='Infoblox Grid Manager'
 )
 @click.option(
     '-w', '--wapi-ver', default='2.11', show_default=True,
     help="Infoblox WAPI version"
 )
 @click.option(
-    '-f', '--file', default='database.tgz', show_default=True,
-    help='Infoblox backup file name'
-)
-@click.option(
     '--debug', is_flag=True, help='enable verbose debug output'
 )
 def main(**args):
-    if args.get('debug'):
-        increase_log_level()
+    if args.get('debug', False):
+        set_log_level('DEBUG', 'both')
+
     wapi.grid_mgr = args.get('gm')
     wapi.username = args.get('username')
     wapi.wapi_ver = args.get('wapi_ver')
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    wapi.connect()
+    try:
+        wapi.connect()
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
-    wapi.grid_backup(filename=args.get('file'))
-
+    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+    wapi.get_support_bundle(member='infoblox.localdomain')
+    log.info('finished!')
     sys.exit()
 
 
