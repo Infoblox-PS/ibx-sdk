@@ -8,11 +8,13 @@ from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(
-    logfile_name='nios-grid-restore.log',
-    logfile_mode='w',
+    logfile_name='wapi.log',
+    logfile_mode='a',
     console_log=True,
-    level='info'
-)
+    level='info',
+    max_size=10000,
+    num_logs=1)
+
 wapi = WAPI()
 
 

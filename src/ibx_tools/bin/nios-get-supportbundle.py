@@ -8,11 +8,13 @@ from ibx_tools.logger.ibx_logger import init_logger, set_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
-    logfile_name='nios-get-supportbundle.log',
-    logfile_mode='w',
-    level='info',
+    logfile_name='wapi.log',
+    logfile_mode='a',
     console_log=True,
-)
+    level='info',
+    max_size=10000,
+    num_logs=1)
+
 wapi = WAPI()
 
 
