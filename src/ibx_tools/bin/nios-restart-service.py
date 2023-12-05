@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import getpass
 import sys
+
 import click
+
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
 
@@ -39,6 +41,28 @@ wapi = WAPI()
     '--debug', is_flag=True, help='enable verbose debug output'
 )
 def main(**args):
+    """
+    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
+    and initiates a service restart operation.
+
+    Args:
+        **args: Arbitrary keyword arguments.
+            debug (bool): If True, it increases the logging level.
+            gm (str): Manager for the wapi grid.
+            username (str): Username for the wapi connection.
+            wapi_ver (str): Version of wapi.
+            service (str): The service to be restarted.
+
+    Notes:
+        In the service restart method, either 'groups' or 'members' can be specified, but not both.
+
+    Returns:
+        None
+
+    Raises:
+        Could raise various exceptions depending on the execution of internal functions.
+
+        """
     if args.get('debug'):
         increase_log_level()
     wapi.grid_mgr = args.get('gm')

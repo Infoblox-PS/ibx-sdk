@@ -4,10 +4,10 @@ import sys
 
 import click
 
-from ibx_tools.nios.wapi import WAPI
 from ibx_tools.logger.ibx_logger import (
     init_logger, increase_log_level
 )
+from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -47,6 +47,25 @@ wapi = WAPI()
     '--debug', is_flag=True, help='enable verbose debug output'
 )
 def main(**args):
+    """
+    The main driver function which sets up the wapi configuration and exports the desired wapi object to a CSV file.
+
+    Args:
+        **args: Arbitrary keyword arguments.
+            debug (bool): If True, it increases the logging level.
+            gm (str): Manager for the wapi grid.
+            username (str): Username for the wapi connection.
+            wapi_ver (str): Version of wapi.
+            object (str): Object to be exported to CSV.
+            file (str): Filename/path where the CSV will be exported.
+
+    Returns:
+        None
+
+    Raises:
+        Could raise various exceptions depending on the execution of internal functions.
+
+    """
     if args.get('debug'):
         increase_log_level()
     wapi.grid_mgr = args.get('gm')

@@ -7,7 +7,6 @@ import click
 from ibx_tools.logger.ibx_logger import init_logger, set_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
-
 log = init_logger(
     logfile_name='nios-log.log',
     logfile_mode='w',
@@ -38,6 +37,25 @@ wapi = WAPI()
     '--debug', is_flag=True, help='enable verbose debug output'
 )
 def main(**args):
+    """
+    The main driver function which sets up the wapi configuration, connects to Infoblox grid manager
+    and fetches the log files.
+
+    Args:
+        **args: Arbitrary keyword arguments.
+            debug (bool): If True, it sets the log level to DEBUG. Default is False.
+            gm (str): Manager for the wapi grid.
+            username (str): Username for the wapi connection.
+            wapi_ver (str): Version of wapi.
+
+    Returns:
+        None
+
+    Raises:
+        WapiRequestException: If unable to connect with the provided wapi parameters.
+        SystemExit: The function exits the system upon completion or upon encounter of an error.
+
+    """
     if args.get('debug', False):
         set_log_level('DEBUG', 'both')
 
