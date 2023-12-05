@@ -23,11 +23,7 @@ Basic Tools and Functions used by other Integrations.
 - Perhaps MIT
 
 ## Code Review
-- Find and remove any IP
-- Googledoc Strings accross all methods
-- Exception handling
-- Clean up maintainer emails
-- unit/integration testing 
+Please see issue #1
 
 ## Git Restrictions
 - Do we enable/disable abilty to open issues/rfes/etc
