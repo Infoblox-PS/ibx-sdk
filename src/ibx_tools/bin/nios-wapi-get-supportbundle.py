@@ -4,8 +4,8 @@ import sys
 
 import click
 
-from infoblox_pslib.logger.ibx_logger import init_logger, set_log_level
-from infoblox_pslib.nios.wapi import WAPI, WapiRequestException
+from ibx_tools.util.ibx_logger import init_logger, set_log_level
+from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
     logfile_name='support-bundle-example.log',

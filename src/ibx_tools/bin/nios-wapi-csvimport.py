@@ -4,8 +4,8 @@ import sys
 
 import click
 
-from infoblox_pslib.nios.wapi import WAPI
-from infoblox_pslib.util.ibx_logger import (
+from ibx_tools.nios.wapi import WAPI
+from ibx_tools.util.ibx_logger import (
     init_logger, increase_log_level
 )
 
