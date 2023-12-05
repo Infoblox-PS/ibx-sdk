@@ -1,0 +1,37 @@
+[project]
+name = "ibx-tools"
+version = "0.1.0"
+description = "Infoblox basic API Toolkit"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE.md" }
+authors = [
+    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Michael Smith", email = "michaels@infoblox.com" },
+]
+maintainers = [
+    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Michael Smith", email = "michaels@infoblox.com" },
+]
+dependencies = [
+    "click",
+    "click-option-group",
+    "coloredlogs",
+    "dnspython",
+    "netaddr",
+    "requests",
+    "urllib3",
+]
+[project.optional-dependencies]
+dev = ["pylint", "codestyle", "sphinx"]
+test = ["coverage", "pytest"]
+
+[project.urls]
+"homepage" = "https://github.com/Infoblox-PS/ibx-tools"
+
+[tools.setuptools]
+packages = ["ibx_tools"]
+
+[build-system]
+requires = ["setuptools >= 61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
