@@ -3,9 +3,14 @@ import getpass
 import sys
 
 import click
+from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
+
+# from pkg_resources import parse_versio
+
+__version__ = '2.0.0'
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -17,69 +22,70 @@ log = init_logger(
 
 wapi = WAPI()
 
+help_text = """
+Restore NIOS Grid.
+"""
 
-@click.command(
-    context_settings=dict(
-        max_content_width=90,
-        help_option_names=['-h', '--help']
-    )
-)
-@click.option(
-    '-u', '--username', default='admin', show_default=True,
-    help='Infoblox admin username'
-)
-@click.option(
-    '-g', '--grid-mgr', required=True, help='Infoblox Grid Manager'
-)
-@click.option(
-    '-w', '--wapi-ver', default='2.11', show_default=True,
-    help="Infoblox WAPI version"
-)
-@click.option(
-    '-f', '--file', default='database.tgz', show_default=True,
-    help='Infoblox restore file name'
-)
-@click.option(
-    '--debug', is_flag=True, help='enable verbose debug output'
-)
-def main(**args):
+
+@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@optgroup.group("Required Parameters")
+@optgroup.option('-s', '--server', metavar='', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
+@optgroup.option('-f', '--filename', metavar='', required=True, help="Infoblox NIOS Grid restore filename")
+@optgroup.group("\nOptional Parameters")
+@optgroup.option('-u', '--username', metavar='', show_default=True, help="Infoblox NIOS username")
+@optgroup.option('-p', '--password', metavar='', prompt=True, hide_input=True, help="Infoblox NIOS password")
+@optgroup.option('-m', '--mode', type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
+                 metavar='', default="FORCED", show_default=True, help="Grid Restore Mode [NORMAL|FORCED|CLONE]")
+@optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.group("\nLogging Parameters")
+@optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
+@click.version_option(__version__)
+def main(server: str, username: str, filename: str, mode: str, keep: bool,
+         debug: bool, wapi_ver: str) -> None:
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager
-    and initiates a grid restore operation.
+     Restore NIOS Grid.
 
-    Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it increases the logging level.
-            gm (str): Manager for the wapi grid.
-            username (str): Username for the wapi connection.
-            wapi_ver (str): Version of wapi.
-            file (str): Filename/path of the backup file to be restored.
+     Args:
+         server (str): Infoblox NIOS Grid Manager IP/Hostname (Required).
+         username (str): Infoblox NIOS username (Optional, default='admin').
+         filename (str): Infoblox NIOS Grid restore filename (Required).
+         mode (str): Grid Restore Mode [NORMAL|FORCED|CLONE] (Optional, default="FORCED").
+         keep (bool): Keep existing IP otherwise use IP from backup (Optional).
+         debug (bool): Enable verbose logging (Optional).
+         wapi_ver (str): Version of wapi.
 
-    Returns:
-        None
+     Returns:
+         None
 
-    Raises:
-        Could raise various exceptions depending on the execution of internal functions.
-    """
+     Raises:
+         Any exceptions raised during the process.
+     """
 
-    if args.get('debug'):
+    sys.tracebacklimit = 0
+
+    if debug:
         increase_log_level()
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+        sys.tracebacklimit = 1
+
+    # MISC
+    wapi.wapi_ver = wapi_ver
+    wapi.username = username
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    wapi.connect()
+    wapi.grid_mgr = server
+    wapi.ssl_verify = False
 
+    wapi.connect()
+    # noinspection PyTypeChecker
     wapi.grid_restore(
-        filename=args.get('file'),
-        mode='FORCED',
-        keep_grid_ip=True
+        filename=filename,
+        mode=mode,
+        keep_grid_ip=keep,
     )
 
-    sys.exit()
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # execute only if run as a script
     main()
