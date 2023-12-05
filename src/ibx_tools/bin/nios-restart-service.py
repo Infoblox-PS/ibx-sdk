@@ -54,7 +54,7 @@ def main(**args):
         # members: [member1, member2, ...]
         mode='SEQUENTIAL',
         restart_option='RESTART_IF_NEEDED',
-        member_services=[args.get('service')]
+        services=[args.get('service')]
     )
 
     sys.exit()
