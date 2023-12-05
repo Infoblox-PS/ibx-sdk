@@ -8,7 +8,7 @@ from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(
-    logfile_name='wapi.log',
+    logfile_name='nios-restart-status.log',
     logfile_mode='w',
     console_log=True,
     level='info'
@@ -27,7 +27,7 @@ wapi = WAPI()
     help='Infoblox admin username'
 )
 @click.option(
-    '-g', '--gm', required=True, help='Infoblox Grid Manager'
+    '-g', '--grid-mgr', required=True, help='Infoblox Grid Manager'
 )
 @click.option(
     '-w', '--wapi-ver', default='2.11', show_default=True,
@@ -57,7 +57,7 @@ def main(**args):
     """
     if args.get('debug'):
         increase_log_level()
-    wapi.grid_mgr = args.get('gm')
+    wapi.grid_mgr = args.get('grid_mgr')
     wapi.username = args.get('username')
     wapi.wapi_ver = args.get('wapi_ver')
     wapi.password = getpass.getpass(

@@ -8,7 +8,7 @@ from ibx_tools.logger.ibx_logger import init_logger, set_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
-    logfile_name='nios-log.log',
+    logfile_name='nios-get-logs.log',
     logfile_mode='w',
     level='info',
     console_log=True,
@@ -27,7 +27,7 @@ wapi = WAPI()
     help='Infoblox admin username'
 )
 @click.option(
-    '-g', '--gm', default='192.168.1.2', show_default=True, help='Infoblox Grid Manager'
+    '-g', '--grid-mgr', default='192.168.1.2', show_default=True, help='Infoblox Grid Manager'
 )
 @click.option(
     '-w', '--wapi-ver', default='2.11', show_default=True,
@@ -59,7 +59,7 @@ def main(**args):
     if args.get('debug', False):
         set_log_level('DEBUG', 'both')
 
-    wapi.grid_mgr = args.get('gm')
+    wapi.grid_mgr = args.get('grid_mgr')
     wapi.username = args.get('username')
     wapi.wapi_ver = args.get('wapi_ver')
     wapi.password = getpass.getpass(
