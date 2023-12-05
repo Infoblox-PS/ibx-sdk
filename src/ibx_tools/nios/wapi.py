@@ -9,8 +9,8 @@ import requests
 import urllib3
 from requests import Response
 
-from infoblox_pslib.nios import fileop
-from infoblox_pslib.nios import service
+from ibx_tools.nios import fileop
+from ibx_tools.nios import service
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

@@ -3,39 +3,37 @@ import getpass
 import sys
 
 import click
+from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import init_logger, set_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
-    logfile_name='nios-get-supportbundle.log',
-    logfile_mode='w',
-    level='info',
+    logfile_name='wapi.log',
+    logfile_mode='a',
     console_log=True,
-)
+    level='info',
+    max_size=10000,
+    num_logs=1)
+
 wapi = WAPI()
 
+help_text = """
+Retrieve Support Bundle from Member
+"""
 
-@click.command(
-    context_settings=dict(
-        max_content_width=90,
-        help_option_names=['-h', '--help']
-    )
-)
-@click.option(
-    '-u', '--username', default='admin', show_default=True,
-    help='Infoblox admin username'
-)
-@click.option(
-    '-g', '--grid-mgr', default='192.168.1.2', show_default=True, help='Infoblox Grid Manager'
-)
-@click.option(
-    '-w', '--wapi-ver', default='2.11', show_default=True,
-    help="Infoblox WAPI version"
-)
-@click.option(
-    '--debug', is_flag=True, help='enable verbose debug output'
-)
+
+@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@optgroup.group("Required Parameters")
+@optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
+@optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
+@optgroup.group("Optional Parameters")
+@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
+@optgroup.option('-r', '--rotated-logs', default=True, show_default=True, help='Include Rotated Logs')
+@optgroup.option('-l', '--logs-files', default=True, show_default=True, help='Include Log Files')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.group("Logging Parameters")
+@optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
     The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
@@ -44,7 +42,8 @@ def main(**args):
     Args:
         **args: Arbitrary keyword arguments.
             debug (bool): If True, it sets the log level to DEBUG. Default is False.
-            gm (str): Manager for the wapi grid.
+            grid-mgr (str): Manager for the wapi grid.
+            member (str): Grid Member
             username (str): Username for the wapi connection.
             wapi_ver (str): Version of wapi.
 
@@ -71,8 +70,18 @@ def main(**args):
         log.error(err)
         sys.exit(1)
 
+    member = args.get('member')
+    rotated = args.get('rotated_logs')
+    logs = args.get('log_files')
+
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
-    wapi.get_support_bundle(member='infoblox.localdomain')
+    wapi.get_support_bundle(member=member,
+                            log_files=logs,
+                            nm_snmp_logs=False,
+                            recursive_cache_file=False,
+                            remote_url=None,
+                            rotate_log_files=rotated)
+
     log.info('finished!')
     sys.exit()
 

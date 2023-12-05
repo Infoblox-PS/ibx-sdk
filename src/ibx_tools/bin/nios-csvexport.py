@@ -3,6 +3,7 @@ import getpass
 import sys
 
 import click
+from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import (
     init_logger, increase_log_level
@@ -10,42 +11,30 @@ from ibx_tools.logger.ibx_logger import (
 from ibx_tools.nios.wapi import WAPI
 
 log = init_logger(
-    logfile_name='nios-csvexport.log',
-    logfile_mode='w',
+    logfile_name='wapi.log',
+    logfile_mode='a',
     console_log=True,
-    level='info'
-)
+    level='info',
+    max_size=10000,
+    num_logs=1)
+
 wapi = WAPI()
 
+help_text = """
+CSV Export by object
+"""
 
-@click.command(
-    context_settings=dict(
-        max_content_width=90,
-        help_option_names=['-h', '--help']
-    )
-)
-@click.option(
-    '-u', '--username', default='admin', show_default=True,
-    help='Infoblox admin username'
-)
-@click.option(
-    '-g', '--grid-mgr', required=True, help='Infoblox Grid Manager'
-)
-@click.option(
-    '-w', '--wapi-ver', default='2.11', show_default=True,
-    help="Infoblox WAPI version"
-)
-@click.option(
-    '-f', '--file', required=True,
-    help='Infoblox WAPI CSV export file name'
-)
-@click.option(
-    '-o', '--object', default='network',
-    help='WAPI export object type'
-)
-@click.option(
-    '--debug', is_flag=True, help='enable verbose debug output'
-)
+
+@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@optgroup.group("Required Parameters")
+@optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
+@optgroup.option('-f', '--file', required=True, help='Infoblox WAPI CSV export file name')
+@optgroup.group("Optional Parameters")
+@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.option('-o', '--object', default='network', help='WAPI export object type')
+@optgroup.group("Logging Parameters")
+@optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
     The main driver function which sets up the wapi configuration and exports the desired wapi object to a CSV file.
@@ -53,7 +42,7 @@ def main(**args):
     Args:
         **args: Arbitrary keyword arguments.
             debug (bool): If True, it increases the logging level.
-            gm (str): Manager for the wapi grid.
+            grid-mgr (str): Manager for the wapi grid.
             username (str): Username for the wapi connection.
             wapi_ver (str): Version of wapi.
             object (str): Object to be exported to CSV.

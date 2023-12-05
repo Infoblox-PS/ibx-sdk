@@ -11,7 +11,7 @@ from typing import Optional
 
 import requests.exceptions
 
-from infoblox_pslib.util import util
+from ibx_tools.util import util
 
 
 def member_config(
@@ -269,7 +269,7 @@ def _upload_file(
             verify=self.ssl_verify
         )
         res.raise_for_status()
-    except request.exceptions.RequestException as err:
+    except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
 
