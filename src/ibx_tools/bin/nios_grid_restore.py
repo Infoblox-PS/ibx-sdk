@@ -29,7 +29,7 @@ Restore NIOS Grid.
 
 @click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
-@optgroup.option('-g', 'grid-mgr', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
+@optgroup.option('-g', '--grid-mgr', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
 @optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', show_default=True, help="Infoblox NIOS username")
@@ -40,46 +40,44 @@ Restore NIOS Grid.
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
 @click.version_option(__version__)
-def main(grid_mgr: str, username: str, filename: str, mode: str, keep: bool,
-         debug: bool, wapi_ver: str) -> None:
+def main(**args):
     """
-     Restore NIOS Grid.
+    The main driver function which sets up the wapi configuration, connects to the Infoblox grid
+    manager and initiates a grid backup.
 
-     Args:
-         grid_mgr (str): Infoblox NIOS Grid Manager IP/Hostname (Required).
-         username (str): Infoblox NIOS username (Optional, default='admin').
-         filename (str): Infoblox NIOS Grid restore filename (Required).
-         mode (str): Grid Restore Mode [NORMAL|FORCED|CLONE] (Optional, default="FORCED").
-         keep (bool): Keep existing IP otherwise use IP from backup (Optional).
-         debug (bool): Enable verbose logging (Optional).
-         wapi_ver (str): Version of wapi.
+    Args:
+        **args: Arbitrary keyword arguments.
+            debug (bool): If True, it increases the logging level.
+            grid-mgr (str): Manager for the wapi grid.
+            username (str): Username for the wapi connection.
+            wapi_ver (str): Version of wapi.
+            file (str): Filename/path where the backup will be saved.
 
-     Returns:
-         None
+    Returns:
+        None
 
-     Raises:
-         Any exceptions raised during the process.
+    Raises:
+        Could raise various exceptions depending on the execution of internal functions.
      """
     sys.tracebacklimit = 0
-    if debug:
+    if args.get('debug'):
         increase_log_level()
         sys.tracebacklimit = 1
 
-    # MISC
-    wapi.wapi_ver = wapi_ver
-    wapi.username = username
+    wapi.grid_mgr = args.get('grid_mgr')
+    wapi.username = args.get('username')
+    wapi.wapi_ver = args.get('wapi_ver')
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    wapi.grid_mgr = grid_mgr
-    wapi.ssl_verify = False
+    wapi.connect()
 
     wapi.connect()
 
     wapi.grid_restore(
-        filename=filename,
-        mode=mode,
-        keep_grid_ip=keep,
+        filename=args.get('filename'),
+        mode=args.get('mode'),
+        keep_grid_ip=args.get('keep')
     )
 
 
