@@ -5,7 +5,7 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_tools.logger.ibx_logger import init_logger, set_log_level
+from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
@@ -55,8 +55,10 @@ def main(**args):
         SystemExit: The function exits the system upon completion or upon encounter of an error.
 
     """
-    if args.get('debug', False):
-        set_log_level('DEBUG', 'both')
+    sys.tracebacklimit = 0
+    if args.get('debug'):
+        increase_log_level()
+        sys.tracebacklimit = 1
 
     wapi.grid_mgr = args.get('grid_mgr')
     wapi.username = args.get('username')

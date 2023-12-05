@@ -61,9 +61,7 @@ def main(server: str, username: str, filename: str, mode: str, keep: bool,
      Raises:
          Any exceptions raised during the process.
      """
-
     sys.tracebacklimit = 0
-
     if debug:
         increase_log_level()
         sys.tracebacklimit = 1
@@ -78,7 +76,7 @@ def main(server: str, username: str, filename: str, mode: str, keep: bool,
     wapi.ssl_verify = False
 
     wapi.connect()
-    # noinspection PyTypeChecker
+
     wapi.grid_restore(
         filename=filename,
         mode=mode,

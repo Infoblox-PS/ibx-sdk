@@ -26,7 +26,6 @@ Backup NIOS Grid
 @click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
-@optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
 @optgroup.option('-f', '--file', default='database.bak', show_default=True, help='Infoblox backup file name')
@@ -53,8 +52,11 @@ def main(**args):
         Could raise various exceptions depending on the execution of internal functions.
 
     """
+    sys.tracebacklimit = 0
     if args.get('debug'):
         increase_log_level()
+        sys.tracebacklimit = 1
+
     wapi.grid_mgr = args.get('grid_mgr')
     wapi.username = args.get('username')
     wapi.wapi_ver = args.get('wapi_ver')
