@@ -29,13 +29,13 @@ Restore NIOS Grid.
 
 @click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
-@optgroup.option('-s', '--server', metavar='', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
-@optgroup.option('-f', '--filename', metavar='', required=True, help="Infoblox NIOS Grid restore filename")
+@optgroup.option('-s', '--server', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
+@optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
 @optgroup.group("\nOptional Parameters")
-@optgroup.option('-u', '--username', metavar='', show_default=True, help="Infoblox NIOS username")
-@optgroup.option('-p', '--password', metavar='', prompt=True, hide_input=True, help="Infoblox NIOS password")
+@optgroup.option('-u', '--username', show_default=True, help="Infoblox NIOS username")
+@optgroup.option('-p', '--password', prompt=True, hide_input=True, help="Infoblox NIOS password")
 @optgroup.option('-m', '--mode', type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
-                 metavar='', default="FORCED", show_default=True, help="Grid Restore Mode [NORMAL|FORCED|CLONE]")
+                 default="FORCED", show_default=True, help="Grid Restore Mode [NORMAL|FORCED|CLONE]")
 @optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("\nLogging Parameters")
