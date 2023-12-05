@@ -23,7 +23,7 @@ Basic Tools and Functions used by other Integrations.
 - Perhaps MIT
 
 ## Code Review
-Please see issue #1
+Please see issue https://github.com/Infoblox-PS/ibx-tools/issues/1
 
 ## Git Restrictions
 - Do we enable/disable abilty to open issues/rfes/etc
