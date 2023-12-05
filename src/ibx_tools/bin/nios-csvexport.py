@@ -55,8 +55,11 @@ def main(**args):
         Could raise various exceptions depending on the execution of internal functions.
 
     """
+    sys.tracebacklimit = 0
     if args.get('debug'):
         increase_log_level()
+        sys.tracebacklimit = 1
+
     wapi.grid_mgr = args.get('grid_mgr')
     wapi.username = args.get('username')
     wapi.wapi_ver = args.get('wapi_ver')
