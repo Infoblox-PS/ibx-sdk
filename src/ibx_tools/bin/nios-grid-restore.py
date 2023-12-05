@@ -29,25 +29,24 @@ Restore NIOS Grid.
 
 @click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
-@optgroup.option('-s', '--server', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
+@optgroup.option('-g', 'grid-mgr', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
 @optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
-@optgroup.group("\nOptional Parameters")
+@optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', show_default=True, help="Infoblox NIOS username")
-@optgroup.option('-p', '--password', prompt=True, hide_input=True, help="Infoblox NIOS password")
 @optgroup.option('-m', '--mode', type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
                  default="FORCED", show_default=True, help="Grid Restore Mode [NORMAL|FORCED|CLONE]")
 @optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
-@optgroup.group("\nLogging Parameters")
+@optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
 @click.version_option(__version__)
-def main(server: str, username: str, filename: str, mode: str, keep: bool,
+def main(grid_mgr: str, username: str, filename: str, mode: str, keep: bool,
          debug: bool, wapi_ver: str) -> None:
     """
      Restore NIOS Grid.
 
      Args:
-         server (str): Infoblox NIOS Grid Manager IP/Hostname (Required).
+         grid_mgr (str): Infoblox NIOS Grid Manager IP/Hostname (Required).
          username (str): Infoblox NIOS username (Optional, default='admin').
          filename (str): Infoblox NIOS Grid restore filename (Required).
          mode (str): Grid Restore Mode [NORMAL|FORCED|CLONE] (Optional, default="FORCED").
@@ -72,7 +71,7 @@ def main(server: str, username: str, filename: str, mode: str, keep: bool,
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    wapi.grid_mgr = server
+    wapi.grid_mgr = grid_mgr
     wapi.ssl_verify = False
 
     wapi.connect()
