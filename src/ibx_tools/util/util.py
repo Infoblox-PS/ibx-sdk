@@ -16,9 +16,18 @@ def named_checkconf(
     """
     perform named-checkconf and re-write a canonicalized copy of the named.conf file
 
-    :param chroot_path: base path or directory to process
-    :param conf_path: named.conf file path within the jail
+    Args:
+        chroot_path (str): Description of the first argument `chroot_path`.
+        conf_path (str): Description of the second argument `conf_path`.
+
+    Returns:
+        None
+
+    Example:
+        Here you can provide an example of how to use your function.
+        >>> named_checkconf("/path/to/chroot", "/path/to/conf")
     """
+
     logging.info('parsing %s conf file', conf_path)
 
     if not os.path.exists(f'{chroot_path}/{conf_path}'):
@@ -47,15 +56,33 @@ def named_compilezone(
         output_file: str,
         input_format: str = 'text') -> list:
     """
-    perform named-compilezone to canonicalize and rewrite the zone file
+    The function named_compilezone performs the named-compilezone command to canonicalize and 
+    rewrite a specified DNS zone file, checking for errors in the file during the process.
 
-    :param zone_name: the string value of the zone being processed
-    :param zone_file: the string value of the zone file to read/process
-    :param output_file: the string value of the canonicalized zone file
-    :param input_format: specify current zone format text or raw (default=text)
+    Args:
+        zone_name (str): The name of the DNS zone being processed.
+        zone_file (str): The path to the file containing the DNS zone information to be read/processed.
+        output_file (str): The path where the canonicalized zone file will be written to.
+        input_format (str, optional): The format in which the zone information is currently presented in the zone file.
+            This should be either 'text' or 'raw'. Defaults to 'text'.
 
-    :returns: list of lines which produce errors causing the zone to fail
+    Returns:
+        list: A list of strings, each string being a line from the output of the named-compilezone
+            command that indicates an error which prevented the DNS zone from being loaded.
+            If there are no such errors, an empty list is returned.
+
+    Raises:
+        ValueError: If `input_format` is neither 'text' or 'raw'
+
+    Usage:
+        Call this function to check for, log, and return errors in a DNS zone file as it is being processed:
+        >>> errors = named_compilezone('my_zone', '/path/to/my_zone_file', '/path/to/output_file')
+        >>> if errors:
+        ...     print('Errors found during zone processing.')
+        ...     for error in errors:
+        ...         print(error)
     """
+
     if input_format not in ['raw', 'text']:
         raise ValueError('specify one of "text" or "raw" value')
     command = f'named-compilezone -k ignore -i none -f {input_format} -o {output_file} ' \
@@ -93,14 +120,33 @@ rewrite_zone_file = named_compilezone
 
 def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: str = None) -> None:
     """
-    remove the supplied list of lines from a file
+    The function remove_lines_from_file removes specific lines from a file.
 
-    :param file_path: fully qualified path to file name
-    :param lines_to_remove: list of line numbers to remove
-    :param output_path: specify path to new file if desire otherwise, same file is modified
+    Args:
+        file_path (str): The fully qualified path to the file from which lines are to be removed.
+        lines_to_remove (list): A list of integers, with each integer being a line number (1-indexed) of the line 
+            to be removed from the file.
+        output_path (str, optional): Path to the output file. If provided, the function will write result to this file. 
+            If not provided, the function will overwrite the original file. Defaults to None.
 
-    :returns: None
+    Returns:
+        None
+
+    Logging:
+        This function logs warning messages for each line that it removes from the file.
+        It also logs an info message once the file has been successfully rewritten.
+
+    Usage:
+        Use this function to remove specific lines from a file:
+        >>> remove_lines_from_file('/path/to/my_file', [2, 3])
+        This will remove the 2nd and 3rd lines from the file located at /path/to/my_file.
+
+        To write the result to a different file, specify the output_path argument:
+        >>> remove_lines_from_file('/path/to/my_file', [2, 3], '/path/to/output_file')
+        This will remove the 2nd and 3rd lines from the file located at /path/to/my_file 
+        and write the result to a file located at /path/to/output_file.
     """
+
     if not output_path:
         output_path = file_path
     logging.warning('file: %s lines to remove: %s', file_path, lines_to_remove)
@@ -144,10 +190,21 @@ def _parse_named_checkzone_log(error_output: str) -> list:
 
 def get_csv_header(csvfile: io.TextIOWrapper) -> list:
     """
-    fetch CSV header from file using sniffer
+    The function get_csv_header retrieves the header from a CSV file.
 
-    :param csvfile: csv file object
-    :return: list of columns in the csv file
+    Args:
+        csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the header.
+
+    Returns:
+        list: A list of strings where each string is a column name from the CSV file's header row. 
+            If the CSV file has no header row, an empty list is returned.
+
+    Usage:
+        Use this function to get the header from a CSV file:
+        >>> with open('/path/to/my_file.csv', 'r') as csv_file:
+        ...     # noinspection PyTypeChecker
+header = get_csv_header(csv_file)
+        ...     print(header)
     """
     csvfile.seek(0)
     sample = csvfile.read(1024)
@@ -186,13 +243,25 @@ def csv_filtered_header(row: dict, col_filter: list = None) -> dict:
 
 def get_csv_from_url(url) -> str:
     """
-    return csv file name from download_url
+    The function get_csv_from_url retrieves the name of the CSV file from a given URL.
 
-    This method is used to extract the csv file name from the download url
+    Args:
+        url (str): An Infoblox download URL for CSV export.
 
-    @param url: Infoblox download url for CSV export
-    @return filename: string value of the csv file name
+    Returns:
+        str: The name of the CSV file that would be downloaded from the specified URL.
+
+    Raises:
+        Exception: An exception is raised if the URL cannot be parsed.
+
+    Logging:
+        This function logs debug messages as it parses the URL, and an error message if an exception was raised while parsing.
+
+    Usage:
+        Use this function to retrieve the name of a CSV file from an Infoblox download URL:
+        >>> file_name = get_csv_from_url('https://my-infoblox-instance/export.csv')
     """
+
     logging.debug('parsing url: %s', url)
     try:
         obj = urlparse(url)
@@ -209,11 +278,26 @@ def get_csv_from_url(url) -> str:
 
 def ibx_csv_file_split(filename: str, output_path: str = '.'):
     """
-    perform CSV file split on globally exported CSV
+    The function ibx_csv_file_split splits a globally exported CSV file into separate CSV files
+    based on the CSV object type(s).
 
-    @param filename: source CSV file to split by CSV object type(s)
-    @param output_path: output path for writing CSV files
+    Args:
+        filename (str): The name of the source CSV file to be split.
+        output_path (str, optional): The directory where the output CSV files will be written.
+            If the directory does not exist, it will be created. Defaults to the current directory.
+
+    Raises:
+        Exception: An exception is raised if the output directory cannot be created.
+
+    Logging:
+        This function logs warning messages when a CSV object type has no associated objects in the source CSV.
+        It also logs informational messages when it creates output CSV files.
+
+    Usage:
+        Use this function to split a `Infoblox` exported CSV file into separate CSV files for each CSV object type:
+        >>> ibx_csv_file_split('/path/to/my_exported_csv_file', '/path/to/output_directory')
     """
+
     if not os.path.exists(output_path):
         logging.warning(
             'output path %s does not exist, creating...', output_path
@@ -284,13 +368,28 @@ def _get_include_data(chroot: str, include_file: str):
 
 def generate_from_includes(chroot: str, filepath: str) -> str:
     """
-    generate a config file from include(s)
+    The function generate_from_includes generates a configuration file from include(s) directives 
+    found in another configuration file.
 
-    :param chroot: string value of the chroot path
-    :param filepath: string value of the path to the initial conf file to process
+    Args:
+        chroot (str): The path to the chroot environment where the config file to process exists.
+        filepath (str): Path to the initial config file to process. The path is relative to chroot if 
+            it starts with '/'.
 
-    :return: string contents of the config file
+    Returns:
+        str: A single string containing the full contents of the config file. This includes data from 
+            the initial config file and all files included with include directives. If the file specified
+            in the filepath parameter does not exist, an empty string is returned.
+
+    Logging:
+        This function logs informational messages indicating the files it's processing and any 'include'
+        directives it encounters. An error message is logged if it attempts to process a file that doesn't exist.
+
+    Usage:
+        Use this function to generate a full config file from one that includes other files with include directives:
+        >>> full_config = generate_from_includes('/path/to/chroot', '/path/to/my_config')
     """
+
     if filepath.startswith('/'):
         filepath = filepath.lstrip('/')
     logging.info('processing file %s', f'{chroot}{filepath}')
