@@ -25,6 +25,7 @@ dependencies = [
 
 [project.scripts]
 nios-get-log = 'ibx_tools.bin.nios_get_log:main'
+nios-get-config = 'ibx_tools.bin.nios_get_config:main'
 nios-get-supportbundle = 'ibx_tools.bin.nios_get_supportbundle:main'
 nios-grid-backup = 'ibx_tools.bin.nios_grid_backup:main'
 nios-grid-restore = 'ibx_tools.bin.nios_grid_restore:main'
