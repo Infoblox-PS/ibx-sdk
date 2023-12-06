@@ -39,8 +39,7 @@ CSV Import Data
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration and imports data from a CSV into a
-    specific wapi object.
+    CSV Import
 
     Args:
         **args: Arbitrary keyword arguments.

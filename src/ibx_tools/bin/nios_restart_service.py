@@ -35,8 +35,7 @@ Restart NIOS Protocol Services
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
-    and initiates a service restart operation.
+    Restart NIOS Protocol Services
 
     Args:
         **args: Arbitrary keyword arguments.

@@ -35,8 +35,7 @@ Retrieve Restart Status
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
-    and retrieves the service restart status.
+    Retrieve Restart Status
 
     Args:
         **args: Arbitrary keyword arguments.

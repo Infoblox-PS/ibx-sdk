@@ -36,8 +36,7 @@ Retrieve Support Bundle from Member
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
-    and initiates a support bundle request for a specific Infoblox member.
+    Get NIOS Support Bundle from Member.
 
     Args:
         **args: Arbitrary keyword arguments.

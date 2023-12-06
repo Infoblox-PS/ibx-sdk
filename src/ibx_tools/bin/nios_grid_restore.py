@@ -42,8 +42,7 @@ Restore NIOS Grid.
 @click.version_option(__version__)
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid
-    manager and initiates a grid backup.
+    Restore NIOS Grid
 
     Args:
         **args: Arbitrary keyword arguments.

@@ -34,8 +34,7 @@ Backup NIOS Grid
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid
-    manager and initiates a grid backup.
+    Backup NIOS Grid
 
     Args:
         **args: Arbitrary keyword arguments.
