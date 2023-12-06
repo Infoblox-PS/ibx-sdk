@@ -29,8 +29,8 @@ Retrieve Support Bundle from Member
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-r', '--rotated-logs', default=True, show_default=True, help='Include Rotated Logs')
-@optgroup.option('-l', '--logs-files', default=True, show_default=True, help='Include Log Files')
+@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs')
+@optgroup.option('-l', '--log-files', is_flag=True, help='Include Log Files')
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
@@ -72,18 +72,14 @@ def main(**args):
         log.error(err)
         sys.exit(1)
 
-    member = args.get('member')
-    rotated = args.get('rotated_logs')
-    logs = args.get('log_files')
-
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
-    wapi.get_support_bundle(member=member,
-                            log_files=logs,
+    wapi.get_support_bundle(member=args.get('member'),
+                            log_files=args.get('log_files'),
                             nm_snmp_logs=False,
                             recursive_cache_file=False,
                             remote_url=None,
-                            rotate_log_files=rotated)
-
+                            rotate_log_files=args.get('rotated_logs')
+                            )
     log.info('finished!')
     sys.exit()
 

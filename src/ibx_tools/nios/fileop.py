@@ -11,7 +11,6 @@ from typing import Optional
 
 import requests.exceptions
 
-from ibx_tools.nios.wapi import WAPI
 from ibx_tools.util import util
 
 
@@ -192,6 +191,7 @@ def csv_import(
         task_operation: str,
         csv_import_file: str,
         exit_on_error: bool = False) -> dict:
+    # noinspection PyUnresolvedReferences
     """
     Initiates a CSV import job via WAPI.
 
@@ -222,6 +222,7 @@ def csv_import(
             )
         >>> print(csv_task)
     """
+    # noinspection PyUnresolvedReferences
     (_, filename) = os.path.split(csv_import_file)
     filename = filename.replace('-', '_')
 
@@ -957,7 +958,7 @@ def get_support_bundle(
     if remote_url:
         payload["remote_url"] = remote_url
     json_payload = json.dumps(payload)
-    logging.debug('payload: %s', pprint.pformat(payload))
+    logging.debug('payload: %s', pprint.pformat(json_payload))
     try:
         res = self.conn.post(
             f'{self.url}/fileop?_function=get_support_bundle',
