@@ -35,6 +35,7 @@ Retrieve Log from NIOS Member
                                          'DISCOVERY_CSV_ERRLOG]')
 @optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
                  show_default=True, help='Node: ACTIVE | PASSIVE')
+@optgroup.option('-r', '--rotated-logs', is_flag=True, default=True, help='Exclude Rotated Logs')
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
@@ -72,16 +73,17 @@ def main(**args):
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    member = args.get('member')
-    log_type = args.get('log_type')
-    node = args.get('node_type')
+
     try:
         wapi.connect()
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
-    wapi.get_log_files(member=member, log_type=log_type, node_type=node)
+    wapi.get_log_files(member=args.get('member'),
+                       log_type=args.get('log_type'),
+                       node_type=args.get('node_type'),
+                       include_rotated=args.get('rotated_logs'))
     log.info('finished!')
     sys.exit()
 

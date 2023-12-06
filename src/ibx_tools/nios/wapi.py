@@ -45,17 +45,44 @@ class WapiRequestException(BaseWapiException):
 
 
 class WAPI(requests.sessions.Session):
-    """
+    """Handles interactions with the Infoblox WAPI.
 
-    WAPI class initialization
+    This class provides a range of methods to interact with Infoblox WAPI,
+    including session management, data retrieval, file operations, and service management.
 
-            Args:
-                grid_mgr (str): The IP address or hostname of the Grid Manager. Default is None.
-                username (str): The username to authenticate with Infoblox WAPI. Default is 'admin'.
-                password (str): The password to authenticate with Infoblox WAPI. Default is 'infoblox'.
-                wapi_ver (str): The version of Infoblox WAPI. Default is '2.5'.
-                ssl_verify (bool): Whether to verify SSL certificate. Default is False.
+    Attributes:
+        grid_mgr (str): IP address or hostname of the Grid Manager.
+        username (str): Username for authentication with the Infoblox WAPI.
+        password (str): Password for authentication.
+        wapi_ver (str): Version of the Infoblox WAPI.
+        ssl_verify (bool): Flag to determine SSL certificate verification.
+        conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is None.
+        grid_ref (str, optional): Reference ID of the connected grid. Default is None.
 
+    Methods:
+        url: Constructs and returns the WAPI URL.
+        object_fields: Retrieves object fields for a specified WAPI object.
+        max_wapi_ver: Fetches the maximum supported WAPI version.
+        connect: Initiates a connection to the WAPI grid.
+        get: Performs a GET request.
+        post: Sends a POST request.
+        put: Performs a PUT request.
+        member_config: Fetches a grid member's configuration file.
+        csv_export: Exports data to a CSV file.
+        csv_import: Imports a CSV file into the WAPI.
+        grid_restore: Restores the grid database from a backup file.
+        grid_backup: Initiates a grid backup.
+        get_service_restart_status: Retrieves the restart status of services.
+        service_restart: Restarts services on Infoblox appliances.
+        csv_task_status: Fetches the status of a CSV import task.
+        get_csv_errors_file: Retrieves the CSV errors file of a task.
+        get_support_bundle: Fetches a support bundle from a grid member.
+        get_log_files: Fetches log files based on specified parameters.
+
+    Example:
+        >>> wapi = WAPI(grid_mgr='10.0.0.1', username='admin', password='infoblox', wapi_ver='2.5', ssl_verify=False)
+        >>> print(wapi.url)
+        https://10.0.0.1/wapi/v2.5
     """
 
     def __init__(
@@ -251,7 +278,7 @@ class WAPI(requests.sessions.Session):
             if response.status_code == 200:
                 print('PUT request successful.')
             else:
-                print('PUT request failed with status code: {}'.format(response.status_code))
+                print('PUT request failed with status code: {}'.format(response.status_code)
         """
         return self.conn.request('delete', url, **kwargs)
 

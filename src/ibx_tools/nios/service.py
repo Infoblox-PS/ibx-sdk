@@ -10,14 +10,26 @@ import requests
 
 def service_restart(self, **kwargs) -> None:
     """
-    restart services of group(s), member(s) or all
+    Restarts specified services of a group, member, or all.
 
-    :param self: WAPI class instance
+    This method allows for flexible service restarts based on the provided keyword arguments.
+    It constructs a data payload from these arguments and sends a POST request to initiate
+    the service restart. The method handles request-related exceptions and logs relevant
+    information about the operation.
 
-    :param kwargs: method arguments
+    Args:
+        **kwargs: Arbitrary keyword arguments. These are used to specify which services
+                  to restart. If 'services' is not specified, it defaults to restarting 'ALL'.
 
-    :return None:
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the POST request.
+
+    Returns:
+        None: This method does not return a value but logs the result of the operation,
+              indicating the success of the service restart.
+
     """
+
     data = {}
     for prop, value in kwargs.items():
         if value:
@@ -44,14 +56,23 @@ def service_restart(self, **kwargs) -> None:
 
 
 def update_service_status(self, services: str = 'ALL') -> None:
-    """
-    Update the grid service restart status
+    """Updates the restart status of grid services.
 
-    :param self: WAPI instance
+    This method sends a POST request to update the restart status of specified grid services.
+    It handles request-related exceptions and logs the response or any errors encountered.
 
-    :param services: service(s) to check
+    Args:
+        services (str): The name of the service(s) to check the restart status for.
+                        Defaults to 'ALL', indicating all services.
 
-    :return None:
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the POST request.
+
+    Returns:
+        None: This method does not return a value but logs the response text upon
+              successful completion of the request.
+
+
     """
     payload = dict(service_option=services)
     try:
@@ -69,13 +90,23 @@ def update_service_status(self, services: str = 'ALL') -> None:
 
 
 def get_service_restart_status(self) -> dict:
-    """
-    Get and print table of all member service restart statuses
+    """Gets the restart status of all member services.
 
-    :param self: WAPI instance
+    This method sends a GET request to the specified URL to retrieve the restart status
+    of all member services. It handles various exceptions related to the request, such as
+    SSL errors, HTTP errors, and other request exceptions, and logs any errors encountered.
 
-    :return service status (dict)
+    Returns:
+        dict: A dictionary containing the restart status of all member services. The
+        dictionary is obtained by parsing the JSON response from the request.
+
+    Raises:
+        requests.exceptions.SSLError: If an SSL error occurs during the request.
+        requests.exceptions.HTTPError: If an HTTP error occurs during the request.
+        requests.exceptions.RequestException: For other request-related errors.
+
     """
+
     try:
         res = self.conn.get(
             f'{self.url}/restartservicestatus',

@@ -19,7 +19,7 @@ log = init_logger(
 wapi = WAPI()
 
 help_text = """
-RRetrieve Restart Status
+Retrieve Restart Status
 """
 
 
