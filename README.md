@@ -16,19 +16,17 @@ A collection of basic tools and functions used by other integrations in the Info
 
 ## NIOS funtions
 
-* wapi api wrapper
+* wapi
 * fileop
 * services
 
 ## Logger functions
 
 ## utilities functions
-
 * named_checkconf
 * named_compilezone
 
 ## Scripts Folder
-
 * [nios-csvimport](#nios-csv-import)
 * [nios-csvexport](#nios-csv-export)
 * [nios-get-log](#nios-get-log)

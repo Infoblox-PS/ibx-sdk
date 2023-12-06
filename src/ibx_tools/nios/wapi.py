@@ -251,7 +251,7 @@ class WAPI(requests.sessions.Session):
             if response.status_code == 200:
                 print('PUT request successful.')
             else:
-                print('PUT request failed with status code: {}'.format(response.status_code))
+                print('PUT request failed with status code: {}'.format(response.status_code)
         """
         return self.conn.request('delete', url, **kwargs)
 
