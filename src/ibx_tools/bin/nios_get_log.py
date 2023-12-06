@@ -13,13 +13,13 @@ log = init_logger(
     logfile_mode='a',
     console_log=True,
     level='info',
-    max_size=10000,
+    max_size=100000,
     num_logs=1)
 
 wapi = WAPI()
 
 help_text = """
-Retrieve Log from NIOS Member
+Get NIOS Log from Member
 """
 
 
@@ -41,8 +41,7 @@ Retrieve Log from NIOS Member
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to Infoblox grid manager
-    and fetches the log files from members.
+    Get NIOS Log from Member.
 
     Args:
         **args: Arbitrary keyword arguments.

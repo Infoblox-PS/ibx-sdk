@@ -17,7 +17,7 @@ log = init_logger(
     logfile_mode='a',
     console_log=True,
     level='info',
-    max_size=10000,
+    max_size=100000,
     num_logs=1)
 
 wapi = WAPI()
@@ -42,8 +42,7 @@ Restore NIOS Grid.
 @click.version_option(__version__)
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid
-    manager and initiates a grid backup.
+    Restore NIOS Grid
 
     Args:
         **args: Arbitrary keyword arguments.

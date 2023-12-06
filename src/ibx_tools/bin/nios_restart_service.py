@@ -13,7 +13,7 @@ log = init_logger(
     logfile_mode='a',
     console_log=True,
     level='info',
-    max_size=10000,
+    max_size=100000,
     num_logs=1)
 
 wapi = WAPI()
@@ -35,8 +35,7 @@ Restart NIOS Protocol Services
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
-    and initiates a service restart operation.
+    Restart NIOS Protocol Services
 
     Args:
         **args: Arbitrary keyword arguments.

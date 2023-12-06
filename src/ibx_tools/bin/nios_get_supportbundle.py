@@ -13,7 +13,7 @@ log = init_logger(
     logfile_mode='a',
     console_log=True,
     level='info',
-    max_size=10000,
+    max_size=1000000,
     num_logs=1)
 
 wapi = WAPI()
@@ -36,8 +36,7 @@ Retrieve Support Bundle from Member
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration, connects to the Infoblox grid manager,
-    and initiates a support bundle request for a specific Infoblox member.
+    Get NIOS Support Bundle from Member.
 
     Args:
         **args: Arbitrary keyword arguments.

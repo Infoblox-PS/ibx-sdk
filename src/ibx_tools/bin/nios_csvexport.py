@@ -15,7 +15,7 @@ log = init_logger(
     logfile_mode='a',
     console_log=True,
     level='info',
-    max_size=10000,
+    max_size=100000,
     num_logs=1)
 
 wapi = WAPI()
@@ -37,7 +37,7 @@ CSV Export by object
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(**args):
     """
-    The main driver function which sets up the wapi configuration and exports the desired wapi object to a CSV file.
+    CSV Export
 
     Args:
         **args: Arbitrary keyword arguments.
