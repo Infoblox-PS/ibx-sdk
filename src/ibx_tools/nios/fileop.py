@@ -11,6 +11,7 @@ from typing import Optional
 
 import requests.exceptions
 
+from ibx_tools.nios.wapi import WAPI
 from ibx_tools.util import util
 
 
@@ -20,15 +21,35 @@ def member_config(
         conf_type: str,
         remote_url: str = None) -> str:
     """
-    download member config file for DNS, DHCP or DHCP6
+    Downloads a member config file for DNS, DHCP, or DHCP6.
 
-    :param self: `WAPI` instance
-    :param member: Grid Member FQDN value
-    :param conf_type: ENUM value for ['DNS', 'DHCP_CONFIG', 'DHCP6_CONFIG]
-    :param remote_url: (optional) Remote URL if downloading to alternate location
+    Args:
+        self (WAPI): An instance of WAPI class.
+        member (str): Fully Qualified Domain Name value for the grid member.
+        conf_type (str): Specifies the type of configuration. It can be one of the following -
+                         'DNS', 'DHCP_CONFIG', 'DHCP6_CONFIG'.
+        remote_url (str, optional): If an alternate location for downloading is specified,
+                                    this stores the URL of that location.
 
-    :return: string value of the downloaded filename
+    Returns:
+        str: The filename of the downloaded config file.
+
+    The function first logs the initiation of downloading process and prepares a payload
+    with member and type details. If a remote url was specified, it's added to the payload.
+    It then attempts a post request to download the config file for the specified member.
+    If the post request encounters an exception, it's logged and re-raised.
+
+    Upon receiving the response, it extracts the download url and the download token from it.
+    It retrieves the `ibapauth` cookie from the cookie jar and logs the download url.
+
+    It then attempts to download the file from the obtained url. If the download encounters
+    an exception, it's logged and re-raised otherwise it proceeds to write the downloaded
+    data into the file.
+
+    The function finally notifies the grid that file download is complete by calling
+    `_download_complete` function. If it encounters an exception, it's logged and re-raised.
     """
+
     conf_type = conf_type.upper()
     logging.info(
         'fetching %s config file for grid member %s',
@@ -86,16 +107,34 @@ def csv_export(
         wapi_object: str,
         filename: Optional[str] = None) -> None:
     """
-    Perform Infoblox CSV Export to file
+    Performs Infoblox CSV Export to a file.
 
-    :param self: `WAPI` instance
-    :param wapi_object: any supported CSV object type to export
-    :param filename: (optional) CSV output filename used for output file name.
-        If a filename is not provided, the filename is extracted from the URL
-        returned by the originating call.
+    Args:
+        self (WAPI): An instance of WAPI class.
+        wapi_object (str): Any supported CSV object type to export.
+        filename (str, optional): The name of the output CSV file. If a filename
+                                  is not provided, the name is extracted from the URL
+                                  returned by the originating call.
 
-    :return None:
+    This function initiates a CSV export for a specified WAPI object. Logging is done at
+    the commencement of the operation.
+
+    A payload is prepared containing the mentioned WAPI object and a POST request is
+    triggered. In case of exception during this request, it is logged and then re-raised.
+
+    Upon successful request, the response is processed for a download URL and token. An
+    `ibapauth` cookie is then retrieved from the cookie jar, which is logged, and the
+    function attempts to download the file from the obtained URL. If an exception occurs
+    during the download, it's logged and re-raised.
+
+    If no filename was provided, one is obtained from the download URL. The function
+    then writes the downloaded data into the file.
+
+    Finally, it notifies the grid about the completion of the download via the
+    `_download_complete` function and returns None. If the notification process
+    encounters an exception, it's logged and re-raised.
     """
+
     if filename:
         (_, filename) = os.path.split(filename)
         filename = os.path.join(_, filename.replace('-', '_'))
@@ -154,20 +193,34 @@ def csv_import(
         csv_import_file: str,
         exit_on_error: bool = False) -> dict:
     """
-    run a CSV job in the CSV job manager over WAPI
+    Initiates a CSV import job via WAPI.
+
+    This method facilitates the execution of a CSV import job using the Infoblox WAPI. It requires
+    specifying the type of task operation to be performed on the CSV file, such as import or update.
+    The method also allows control over the behavior when encountering errors during the import process.
 
     Args:
-        self: The instance of the class where the method is called
-        task_operation: The operation to be performed on the CSV file (e.g. 'import', 'update')
-        csv_import_file: The path to the CSV file to be imported
-        exit_on_error: Flag indicating whether to exit the program on error (default: False)
+        self: The instance of the class where the method is called.
+        task_operation (str): The operation to be performed on the CSV file (e.g., 'IMPORT', 'UPDATE').
+        csv_import_file (str): The path to the CSV file to be imported.
+        exit_on_error (bool, optional): If True, the import will halt on encountering an error;
+                                        if False, it continues. Defaults to False.
 
     Returns:
-        csv_task (dict)
+        dict: A dictionary representing the status of the CSV import job initiation. This typically
+              includes details like job reference and initial status.
 
     Raises:
-        Exception: If any error occurs during the CSV import process
+        Exception: If an error occurs during the CSV import process.
 
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> csv_task = wapi_instance.csv_import(
+                task_operation='IMPORT',
+                csv_import_file='/path/to/file.csv',
+                exit_on_error=False
+            )
+        >>> print(csv_task)
     """
     (_, filename) = os.path.split(csv_import_file)
     filename = filename.replace('-', '_')
@@ -226,7 +279,30 @@ def csv_import(
 
 
 def _upload_init(self, filename: str) -> dict:
-    # call uploadinit to get URL and upload_token from server
+    """
+    Initializes a file upload process in the Infoblox WAPI.
+
+    This private method is used to initiate a file upload operation. It sends a POST request to the WAPI
+    with the filename to be uploaded. In response, the server provides a URL and an upload token, which are
+    necessary for the subsequent file upload process.
+
+    Args:
+        self: Instance of the `WAPI` class.
+        filename (str): The name of the file to be uploaded.
+
+    Returns:
+        dict: A dictionary containing the response from the WAPI. This includes the URL for the file upload
+              and an upload token.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the initialization of the file upload.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> upload_info = wapi_instance._upload_init('example.csv')
+        >>> print(upload_info)
+    """
+
     headers = {'content-type': 'application/json'}
     payload = {'filename': filename}
     try:
@@ -251,14 +327,30 @@ def _upload_file(
         upload_file: dict,
         req_cookies: dict) -> None:
     """
-    upload the file to the file url
+    Uploads a file to a specified URL using the Infoblox WAPI.
 
-    :param self: `WAPI` instance
-    :param upload_url: infoblox provided upload file URL
-    :param upload_file: upload file name
-    :param req_cookies: infoblox authentication cookies
+    This private method handles the uploading of a file to a provided Infoblox WAPI URL. It uses
+    HTTP POST method for uploading and requires authentication cookies. The method is designed to
+    work within the WAPI class for internal operations related to file uploading.
 
-    :return None:
+    Args:
+        self: Instance of the `WAPI` class.
+        upload_url (str): Infoblox provided URL to which the file needs to be uploaded.
+        upload_file (dict): Dictionary representing the file to upload. The format is typically
+                            {'file': ('filename', fileobj)}.
+        req_cookies (dict): Dictionary containing the authentication cookies required for Infoblox.
+
+    Returns:
+        None: The method returns nothing. It logs the response text for debugging purposes.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the file upload process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> file_to_upload = {'file': ('example.csv', open('example.csv', 'rb'))}
+        >>> cookies = {'session_id': '123'}
+        >>> wapi_instance._upload_file('https://infoblox/api/upload', file_to_upload, cookies)
     """
     # Perform the actual upload
     try:
@@ -283,21 +375,37 @@ def _csv_import(
         req_cookies: dict,
         exit_on_error: bool = False) -> dict:
     """
-    perform CSV import job via WAPI
+    Performs a CSV import job via WAPI.
+
+    This private method initiates a CSV import task in the Infoblox WAPI. It sends a POST request
+    with specified parameters to import data from a CSV file into the WAPI. The method allows
+    specifying the type of operation (e.g., insert, update, merge), handling of errors during import,
+    and requires an upload token and cookies for authentication.
 
     Args:
-        self: Instance of the class that contains this method.
-        task_operation: The type of operation to perform on the tasks.
-        upload_token: The token for the CSV file upload.
-        req_cookies: The cookies required for the request.
-        exit_on_error: Flag indicating whether to exit on error (default is False).
+        self: Instance of the class containing this method.
+        task_operation (str): The type of operation to perform (e.g., 'INSERT', 'UPDATE').
+        upload_token (str): Token received after successfully uploading the CSV file.
+        req_cookies (dict): Cookies required for making the WAPI request.
+        exit_on_error (bool, optional): If True, the import will stop on encountering an error;
+                                        continues otherwise. Default is False.
 
     Returns:
-        Dictionary containing the response from the _csv_import operation.
+        dict: A dictionary containing the response from the CSV import operation. This includes
+              details about the import task initiation, such as status and task reference.
 
     Raises:
-        Exception: If an error occurs during the _csv_import operation.
+        requests.exceptions.RequestException: If an error occurs during the CSV import operation.
 
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> response = wapi_instance._csv_import(
+                task_operation='INSERT',
+                upload_token='some-token',
+                req_cookies={'session_id': '123'},
+                exit_on_error=False
+            )
+        >>> print(response)
     """
     headers = {'content-type': 'application/json'}
 
@@ -340,12 +448,29 @@ def _csv_import(
 
 def csvtask_status(self, csvtask: dict) -> dict:
     """
-    return csv import task status from CSV Job Manager
+    Fetches the status of a CSV import task from the CSV Job Manager.
+
+    This method queries the status of a specific CSV import task identified by the task reference
+    in the provided csvtask dictionary. It makes an HTTP GET request to the WAPI endpoint and
+    returns the current status of the task in a JSON format.
 
     Args:
-        self: The instance of the class.
-        csvtask: The dictionary containing the CSV import task details.
+        self: The instance of the WAPI class.
+        csvtask (dict): A dictionary containing details of the CSV import task. It should include
+                        the '_ref' key to uniquely identify the task.
 
+    Returns:
+        dict: A dictionary containing the JSON response with the status of the CSV import task.
+              This includes details such as current state, progress, and any errors.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the HTTP request to the WAPI endpoint.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> task_details = {'csv_import_task': {'_ref': 'task:abc123'}}
+        >>> status = wapi_instance.csvtask_status(task_details)
+        >>> print(status)
     """
     _ref = csvtask['csv_import_task']['_ref']
     logging.debug('Checking status of csvimporttask %s', _ref)
@@ -363,13 +488,27 @@ def csvtask_status(self, csvtask: dict) -> dict:
 
 def get_csv_errors_file(self, filename: str, job_id: str) -> None:
     """
-    download csv-errors.#.csv file if any errors are encountered
+    Downloads the CSV errors file for a specified job.
 
-    :param self: `WAPI` instance
-    :param filename: csv import file
-    :param job_id: csv job id
+    This method retrieves the errors file generated from a CSV import job in Infoblox WAPI, if any errors
+    were encountered. It first requests the error log file's download URL and token, and then proceeds to
+    download the file. The file is saved with the provided filename.
 
-    :return None:
+    Args:
+        self: Instance of the `WAPI` class.
+        filename (str): Name of the CSV file that was imported, used for naming the errors file.
+        job_id (str): Unique identifier of the CSV import job.
+
+    Returns:
+        None: This method does not return a value. It writes the errors file to the local file system.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the file download process or
+                                              in any of the intermediate steps.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> wapi_instance.get_csv_errors_file('imported_data.csv', '1234567890')
     """
 
     logging.debug('fetching csv-errors file for job id %s', job_id)
@@ -418,14 +557,31 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
 
 def _getgriddata(self, payload: dict, req_cookies) -> dict:
     """
-    perform a fileop function call to getgriddata
+    Executes a 'getgriddata' file operation call to the Infoblox WAPI.
 
-    :param self: `WAPI` instance
-    :param payload: options for fetching grid data
-    :param req_cookies: Infoblox authentication cookie
+    This private method is designed for internal use within the WAPI class to perform 'getgriddata'
+    operations. It sends a POST request with the specified payload to the WAPI, retrieving grid data
+    based on the options provided in the payload. The method requires Infoblox authentication cookies.
 
-    :return dict: json response
+    Args:
+        self: Instance of the `WAPI` class.
+        payload (dict): A dictionary containing options and parameters for fetching grid data.
+        req_cookies: Infoblox authentication cookies required for making the request.
+
+    Returns:
+        dict: A dictionary containing the JSON response from the WAPI. This includes the requested grid data.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the HTTP request to the WAPI endpoint.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> pay_load = {'option1': 'value1', 'option2': 'value2'}
+        >>> cookies = {'ibapauth': 'auth-token'}
+        >>> response = wapi_instance._getgriddata(pay_load, cookies)
+        >>> print(response)
     """
+
     # set content type back to JSON
     headers = {'content-type': 'application/json'}
     try:
@@ -448,21 +604,28 @@ def _getgriddata(self, payload: dict, req_cookies) -> dict:
 
 def grid_backup(self, filename: str = 'database.tgz') -> None:
     """
-    Perform Infoblox Grid Backup to local file
+    Performs a backup of the Infoblox Grid and saves it to a local file.
 
-    This method is handy for performing Infoblox Grid Backups to file used often
-    to create restore-points. The following calls are performed:
+    This method facilitates creating a backup of the Infoblox Grid. It involves several steps,
+    including requesting grid data from the WAPI file operation object, saving the grid data to a file,
+    and signaling the completion of the download. The backup file is saved with the specified filename.
 
-    1. request griddata from the WAPI fileop object
-    2. save the griddata to file
-    3. signal griddata download to file complete
+    Args:
+        self: Instance of the `WAPI` class.
+        filename (str, optional): The name or path of the file where the Infoblox backup will be saved.
+                                  Defaults to 'database.tgz'.
 
-    :param self: `WAPI` instance
-    :param filename: filename or path of the Infoblox backup file to be
-        generated (default: database.tgz)
+    Returns:
+        None: The method does not return a value. It performs the backup operation and saves the file locally.
 
-    :return None:
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during any step of the backup process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> wapi_instance.grid_backup('backup_file.tgz')
     """
+
     ibapauth_cookie = self.conn.cookies['ibapauth']
     req_cookies = {'ibapauth': ibapauth_cookie}
 
@@ -503,19 +666,33 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
 
 def _download_file(self, download_url, req_cookies):
     """
-    Download file from provided download url
+    Downloads a file from a specified Infoblox URL.
 
-    NOTE: this should be used for any of the following:
-    * CSV errors file download
-    * CSV export file download
-    * Grid Backup file download
+    This private method is part of the `WAPI` class and is used for downloading files from the Infoblox WAPI.
+    It is commonly used for downloading CSV errors files, CSV export files, and Grid backup files. The method
+    sends a GET request to the provided URL and returns the response object, which contains the downloaded file
+    data. It requires authentication cookies for access.
 
-    :param self: `WAPI` instance
-    :param download_url: Infoblox provided download URL
-    :param req_cookies: Authentication cookies
+    Args:
+        self: Instance of the `WAPI` class.
+        download_url (str): URL provided by Infoblox for downloading the file.
+        req_cookies (dict): Dictionary containing the authentication cookies required for the request.
 
-    :return: requests response object
+    Returns:
+        requests.Response: The response object from the GET request, containing the file data.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the file download process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> down_url = 'https://infoblox/api/download'
+        >>> cookies = {'ibapauth': 'auth-token'}
+        >>> response = wapi_instance._download_file(down_url, cookies)
+        >>> with open('downloaded_file', 'wb') as file:
+        >>>     file.write(response.content)
     """
+
     header = {'Content-type': 'application/force-download'}
     try:
         res = self.conn.get(
@@ -538,21 +715,29 @@ def _download_complete(
         filename: str,
         req_cookies: dict) -> None:
     """
-    post file downloadcomplete function
+    Notifies the completion of a file download process in the Infoblox WAPI.
 
-    NOTE: this private function should be used whenever a filedownload of any
-    kind is complete. Use for the following:
+    This private method is used to signal the completion of a file download from the Infoblox WAPI.
+    It is a follow-up step typically performed after downloading files such as CSV error logs, CSV export files,
+    or Grid backup files. The method sends a POST request with a download token to the WAPI.
 
-    - CSV errors file download
-    - CSV export file
-    - Grid backup file downloaded
+    Args:
+        self: Instance of the `WAPI` class.
+        token (str): The download token associated with the file download.
+        filename (str): The name of the file that was downloaded.
+        req_cookies (dict): Dictionary containing the authentication cookies required for the request.
 
-    :param self: WAPI object
-    :param token: download token
-    :param filename: filename
-    :param req_cookies: auth cookies
+    Returns:
+        None: This method does not return a value. It performs a notification operation.
 
-    :return None:
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the notification process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> download_token = 'some-download-token'
+        >>> cookies = {'ibapauth': 'auth-token'}
+        >>> wapi_instance._download_complete(download_token, 'downloaded_file.tgz', cookies)
     """
     header = {'Content-type': 'application/json'}
     payload = {'token': token}
@@ -578,18 +763,39 @@ def _restore_database(
         upload_token: str,
         req_cookies: dict) -> dict:
     """
-    perform fileop function call to restoredatabase
+    Performs a database restore operation in the Infoblox WAPI.
 
-    :param self: is a `WAPI` instance
-    :param keep_grid_ip: set this value to `True` to retain the IP address
-        configuration settings of the Grid Manager, if `False` the network
-        settings will potentially be overwritten with the IP address of the GM
-        in the restore file.
-    :param mode: restore mode
-    :param upload_token: file upload token
-    :param req_cookies: infoblox authentication cookie
+    This private method is responsible for initiating a database restore operation via the Infoblox WAPI.
+    It posts a request with specific parameters to control the restore process, including whether to retain
+    the Grid Manager's IP address, the mode of restoration, and a token for the uploaded file.
 
-    :return dict: requests response
+    Args:
+        self: Instance of the `WAPI` class.
+        keep_grid_ip (bool): If True, retains the Grid Manager's IP address configuration settings.
+                             If False, network settings may be overwritten with the IP address in the
+                             restore file.
+        mode (str): The mode of restoration (e.g., 'NORMAL', 'FORCED').
+        upload_token (str): Token received after successfully uploading the restore file.
+        req_cookies (dict): Dictionary containing the authentication cookies required for the request.
+
+    Returns:
+        dict: A dictionary containing the JSON response from the WAPI. This includes details about
+              the restore operation initiation.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the restore operation.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> up_token = 'some-upload-token'
+        >>> cookies = {'ibapauth': 'auth-token'}
+        >>> response = wapi_instance._restore_database(
+                keep_grid_ip=True,
+                mode='NORMAL',
+                upload_token=up_token,
+                req_cookies=cookies
+            )
+        >>> print(response)
     """
     # set content type back to JSON
     headers = {'content-type': 'application/json'}
@@ -624,34 +830,29 @@ def grid_restore(self,
                  mode: str,
                  keep_grid_ip: bool) -> None:
     """
-    method for restore NIOS database file
+    Restores the Infoblox NIOS database from a backup file.
 
-    This method will perform all the necessary steps in doing a Grid Restore to
-    Grid Master. The caller supplies the name of the file to restore, the mode,
-    and whether to retain the IP Address settings of the GM or allow it to be
-    overwritten.
+    This method executes a series of steps to restore the Infoblox Grid database from a specified backup file.
+    It allows the user to specify the restore mode and whether to keep the current Grid Manager's IP settings.
+    The method involves initializing the file upload, uploading the backup file, and then initiating the grid
+    restore process.
 
-    This method performs the following calls:
+    Args:
+        self: Instance of the `WAPI` class.
+        restore_file_name (str): The name or path of the Infoblox grid backup file to be restored.
+        mode (str): The restore mode. Can be one of 'NORMAL', 'FORCED', or 'CLONE'.
+        keep_grid_ip (bool): If True, retains the Grid Manager's network settings and IP address.
+                             If False, these settings will be overwritten with the values in the restore file.
 
-    1. Initiates the file upload by calling _upload_init()
-    2. Uploads the file to restore calling _upload_file()
-    3. Starts the Grid restore process calling _restore_database()
+    Returns:
+        None: This method does not return a value. It performs the restore operation.
 
-    :param self: `WAPI` instance
-    :param restore_file_name: supply a filename or filepath of an Infoblox Grid
-        backup file to restore.
-    :param mode: specify a restore mode as any one of `NORMAL`, `FORCED`,
-        `CLONE`. Use `NORMAL` when you are restoring a Grid backup file that was
-        extracted from the same server you're restoring to. Use `FORCED` to
-        restore a Grid backup file to a different Grid Manager. This is most
-        often used by PS to restore a customer's Grid onto a different GM in a
-        lab environment.
-    :param keep_grid_ip: set this value to `True` to retain the Grid Manager's
-        network settings and/or IP address. Set it to `False` will cause the
-        network settings and IP address to be overwritten w/ the value contained
-        in the restore file.
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during any step of the restore process.
 
-    :return None:
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> wapi_instance.grid_restore('backup_file.tgz', 'NORMAL', True)
     """
     (_, filename) = os.path.split(restore_file_name)
     filename = os.path.join(_, filename.replace('-', '_'))
@@ -708,10 +909,42 @@ def get_support_bundle(
         remote_url: Optional[str] = None,
         rotate_log_files: bool = False
 ):
-    # Call WAPI fileop (download) get_support_bundle function
-    logging.info(
-        'performing get_support_bundle for %s object(s)', member
-    )
+    """
+    Fetches and downloads a support bundle from the specified Infoblox member.
+
+    This method requests a support bundle from an Infoblox member and downloads it. The support bundle may
+    include various data like cached zone data, core files, log files, and more, depending on the options
+    specified. The method sends a request to the WAPI and handles the download and saving of the resulting
+    support bundle file.
+
+    Args:
+        self: Instance of the `WAPI` class.
+        member (str): The name or IP address of the target member.
+        cached_zone_data (bool, optional): If True, includes cached zone data in the bundle. Defaults to False.
+        core_files (bool, optional): If True, includes core files in the bundle. Defaults to False.
+        log_files (bool, optional): If True, includes log files in the bundle. Defaults to False.
+        nm_snmp_logs (bool, optional): If True, includes NIOS Maintenance SNMP logs in the bundle. Defaults to False.
+        recursive_cache_file (bool, optional): If True, includes the cache file recursively. Defaults to False.
+        remote_url (str, optional): URL of a remote server to upload the support bundle to. Defaults to None.
+        rotate_log_files (bool, optional): If True, rotates log files after creating the support bundle. Defaults to False.
+
+    Returns:
+        None: This method does not return a value. It performs the operation of fetching and saving the support bundle.
+
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the request or file download process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> wapi_instance.get_support_bundle(
+                member='member1',
+                cached_zone_data=True,
+                core_files=True,
+                log_files=True
+            )
+    """
+
+    logging.info('performing get_support_bundle for %s object(s)', member)
     payload = {
         "member": member,
         "cached_zone_data": cached_zone_data,
@@ -778,25 +1011,36 @@ def get_log_files(
         node_type: Optional[str] = None
 ):
     """
-    Fetches log from NIOS and writes it to disk for given type, member, and endpoint
+    Fetches specified log files from NIOS and writes them to disk.
+
+    This method is used to retrieve log files of a specified type from the NIOS system. It can target
+    specific members, endpoints, or MSServers, and optionally include rotated log files. The logs are
+    downloaded and saved to a file on disk.
 
     Args:
-        self: The instance of the class calling this method.
-        log_type: The type of log files to fetch. This can be one of the LogType enum values.
-        endpoint: Optional. The specific endpoint to fetch log files for.
-        include_rotated: Optional. Whether to include rotated log files. Default is False.
-        member: Optional. The member to fetch log files for.
-        msserver: Optional. The specific MSServer to fetch log files for.
-        node_type: Optional. The type of node to fetch log files for.
-
-    Raises:
-        requests.exceptions.RequestException: If there is an error in making the request or retrieving the log files.
+        self: Instance of the `WAPI` class calling this method.
+        log_type (str): The type of log files to fetch, as defined in the LogType enum.
+        endpoint (str, optional): Specific endpoint to fetch log files for. Default is None.
+        include_rotated (bool, optional): Whether to include rotated log files. Default is False.
+        member (str, optional): Specific member to fetch log files for. Default is None.
+        msserver (str, optional): Specific MSServer to fetch log files for. Default is None.
+        node_type (str, optional): Type of node to fetch log files for. Default is None.
 
     Returns:
-        None
+        None: This method does not return a value. It performs the operation of fetching and saving the log files.
 
+    Raises:
+        requests.exceptions.RequestException: If an error occurs during the request or file download process.
+
+    Example:
+        >>> wapi_instance = WAPI(...)
+        >>> wapi_instance.get_log_files(
+                log_type='syslog',
+                member='member1',
+                include_rotated=True
+            )
     """
-    # Call WAPI fileop (download) get_log_files function
+
     logging.info('fetching %s log files for %s', log_type, member)
     payload = {
         "log_type": log_type,
