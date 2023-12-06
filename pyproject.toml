@@ -24,15 +24,15 @@ dependencies = [
 ]
 
 [project.scripts]
-nios-get-log = 'ibx_tools.bin.nios_get_log:main'
-nios-get-config = 'ibx_tools.bin.nios_get_config:main'
-nios-get-supportbundle = 'ibx_tools.bin.nios_get_supportbundle:main'
-nios-grid-backup = 'ibx_tools.bin.nios_grid_backup:main'
-nios-grid-restore = 'ibx_tools.bin.nios_grid_restore:main'
-nios-restart-service = 'ibx_tools.bin.nios_restart_service:main'
-nios-restart-status = 'ibx_tools.bin.nios_restart_status:main'
-nios-csvimport = 'ibx_tools.bin.nios_csvimport:main'
-nios-csvexport = 'ibx_tools.bin.nios_csvexport:main'
+get-log = 'ibx_tools.bin.nios_get_log:main'
+get-config = 'ibx_tools.bin.nios_get_config:main'
+get-supportbundle = 'ibx_tools.bin.nios_get_supportbundle:main'
+grid-backup = 'ibx_tools.bin.nios_grid_backup:main'
+grid-restore = 'ibx_tools.bin.nios_grid_restore:main'
+restart-service = 'ibx_tools.bin.nios_restart_service:main'
+restart-status = 'ibx_tools.bin.nios_restart_status:main'
+csvimport = 'ibx_tools.bin.nios_csvimport:main'
+csvexport = 'ibx_tools.bin.nios_csvexport:main'
 
 
 [project.optional-dependencies]
