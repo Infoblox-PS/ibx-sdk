@@ -1,14 +1,49 @@
 site_name: Basic API Toolkit
+
+extra_css:
+  - css/ibx.css
+
+nav:
+  - Home: index.md
+  - User Gudes:
+      - Methods:
+          - File Operations: user-guide/classes/fileop.md
+          - NIOS WAPI: user-guide/classes/wapi.md
+          - NIOS Services: user-guide/classes/service.md
+      - Examples:
+          - CSV Export: user-guide/examples/csvexport.md
+          - CSV Import: user-guide/examples/csvimport.md
+          - Get Configuration: user-guide/examples/get_config.md
+          - Get Log: user-guide/examples/get_log.md
+          - Get Support Bundle: user-guide/examples/get_supportbundle.md
+          - Grid Bakcup: user-guide/examples/grid_backup.md
+          - Grid Restore: user-guide/examples/grid_restore.md
+          - Restart Service: user-guide/examples/restart_service.md
+          - Restart Status: user-guide/examples/restart_status.md
+  - Change Log: changelog.md
+
 theme:
   font:
     text: Lato
+
   palette:
     primary: black
     accent: green
+
   logo: assets/logo.svg
   name: material
+
+  markdown_extensions:
+    - pymdownx.highlight:
+        anchor_linenums: true
+        line_spans: __span
+        pygments_lang_class: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+
   features:
-    #    - navigation.tabs
+    - navigation.tabs
     - navigation.sections
     - navigation.path
     - toc.integrate
@@ -23,21 +58,6 @@ theme:
 plugins:
   - search
   - mkdocstrings
-
-markdown_extensions:
-  - def_list
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.highlight:
-      anchor_linenums: true
-  - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - admonition
-  - footnotes
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.mark
-  - attr_list
 
 copyright: |
   &copy; 2023 <a href="https://infoblox.com" target= "_blank" rel="noopener">Infoblox</a>

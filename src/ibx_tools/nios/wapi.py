@@ -59,7 +59,7 @@ class WapiRequestException(BaseWapiException):
 class WAPI(requests.sessions.Session):
     """Handles interactions with the Infoblox WAPI.
 
-    This class provides a range of methods to interact with Infoblox WAPI,
+    This class provides a range of classes to interact with Infoblox WAPI,
     including session management, data retrieval, file operations, and service management.
 
     Attributes:
