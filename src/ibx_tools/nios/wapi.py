@@ -92,9 +92,13 @@ class WAPI(requests.sessions.Session):
         get_log_files: Fetches log files based on specified parameters.
 
     Example:
-        >>> wapi = WAPI(grid_mgr='10.0.0.1', username='admin', password='infoblox', wapi_ver='2.5', ssl_verify=False)
-        >>> print(wapi.url)
-        https://10.0.0.1/wapi/v2.5
+
+        ```python
+        wapi = WAPI(grid_mgr='10.0.0.1', username='admin', password='infoblox', wapi_ver='2.5', ssl_verify=False)
+        print(wapi.url)
+
+        # outputs https://10.0.0.1/wapi/v2.5
+        ```
     """
 
     def __init__(
@@ -137,12 +141,15 @@ class WAPI(requests.sessions.Session):
         - None.
 
         Example:
-            wapi = WAPI()
-            wapi.grid_mgr = '10.0.0.1'
-            wapi.wapi_ver = '2.10'
-            url = wapi.url
-            print(url)
-            # Output: 'https://10.0.0.1/wapi/v2.10'
+
+            ```python
+                wapi = WAPI()
+                wapi.grid_mgr = '10.0.0.1'
+                wapi.wapi_ver = '2.10'
+                url = wapi.url
+                print(url)
+                # Output: 'https://10.0.0.1/wapi/v2.10'
+            ```
         """
         if self.grid_mgr and self.wapi_ver:
             return f'https://{self.grid_mgr}/wapi/v{self.wapi_ver}'
@@ -162,10 +169,13 @@ class WAPI(requests.sessions.Session):
             WapiRequestException: If there was an error connecting to the WAPI service.
 
         Example:
+
+            ```python
             wapi = WAPI()
             fields = wapi.object_fields('record:host')
             if fields is not None:
                 print(f"Fields: {fields}")
+            ```
         """
         try:
             logging.debug('trying %s/%s?_schema', self.url, wapi_object)
@@ -190,9 +200,12 @@ class WAPI(requests.sessions.Session):
             WapiRequestException: If there is an error making the GET request to retrieve the WAPI version.
 
         Example Usage:
+
+            ```python
             session = WAPI()
             session.max_wapi_ver()
             print(session.wapi_ver)  # Prints the maximum supported WAPI version
+            ```
 
         """
         url = f'https://{self.grid_mgr}/wapi/v1.0/?_schema'
@@ -285,12 +298,15 @@ class WAPI(requests.sessions.Session):
             A Response object representing the server's response to the PUT request.
 
         Example usage:
+
+            ```python
             wapi = WAPI()
             response = wapi.put('https://example.com/api/resource/123', data={'name': 'John Doe'})
             if response.status_code == 200:
                 print('PUT request successful.')
             else:
                 print('PUT request failed with status code: {}'.format(response.status_code)
+            ```
         """
         return self.conn.request('delete', url, **kwargs)
 
@@ -364,9 +380,11 @@ class WAPI(requests.sessions.Session):
         Raises:
             None
 
-        Example Usage:
+        Example:
+            ```python
             wapi = WAPI()
-            wapi.grid_restore()
+            wapi.grid_restore(filename="database.tgz", mode="NORMAL", keep_grid_ip=True)
+            ```
         """
         fileop.grid_restore(self, filename, mode, keep_grid_ip)
 
@@ -385,9 +403,12 @@ class WAPI(requests.sessions.Session):
         fileop.grid_backup() method from the infoblox_pslib.nios.fileop module. The backup is saved with the
         specified filename in the Infoblox Grid.
 
-        Example Usage:
+        Example:
+
+            ```python
             session = WAPI()
-            session.grid_backup("backup_file.tgz")
+            session.grid_backup(filename="backup_file.tgz")
+            ```
 
         This will initiate a grid backup with the provided filename "backup_file.tgz".
         """

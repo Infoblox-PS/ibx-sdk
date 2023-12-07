@@ -402,15 +402,6 @@ def __csv_import(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the CSV import operation.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> response = wapi_instance.__csv_import(
-                task_operation='INSERT',
-                upload_token='some-token',
-                req_cookies={'session_id': '123'},
-                exit_on_error=False
-            )
-        >>> print(response)
     """
     headers = {'content-type': 'application/json'}
 
@@ -471,11 +462,6 @@ def csvtask_status(self, csvtask: dict) -> dict:
     Raises:
         requests.exceptions.RequestException: If an error occurs during the HTTP request to the WAPI endpoint.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> task_details = {'csv_import_task': {'_ref': 'task:abc123'}}
-        >>> status = wapi_instance.csvtask_status(task_details)
-        >>> print(status)
     """
     _ref = csvtask['csv_import_task']['_ref']
     logging.debug('Checking status of csvimporttask %s', _ref)
@@ -511,9 +497,6 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
         requests.exceptions.RequestException: If an error occurs during the file download process or
                                               in any of the intermediate steps.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> wapi_instance.get_csv_errors_file('imported_data.csv', '1234567890')
     """
 
     logging.debug('fetching csv-errors file for job id %s', job_id)
@@ -620,9 +603,6 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
     Raises:
         requests.exceptions.RequestException: If an error occurs during any step of the backup process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> wapi_instance.grid_backup('backup_file.tgz')
     """
 
     ibapauth_cookie = self.conn.cookies['ibapauth']
@@ -826,9 +806,6 @@ def grid_restore(self,
     Raises:
         requests.exceptions.RequestException: If an error occurs during any step of the restore process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> wapi_instance.grid_restore('backup_file.tgz', 'NORMAL', True)
     """
     (_, filename) = os.path.split(restore_file_name)
     filename = os.path.join(_, filename.replace('-', '_'))
@@ -910,14 +887,6 @@ def get_support_bundle(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the request or file download process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> wapi_instance.get_support_bundle(
-                member='member1',
-                cached_zone_data=True,
-                core_files=True,
-                log_files=True
-            )
     """
 
     logging.info('performing get_support_bundle for %s object(s)', member)
@@ -1008,13 +977,6 @@ def get_log_files(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the request or file download process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> wapi_instance.get_log_files(
-                log_type='syslog',
-                member='member1',
-                include_rotated=True
-            )
     """
 
     logging.info('fetching %s log files for %s', log_type, member)
