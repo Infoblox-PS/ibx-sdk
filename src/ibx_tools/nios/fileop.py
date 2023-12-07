@@ -58,7 +58,7 @@ def member_config(
     data into the file.
 
     The function finally notifies the grid that file download is complete by calling
-    `_download_complete` function. If it encounters an exception, it's logged and re-raised.
+    `__download_complete` function. If it encounters an exception, it's logged and re-raised.
     """
 
     conf_type = conf_type.upper()
@@ -90,7 +90,7 @@ def member_config(
 
     logging.info('downloading data from %s', download_url)
     try:
-        res = _download_file(self, download_url, req_cookies)
+        res = __download_file(self, download_url, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -105,7 +105,7 @@ def member_config(
 
     # notify grid file downloadcomplete
     try:
-        _download_complete(self, download_token, download_file, req_cookies)
+        __download_complete(self, download_token, download_file, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -142,7 +142,7 @@ def csv_export(
     then writes the downloaded data into the file.
 
     Finally, it notifies the grid about the completion of the download via the
-    `_download_complete` function and returns None. If the notification process
+    `__download_complete` function and returns None. If the notification process
     encounters an exception, it's logged and re-raised.
     """
 
@@ -176,7 +176,7 @@ def csv_export(
 
     logging.info('downloading data from %s', download_url)
     try:
-        res = _download_file(self, download_url, req_cookies)
+        res = __download_file(self, download_url, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -192,7 +192,7 @@ def csv_export(
 
     # notify grid file downloadcomplete
     try:
-        _download_complete(self, download_token, filename, req_cookies)
+        __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -203,7 +203,6 @@ def csv_import(
         task_operation: str,
         csv_import_file: str,
         exit_on_error: bool = False) -> dict:
-    # noinspection PyUnresolvedReferences
     """
     Initiates a CSV import job via WAPI.
 
@@ -226,22 +225,24 @@ def csv_import(
         Exception: If an error occurs during the CSV import process.
 
     Example:
-        >>> wapi_instance = WAPI(...)
-        >>> csv_task = wapi_instance.csv_import(
+
+    ```python
+            wapi_instance = WAPI(...)
+            csv_task = wapi_instance.csv_import(
                 task_operation='IMPORT',
                 csv_import_file='/path/to/file.csv',
                 exit_on_error=False
             )
-        >>> print(csv_task)
+            print(csv_task)
+    ```
     """
-    # noinspection PyUnresolvedReferences
     (_, filename) = os.path.split(csv_import_file)
     filename = filename.replace('-', '_')
 
     # Call WAPI fileop Upload INIT
     logging.info('step 1 - request uploadinit %s', filename)
     try:
-        obj = _upload_init(self, filename)
+        obj = __upload_init(self, filename)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -266,7 +267,7 @@ def csv_import(
             'step 2 - post the files using the upload_url provided'
         )
         try:
-            _upload_file(self, upload_url, upload_file, req_cookies)
+            __upload_file(self, upload_url, upload_file, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise
@@ -277,7 +278,7 @@ def csv_import(
             task_operation, csv_import_file
         )
         try:
-            csvtask = _csv_import(
+            csvtask = __csv_import(
                 self,
                 task_operation.upper(),
                 token,
@@ -291,7 +292,7 @@ def csv_import(
             return csvtask
 
 
-def _upload_init(self, filename: str) -> dict:
+def __upload_init(self, filename: str) -> dict:
     """
     Initializes a file upload process in the Infoblox WAPI.
 
@@ -310,10 +311,6 @@ def _upload_init(self, filename: str) -> dict:
     Raises:
         requests.exceptions.RequestException: If an error occurs during the initialization of the file upload.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> upload_info = wapi_instance._upload_init('example.csv')
-        >>> print(upload_info)
     """
 
     headers = {'content-type': 'application/json'}
@@ -334,7 +331,7 @@ def _upload_init(self, filename: str) -> dict:
     return res.json()
 
 
-def _upload_file(
+def __upload_file(
         self,
         upload_url: str,
         upload_file: dict,
@@ -359,11 +356,6 @@ def _upload_file(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the file upload process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> file_to_upload = {'file': ('example.csv', open('example.csv', 'rb'))}
-        >>> cookies = {'session_id': '123'}
-        >>> wapi_instance._upload_file('https://infoblox/api/upload', file_to_upload, cookies)
     """
     # Perform the actual upload
     try:
@@ -381,7 +373,7 @@ def _upload_file(
     logging.debug(pprint.pformat(res.text))
 
 
-def _csv_import(
+def __csv_import(
         self,
         task_operation: str,
         upload_token: str,
@@ -412,7 +404,7 @@ def _csv_import(
 
     Example:
         >>> wapi_instance = WAPI(...)
-        >>> response = wapi_instance._csv_import(
+        >>> response = wapi_instance.__csv_import(
                 task_operation='INSERT',
                 upload_token='some-token',
                 req_cookies={'session_id': '123'},
@@ -549,7 +541,7 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
     filename = f'csv-errors-{filename}.csv'
     with open(filename, 'wb') as handle:
         try:
-            res = _download_file(self, download_url, req_cookies)
+            res = __download_file(self, download_url, req_cookies)
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
@@ -562,13 +554,13 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
 
         # We're done - so post to downloadcomplete function
         try:
-            _download_complete(self, token, filename, req_cookies)
+            __download_complete(self, token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise
 
 
-def _getgriddata(self, payload: dict, req_cookies) -> dict:
+def __getgriddata(self, payload: dict, req_cookies) -> dict:
     """
     Executes a 'getgriddata' file operation call to the Infoblox WAPI.
 
@@ -587,12 +579,6 @@ def _getgriddata(self, payload: dict, req_cookies) -> dict:
     Raises:
         requests.exceptions.RequestException: If an error occurs during the HTTP request to the WAPI endpoint.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> pay_load = {'option1': 'value1', 'option2': 'value2'}
-        >>> cookies = {'ibapauth': 'auth-token'}
-        >>> response = wapi_instance._getgriddata(pay_load, cookies)
-        >>> print(response)
     """
 
     # set content type back to JSON
@@ -646,7 +632,7 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
 
     logging.info('step 1 - request gridbackup %s', filename)
     try:
-        res = _getgriddata(self, payload, req_cookies)
+        res = __getgriddata(self, payload, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -658,7 +644,7 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
 
     with open(filename, 'wb') as handle:
         try:
-            res = _download_file(self, download_url, req_cookies)
+            res = __download_file(self, download_url, req_cookies)
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
@@ -671,13 +657,13 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
 
         # we're done - post downloadcomplete function using the token
         try:
-            _download_complete(self, token, filename, req_cookies)
+            __download_complete(self, token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise
 
 
-def _download_file(self, download_url, req_cookies):
+def __download_file(self, download_url, req_cookies):
     """
     Downloads a file from a specified Infoblox URL.
 
@@ -697,13 +683,6 @@ def _download_file(self, download_url, req_cookies):
     Raises:
         requests.exceptions.RequestException: If an error occurs during the file download process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> down_url = 'https://infoblox/api/download'
-        >>> cookies = {'ibapauth': 'auth-token'}
-        >>> response = wapi_instance._download_file(down_url, cookies)
-        >>> with open('downloaded_file', 'wb') as file:
-        >>>     file.write(response.content)
     """
 
     header = {'Content-type': 'application/force-download'}
@@ -722,7 +701,7 @@ def _download_file(self, download_url, req_cookies):
     return res
 
 
-def _download_complete(
+def __download_complete(
         self,
         token: str,
         filename: str,
@@ -746,11 +725,6 @@ def _download_complete(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the notification process.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> download_token = 'some-download-token'
-        >>> cookies = {'ibapauth': 'auth-token'}
-        >>> wapi_instance._download_complete(download_token, 'downloaded_file.tgz', cookies)
     """
     header = {'Content-type': 'application/json'}
     payload = {'token': token}
@@ -769,7 +743,7 @@ def _download_complete(
         raise
 
 
-def _restore_database(
+def __restore_database(
         self,
         keep_grid_ip: bool,
         mode: str,
@@ -798,17 +772,6 @@ def _restore_database(
     Raises:
         requests.exceptions.RequestException: If an error occurs during the restore operation.
 
-    Example:
-        >>> wapi_instance = WAPI(...)
-        >>> up_token = 'some-upload-token'
-        >>> cookies = {'ibapauth': 'auth-token'}
-        >>> response = wapi_instance._restore_database(
-                keep_grid_ip=True,
-                mode='NORMAL',
-                upload_token=up_token,
-                req_cookies=cookies
-            )
-        >>> print(response)
     """
     # set content type back to JSON
     headers = {'content-type': 'application/json'}
@@ -873,7 +836,7 @@ def grid_restore(self,
     # Call WAPI fileop Upload INIT
     logging.info('step 1 - request uploadinit %s', restore_file_name)
     try:
-        obj = _upload_init(self, filename)
+        obj = __upload_init(self, filename)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -890,7 +853,7 @@ def grid_restore(self,
         logging.info('step 2 - post the files using the upload_url provided')
         upload_file = {'filedata': restore_file}
         try:
-            _upload_file(self, upload_url, upload_file, req_cookies)
+            __upload_file(self, upload_url, upload_file, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise
@@ -898,7 +861,7 @@ def grid_restore(self,
         # Execute the restore
         logging.info('step 3 - execute the restore')
         try:
-            _restore_database(
+            __restore_database(
                 self,
                 keep_grid_ip,
                 mode,
@@ -992,7 +955,7 @@ def get_support_bundle(
 
     logging.info('downloading data from %s', download_url)
     try:
-        res = _download_file(self, download_url, req_cookies)
+        res = __download_file(self, download_url, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -1008,7 +971,7 @@ def get_support_bundle(
 
     # notify grid file downloadcomplete
     try:
-        _download_complete(self, download_token, filename, req_cookies)
+        __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -1093,7 +1056,7 @@ def get_log_files(
 
     logging.info('downloading data from %s', download_url)
     try:
-        res = _download_file(self, download_url, req_cookies)
+        res = __download_file(self, download_url, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -1109,7 +1072,7 @@ def get_log_files(
 
     # notify grid file downloadcomplete
     try:
-        _download_complete(self, download_token, filename, req_cookies)
+        __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
