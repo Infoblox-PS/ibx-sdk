@@ -7,9 +7,9 @@ nav:
   - Home: index.md
   - User Gudes:
       - Methods:
-          - File Operations: user-guide/methods/fileop.md
-          - NIOS WAPI: user-guide/methods/wapi.md
-          - NIOS Services: user-guide/methods/service.md
+          - File Operations: user-guide/classes/fileop.md
+          - NIOS WAPI: user-guide/classes/wapi.md
+          - NIOS Services: user-guide/classes/service.md
       - Examples:
           - CSV Export: user-guide/examples/csvexport.md
           - CSV Import: user-guide/examples/csvimport.md
