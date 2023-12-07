@@ -5,7 +5,7 @@ extra_css:
 
 nav:
   - IBX-Tools: index.md
-  - User Gudes:
+  - User Guides:
       - Classes:
           - wapi: user-guide/classes/wapi.md
           - fileop: user-guide/classes/fileop.md
