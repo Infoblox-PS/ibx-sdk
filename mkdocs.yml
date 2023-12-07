@@ -4,23 +4,24 @@ extra_css:
   - css/ibx.css
 
 nav:
-  - Home: index.md
+  - IBX-Tools: index.md
   - User Gudes:
-      - Methods:
-          - File Operations: user-guide/classes/fileop.md
-          - NIOS WAPI: user-guide/classes/wapi.md
-          - NIOS Services: user-guide/classes/service.md
+      - Classes:
+          - wapi: user-guide/classes/wapi.md
+          - fileop: user-guide/classes/fileop.md
+          - service: user-guide/classes/service.md
       - Examples:
           - CSV Export: user-guide/examples/csvexport.md
           - CSV Import: user-guide/examples/csvimport.md
           - Get Configuration: user-guide/examples/get_config.md
           - Get Log: user-guide/examples/get_log.md
           - Get Support Bundle: user-guide/examples/get_supportbundle.md
-          - Grid Bakcup: user-guide/examples/grid_backup.md
+          - Grid Backup: user-guide/examples/grid_backup.md
           - Grid Restore: user-guide/examples/grid_restore.md
           - Restart Service: user-guide/examples/restart_service.md
           - Restart Status: user-guide/examples/restart_status.md
   - Change Log: changelog.md
+  - License: LICENSE.md
 
 theme:
   font:
