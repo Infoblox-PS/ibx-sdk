@@ -1,15 +1,22 @@
-site_name: Infoblox Basic API Toolkit
+site_name: Basic API Toolkit
 theme:
+  font:
+    text: Lato
+  palette:
+    primary: black
+    accent: green
+  logo: assets/logo.svg
   name: material
   features:
-    - navigation.tabs
+    #    - navigation.tabs
     - navigation.sections
+    - navigation.path
     - toc.integrate
     - navigation.top
-    - saarch.suggest
+    - search.suggest
     - search.highlight
     - content.tabs.link
-    - contant.code.annotation
+    - content.code.annotation
     - content.code.copy
   language: en
 
@@ -18,6 +25,9 @@ plugins:
   - mkdocstrings
 
 markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -28,9 +38,6 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.mark
   - attr_list
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
 
 copyright: |
   &copy; 2023 <a href="https://infoblox.com" target= "_blank" rel="noopener">Infoblox</a>

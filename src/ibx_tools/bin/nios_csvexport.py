@@ -6,7 +6,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@ limitations under the License.
 
 import getpass
 import sys
+from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -24,7 +25,7 @@ from click_option_group import optgroup
 from ibx_tools.logger.ibx_logger import (
     init_logger, increase_log_level
 )
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -51,7 +52,7 @@ CSV Export by object
 @optgroup.option('-o', '--object', default='network', help='WAPI export object type')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(**args):
+def main(**args: Any) -> None:
     """
     CSV Export
 
@@ -68,7 +69,8 @@ def main(**args):
         None
 
     Raises:
-        Could raise various exceptions depending on the execution of internal functions.
+        WapiRequestException: If unable to connect with the provided wapi parameters.
+        SystemExit: The function exits the system upon completion or upon encounter of an error.
 
     """
     sys.tracebacklimit = 0
@@ -82,7 +84,12 @@ def main(**args):
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
-    wapi.connect()
+    try:
+        wapi.connect()
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
+    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     wapi.csv_export(
         wapi_object=args.get('object'),
