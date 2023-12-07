@@ -34,6 +34,20 @@ log = init_logger(
 
 wapi = WAPI()
 
+
+class LogType(click.ParamType):
+    name = "log_type"
+    log_types = [
+        'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG',
+        'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
+    ]
+
+    def convert(self, value, param, ctx):
+        if value.upper() in self.log_types:
+            return value.upper()
+        self.fail(f"{value} is not a valid log type")
+
+
 help_text = """
 Get NIOS Log from Member
 """
@@ -45,10 +59,7 @@ Get NIOS Log from Member
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-t', '--log-type', default='SYSLOG',
-                 show_default=True, help='SYSLOG | AUDITLOG | MSMGMTLOG |'
-                                         'DELTALOG | OUTBOUND | PTOPLOG |'
-                                         'DISCOVERY_CSV_ERRLOG]')
+@optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True, help='select log type')
 @optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
                  show_default=True, help='Node: ACTIVE | PASSIVE')
 @optgroup.option('-r', '--rotated-logs', is_flag=True, default=True, help='Exclude Rotated Logs')
