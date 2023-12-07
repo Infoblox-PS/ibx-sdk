@@ -1,0 +1,43 @@
+site_name: Basic API Toolkit
+theme:
+  font:
+    text: Lato
+  palette:
+    primary: black
+    accent: green
+  logo: assets/logo.svg
+  name: material
+  features:
+    #    - navigation.tabs
+    - navigation.sections
+    - navigation.path
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+  language: en
+
+plugins:
+  - search
+  - mkdocstrings
+
+markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+
+copyright: |
+  &copy; 2023 <a href="https://infoblox.com" target= "_blank" rel="noopener">Infoblox</a>
