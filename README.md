@@ -85,14 +85,14 @@ such as configuration file downloads, CSV exports and imports, grid backups and 
 ### Internal Helper Functions
 
 - **_upload_init**: Initializes a file upload to the Infoblox WAPI.
-- **_upload_file**: Uploads a file to the specified URL using the Infoblox WAPI.
-- **_csv_import**: Performs a CSV import job via WAPI.
+- **__upload_file**: Uploads a file to the specified URL using the Infoblox WAPI.
+- **__csv_import**: Performs a CSV import job via WAPI.
 - **csvtask_status**: Fetches the status of a CSV import task from the CSV Job Manager.
 - **get_csv_errors_file**: Downloads the CSV errors file for a specified job.
-- **_getgriddata**: Executes a 'getgriddata' file operation call to the Infoblox WAPI.
-- **_download_file**: Downloads a file from a specified Infoblox URL.
-- **_download_complete**: Notifies the completion of a file download process in the Infoblox WAPI.
-- **_restore_database**: Performs a database restore operation in the Infoblox WAPI.
+- **__getgriddata**: Executes a 'getgriddata' file operation call to the Infoblox WAPI.
+- **__download_file**: Downloads a file from a specified Infoblox URL.
+- **__download_complete**: Notifies the completion of a file download process in the Infoblox WAPI.
+- **__restore_database**: Performs a database restore operation in the Infoblox WAPI.
 
 ### Example Usage
 
