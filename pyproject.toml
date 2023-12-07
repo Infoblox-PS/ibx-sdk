@@ -36,7 +36,7 @@ csvexport = 'ibx_tools.bin.nios_csvexport:main'
 
 
 [project.optional-dependencies]
-dev = ["pylint", "codestyle", "sphinx"]
+dev = ["pylint", "codestyle", "sphinx", "mkdocstrings-python", "mkdocs-material"]
 test = ["coverage", "pytest"]
 
 [project.urls]
