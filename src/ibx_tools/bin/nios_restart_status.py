@@ -16,8 +16,8 @@ limitations under the License.
 """
 
 import getpass
+import json
 import sys
-from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -45,21 +45,19 @@ Retrieve Restart Status
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-s', '--service', type=click.Choice(['DNS', 'DHCP', 'DHCPV4', 'DHCPV6', 'ALL']),
-                 default='ALL', show_default=True, help='select which service to restart')
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(**args: Any) -> None:
+def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
     """
     Retrieve Restart Status
 
     Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it increases the logging level.
-            grid-mgr (str): Manager for the wapi grid.
-            username (str): Username for the wapi connection.
-            wapi_ver (str): Version of wapi.
+        grid_mgr (str): Infoblox Grid Manager
+        debug (bool): If True, it sets the log level to DEBUG. Default is False.
+        grid-mgr (str): Manager for the wapi grid.
+        username (str): Username for the wapi connection.
+        wapi_ver (str): Version of wapi.
 
     Returns:
         None
@@ -70,13 +68,13 @@ def main(**args: Any) -> None:
 
     """
     sys.tracebacklimit = 0
-    if args.get('debug'):
+    if debug:
         increase_log_level()
         sys.tracebacklimit = 1
 
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+    wapi.grid_mgr = grid_mgr
+    wapi.username = username
+    wapi.wapi_ver = wapi_ver
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
@@ -88,7 +86,9 @@ def main(**args: Any) -> None:
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     res = wapi.get_service_restart_status()
-    log.info(res)
+
+    formatted_json = json.dumps(res, indent=4)
+    print(formatted_json)
 
     sys.exit()
 

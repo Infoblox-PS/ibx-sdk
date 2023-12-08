@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -56,18 +55,18 @@ Restore NIOS Grid.
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
-@click.version_option(__version__)
-def main(**args: Any) -> None:
+def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str, debug: bool) -> None:
     """
     Restore NIOS Grid
 
     Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it increases the logging level.
-            grid-mgr (str): Manager for the wapi grid.
-            username (str): Username for the wapi connection.
-            wapi_ver (str): Version of wapi.
-            file (str): Filename/path where the backup will be saved.
+        mode (str): Restore Mode [NORMAL]
+        debug (bool): If True, it sets the log level to DEBUG. Default is False.
+        grid_mgr (str): Manager for the wapi grid.
+        username (str): Username for the wapi connection.
+        wapi_ver (str): Version of wapi.
+        filename (str): Filename/path where the backup will be saved.
+        keep: (bool): Keep existing
 
     Returns:
         None
@@ -78,13 +77,13 @@ def main(**args: Any) -> None:
 
     """
     sys.tracebacklimit = 0
-    if args.get('debug'):
+    if debug:
         increase_log_level()
         sys.tracebacklimit = 1
 
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+    wapi.grid_mgr = grid_mgr
+    wapi.username = username
+    wapi.wapi_ver = wapi_ver
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
@@ -95,11 +94,11 @@ def main(**args: Any) -> None:
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
+    # noinspection PyTypeChecker
     wapi.grid_restore(
-        filename=args.get('filename'),
-        mode=args.get('mode'),
-        keep_grid_ip=args.get('keep')
-    )
+        filename=filename,
+        mode=mode,
+        keep_grid_ip=keep)
 
 
 if __name__ == "__main__":
