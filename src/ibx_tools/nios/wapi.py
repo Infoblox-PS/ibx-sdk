@@ -168,14 +168,22 @@ class WAPI(requests.sessions.Session):
 
         Example:
 
-        ```py
-            wapi = WAPI()
-            wapi.grid_mgr = '10.0.0.1'
-            wapi.wapi_ver = '2.10'
-            url = wapi.url
-            print(url)
-            # Output: 'https://10.0.0.1/wapi/v2.10'
+        ```python
+
+        wapi = WAPI()
+        wapi.grid_mgr = '10.0.0.1'
+        wapi.wapi_ver = '2.10'
+        url = wapi.url
+
+        print(url)
+
         ```
+        The above code example will return output:
+
+        ```
+        'https://10.0.0.1/wapi/v2.10'
+        ```
+
         """
         if self.grid_mgr and self.wapi_ver:
             return f'https://{self.grid_mgr}/wapi/v{self.wapi_ver}'
