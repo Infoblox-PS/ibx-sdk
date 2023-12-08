@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,6 +31,7 @@ def service_restart(self, **kwargs) -> None:
     information about the operation.
 
     Args:
+        self (WAPI): An instance of the WAPI class
         **kwargs: Arbitrary keyword arguments. These are used to specify which services
                   to restart. If 'services' is not specified, it defaults to restarting 'ALL'.
 
@@ -75,6 +76,7 @@ def update_service_status(self, services: str = 'ALL') -> None:
     It handles request-related exceptions and logs the response or any errors encountered.
 
     Args:
+        self (WAPI): An instance of the WAPI class
         services (str): The name of the service(s) to check the restart status for.
                         Defaults to 'ALL', indicating all services.
 
