@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -69,7 +69,7 @@ def named_compilezone(
         output_file: str,
         input_format: str = 'text') -> list:
     """
-    The function named_compilezone performs the named-compilezone command to canonicalize and 
+    The function named_compilezone performs the named-compilezone command to canonicalize and
     rewrite a specified DNS zone file, checking for errors in the file during the process.
 
     Args:
@@ -137,9 +137,9 @@ def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: s
 
     Args:
         file_path (str): The fully qualified path to the file from which lines are to be removed.
-        lines_to_remove (list): A list of integers, with each integer being a line number (1-indexed) of the line 
+        lines_to_remove (list): A list of integers, with each integer being a line number (1-indexed) of the line
             to be removed from the file.
-        output_path (str, optional): Path to the output file. If provided, the function will write result to this file. 
+        output_path (str, optional): Path to the output file. If provided, the function will write result to this file.
             If not provided, the function will overwrite the original file. Defaults to None.
 
     Returns:
@@ -156,7 +156,7 @@ def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: s
 
         To write the result to a different file, specify the output_path argument:
         >>> remove_lines_from_file('/path/to/my_file', [2, 3], '/path/to/output_file')
-        This will remove the 2nd and 3rd lines from the file located at /path/to/my_file 
+        This will remove the 2nd and 3rd lines from the file located at /path/to/my_file
         and write the result to a file located at /path/to/output_file.
     """
 
@@ -209,7 +209,7 @@ def get_csv_header(csvfile: io.TextIOWrapper) -> list:
         csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the header.
 
     Returns:
-        list: A list of strings where each string is a column name from the CSV file's header row. 
+        list: A list of strings where each string is a column name from the CSV file's header row.
             If the CSV file has no header row, an empty list is returned.
 
     Usage:
@@ -268,7 +268,8 @@ def get_csv_from_url(url) -> str:
         Exception: An exception is raised if the URL cannot be parsed.
 
     Logging:
-        This function logs debug messages as it parses the URL, and an error message if an exception was raised while parsing.
+        This function logs debug messages as it parses the URL, and an error message if an exception
+        was raised while parsing.
 
     Usage:
         Use this function to retrieve the name of a CSV file from an Infoblox download URL:
@@ -381,16 +382,16 @@ def _get_include_data(chroot: str, include_file: str):
 
 def generate_from_includes(chroot: str, filepath: str) -> str:
     """
-    The function generate_from_includes generates a configuration file from include(s) directives 
+    The function generate_from_includes generates a configuration file from include(s) directives
     found in another configuration file.
 
     Args:
         chroot (str): The path to the chroot environment where the config file to process exists.
-        filepath (str): Path to the initial config file to process. The path is relative to chroot if 
+        filepath (str): Path to the initial config file to process. The path is relative to chroot if
             it starts with '/'.
 
     Returns:
-        str: A single string containing the full contents of the config file. This includes data from 
+        str: A single string containing the full contents of the config file. This includes data from
             the initial config file and all files included with include directives. If the file specified
             in the filepath parameter does not exist, an empty string is returned.
 
