@@ -123,7 +123,7 @@ nav:
       - Examples:
           - CSV Export: user-guide/examples/csvexport.md
           - CSV Import: user-guide/examples/csvimport.md
-          - Get Configuration: user-guide/examples/get_config.md
+          - Get File: user-guide/examples/get_file.md
           - Get Log: user-guide/examples/get_log.md
           - Get Support Bundle: user-guide/examples/get_supportbundle.md
           - Grid Backup: user-guide/examples/grid_backup.md
