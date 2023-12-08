@@ -162,6 +162,18 @@ class WAPI(requests.sessions.Session):
         return ''
 
     def connect(self, username: str = None, password: str = None, certificate: str = None) -> None:
+        """
+        Make a connection to the grid manager using the WAPI instance
+
+        Args:
+            username: A string representing the username for the connection. (default: None)
+            password: A string representing the password for the connection. (default: None)
+            certificate: A string representing the certificate for the connection. (default: None)
+
+        Raises:
+            WapiInvalidParameterException: If neither a username and password nor a certificate is provided.
+
+        """
         if not self.url:
             logging.error('invalid url %s - unable to connect!', self.url)
             raise WapiInvalidParameterException
@@ -169,12 +181,25 @@ class WAPI(requests.sessions.Session):
         if username and password:
             self.__basic_auth_request(username, password)
         elif certificate:
-            # do client CAS authentication call
             self.__certificate_auth_request(certificate)
         else:
             raise WapiInvalidParameterException
 
-    def __certificate_auth_request(self, certificate: str) -> None:
+    def __certificate_auth_request(self, certificate: str) -> dict | None:
+        """
+        This private method performs a certificate authentication request to the API. It uses the provided
+        certificate to establish a connection with the API server using the requests library.
+
+        Args:
+            certificate (str): The certificate to be used for authentication with the API.
+
+        Returns:
+            grid _ref (dict): A dictionary
+
+        Raises:
+            WapiRequestException: If there is an error with the request to the API.
+
+        """
         with requests.sessions.Session() as conn:
             try:
                 res = conn.get(
@@ -190,8 +215,28 @@ class WAPI(requests.sessions.Session):
                 grid = res.json()
                 setattr(self, 'conn', conn)
                 setattr(self, 'grid_ref', grid[0].get('_ref'))
+            finally:
+                return grid[0].get('_ref', '')
 
-    def __basic_auth_request(self, username: str, password: str) -> None:
+    def __basic_auth_request(self, username: str, password: str) -> dict | None:
+        """
+        This private method makes a request to the specified URL with basic authentication using the provided username
+        and password. It stores the session connection in the instance attribute 'conn*' and the grid reference in the
+        instance attribute 'grid_ref'.
+
+        Note:
+            This method requires the 'requests' library to be installed.
+
+        Args:
+            username (str): The username for basic authentication.
+            password (str): The password for basic authentication.
+
+        Returns:
+            grid _ref (dict): A dictionary
+
+        Raises:
+            WapiRequestException: If an error occurs during the request.
+        """
         with requests.sessions.Session() as conn:
             try:
                 res = conn.get(
@@ -207,6 +252,8 @@ class WAPI(requests.sessions.Session):
                 grid = res.json()
                 setattr(self, 'conn', conn)
                 setattr(self, 'grid_ref', grid[0].get('_ref'))
+            finally:
+                return grid[0].get('_ref', '')
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
         """
