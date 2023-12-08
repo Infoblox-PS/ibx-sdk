@@ -106,8 +106,7 @@ class WAPI(requests.sessions.Session):
     }
     wapi = WAPI(wapi_properties)
 
-    print(wapi.url)
-    # outputs https://10.0.0.1/wapi/v2.5
+    wapi.connect()
 
     ```
 
@@ -155,7 +154,7 @@ class WAPI(requests.sessions.Session):
     @property
     def url(self) -> str:
         """
-        construct WAPI url property from grid_mgr and wapi_ver attributes
+        Constructs a property using `grid_mgr` and `wapi_ver` attributes for the WAPI class.
 
         Parameters:
         - grid_mgr (str): The IP address or hostname of the grid manager.
