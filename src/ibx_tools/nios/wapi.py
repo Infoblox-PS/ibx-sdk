@@ -47,6 +47,10 @@ class BaseWapiException(Exception):
     """BaseWapiException class"""
 
 
+class WapiInvalidParameterException(BaseWapiException):
+    """WapiInvalidParameterException class - raised when invalid args/params passed to methods"""
+
+
 class WapiRequestException(BaseWapiException):
     """WapiRequestException class - returns error(s) returned from Infoblox WAPI calls"""
 
@@ -64,8 +68,6 @@ class WAPI(requests.sessions.Session):
 
     Attributes:
         grid_mgr (str): IP address or hostname of the Grid Manager.
-        username (str): Username for authentication with the Infoblox WAPI.
-        password (str): Password for authentication.
         wapi_ver (str): Version of the Infoblox WAPI.
         ssl_verify (bool): Flag to determine SSL certificate verification.
         conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is None.
@@ -79,14 +81,12 @@ class WAPI(requests.sessions.Session):
 
     wapi_properties = {
         'grid_mgr': 'gm.example.com',
-        'username': 'admin',
-        'password': 'infoblox',
         'wapi_ver': '2.11',
         'ssl_verify': False
     }
     wapi = WAPI(wapi_properties)
 
-    wapi.connect()
+    wapi.connect(username='admin', password='infoblox')
 
     ```
 
@@ -97,12 +97,10 @@ class WAPI(requests.sessions.Session):
     wapi = WAPI()
 
     wapi.grid_mgr = 'gm.example.com'
-    wapi.username = 'admin'
-    wapi.password = 'infoblox'
     wapi.wapi_ver = '2.11'
     wapi.ssl_verify = False
 
-    wapi.connect()
+    wapi.connect(username='admin', password='infoblox')
 
     ```
     """
@@ -110,14 +108,10 @@ class WAPI(requests.sessions.Session):
     def __init__(
             self,
             grid_mgr: str = None,
-            username: str = 'admin',
-            password: str = 'infoblox',
             wapi_ver: str = '2.5',
             ssl_verify: bool = False) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
-        self.username = username
-        self.password = password
         self.wapi_ver = wapi_ver
         self.ssl_verify = ssl_verify
         self.conn = None
@@ -126,8 +120,6 @@ class WAPI(requests.sessions.Session):
     def __repr__(self):
         args = []
         for key, value in self.__dict__.items():
-            if key == 'password':
-                value = '*******'
             args.append(f'{key}={value}')
         return f"{self.__class__.__qualname__}({', '.join(args)})"
 
@@ -168,6 +160,53 @@ class WAPI(requests.sessions.Session):
         if self.grid_mgr and self.wapi_ver:
             return f'https://{self.grid_mgr}/wapi/v{self.wapi_ver}'
         return ''
+
+    def connect(self, username: str = None, password: str = None, certificate: str = None) -> None:
+        if not self.url:
+            logging.error('invalid url %s - unable to connect!', self.url)
+            raise WapiInvalidParameterException
+
+        if username and password:
+            self.__basic_auth_request(username, password)
+        elif certificate:
+            # do client CAS authentication call
+            self.__certificate_auth_request(certificate)
+        else:
+            raise WapiInvalidParameterException
+
+    def __certificate_auth_request(self, certificate: str) -> None:
+        with requests.sessions.Session() as conn:
+            try:
+                res = conn.get(
+                    f'{self.url}/grid',
+                    cert=certificate,
+                    verify=self.ssl_verify
+                )
+                res.raise_for_status()
+            except requests.exceptions.RequestException as err:
+                logging.error(err)
+                raise WapiRequestException(err) from err
+            else:
+                grid = res.json()
+                setattr(self, 'conn', conn)
+                setattr(self, 'grid_ref', grid[0].get('_ref'))
+
+    def __basic_auth_request(self, username: str, password: str) -> None:
+        with requests.sessions.Session() as conn:
+            try:
+                res = conn.get(
+                    f'{self.url}/grid',
+                    auth=(username, password),
+                    verify=self.ssl_verify
+                )
+                res.raise_for_status()
+            except requests.exceptions.RequestException as err:
+                logging.error(err)
+                raise WapiRequestException(err) from err
+            else:
+                grid = res.json()
+                setattr(self, 'conn', conn)
+                setattr(self, 'grid_ref', grid[0].get('_ref'))
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
         """
@@ -237,38 +276,6 @@ class WAPI(requests.sessions.Session):
             logging.debug(versions)
             max_wapi_ver = versions.pop()
             setattr(self, 'wapi_ver', max_wapi_ver)
-
-    def connect(self) -> None:
-        """
-        Connects to the WAPI grid.
-
-        Raises:
-            WapiRequestException: If there is an error in making the request to the WAPI grid.
-
-        Returns:
-            None: Returns nothing.
-
-        """
-        if not self.url:
-            logging.error('invalid url %s - unable to connect!', self.url)
-            return
-
-        with requests.sessions.Session() as conn:
-            try:
-                res = conn.get(
-                    f'{self.url}/grid',
-                    auth=(self.username, self.password),
-                    verify=self.ssl_verify
-                )
-                res.raise_for_status()
-                grid = res.json()
-            except requests.exceptions.RequestException as err:
-                logging.error(err)
-                raise WapiRequestException(err) from err
-            else:
-                setattr(self, 'conn', conn)
-                setattr(self, 'grid_ref', grid[0].get('_ref'))
-                return
 
     def get(self, url, params=None, **kwargs) -> Response:
         """
