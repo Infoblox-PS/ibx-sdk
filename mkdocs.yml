@@ -117,19 +117,19 @@ nav:
   - Home: index.md
   - User Guides:
       - Classes:
-          - wapi: user-guide/classes/wapi.md
-          - fileop: user-guide/classes/fileop.md
-          - service: user-guide/classes/service.md
+          - wapi: classes/wapi/wapi.md
+          - fileop: classes/fileop/fileop.md
+          - service: classes/service/service.md
       - Examples:
-          - CSV Export: user-guide/examples/csvexport.md
-          - CSV Import: user-guide/examples/csvimport.md
-          - Get File: user-guide/examples/get_file.md
-          - Get Log: user-guide/examples/get_log.md
-          - Get Support Bundle: user-guide/examples/get_supportbundle.md
-          - Grid Backup: user-guide/examples/grid_backup.md
-          - Grid Restore: user-guide/examples/grid_restore.md
-          - Restart Service: user-guide/examples/restart_service.md
-          - Restart Status: user-guide/examples/restart_status.md
+          - CSV Export: examples/csvexport.md
+          - CSV Import: examples/csvimport.md
+          - Get File: examples/get_file.md
+          - Get Log: examples/get_log.md
+          - Get Support Bundle: examples/get_supportbundle.md
+          - Grid Backup: examples/grid_backup.md
+          - Grid Restore: examples/grid_restore.md
+          - Restart Service: examples/restart_service.md
+          - Restart Status: examples/restart_status.md
   - Change Log: changelog.md
   - License: LICENSE.md
 
