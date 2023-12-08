@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    https://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -185,7 +185,7 @@ class WAPI(requests.sessions.Session):
         else:
             raise WapiInvalidParameterException
 
-    def __certificate_auth_request(self, certificate: str) -> dict | None:
+    def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
         """
         This private method performs a certificate authentication request to the API. It uses the provided
         certificate to establish a connection with the API server using the requests library.
@@ -218,7 +218,7 @@ class WAPI(requests.sessions.Session):
             finally:
                 return grid[0].get('_ref', '')
 
-    def __basic_auth_request(self, username: str, password: str) -> dict | None:
+    def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
         This private method makes a request to the specified URL with basic authentication using the provided username
         and password. It stores the session connection in the instance attribute 'conn*' and the grid reference in the
