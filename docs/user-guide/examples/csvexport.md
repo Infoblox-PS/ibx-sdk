@@ -10,7 +10,7 @@ type of Infoblox objects to export. Whether you need to extract network informat
 by Infoblox, this utility streamlines the process, making it a valuable resource for Infoblox administrators and users
 who need to work with data in CSV format.
 
-## Usages
+## Usage
 
 ```
 Usage: csvexport [OPTIONS]
@@ -31,7 +31,7 @@ Options:
 
 ```
 
-## Example
+## Examples
 
 ```sh
 csvexport -u admin -g 192.168.1.2 -f networks.csv -o network
@@ -49,5 +49,5 @@ csvexport -u admin -g 192.168.1.2 -f hosts.csv -o record:host
 csvexport -u admin -g 192.168.1.2 -f ranges.csv -o range
 ```
 
-The Infoblox API Documentation can be found at [https://docs.infoblox.com]().
+The Infoblox API & CSV Documentation can be found at [https://docs.infoblox.com]().
 
