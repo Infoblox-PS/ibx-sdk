@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -50,17 +49,16 @@ Restart NIOS Protocol Services
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(**args: Any) -> None:
+def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool) -> None:
     """
     Restart NIOS Protocol Services
 
     Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it increases the logging level.
-            grid_mgr (str): Manager for the wapi grid.
-            username (str): Username for the wapi connection.
-            wapi_ver (str): Version of wapi.
-            service (str): The service to be restarted.
+        debug (bool): If True, it sets the log level to DEBUG. Default is False.
+        grid_mgr (str): Manager for the wapi grid.
+        username (str): Username for the wapi connection.
+        wapi_ver (str): Version of wapi.
+        service (str): The service to be restarted.
 
     Notes:
         In the service restart method, either 'groups' or 'members' can be specified, but not both.
@@ -74,13 +72,13 @@ def main(**args: Any) -> None:
 
     """
     sys.tracebacklimit = 0
-    if args.get('debug'):
+    if debug:
         increase_log_level()
         sys.tracebacklimit = 1
 
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+    wapi.grid_mgr = grid_mgr
+    wapi.username = username
+    wapi.wapi_ver = wapi_ver
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
@@ -91,13 +89,11 @@ def main(**args: Any) -> None:
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
+    # noinspection PyTypeChecker
     wapi.service_restart(
-        # groups: [group1, ...],
-        # or
-        # members: [member1, member2, ...]
         mode='SEQUENTIAL',
         restart_option='RESTART_IF_NEEDED',
-        services=[args.get('service')]
+        services=service
     )
 
     sys.exit()

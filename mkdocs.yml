@@ -133,6 +133,9 @@ nav:
   - Change Log: changelog.md
   - License: LICENSE.md
 
+extra:
+  generator: false
+
 
 #theme:
 #  palette:
