@@ -454,6 +454,7 @@ class WAPI(requests.sessions.Session):
         wapi = WAPI()
         wapi.grid_restore(filename="database.tgz", mode="NORMAL", keep_grid_ip=True)
         ```
+        :rtype: object
         """
         fileop.grid_restore(self, filename, mode, keep_grid_ip)
 

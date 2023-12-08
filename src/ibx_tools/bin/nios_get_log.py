@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -67,19 +66,20 @@ Get NIOS Log from Member
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(**args: Any) -> None:
+def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: str, rotated_logs: bool,
+         wapi_ver: str, debug: bool) -> None:
     """
     Get NIOS Log from Member.
 
     Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it sets the log level to DEBUG. Default is False.
-            grid-mgr (str): Manager for the wapi grid.
-            member (str): Grid Member
-            username (str): Username for the wapi connection.
-            log-type (str): Log type
-            node-type (str) Node Type [ ACTIVE | PASSIVE ]
-            wapi_ver (str): Version of wapi.
+        debug (bool): If True, it sets the log level to DEBUG. Default is False.
+        grid_mgr (str): Manager for the wapi grid.
+        member (str): Grid Member
+        username (str): Username for the wapi connection.
+        log_type (str): Log type
+        node_type (str) Node Type [ ACTIVE | PASSIVE ]
+        wapi_ver (str): Version of wapi.
+        rotated_logs (bool):
 
     Returns:
         None
@@ -90,13 +90,13 @@ def main(**args: Any) -> None:
 
     """
     sys.tracebacklimit = 0
-    if args.get('debug'):
+    if debug:
         increase_log_level()
         sys.tracebacklimit = 1
 
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+    wapi.grid_mgr = grid_mgr
+    wapi.username = username
+    wapi.wapi_ver = wapi_ver
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
@@ -107,10 +107,12 @@ def main(**args: Any) -> None:
         log.error(err)
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
-    wapi.get_log_files(member=args.get('member'),
-                       log_type=args.get('log_type'),
-                       node_type=args.get('node_type'),
-                       include_rotated=args.get('rotated_logs'))
+
+    # noinspection PyTypeChecker
+    wapi.get_log_files(member=member,
+                       log_type=log_type,
+                       node_type=node_type,
+                       include_rotated=rotated_logs)
     log.info('finished!')
     sys.exit()
 

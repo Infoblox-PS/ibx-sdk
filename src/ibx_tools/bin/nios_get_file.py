@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Any
 
 import click
 from click_option_group import optgroup
@@ -52,19 +51,18 @@ Get NIOS File from member
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(**args: Any) -> None:
+def main(grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str, debug: bool) -> None:
     """
     Get NIOS Configuration from Member
 
     Args:
-        **args: Arbitrary keyword arguments.
-            debug (bool): If True, it sets the log level to DEBUG. Default is False.
-            grid-mgr (str): Manager for the wapi grid.
-            member (str): Grid Member
-            username (str): Username for the wapi connection.
-            cfg-type (str): Configuration Type: DNS_CACHE | DNS_CFG | DHCP_CFG | DHCPV6_CFG |
-                                                TRAFFIC_CAPTURE_FILE | DNS_STATS | DNS_RECURSING_CACHE
-            wapi_ver (str): Version of wapi.
+        debug (bool): If True, it sets the log level to DEBUG. Default is False.
+        grid_mgr (str): Manager for the wapi grid.
+        member (str): Grid Member
+        username (str): Username for the wapi connection.
+        cfg_type (str): Configuration Type: DNS_CACHE | DNS_CFG | DHCP_CFG | DHCPV6_CFG |
+                                            TRAFFIC_CAPTURE_FILE | DNS_STATS | DNS_RECURSING_CACHE
+        wapi_ver (str): Version of wapi.
 
     Returns:
         None
@@ -75,13 +73,13 @@ def main(**args: Any) -> None:
 
     """
     sys.tracebacklimit = 0
-    if args.get('debug'):
+    if debug:
         increase_log_level()
         sys.tracebacklimit = 1
 
-    wapi.grid_mgr = args.get('grid_mgr')
-    wapi.username = args.get('username')
-    wapi.wapi_ver = args.get('wapi_ver')
+    wapi.grid_mgr = grid_mgr
+    wapi.username = username
+    wapi.wapi_ver = wapi_ver
     wapi.password = getpass.getpass(
         f'Enter password for [{wapi.username}]: '
     )
@@ -93,8 +91,9 @@ def main(**args: Any) -> None:
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    wapi.member_config(member=args.get('member'),
-                       conf_type=args.get('cfg_type'))
+    # noinspection PyTypeChecker
+    wapi.member_config(member=member,
+                       conf_type=cfg_type)
     log.info('finished!')
     sys.exit()
 
