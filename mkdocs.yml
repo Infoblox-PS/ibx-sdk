@@ -14,11 +14,11 @@ theme:
   name: material
   features:
     - announce.dismiss
-    - content.action.edit
-    - content.action.view
+    #    - content.action.edit
+    #    - content.action.view
     - content.code.annotate
     - content.code.copy
-    # - content.code.select
+    - content.code.select
     # - content.tabs.link
     - content.tooltips
     - header.autohide
@@ -87,16 +87,13 @@ markdown_extensions:
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.magiclink:
-      normalize_issue_symbols: true
-      repo_url_shorthand: true
-      user: squidfunk
-      repo: mkdocs-material
-  - pymdownx.mark
-  - pymdownx.smartsymbols
-  - pymdownx.snippets:
-      auto_append:
-        - includes/mkdocs.md
+  #  - pymdownx.magiclink:
+  #      normalize_issue_symbols: true
+  #      repo_url_shorthand: true
+  #      user:
+  #      repo:
+  #  - pymdownx.mark
+  #  - pymdownx.smartsymbols
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
