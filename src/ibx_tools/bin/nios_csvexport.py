@@ -75,15 +75,13 @@ def main(grid_mgr: str, filename: str, username: str, wapi_ver: str, obj: str, d
     if debug:
         increase_log_level()
         sys.tracebacklimit = 1
-
     wapi.grid_mgr = grid_mgr
-    wapi.username = username
     wapi.wapi_ver = wapi_ver
-    wapi.password = getpass.getpass(
-        f'Enter password for [{wapi.username}]: '
+    password = getpass.getpass(
+        f'Enter password for [{username}]: '
     )
     try:
-        wapi.connect()
+        wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
