@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -25,7 +24,7 @@ from click_option_group import optgroup
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
-cfg_types = Literal[
+cfg_types = [
     'DNS_CACHE',
     'DNS_CFG',
     'DHCP_CFG',
