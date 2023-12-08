@@ -91,19 +91,39 @@ class WAPI(requests.sessions.Session):
         get_support_bundle: Fetches a support bundle from a grid member.
         get_log_files: Fetches log files based on specified parameters.
 
-    Example::
+    Examples:
+
+    Initialize the WAPI instance with a dictionary of properties:
 
     ```py
 
-    wapi = WAPI(
-        grid_mgr='10.0.0.1',
-        username='admin',
-        password='infoblox',
-        wapi_ver='2.5',
-        ssl_verify=False
-    )
+    wapi_properties = {
+        'grid_mgr': 'gm.example.com',
+        'username': 'admin',
+        'password': 'infoblox',
+        'wapi_ver': '2.11',
+        'ssl_verify': False
+    }
+    wapi = WAPI(wapi_properties)
+
     print(wapi.url)
     # outputs https://10.0.0.1/wapi/v2.5
+
+    ```
+
+    Build up the WAPI instance one property at a time:
+
+    ```python
+
+    wapi = WAPI()
+
+    wapi.grid_mgr = 'gm.example.com'
+    wapi.username = 'admin'
+    wapi.password = 'infoblox'
+    wapi.wapi_ver = '2.11'
+    wapi.ssl_verify = False
+
+    wapi.connect()
 
     ```
     """
