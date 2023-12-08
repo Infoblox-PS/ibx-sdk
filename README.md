@@ -1,12 +1,9 @@
-<img alt="Professional Services" src="media/ib-toolkit-img.png" title="Infoblox Professional Services"/>
+<img alt="Professional Services" src="docs/assets/ib-toolkit-img.png" title="Infoblox Professional Services"/>
 
 # Table of Contents
 
 1. [NIOS API](#nios-api)
 2. [Overview](#overview)
-3. [License](#license)
-4. [Acknowledgments](#acknowledgments)
-5. [Changelog](#changelog)
 
 # Overview
 
