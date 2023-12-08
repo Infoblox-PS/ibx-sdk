@@ -1,7 +1,7 @@
 site_name: Basic API Toolkit
 
-extra_css:
-  - css/ibx.css
+#extra_css:
+#  - css/ibx.css
 
 nav:
   - IBX-Tools: index.md
@@ -36,25 +36,38 @@ theme:
 
   markdown_extensions:
     - pymdownx.highlight:
-        anchor_linenums: true
-        line_spans: __span
         pygments_lang_class: true
-    - pymdownx.inlinehilite
-    - pymdownx.snippets
-    - pymdownx.superfences
+#    - pymdownx.superfences
+#    - pymdownx.inlinehilite
+#    - pymdownx.snippets
+#    - pymdownx.superfences
+#    - pymdownx.arithmatex:
+#        generic: true
 
-  features:
-    - navigation.tabs
-    - navigation.sections
-    - navigation.path
-    - toc.integrate
-    - navigation.top
-    - search.suggest
-    - search.highlight
-    - content.tabs.link
-    - content.code.annotation
-    - content.code.copy
-  language: en
+features:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.path
+  - toc.integrate
+  - navigation.top
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - content.code.annotation
+  - content.code.copy
+language: en
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
 
 plugins:
   - search

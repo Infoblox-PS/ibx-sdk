@@ -95,16 +95,15 @@ class WAPI(requests.sessions.Session):
 
     ```py
 
-        wapi = WAPI(
-            grid_mgr='10.0.0.1',
-            username='admin',
-            password='infoblox',
-            wapi_ver='2.5',
-            ssl_verify=False
-        )
-        print(wapi.url)
-
-        # outputs https://10.0.0.1/wapi/v2.5
+    wapi = WAPI(
+        grid_mgr='10.0.0.1',
+        username='admin',
+        password='infoblox',
+        wapi_ver='2.5',
+        ssl_verify=False
+    )
+    print(wapi.url)
+    # outputs https://10.0.0.1/wapi/v2.5
 
     ```
     """
