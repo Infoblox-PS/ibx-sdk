@@ -72,8 +72,8 @@ markdown_extensions:
   - def_list
   - footnotes
   - md_in_html
-  - toc:
-      permalink: true
+  #  - toc:
+  #      permalink: true
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
