@@ -71,26 +71,6 @@ class WAPI(requests.sessions.Session):
         conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is None.
         grid_ref (str, optional): Reference ID of the connected grid. Default is None.
 
-    Methods:
-        url: Constructs and returns the WAPI URL.
-        object_fields: Retrieves object fields for a specified WAPI object.
-        max_wapi_ver: Fetches the maximum supported WAPI version.
-        connect: Initiates a connection to the WAPI grid.
-        get: Performs a GET request.
-        post: Sends a POST request.
-        put: Performs a PUT request.
-        member_config: Fetches a grid member's configuration file.
-        csv_export: Exports data to a CSV file.
-        csv_import: Imports a CSV file into the WAPI.
-        grid_restore: Restores the grid database from a backup file.
-        grid_backup: Initiates a grid backup.
-        get_service_restart_status: Retrieves the restart status of services.
-        service_restart: Restarts services on Infoblox appliances.
-        csv_task_status: Fetches the status of a CSV import task.
-        get_csv_errors_file: Retrieves the CSV errors file of a task.
-        get_support_bundle: Fetches a support bundle from a grid member.
-        get_log_files: Fetches log files based on specified parameters.
-
     Examples:
 
     Initialize the WAPI instance with a dictionary of properties:
