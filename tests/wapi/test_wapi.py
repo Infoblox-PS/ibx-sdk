@@ -1,11 +1,18 @@
 """
 WAPI test module
 """
+import os
+
 import urllib3
 
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+GRID_MGR = os.environ.get('GRID_MGR')
+WAPI_VER = os.environ.get('WAPI_VER')
+PASSWORD = os.environ.get('PASSWORD')
+USERNAME = os.environ.get('USERNAME')
+SSL_VERIFY = False if os.environ.get('SSL_VERIFY') == 'False' else True
 
 
 def test_instantiate_wapi_without_properties():
@@ -17,25 +24,25 @@ def test_instantiate_wapi_without_properties():
 
 
 def test_instantiate_wapi_with_positional_arguments():
-    wapi = WAPI('192.168.1.2', '2.12', '/path/to/certfile')
-    assert wapi.grid_mgr == '192.168.1.2'
-    assert wapi.wapi_ver == '2.12'
-    assert wapi.ssl_verify == '/path/to/certfile'
+    wapi = WAPI(GRID_MGR, WAPI_VER, SSL_VERIFY)
+    assert wapi.grid_mgr == GRID_MGR
+    assert wapi.wapi_ver == WAPI_VER
+    assert wapi.ssl_verify == SSL_VERIFY
 
 
 def test_instantiate_wapi_with_named_arguments():
-    wapi = WAPI(grid_mgr='192.168.1.2', wapi_ver='2.12', ssl_verify='/path/to/certfile')
-    assert wapi.grid_mgr == '192.168.1.2'
-    assert wapi.wapi_ver == '2.12'
-    assert wapi.ssl_verify == '/path/to/certfile'
+    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    assert wapi.grid_mgr == GRID_MGR
+    assert wapi.wapi_ver == WAPI_VER
+    assert wapi.ssl_verify == SSL_VERIFY
 
 
 def test_instantiate_wapi_with_dictionary_of_arguments():
-    props = dict(grid_mgr='192.168.1.2', wapi_ver='2.12', ssl_verify='/path/to/certfile')
+    props = dict(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     wapi = WAPI(**props)
-    assert wapi.grid_mgr == '192.168.1.2'
-    assert wapi.wapi_ver == '2.12'
-    assert wapi.ssl_verify == '/path/to/certfile'
+    assert wapi.grid_mgr == GRID_MGR
+    assert wapi.wapi_ver == WAPI_VER
+    assert wapi.ssl_verify == SSL_VERIFY
 
 
 def test_ssl_verify_as_string_value():
@@ -51,15 +58,15 @@ def test_ssl_verify_as_boolean_value():
 
 
 def test_wapi_basic_auth_connection():
-    wapi = WAPI(grid_mgr='192.168.40.60', wapi_ver='2.12', ssl_verify=False)
-    wapi.connect(username='admin', password='infoblox')
+    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi.connect(username=USERNAME, password=PASSWORD)
     assert wapi.grid_ref is not None
 
 
 def test_wapi_basic_auth_connection_with_bad_password():
-    wapi = WAPI(grid_mgr='192.168.40.60', wapi_ver='2.12', ssl_verify=False)
+    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     try:
-        wapi.connect(username='admin', password='bad_password')
+        wapi.connect(username=USERNAME, password='bad_password')
     except WapiRequestException as err:
         assert '401 Client Error: Authorization Required' in str(err)
     assert wapi.grid_ref is None
