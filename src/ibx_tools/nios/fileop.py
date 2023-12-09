@@ -26,13 +26,13 @@ import requests.exceptions
 from ibx_tools.util import util
 
 
-def __write_file(filename: str, response: requests.Response) -> None:
+def __write_file(filename: str, data: requests.Response) -> None:
     """
     write response to filename
 
     Args:
         filename (str): The name of the file to be written.
-        response (requests.Response): The response object containing the file content.
+        data (requests.Response): The response object containing the file content.
 
     Returns:
         None
@@ -40,7 +40,7 @@ def __write_file(filename: str, response: requests.Response) -> None:
     """
     logging.info('writing file: %s', filename)
     with open(filename, 'wb') as file:
-        for chunk in response.iter_content(chunk_size=1024):
+        for chunk in data.iter_content(chunk_size=1024):
             if chunk:
                 file.write(chunk)
 
@@ -112,7 +112,7 @@ def member_config(
 
     download_file = util.get_csv_from_url(download_url)
 
-    __write_file(filename=download_file, response=res)
+    __write_file(filename=download_file, data=res)
 
     try:
         __download_complete(self, download_token, download_file, req_cookies)
@@ -166,11 +166,8 @@ def csv_export(
     )
     payload = {'_object': wapi_object}
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=csv_export',
-            data=json.dumps(payload),
-            verify=self.ssl_verify
-        )
+        res = self.post('fileop', params={'_function': 'csv_export'}, json=payload)
+        logging.debug(res.text)
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
@@ -194,13 +191,8 @@ def csv_export(
     if not filename:
         filename = util.get_csv_from_url(download_url)
 
-    logging.info('writing data to %s file', filename)
-    with open(filename, 'wb') as handle:
-        for chunk in res.iter_content(chunk_size=1024):
-            if chunk:
-                handle.write(chunk)
+    __write_file(filename=filename, data=res)
 
-    # notify grid file downloadcomplete
     try:
         __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
@@ -332,18 +324,13 @@ def __upload_init(self, filename: str) -> dict:
     headers = {'content-type': 'application/json'}
     payload = {'filename': filename}
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=uploadinit',
-            data=json.dumps(payload),
-            headers=headers,
-            verify=self.ssl_verify
-        )
+        res = self.post('fileop', params={'_function': 'uploadinit'}, headers=headers, json=payload)
+        logging.debug(pprint.pformat(res.text))
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
 
-    logging.debug(pprint.pformat(res.text))
     return res.json()
 
 
