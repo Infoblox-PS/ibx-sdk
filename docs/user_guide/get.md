@@ -13,6 +13,14 @@ All WAPI object fetches should take the basic form:
 res = wapi.get('<wapi_object>', params={}, **kwargs)
 ```
 
+The Infoblox NIOS Web RESTful API supports a number of Options when performing GET requests to fetch
+data. A couple of these are shown below:
+
+| Method Option                                      | Description                                                                                                                                                                                                                                                                     |
+|:---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `_max_results`                                     | Maximum number of objects to be returned. If set to a negative number the appliance will return an error when the number of returned objects would exceed the setting. The default is -1000. If this is set to a positive number, the results will be truncated when necessary. |
+| <div style="white-space: nowrap;">`_return_fields` | List of returned fields separated by commas. The use of _return_fields repeatedly is the same as listing several fields with commas. The default is the basic fields of the object.                                                                                             |
+
 To fetch all `network` WAPI objects from the Grid, we'd fashion our script like the following:
 
 ```python
