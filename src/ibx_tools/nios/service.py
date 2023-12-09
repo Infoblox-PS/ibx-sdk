@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import json
 import logging
 import pprint
 
@@ -57,6 +56,7 @@ def service_restart(self, **kwargs) -> None:
         res = self.post(
             self.grid_ref, params={'_function': 'restartservices'}, json=data
         )
+        logging.debug(res.text)
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
@@ -87,19 +87,16 @@ def update_service_status(self, services: str = 'ALL') -> None:
 
 
     """
-    payload = dict(service_option=services)
+    payload = {'service_option': services}
     try:
-        res = self.conn.post(
-            f'{self.url}/{self.grid_ref}?_function=requestrestartservicestatus',
-            data=json.dumps(payload),
-            verify=self.ssl_verify
+        res = self.post(
+            self.grid_ref, params={'_function': 'requestrestartservicestatus'}, json=payload
         )
+        logging.debug(res.text)
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
-    else:
-        logging.info(res.text)
 
 
 def get_service_restart_status(self) -> dict:
@@ -121,11 +118,9 @@ def get_service_restart_status(self) -> dict:
     """
 
     try:
-        res = self.conn.get(
-            f'{self.url}/restartservicestatus',
-            verify=self.ssl_verify
-        )
-        res.raise_for_status()
+        response = self.get('restartservicestatus')
+        logging.debug(response.text)
+        response.raise_for_status()
     except requests.exceptions.SSLError as err:
         logging.error(err)
         raise
@@ -136,4 +131,4 @@ def get_service_restart_status(self) -> dict:
         logging.error(err)
         raise
     else:
-        return res.json()
+        return response.json()
