@@ -34,14 +34,24 @@ Options:
 
 ## Examples
 
+The following example will download the named.conf file from the infoblox.localdomain.
+
 ```sh
 get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_CFG
 ```
+
+The following example will download the dhcpd.conf file from the infoblox.localdomain.
 
 ```sh
 get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCP_CFG
 ```
 
+The following example will download the dhcpv6.conf file from the infoblox.localdomain.
+
 ```sh
 get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCPV6_CFG
 ```
+
+!!! Warning
+    Configuration files can only be downloaded if the file exists on the appliance.  If the file does not exist a
+    "400 Client Error: Bad Request for url" will be received.
