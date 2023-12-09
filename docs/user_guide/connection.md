@@ -1,4 +1,4 @@
-# Connecting
+# Connecting to WAPI
 
 To establish a connection to your NIOS Grid, you'll need the following bits of information:
 
