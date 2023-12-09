@@ -23,13 +23,39 @@ import coloredlogs
 
 
 class CallCounted:
-    """Decorator to determine the # of calls for a method"""
+    """
+    Decorator to determine the number of calls for a method.
 
+    This decorator can be used to wrap a method, and each time the method is called,
+    it increments a counter to keep track of the number of times the method has been
+    called.
+
+    Args:
+        method (callable): The method to be decorated.
+
+    """
     def __init__(self, method):
+        """
+        Initialize the CallCounted decorator.
+
+        Args:
+            method (callable): The method to be decorated.
+        """
         self.method = method
         self.counter = 0
 
     def __call__(self, *args, **kwargs):
+        """
+        Call the decorated method and increment the call count.
+
+        Args:
+            *args: Positional arguments to pass to the decorated method.
+            **kwargs: Keyword arguments to pass to the decorated method.
+
+        Returns:
+            The result of the decorated method.
+
+        """
         self.counter += 1
         return self.method(*args, **kwargs)
 
@@ -51,41 +77,47 @@ def init_logger(
         num_logs: Optional[int] = None,
         level: Optional[str] = None) -> logging.Logger:
     """
-    create and return custom file/console logger
+    Create and return a custom file/console logger.
 
-    :param logfile_name: log file name
-    :param logfile_mode: (optional) specify this value to set the logging file
-        mode 'a' for append or 'w' for write mode for basic file logging
-    :param console_log: if true, create a colored console log
-    :param max_size: (optional) specify a logfile size if you would like to
-        use a rotating log file handler vs standard log file handler
-    :param num_logs: (optional) specify a logfile count if you would like
-        to use a rotating log file handler vs standard log file handler
-    :param level: (optional) specify a string value of logging level. This field
-        is case-insensitive and will default to logging.INFO
+    Args:
+        logfile_name (str): The name of the log file.
+        logfile_mode (str, optional): Specify the mode for the log file. 'a' for
+            append or 'w' for write mode for basic file logging.
+        console_log (bool, optional): If True, create a colored console log.
+        max_size (int, optional): Specify the maximum size for the log file (in
+            bytes) if you want to use a rotating log file handler instead of a
+            standard log file handler.
+        num_logs (int, optional): Specify the number of log files to keep if you
+            want to use a rotating log file handler instead of a standard log
+            file handler.
+        level (str, optional): Specify a string value for the logging level. This
+            field is case-insensitive and will default to 'INFO' if not provided.
 
-    :return: return root logger
+    Returns:
+        logging.Logger: The root logger.
 
-    Example::
+    Example:
 
     **Basic FileHandler**
+    ```py
+    from ibx-tools.logger.ibx_logger import init_logger
 
-        from infoblox_pslib.util.ibx_logger import init_logger
-
-        # initialize basic logger to file using write mode
-        log = init_logger('logs/mylog.log', 'w')
+    # Initialize a basic logger to a file using write mode
+    log = init_logger('logs/mylog.log', 'w')
+    ```
 
     **Advanced RotatingFileHandler**
+    ```py
+    from ibx-tools.logger.ibx_logger import init_logger
 
-        from infoblox_pslib.util.ibx_logger import init_logger
+    # Initialize rotating file logging
 
-        # initialize rotating file logging
-        log = init_logger(
-            logfile_name='logs/mylog.log',
-            logfile_size=1000000,
-            logfile_count=10
-        )
-
+    log = init_logger(
+        logfile_name='logs/mylog.log',
+        max_size=1000000,
+        num_logs=10
+    )
+    ```
     """
     if level:
         log_level = log_levels.get(level.upper(), logging.INFO)
@@ -130,10 +162,22 @@ def init_logger(
 
 def init_console_logger(level: Optional[str] = None):
     """
-    Initialize a colored console logger
+    Initialize a colored console logger with optional custom logging level.
 
-    :param level: (optional) specify string value of logging level. This field
-        is case-insensitive and will default to logging.INFO otherwise.
+    Args:
+        level (str, optional): Specify a string value of the logging level.
+            This field is case-insensitive and will default to 'INFO' if not provided.
+
+    Example:
+
+    **Initialize Colored console logger with a custom logging level**
+    ```py
+    from ibx-tools.logger.ibx_logger import init_console_logger
+
+    # Initialize a console logger with a custom logging level
+    init_console_logger(level='DEBUG')
+    ```
+
     """
     if level:
         log_level = log_levels.get(level.upper(), logging.INFO)
@@ -152,12 +196,29 @@ def init_console_logger(level: Optional[str] = None):
 
 def increase_log_level(handler_type: str = 'both') -> None:
     """
-    increase logging level to DEBUG
+    Increase the logging level of the root logger and specific handlers.
 
-    :param handler_type: specify the type of handler 'both' (default), 'file' or 'console'
+    Args:
+        handler_type (str, optional): Specify the type of handlers to increase
+            the logging level for. Can be 'both' (default), 'console', or 'file'.
 
-    :return None:
+    Returns:
+        None
+
+    Example:
+
+    **Increase Log Level**
+    ```python
+    from your_module import increase_log_level
+
+    # Increase the logging level for both console and file handlers
+    increase_log_level()
+
+    # Increase the logging level for console handlers only
+    increase_log_level(handler_type='console')
+    ```
     """
+
     defined_levels = sorted(set(_defined_levels().values()))
     root_logger = logging.getLogger()
     current_level = root_logger.getEffectiveLevel()
@@ -184,12 +245,31 @@ def increase_log_level(handler_type: str = 'both') -> None:
 
 def set_log_level(level: str, handler_type: str = 'both') -> None:
     """
-    set logging level
+    Set the logging level for the root logger and specific handlers.
 
-    :param level: specify string value of logging level. This field
-        is case-insensitive and will default to logging.INFO otherwise.
-    :param handler_type: specify the type of handler 'file' or 'console' or 'both'
-        defaults to 'both'
+    Args:
+        level (str): The desired logging level, e.g., 'DEBUG', 'INFO', 'WARNING'.
+            This field is case-insensitive.
+        handler_type (str, optional): Specify the type of handlers to set the
+            logging level for. Can be 'both' (default), 'console', or 'file'.
+
+    Returns:
+        None
+
+    Example:
+
+    **Set the logging level for both console and file handlers to 'DEBUG'**
+
+    ```py
+    from your_module import set_log_level
+
+    # Set the logging level for both console and file handlers
+    set_log_level(level='DEBUG')
+
+    # Set the logging level for console handlers only to 'INFO'
+    set_log_level(level='INFO', handler_type='console')
+    ```
+
     """
     log_level = log_levels.get(level.upper(), logging.INFO)
     root_logger = logging.getLogger()
