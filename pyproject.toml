@@ -37,7 +37,7 @@ csvexport = 'ibx_tools.bin.nios_csvexport:main'
 
 [project.optional-dependencies]
 dev = ["pylint", "codestyle", "sphinx", "mkdocstrings-python", "mkdocs-material"]
-test = ["coverage", "pytest"]
+test = ["coverage", "pytest", "pytest-env", "pytest-dotenv"]
 
 [project.urls]
 "homepage" = "https://github.com/Infoblox-PS/ibx-tools"

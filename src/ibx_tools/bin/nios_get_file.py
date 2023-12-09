@@ -46,8 +46,11 @@ Get NIOS File from member
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve file from')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-t', '--cfg-type', default='DNS_CFG', show_default=True,
-                 help='Configuration Type: DNS_CACHE | DNS_CFG | DHCP_CFG | DHCPV6_CFG | TRAFFIC_CAPTURE_FILE | DNS_STATS | DNS_RECURSING_CACHE')
+@optgroup.option(
+    '-t', '--cfg-type', default='DNS_CFG', show_default=True,
+    help='Configuration Type: DNS_CACHE | DNS_CFG | DHCP_CFG | DHCPV6_CFG | TRAFFIC_CAPTURE_FILE | DNS_STATS | '
+         'DNS_RECURSING_CACHE'
+)
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
@@ -91,8 +94,7 @@ def main(grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     # noinspection PyTypeChecker
-    wapi.member_config(member=member,
-                       conf_type=cfg_type)
+    wapi.member_config(member=member, conf_type=cfg_type)
     log.info('finished!')
     sys.exit()
 

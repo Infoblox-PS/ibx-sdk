@@ -90,6 +90,7 @@ def main(grid_mgr: str, filename: str, operation: str, username: str, wapi_ver: 
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
+    # noinspection PyTypeChecker
     wapi.csv_import(
         task_operation=operation,
         csv_import_file=filename,

@@ -29,8 +29,9 @@ theme:
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.prune
-    - navigation.sections
-    - navigation.path
+#    - navigation.sections
+    # - navigation.tabs
+    # - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
     - search.highlight
@@ -94,23 +95,32 @@ plugins:
 
 nav:
   - Home: index.md
-  - User Guides:
-      - Classes:
-          - wapi: classes/wapi.md
-          - fileop: classes/fileop.md
-          - service: classes/service.md
-          - ibx_logger: classes/logger.md
-
-      - Examples:
-          - CSV Export: examples/csvexport.md
-          - CSV Import: examples/csvimport.md
-          - Get File: examples/get_file.md
-          - Get Log: examples/get_log.md
-          - Get Support Bundle: examples/get_supportbundle.md
-          - Grid Backup: examples/grid_backup.md
-          - Grid Restore: examples/grid_restore.md
-          - Restart Service: examples/restart_service.md
-          - Restart Status: examples/restart_status.md
+  - User Guide:
+      - Introduction: user_guide/index.md
+      - Connection: user_guide/connection.md
+      - Fetching Objects: user_guide/get.md
+      - Creating Objects: user_guide/post.md
+      - Updating Objects: user_guide/put.md
+      - Deleting Objects: user_guide/delete.md
+      - Calling Functions: user_guide/functions.md
+      - Cookbook: user_guide/cookbook.md
+  - Tools:
+      - csvexport: examples/csvexport.md
+      - csvimport: examples/csvimport.md
+      - get-file: examples/get_file.md
+      - get-log: examples/get_log.md
+      - get-supportbundle: examples/get_supportbundle.md
+      - grid-backup: examples/grid_backup.md
+      - grid-restore: examples/grid_restore.md
+      - restart-service: examples/restart_service.md
+      - restart-status: examples/restart_status.md
+  - Classes:
+      - wapi: classes/wapi.md
+  - Modules:
+      - fileop: modules/fileop.md
+      - service: modules/service.md
+      - util: modules/util.md
+      - ibx_logger: modules/logger.md
   - Change Log: changelog.md
   - License: LICENSE.md
 

@@ -109,7 +109,7 @@ class WAPI(requests.sessions.Session):
             self,
             grid_mgr: str = None,
             wapi_ver: str = '2.5',
-            ssl_verify: bool = False) -> None:
+            ssl_verify: Union[bool, str] = False) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
@@ -252,7 +252,6 @@ class WAPI(requests.sessions.Session):
                 grid = res.json()
                 setattr(self, 'conn', conn)
                 setattr(self, 'grid_ref', grid[0].get('_ref'))
-            finally:
                 return grid[0].get('_ref', '')
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
