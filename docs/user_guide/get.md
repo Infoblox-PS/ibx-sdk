@@ -30,6 +30,8 @@ couple of these are shown below:
 | `_max_results`                                     | Maximum number of objects to be returned. If set to a negative number the appliance will return an error when the number of returned objects would exceed the setting. The default is -1000. If this is set to a positive number, the results will be truncated when necessary. |
 | <div style="white-space: nowrap;">`_return_fields` | List of returned fields separated by commas. The use of _return_fields repeatedly is the same as listing several fields with commas. The default is the basic fields of the object.                                                                                             |
 
+## Basics
+
 To fetch all `network` WAPI objects from the Grid, we'd fashion our script like the following:
 
 ```python
@@ -98,5 +100,7 @@ response = wapi.get('network', params={'_max_results': 10000})
 ```
 
 The above call now sets the `_max_results` to 10,000 rows of data. 
+
+## Handling Exceptions
 
 
