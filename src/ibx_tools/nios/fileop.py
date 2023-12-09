@@ -361,6 +361,7 @@ def __upload_file(
 
     """
     # Perform the actual upload
+    logging.debug(upload_url)
     try:
         res = self.conn.post(
             upload_url,
@@ -368,12 +369,11 @@ def __upload_file(
             cookies=req_cookies,
             verify=self.ssl_verify
         )
+        logging.debug(pprint.pformat(res.text))
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
-
-    logging.debug(pprint.pformat(res.text))
 
 
 def __csv_import(
@@ -428,19 +428,18 @@ def __csv_import(
 
     # start the CSV task in job manager
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=csv_import',
-            data=json.dumps(payload),
+        res = self.post(
+            'fileop',
+            params={'_function': 'csv_import'},
+            json=payload,
             headers=headers,
-            cookies=req_cookies,
-            verify=self.ssl_verify
+            cookies=req_cookies
         )
+        logging.debug(pprint.pformat(res.text))
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
-    else:
-        logging.debug(pprint.pformat(res.text))
 
     return res.json()
 
@@ -470,7 +469,7 @@ def csvtask_status(self, csvtask: dict) -> dict:
     _ref = csvtask['csv_import_task']['_ref']
     logging.debug('Checking status of csvimporttask %s', _ref)
     try:
-        res = self.conn.get(f'{self.url}/{_ref}', verify=self.ssl_verify)
+        res = self.get(_ref)
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
@@ -509,13 +508,9 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
     logging.debug('fetching csv-errors file for job id %s', job_id)
     payload = {'import_id': job_id}
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=csv_error_log',
-            data=json.dumps(payload),
-            verify=self.ssl_verify
-        )
-        res.raise_for_status()
+        res = self.post('fileop', params={'_function': 'csv_error_log'}, json=payload)
         logging.debug(pprint.pformat(res.text))
+        res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
@@ -528,26 +523,22 @@ def get_csv_errors_file(self, filename: str, job_id: str) -> None:
     ibapauth_cookie = self.conn.cookies['ibapauth']
     req_cookies = {'ibapauth': ibapauth_cookie}
 
+    try:
+        res = __download_file(self, download_url, req_cookies)
+        res.raise_for_status()
+    except requests.exceptions.RequestException as err:
+        logging.error(err)
+        raise
+
     filename = f'csv-errors-{filename}.csv'
-    with open(filename, 'wb') as handle:
-        try:
-            res = __download_file(self, download_url, req_cookies)
-            res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise
+    __write_file(filename=filename, data=res)
 
-        # iterate over the result content and write it out to file
-        for block in res.iter_content(chunk_size=1024):
-            if block:
-                handle.write(block)
-
-        # We're done - so post to downloadcomplete function
-        try:
-            __download_complete(self, token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise
+    # We're done - so post to downloadcomplete function
+    try:
+        __download_complete(self, token, filename, req_cookies)
+    except requests.exceptions.RequestException as err:
+        logging.error(err)
+        raise
 
 
 def __getgriddata(self, payload: dict, req_cookies) -> dict:
@@ -577,19 +568,18 @@ def __getgriddata(self, payload: dict, req_cookies) -> dict:
     # set content type back to JSON
     headers = {'content-type': 'application/json'}
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=getgriddata',
-            data=json.dumps(payload),
+        res = self.post(
+            'fileop',
+            params={'_function': 'getgriddata'},
+            json=payload,
             headers=headers,
-            cookies=req_cookies,
-            verify=self.ssl_verify
+            cookies=req_cookies
         )
+        logging.debug(pprint.pformat(res.text))
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
-    else:
-        logging.debug(pprint.pformat(res.text))
 
     return res.json()
 
@@ -637,25 +627,21 @@ def grid_backup(self, filename: str = 'database.tgz') -> None:
 
     logging.info("step 2 - saving backup to %s", filename)
 
-    with open(filename, 'wb') as handle:
-        try:
-            res = __download_file(self, download_url, req_cookies)
-            res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise
+    try:
+        res = __download_file(self, download_url, req_cookies)
+        res.raise_for_status()
+    except requests.exceptions.RequestException as err:
+        logging.error(err)
+        raise
 
-        # iterate over the result content and write it out to file
-        for block in res.iter_content(chunk_size=1024):
-            if block:
-                handle.write(block)
+    __write_file(filename=filename, data=res)
 
-        # we're done - post downloadcomplete function using the token
-        try:
-            __download_complete(self, token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise
+    # we're done - post downloadcomplete function using the token
+    try:
+        __download_complete(self, token, filename, req_cookies)
+    except requests.exceptions.RequestException as err:
+        logging.error(err)
+        raise
 
 
 def __download_file(self, download_url, req_cookies):
@@ -686,6 +672,7 @@ def __download_file(self, download_url, req_cookies):
 
     header = {'Content-type': 'application/force-download'}
     try:
+        logging.info(download_url)
         res = self.conn.get(
             download_url,
             headers=header,
@@ -730,12 +717,12 @@ def __download_complete(
     header = {'Content-type': 'application/json'}
     payload = {'token': token}
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=downloadcomplete',
-            data=(json.dumps(payload)),
+        res = self.post(
+            'fileop',
+            params={'_function': 'downloadcomplete'},
+            json=payload,
             headers=header,
-            cookies=req_cookies,
-            verify=self.ssl_verify
+            cookies=req_cookies
         )
         logging.info("file %s download complete", filename)
         res.raise_for_status()
@@ -790,19 +777,18 @@ def __restore_database(
 
     # start the restore
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=restoredatabase',
-            data=json.dumps(payload),
+        res = self.post(
+            'fileop',
+            params={'_function': 'restoredatabase'},
+            json=payload,
             headers=headers,
             cookies=req_cookies,
-            verify=self.ssl_verify
         )
+        logging.debug(pprint.pformat(res.text))
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
         raise
-    else:
-        logging.debug(pprint.pformat(res.text))
     return res
 
 
