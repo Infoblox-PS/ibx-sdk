@@ -13,8 +13,17 @@ All WAPI object fetches should take the basic form:
 res = wapi.get('<wapi_object>', params={}, **kwargs)
 ```
 
-The Infoblox NIOS Web RESTful API supports a number of Options when performing GET requests to fetch
-data. A couple of these are shown below:
+!!! tip
+
+    The Infoblox NIOS WAPI API is fully documented and available online. You can access the API guide by using 
+    the following url path on your Infoblox Grid Manager:
+
+    `https://<grid_mgr>/wapidoc`
+
+    See the WAPI Guide for details on all objects, properties, functions, and parameters.
+
+The Infoblox NIOS Web RESTful API supports Options when performing GET requests to fetch data. A
+couple of these are shown below:
 
 | Method Option                                      | Description                                                                                                                                                                                                                                                                     |
 |:---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -66,6 +75,8 @@ the results. Simply do the following:
 ```python
 results = response.json()
 ```
+
+## Query Parameters
 
 This code will fetch all networks (provided we don't hit the max result set limit!). A JSON response
 is
