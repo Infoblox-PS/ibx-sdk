@@ -31,23 +31,43 @@ Options:
 
 ```
 
-## Examples
+## Example
 
-```sh
-csvexport -u admin -g 192.168.1.2 -f networks.csv -o network
+### CSV Export Process
+
+```shell
+csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 ```
 
-```sh
-csvexport -u admin -g 192.168.1.2 -f arecs.csv -o record:a
+The command is used to export network data from an Infoblox Grid Manager. Here's a breakdown of the command and the
+subsequent output:
+
+1. **Command Explanation**:
+    - `csvexport`: This is the command to initiate the CSV export process.
+    - `-u admin`: Specifies the username (in this case, 'admin') for authentication.
+    - `-g 192.168.1.2`: Specifies the IP address of the Infoblox Grid Manager.
+    - `-f ibcsv-networks.csv`: Sets the filename for the exported CSV file.
+    - `-o network`: Indicates that the export is for network objects.
+
+2. **Command Output**:
+    - `Enter password for [admin]:`: Prompt to enter the password for the admin user.
+    - `2023-12-09 12:36:27 [nios_csvexport.py:88] INFO connected to Infoblox grid manager 192.168.1.2`: Confirmation of
+      a
+      successful connection to the Infoblox Grid Manager.
+    - `2023-12-09 12:36:27 [fileop.py:154] INFO performing csv export for network object(s)`: Indicates that the CSV
+      export process for network objects has started.
+    - `2023-12-09 12:36:27 [fileop.py:177] INFO downloading data from https://192.168.1.2/http_direct_file_io/req_id-DOWNLOAD-1209183627629530/Networks.csv`:
+      Shows the URL from which the data is being downloaded.
+    - `2023-12-09 12:36:27 [fileop.py:187] INFO writing data to ibcsv_networks.csv file`: Indicates that the data is
+      being written to the specified CSV file.
+    - `2023-12-09 12:36:27 [fileop.py:719] INFO file ibcsv_networks.csv download complete`: Confirms that the download
+      and writing of the CSV file is complete.
+
+3. **CSV File**
+
+```text
+header-network,address*,netmask*,always_update_dns,basic_polling_settings,boot_file,boot_server,broadcast_address,comment,ddns_domainname,ddns_ttl,deny_bootp,dhcp_members,disabled,discovery_exclusion_range,discovery_member,domain_name,domain_name_servers,enable_ddns,enable_discovery,enable_option81,enable_pxe_lease_time,enable_threshold_email_warnings,enable_threshold_snmp_warnings,enable_thresholds,generate_hostname,ignore_client_requested_options,is_authoritative,lease_scavenge_time,lease_time,mgm_private,network_view,next_server,option_logic_filters,pxe_lease_time,range_high_water_mark,range_high_water_mark_reset,range_low_water_mark,range_low_water_mark_reset,recycle_leases,routers,threshold_email_addresses,update_dns_on_lease_renewal,update_static_leases,vlans,zone_associations
+network,100.64.50.0,255.255.255.0,,,,,,,,,,ns1.ffy.network,False,,nd.ffy.network,ffy.corp,"100.64.50.53,100.64.50.54",,True,,,False,False,,,,,,,False,default,,,,95,85,0,10,,100.64.50.1,,,,,<empty>
+network,100.64.40.0,255.255.255.0,,,,,,,,,,,False,,nd.ffy.network,,,,True,,,False,False,,,,,,,False,default,,,,95,85,0,10,,,,,,,<empty>
 ```
-
-```sh
-csvexport -u admin -g 192.168.1.2 -f hosts.csv -o record:host
-```
-
-```sh
-csvexport -u admin -g 192.168.1.2 -f ranges.csv -o range
-```
-
-The Infoblox API & CSV Documentation can be found at [https://docs.infoblox.com]().
-
+   
