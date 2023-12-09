@@ -46,18 +46,16 @@ def service_restart(self, **kwargs) -> None:
 
     data = {}
     for prop, value in kwargs.items():
-        if value:
+        if prop == 'services':
+            data[prop] = [value]
+        elif value:
             data[prop] = value
-        elif prop == 'services':
-            data[prop] = ['ALL']
 
     logging.debug(pprint.pformat(data))
 
     try:
-        res = self.conn.post(
-            f'{self.url}/{self.grid_ref}?_function=restartservices',
-            json.dumps(data),
-            verify=self.ssl_verify
+        res = self.post(
+            self.grid_ref, params={'_function': 'restartservices'}, json=data
         )
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
