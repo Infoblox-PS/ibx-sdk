@@ -35,14 +35,24 @@ Options:
 
 ## Examples
 
+### Syslog Download
+
+The following example will download the SYSLOG file from the infoblox.localdomain.
+
 ```sh
 get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t SYSLOG
 ```
 
-```sh
-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t AUDIT_LOG
-```
+**Screen output from command**
 
-```sh
-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t MSMGMTLOG
+```text
+get-log -u admin -g 192.168.1.2 -m infoblox.localdomain -t SYSLOG
+Enter password for [admin]: 
+2023-12-09 17:13:42 [nios_get_log.py:108] INFO connected to Infoblox grid manager 192.168.1.2
+2023-12-09 17:13:42 [fileop.py:982] INFO fetching SYSLOG log files for infoblox.localdomain
+2023-12-09 17:13:48 [fileop.py:1019] INFO downloading data from https://192.168.1.2/http_direct_file_io/req_id-DOWNLOAD-1209231342096359/sysLog.tar.gz
+2023-12-09 17:13:48 [fileop.py:1029] INFO writing data to 2023120948-infoblox.localdomain-SYSLOG.tgz file
+2023-12-09 17:13:51 [fileop.py:719] INFO file 2023120948-infoblox.localdomain-SYSLOG.tgz download complete
+2023-12-09 17:13:51 [nios_get_log.py:115] INFO finished!
+
 ```
