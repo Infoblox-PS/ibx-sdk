@@ -1,6 +1,7 @@
 # Connecting
 
 To establish a connection to your NIOS Grid, you'll need the following bits of information:
+
 - Grid Manager hostname or IP Address
 - NIOS Administrative User credentials `username` and `password`
 - (optionally) the NIOS version `wapi_ver`
@@ -12,11 +13,44 @@ insecure. In the Toolkit scripts, we used the Python `@click` module which provi
 CLI script argument parsing and validation.
 
 There are three (3) ways of instantiating the WAPI class:
+
 1. positional arguments
 2. named arguments
 3. dictionary of properties or key-value pairs
 
-Assuming we have the above properties and values, we can make a Grid connection as follows:
+To establish a connection to a NIOS Grid Manager using positional arguments, use the following:
+
+```python
+from ibx_tools.nios.wapi import WAPI
+
+grid_mgr = 'infoblox.localdomain'
+wapi_ver = '2.11'
+ssl_verify = False
+username = 'admin'
+password = 'infoblox'
+
+wapi = WAPI(grid_mgr, wapi_ver, ssl_verify)
+
+wapi.connect(username, password)
+```
+
+!!! warning
+
+    While this works and is acceptable, we do not recommend using positional arguments. Instead, leverage named
+    arguments to remove any abiguity. Positional arguments require specific order - if you get the order wrong
+    the method/call will fail and you may have a hard time figuring out how to resolve it.
+
+Instead of positional arguments it's recommended you use named args and parameters as shown below:
+
+```python
+from ibx_tools.nios.wapi import WAPI
+
+wapi = WAPI(grid_mgr='infoblox.localdomain', wapi_ver='2.11', ssl_verify='/path/to/certfile')
+wapi.connect(username='admin', password='infoblox')
+```
+
+In the next example, we establish our connection to the NIOS Grid Manager by instantiating the `WAPI` class, and
+building it up using the `WAPI` class properties.
 
 ```python
 from ibx_tools.nios.wapi import WAPI
@@ -30,11 +64,42 @@ password = 'infoblox'
 
 wapi.connect(username, password)
 ```
-This will attempt to use BASIC AUTH to establish a connection with the Grid Manager
-_infoblox.localdomain_ using the _admin_ user account and password. The `wapi.connect()`
-method will return an WapiRequestException if the connection fails. This example shows how
-to build up the WAPI object one property or attribute at a time. You could alternatively pass
-in a dictionary of variables as well. See the following:
+
+!!! tip
+
+    By instantiating an empty instance of the `WAPI` class, you can make the `wapi` instance variable global instead
+    of having to pass it around in your scripts to other functions and methods. See Below.
+
+```python
+from ibx_tools.nios.wapi import WAPI
+
+wapi = WAPI()
+
+
+def get_grid():
+    # the wapi instance is visible in the method
+    res = wapi.get(f'{wapi.url}/grid')
+
+
+def main():
+    wapi.grid_mgr = 'infoblox.localdomain'
+    wapi.wapi_ver = '2.11'
+    wapi.ssl_verify = '/path/to/certfile'
+
+    wapi.connect(username='admin', password='infoblox')
+    get_grid()
+```
+
+line 3 - We're instantiating the `WAPI` class without any attributes set on the instance globally  
+lines 12-14 - we build up the `wapi` instance  
+line 16 - we establish our connection to the NIOS Grid Manager  
+line 17 - we call a method/function in the code to get the Grid object  
+lines 6-8 - we make a call with the `wapi` instance. It's visible to the function because we made it global
+
+If a `WAPI` instance is not global, you will need to pass it around to any methods and functions which use it.
+
+In addition to the above, you can instantiate the `WAPI` class using a dictionary and passing that into the
+constructor shown below:
 
 ```python
 from ibx_tools.nios.wapi import WAPI
@@ -50,3 +115,9 @@ wapi = WAPI(**props)
 
 wapi.connect(username, password)
 ```
+
+This will attempt to use BASIC AUTH to establish a connection with the Grid Manager
+_infoblox.localdomain_ using the _admin_ user account and password. The `wapi.connect()`
+method will return an WapiRequestException if the connection fails. This example shows how
+to build up the WAPI object one property or attribute at a time. You could alternatively pass
+in a dictionary of variables as well. See the following:
