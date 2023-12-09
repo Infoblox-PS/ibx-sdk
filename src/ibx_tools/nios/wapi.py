@@ -323,59 +323,69 @@ class WAPI(requests.sessions.Session):
             max_wapi_ver = versions.pop()
             setattr(self, 'wapi_ver', max_wapi_ver)
 
-    def get(self, url, params=None, **kwargs) -> Response:
+    def get(self, wapi_object: str, params=None, **kwargs) -> Response:
         """
-        This method performs a GET request to the specified URL.
+        Create a GET request to retrieve WAPI object data
 
         Args:
-            url: The URL to which the GET request will be sent.
-            params: Optional parameters to be passed in the request URL.
-            **kwargs: Additional keyword arguments to be passed to the underlying `requests.Session.request` method.
+            wapi_object: A string representing the path or object to be accessed using the GET method.
+            params: Optional. A dictionary of query parameters to be included in the request.
+            **kwargs: Optional. Additional keyword arguments to be passed to the `request` method.
 
         Returns:
-            A `requests.Response` object containing the server's response to the GET request.
+            A `Response` object representing the HTTP response returned by the server.
 
         """
-        return self.conn.request('get', url, params=params, **kwargs)
+        url = f'{self.url}/{wapi_object}'
+        return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
 
-    def post(self, url, data=None, json=None, **kwargs) -> Response:
+    def post(self, wapi_object, data=None, json=None, **kwargs) -> Response:
         """
-        Send a POST request to the supplied URL
+        Create a POST request to create a WAPI object
 
         Args:
-            url: The URL to which the POST request will be sent.
-            data: Optional. The data to be sent in the body of the request.
-            json: Optional. The JSON data to be sent in the body of the request.
-            **kwargs: Optional keyword arguments.
+            wapi_object: The object to which the POST request is being made.
+            data (optional): The data to be sent in the body of the request. Default is None.
+            json (optional): The JSON data to be sent in the body of the request. Default is None.
+            **kwargs (optional): Additional keyword arguments to be passed to the request.
+
+        Returns:
+            Response: The response object containing the server's response to the POST request.
 
         """
-        return self.conn.request('post', url, data=data, json=json, **kwargs)
+        url = f'{self.url}/{wapi_object}'
+        return self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify, **kwargs)
 
-    def put(self, url, data=None, **kwargs) -> Response:
+    def put(self, wapi_object_ref: str, data=None, **kwargs) -> Response:
         """
-        Performs a PUT request to the specified URL with the provided data. Additional parameters can be passed
-        through the **kwargs argument.
+        Create a PUT request to update a WAPI object by its _ref
 
         Args:
-            url: The URL to send the PUT request to.
-            data: The data to include in the PUT request, if any.
+            wapi_object_ref: The reference string for the WAPI object.
+            data: Optional data to be sent with the request. Defaults to None.
             **kwargs: Additional keyword arguments to be passed to the request.
 
         Returns:
-            A Response object representing the server's response to the PUT request.
+            Response: The response object for the PUT request.
 
-        Example usage:
-
-        ```py
-        wapi = WAPI()
-        response = wapi.put('https://example.com/api/resource/123', data={'name': 'John Doe'})
-        if response.status_code == 200:
-            print('PUT request successful.')
-        else:
-            print('PUT request failed with status code: {}'.format(response.status_code)
-        ```
         """
-        return self.conn.request('delete', url, **kwargs)
+        url = f'{self.url}/{wapi_object_ref}'
+        return self.conn.request('put', url, verify=self.ssl_verify, **kwargs)
+
+    def delete(self, wapi_object_ref: str, **kwargs) -> Response:
+        """
+        Deletes a resource specified by the WAPI object reference.
+
+        Args:
+            wapi_object_ref (str): The WAPI object reference of the resource to delete.
+            **kwargs: Additional arguments to be passed to the HTTP delete request.
+
+        Returns:
+            Response: The response object representing the HTTP response.
+
+        """
+        url = f'{self.url}/{wapi_object_ref}'
+        return self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
 
     def member_config(self, member: str, conf_type: MemberDataType, remote_url: str = None) -> str:
         """

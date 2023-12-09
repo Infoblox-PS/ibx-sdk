@@ -2,10 +2,13 @@
 WAPI test module
 """
 import os
+import logging
 
+import pytest
 import urllib3
 
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
+log = logging.getLogger(__name__)
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 GRID_MGR = os.environ.get('GRID_MGR')
@@ -65,8 +68,57 @@ def test_wapi_basic_auth_connection():
 
 def test_wapi_basic_auth_connection_with_bad_password():
     wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
-    try:
+    with pytest.raises(WapiRequestException):
         wapi.connect(username=USERNAME, password='bad_password')
-    except WapiRequestException as err:
-        assert '401 Client Error: Authorization Required' in str(err)
     assert wapi.grid_ref is None
+
+
+def test_wapi_try_find_and_remove_object(get_wapi):
+    wapi = get_wapi
+    response = wapi.get('record:a', params={'name': 'test.example.com'})
+    if response.status_code == 200:
+        if len(response.json()) > 0:
+            for record in response.json():
+                reference = record.get('_ref')
+                res = wapi.delete(reference)
+                assert res.status_code == 200
+        else:
+            assert len(response.json()) == 0
+
+
+def test_wapi_object_create(get_wapi):
+    wapi = get_wapi
+    response = wapi.post('record:a', json={'name': 'test.example.com', 'ipv4addr': '192.0.2.1'})
+    assert response.status_code == 201
+
+
+def test_wapi_object_get(get_wapi):
+    wapi = get_wapi
+    response = wapi.get('record:a', params={'name': 'test.example.com'})
+    log.debug(response.json())
+    assert response.status_code == 200
+    assert len(response.json()) == 1
+
+
+def test_wapi_object_update(get_wapi):
+    wapi = get_wapi
+    response = wapi.get('record:a', params={'name': 'test.example.com'})
+    log.debug(response.json())
+    if len(response.json()) > 0:
+        first_record = response.json()[0]
+        reference = first_record.get('_ref')
+        res = wapi.put(reference, json={'comment': 'test update to comment'})
+        assert res.status_code == 200
+
+
+def test_wapi_object_delete(get_wapi):
+    wapi = get_wapi
+    response = wapi.get('record:a', params={'name': 'test.example.com'})
+    log.debug(response.json())
+    if len(response.json()) > 0:
+        first_record = response.json()[0]
+        reference = first_record.get('_ref')
+        res = wapi.get(reference)
+        assert res.status_code == 200
+        _ref = wapi.delete(reference)
+        assert _ref.json() == reference
