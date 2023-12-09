@@ -12,6 +12,8 @@ who need to work with data in CSV format.
 
 ## Usage
 
+To invoke the usage run `csvexport --help`
+
 ```
 Usage: csvexport [OPTIONS]
 
@@ -28,42 +30,31 @@ Options:
   Logging Parameters: 
     --debug              enable verbose debug output
   -h, --help             Show this message and exit.
-
 ```
 
 ## Example
 
-### CSV Export Process
+### CSV Export
 
 ```shell
 csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 ```
 
-The command is used to export network data from an Infoblox Grid Manager. Here's a breakdown of the command and the
-subsequent output:
+The command invokes the CSV Job Manager and creates a job to export objects of type network. Once the job is complete,
+the data is exported and saved.
 
-1. **Command Explanation**:
-    - `csvexport`: This is the command to initiate the CSV export process.
-    - `-u admin`: Specifies the username (in this case, 'admin') for authentication.
-    - `-g 192.168.1.2`: Specifies the IP address of the Infoblox Grid Manager.
-    - `-f ibcsv-networks.csv`: Sets the filename for the exported CSV file.
-    - `-o network`: Indicates that the export is for network objects.
+**Screen output from command**
 
-2. **Command Output**:
-    - `Enter password for [admin]:`: Prompt to enter the password for the admin user.
-    - `2023-12-09 12:36:27 [nios_csvexport.py:88] INFO connected to Infoblox grid manager 192.168.1.2`: Confirmation of
-      a
-      successful connection to the Infoblox Grid Manager.
-    - `2023-12-09 12:36:27 [fileop.py:154] INFO performing csv export for network object(s)`: Indicates that the CSV
-      export process for network objects has started.
-    - `2023-12-09 12:36:27 [fileop.py:177] INFO downloading data from https://192.168.1.2/http_direct_file_io/req_id-DOWNLOAD-1209183627629530/Networks.csv`:
-      Shows the URL from which the data is being downloaded.
-    - `2023-12-09 12:36:27 [fileop.py:187] INFO writing data to ibcsv_networks.csv file`: Indicates that the data is
-      being written to the specified CSV file.
-    - `2023-12-09 12:36:27 [fileop.py:719] INFO file ibcsv_networks.csv download complete`: Confirms that the download
-      and writing of the CSV file is complete.
+```text
+Enter password for [admin]:
+2023-12-09 12:36:27 [nios_csvexport.py:88] INFO connected to Infoblox grid manager 192.168.1.2
+2023-12-09 12:36:27 [fileop.py:154] INFO performing csv export for network object(s)
+2023-12-09 12:36:27 [fileop.py:177] INFO downloading data from https://192.168.1.2/http_direct_file_io/req_id-DOWNLOAD-1209183627629530/Networks.csv
+2023-12-09 12:36:27 [fileop.py:187] INFO writing data to ibcsv_networks.csv file
+2023-12-09 12:36:27 [fileop.py:719] INFO file ibcsv_networks.csv download complete
+```
 
-3. **CSV File**
+**Output from ibcsv-networks.csv**
 
 ```text
 header-network,address*,netmask*,always_update_dns,basic_polling_settings,boot_file,boot_server,broadcast_address,comment,ddns_domainname,ddns_ttl,deny_bootp,dhcp_members,disabled,discovery_exclusion_range,discovery_member,domain_name,domain_name_servers,enable_ddns,enable_discovery,enable_option81,enable_pxe_lease_time,enable_threshold_email_warnings,enable_threshold_snmp_warnings,enable_thresholds,generate_hostname,ignore_client_requested_options,is_authoritative,lease_scavenge_time,lease_time,mgm_private,network_view,next_server,option_logic_filters,pxe_lease_time,range_high_water_mark,range_high_water_mark_reset,range_low_water_mark,range_low_water_mark_reset,recycle_leases,routers,threshold_email_addresses,update_dns_on_lease_renewal,update_static_leases,vlans,zone_associations
