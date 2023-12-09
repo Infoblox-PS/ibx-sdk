@@ -39,3 +39,7 @@ Options:
 grid-restore -u admin -g 192.168.1.2 -f database.bak -m FORCED -k
 ```
 
+!!! Danger
+Restoring an Infoblox Grid should only be considered as a final option for production deployments. Please refrain from
+initiating a restoration process unless you are in a Disaster Recovery (DR) scenario.
+
