@@ -65,7 +65,7 @@ from ibx_tools.nios.wapi import WAPI
 wapi = WAPI()
 wapi.grid_mgr = 'infoblox.localdomain'
 wapi.wapi_ver = '2.11'
-wapi.ssl_verify = False
+wapi.ssl_verify = '/path/to/certfile'
 username = 'admin'
 password = 'infoblox'
 
@@ -103,7 +103,30 @@ line 16 - we establish our connection to the NIOS Grid Manager
 line 17 - we call a method/function in the code to get the Grid object  
 lines 6-8 - we make a call with the `wapi` instance. It's visible to the function because we made it global
 
-If a `WAPI` instance is not global, you will need to pass it around to any methods and functions which use it.
+If a `WAPI` instance is not global, you will need to pass it around to any methods and functions which use it. Our
+previous code would now look more like this:
+
+```python
+from ibx_tools.nios.wapi import WAPI
+
+
+def get_grid(wapi):
+    # the wapi instance is visible in the method
+    res = wapi.get(f'{wapi.url}/grid')
+
+
+def main():
+    wapi = WAPI()
+    wapi.grid_mgr = 'infoblox.localdomain'
+    wapi.wapi_ver = '2.11'
+    wapi.ssl_verify = '/path/to/certfile'
+
+    wapi.connect(username='admin', password='infoblox')
+    get_grid(wapi)
+```
+
+Notice how we have to pass the `wapi` instance to the `get_grid` function. We MUST do this if the `wapi` instance is a
+locally scoped variable instead of a global one.
 
 ## Dictionary of properties
 
@@ -118,7 +141,7 @@ password = "infoblox"
 props = {
     "grid_mgr": "infoblox.localdomain",
     "wapi_ver": "2.11",
-    "verify_ssl": False
+    "verify_ssl": '/path/to/certfile'
 }
 wapi = WAPI(**props)
 
