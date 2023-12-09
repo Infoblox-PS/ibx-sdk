@@ -105,6 +105,7 @@ nav:
       - Calling Functions: user_guide/functions.md
       - Cookbook: user_guide/cookbook.md
   - Tools:
+      - Introduction: examples/index.md
       - csvexport: examples/csvexport.md
       - csvimport: examples/csvimport.md
       - get-file: examples/get_file.md
