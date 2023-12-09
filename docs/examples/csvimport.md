@@ -71,15 +71,15 @@ data row describes the type of action that the appliance supports for the respec
 following: `I` (Insert), `M` (Merge), `O` (Override), `IM` (Insert + Merge), `IO` (Insert + Override), `D` (Delete).
 
 !!! Note
-You must specify appropriate values in the IMPORT-ACTION column for each row to perform a multiple action CSV
-import. The appliance performs the respective operation when you specify `I`, `M`, `O`, `D`, in the
-IMPORT-ACTION column. When you specify `IM` or `IO`, the appliance first checks if the corresponding object exists. If
-it exists, the appliance performs the merge or override operation accordingly. If the object does not exist, you must
-first perform the insert operation to add the data.
+    You must specify appropriate values in the IMPORT-ACTION column for each row to perform a multiple action CSV
+    import. The appliance performs the respective operation when you specify `I`, `M`, `O`, `D`, in the
+    IMPORT-ACTION column. When you specify `IM` or `IO`, the appliance first checks if the corresponding object exists. If
+    it exists, the appliance performs the merge or override operation accordingly. If the object does not exist, you must
+    first perform the insert operation to add the data.
 
 !!! Danger
-CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
-networks and all child objects, will significantly affect member performance, resulting in service outage.
+    CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
+    networks and all child objects, will significantly affect member performance, resulting in service outage.
 
 
     
