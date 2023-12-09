@@ -74,8 +74,8 @@ following: `I` (Insert), `M` (Merge), `O` (Override), `IM` (Insert + Merge), `IO
 You must specify appropriate values in the IMPORT-ACTION column for each row to perform a multiple action CSV
 import. The appliance performs the respective operation when you specify `I`, `M`, `O`, `D`, in the
 IMPORT-ACTION column. When you specify `IM` or `IO`, the appliance first checks if the corresponding object exists. If
-it
-exists, the appliance performs the merge or override operation accordingly. If the object does not exist, you must first
+it exists, the appliance performs the merge or override operation accordingly. If the object does not exist, you must
+first
 perform the insert operation to add the data.
 
 !!! Danger
