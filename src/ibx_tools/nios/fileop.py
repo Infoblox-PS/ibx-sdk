@@ -927,13 +927,14 @@ def get_support_bundle(
     }
     if remote_url:
         payload["remote_url"] = remote_url
-    json_payload = json.dumps(payload)
-    logging.debug('payload: %s', pprint.pformat(json_payload))
+    logging.debug(pprint.pformat(payload))
+    # json_payload = json.dumps(payload)
+    # logging.debug('payload: %s', pprint.pformat(json_payload))
     try:
-        res = self.conn.post(
-            f'{self.url}/fileop?_function=get_support_bundle',
-            data=json_payload,
-            verify=self.ssl_verify
+        res = self.post(
+            'fileop',
+            params={'_function': 'get_support_bundle'},
+            json=payload
         )
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
@@ -958,13 +959,8 @@ def get_support_bundle(
     date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
     filename = f'{date_time}-{member}-SupportBundle.tgz'
 
-    logging.info('writing data to %s file', filename)
-    with open(filename, 'wb') as handle:
-        for chunk in res.iter_content(chunk_size=1024):
-            if chunk:
-                handle.write(chunk)
+    __write_file(filename=filename, data=res)
 
-    # notify grid file downloadcomplete
     try:
         __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
@@ -1029,10 +1025,12 @@ def get_log_files(
 
     try:
         res = self.conn.post(
-            f'{self.url}/fileop?_function=get_log_files',
+            'fileop',
+            params={'_function': 'get_log_files'},
             data=json_payload,
             verify=self.ssl_verify
         )
+        logging.debug(res.text)
         res.raise_for_status()
     except requests.exceptions.RequestException as err:
         logging.error(err)
@@ -1056,13 +1054,8 @@ def get_log_files(
     date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
     filename = f'{date_time}-{member}-{log_type}.tgz'
 
-    logging.info('writing data to %s file', filename)
-    with open(filename, 'wb') as handle:
-        for chunk in res.iter_content(chunk_size=1024):
-            if chunk:
-                handle.write(chunk)
+    __write_file(filename=filename, data=res)
 
-    # notify grid file downloadcomplete
     try:
         __download_complete(self, download_token, filename, req_cookies)
     except requests.exceptions.RequestException as err:
