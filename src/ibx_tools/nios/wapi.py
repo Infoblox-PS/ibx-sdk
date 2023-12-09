@@ -40,7 +40,8 @@ MemberDataType = Literal[
     'DNS_STATS',
     'DNS_RECURSING_CACHE'
 ]
-LogType = Literal['SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
+LogType = Literal[
+    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
 
 
 class BaseWapiException(Exception):
@@ -70,7 +71,8 @@ class WAPI(requests.sessions.Session):
         grid_mgr (str): IP address or hostname of the Grid Manager.
         wapi_ver (str): Version of the Infoblox WAPI.
         ssl_verify (bool): Flag to determine SSL certificate verification.
-        conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is None.
+        conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is
+        None.
         grid_ref (str, optional): Reference ID of the connected grid. Default is None.
 
     Examples:
@@ -171,7 +173,8 @@ class WAPI(requests.sessions.Session):
             certificate: A string representing the certificate for the connection. (default: None)
 
         Raises:
-            WapiInvalidParameterException: If neither a username and password nor a certificate is provided.
+            WapiInvalidParameterException: If neither a username and password nor a certificate
+            is provided.
 
         """
         if not self.url:
@@ -187,7 +190,8 @@ class WAPI(requests.sessions.Session):
 
     def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
         """
-        This private method performs a certificate authentication request to the API. It uses the provided
+        This private method performs a certificate authentication request to the API. It uses the
+        provided
         certificate to establish a connection with the API server using the requests library.
 
         Args:
@@ -215,13 +219,14 @@ class WAPI(requests.sessions.Session):
                 grid = res.json()
                 setattr(self, 'conn', conn)
                 setattr(self, 'grid_ref', grid[0].get('_ref'))
-            finally:
                 return grid[0].get('_ref', '')
 
     def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
-        This private method makes a request to the specified URL with basic authentication using the provided username
-        and password. It stores the session connection in the instance attribute 'conn*' and the grid reference in the
+        This private method makes a request to the specified URL with basic authentication using
+        the provided username
+        and password. It stores the session connection in the instance attribute 'conn*' and the
+        grid reference in the
         instance attribute 'grid_ref'.
 
         Note:
@@ -262,7 +267,8 @@ class WAPI(requests.sessions.Session):
             wapi_object (str): The name of the WAPI object for which to retrieve the fields.
 
         Returns:
-            Union[str, None]: A string containing the fields separated by commas, or None if an error occurred.
+            Union[str, None]: A string containing the fields separated by commas, or None if an
+            error occurred.
 
         Raises:
             WapiRequestException: If there was an error connecting to the WAPI service.
@@ -285,7 +291,9 @@ class WAPI(requests.sessions.Session):
             logging.error(err)
             raise WapiRequestException(err) from err
         else:
-            fields = ",".join(field["name"] for field in data.get('fields') if "r" in field.get('supports'))
+            fields = ",".join(
+                field["name"] for field in data.get('fields') if "r" in field.get('supports')
+            )
         return fields
 
     def max_wapi_ver(self) -> None:
@@ -296,7 +304,8 @@ class WAPI(requests.sessions.Session):
             None
 
         Raises:
-            WapiRequestException: If there is an error making the GET request to retrieve the WAPI version.
+            WapiRequestException: If there is an error making the GET request to retrieve the
+            WAPI version.
 
         Example Usage:
 
@@ -328,7 +337,8 @@ class WAPI(requests.sessions.Session):
         Create a GET request to retrieve WAPI object data
 
         Args:
-            wapi_object: A string representing the path or object to be accessed using the GET method.
+            wapi_object: A string representing the path or object to be accessed using the GET
+            method.
             params: Optional. A dictionary of query parameters to be included in the request.
             **kwargs: Optional. Additional keyword arguments to be passed to the `request` method.
 
@@ -354,7 +364,8 @@ class WAPI(requests.sessions.Session):
 
         """
         url = f'{self.url}/{wapi_object}'
-        return self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify, **kwargs)
+        return self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify,
+                                 **kwargs)
 
     def put(self, wapi_object_ref: str, data=None, **kwargs) -> Response:
         """
@@ -394,7 +405,8 @@ class WAPI(requests.sessions.Session):
         Args:
             member (str): The name or IP address of the member.
             conf_type (MemberDataType): The type of configuration file to download.
-            remote_url (str, optional): The remote URL from which to download the configuration file. Defaults to None.
+            remote_url (str, optional): The remote URL from which to download the configuration
+            file. Defaults to None.
 
         Returns:
             str: The path of the downloaded configuration file.
@@ -408,7 +420,8 @@ class WAPI(requests.sessions.Session):
 
         Args:
             wapi_object (str): The WAPI object to export data from.
-            filename (Optional[str]): The name of the CSV file to export the data to. If not provided,
+            filename (Optional[str]): The name of the CSV file to export the data to. If not
+            provided,
                 the data will be exported to a default file.
 
         Raises:
@@ -449,7 +462,8 @@ class WAPI(requests.sessions.Session):
             self: The current instance of the WAPI class.
             filename (str): The name of the backup file to restore. Defaults to "database.tgz".
             mode (str): The restore mode. Defaults to "NORMAL".
-            keep_grid_ip (bool): Boolean flag to indicate whether to keep the grid IP address. Defaults to False.
+            keep_grid_ip (bool): Boolean flag to indicate whether to keep the grid IP address.
+            Defaults to False.
 
         Returns:
             None
@@ -479,7 +493,8 @@ class WAPI(requests.sessions.Session):
 
         Description:
         This method is used to initiate a grid backup in the Infoblox NIOS WAPI. It makes use of the
-        fileop.grid_backup() method from the infoblox_pslib.nios.fileop module. The backup is saved with the
+        fileop.grid_backup() method from the infoblox_pslib.nios.fileop module. The backup is
+        saved with the
         specified filename in the Infoblox Grid.
 
         Example:
@@ -525,10 +540,13 @@ class WAPI(requests.sessions.Session):
 
         Args:
             groups (Optional[list]): List of group names containing appliances. Default is None.
-            members (Optional[list[str]]): List of member names within the given groups. Default is None.
+            members (Optional[list[str]]): List of member names within the given groups. Default
+            is None.
             mode (Optional[ServiceRestartMode]): Service restart mode. Default is None.
-            restart_option (Optional[ServiceRestartOption]): Service restart option. Default is 'RESTART_IF_NEEDED'.
-            services (Optional[list[ServiceRestartServices]]): List of member services to restart. Default is
+            restart_option (Optional[ServiceRestartOption]): Service restart option. Default is
+            'RESTART_IF_NEEDED'.
+            services (Optional[list[ServiceRestartServices]]): List of member services to
+            restart. Default is
             'ALL'.
             user_name (Optional[str]): Username for authentication. Default is None.
 
@@ -585,20 +603,28 @@ class WAPI(requests.sessions.Session):
 
         Args:
             member (str): The name or IP address of the target member.
-            cached_zone_data (bool): Whether to include cached zone data in the support bundle. Default is False.
-            core_files (bool): Whether to include core files in the support bundle. Default is False.
-            log_files (bool): Whether to include log files in the support bundle. Default is False.
-            nm_snmp_logs (bool): Whether to include NIOS Maintenance SNMP logs in the support bundle. Default is False.
-            recursive_cache_file (bool): Whether to recursively include the cache in the support bundle. Default is
+            cached_zone_data (bool): Whether to include cached zone data in the support bundle.
+            Default is False.
+            core_files (bool): Whether to include core files in the support bundle. Default is
             False.
-            remote_url (str, optional): The URL of a remote server to upload the support bundle to. Default is None.
-            rotate_log_files (bool): Whether to rotate log files after creating the support bundle. Default is False.
+            log_files (bool): Whether to include log files in the support bundle. Default is False.
+            nm_snmp_logs (bool): Whether to include NIOS Maintenance SNMP logs in the support
+            bundle. Default is False.
+            recursive_cache_file (bool): Whether to recursively include the cache in the support
+            bundle. Default is
+            False.
+            remote_url (str, optional): The URL of a remote server to upload the support bundle
+            to. Default is None.
+            rotate_log_files (bool): Whether to rotate log files after creating the support
+            bundle. Default is False.
 
         Returns:
-            Response: The response object containing the result of the support bundle creation request.
+            Response: The response object containing the result of the support bundle creation
+            request.
 
         Raises:
-            requests.exceptions.RequestException: If an error occurs while making the support bundle creation request.
+            requests.exceptions.RequestException: If an error occurs while making the support
+            bundle creation request.
         """
         return fileop.get_support_bundle(
             self,
@@ -625,14 +651,19 @@ class WAPI(requests.sessions.Session):
         Fetches the log(s) from NIOS for given log_type
 
         Args:
-            log_type: The type of log files to retrieve. Accepted values are 'debug', 'query', 'dhcp', 'dns',
-            'auto_discovery', 'event', 'object_management', 'reporting', 'file_integration', 'traffic_management',
-            'threat_insight', 'cloud_network', 'external_dns', 'external_autodiscover', and 'external_forwarding'.
+            log_type: The type of log files to retrieve. Accepted values are 'debug', 'query',
+            'dhcp', 'dns',
+            'auto_discovery', 'event', 'object_management', 'reporting', 'file_integration',
+            'traffic_management',
+            'threat_insight', 'cloud_network', 'external_dns', 'external_autodiscover',
+            and 'external_forwarding'.
             endpoint: The endpoint IP address or hostname for which to retrieve the log files.
             include_rotated: Whether to include rotated log files. Defaults to False.
             member: The member name for which to retrieve the log files.
-            msserver: The Microsoft Windows server IP address or hostname for which to retrieve the log files.
-            node_type: The node type of the appliance for which to retrieve the log files. Accepted values are
+            msserver: The Microsoft Windows server IP address or hostname for which to retrieve
+            the log files.
+            node_type: The node type of the appliance for which to retrieve the log files.
+            Accepted values are
             'ACTIVE' and 'BACKUP'.
 
         Returns:
