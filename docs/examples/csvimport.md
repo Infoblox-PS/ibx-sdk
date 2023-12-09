@@ -75,8 +75,7 @@ You must specify appropriate values in the IMPORT-ACTION column for each row to 
 import. The appliance performs the respective operation when you specify `I`, `M`, `O`, `D`, in the
 IMPORT-ACTION column. When you specify `IM` or `IO`, the appliance first checks if the corresponding object exists. If
 it exists, the appliance performs the merge or override operation accordingly. If the object does not exist, you must
-first
-perform the insert operation to add the data.
+first perform the insert operation to add the data.
 
 !!! Danger
 CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
