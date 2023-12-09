@@ -19,108 +19,12 @@ class,
 `WAPI`, extends `requests.sessions.Session` and provides functionalities for session management, data retrieval, file
 operations, and service management
 
-### Key Classes and Literals
-
-- **WAPI**: This is the main class handling interactions with the Infoblox WAPI. It includes methods for CRUD (Create,
-  Read, Update, Delete) operations, grid management, service restarts, and fetching log files.
-- **BaseWapiException**: A base exception class for WAPI-related errors.
-- **WapiRequestException**: A subclass of `BaseWapiException` specifically for handling request errors.
-- **ServiceRestartOption**: A literal representing service restart options.
-- **ServiceRestartServices**: A literal indicating the services that can be restarted.
-- **ServiceRestartMode**: Describes the mode of service restart.
-- **CsvOperation**: Represents different operations that can be performed on CSV files.
-- **GridRestoreMode**: Indicates the modes available for grid restoration.
-- **MemberDataType**: Defines the types of data that can be associated with a grid member.
-- **LogType**: Specifies the types of logs that can be retrieved.
-
-### Key Methods of `WAPI`
-
-- **Connection Management**: `connect()`
-- **Data Retrieval**: `get()`, `object_fields()`
-- **Data Modification**: `post()`, `put()`
-- **File Operations**: `csv_export()`, `csv_import()`, `grid_restore()`, `grid_backup()`
-- **Service Management**: `service_restart()`, `get_service_restart_status()`
-- **Log Management**: `get_log_files()`, `get_support_bundle()`
-
-### Example Usage
-
-Here's an example of how to use the `WAPI` class:
-
-```python
-# Initialize the WAPI instance
-wapi = WAPI(grid_mgr='10.0.0.1', username='admin', password='infoblox', wapi_ver='2.5', ssl_verify=False)
-
-# Connect to the grid
-wapi.connect()
-
-# Retrieve object fields
-fields = wapi.object_fields('record:host')
-if fields is not None:
-   print(f"Fields: {fields}")
-
-# Example POST request
-response = wapi.post('https://example.com/api/resource', data={'key': 'value'})
-print(response.status_code)
-```
-
 ## FILEOP Module Overview
 
 The `fileop.py` module provides a suite of functions for managing file operations in the context of the Infoblox Web
 API (WAPI). These functions are designed to be used within the `WAPI` class and handle various file-related tasks
 such as configuration file downloads, CSV exports and imports, grid backups and restorations, and log file management.
 
-### Key Functions
-
-- **member_config**: Downloads a configuration file for a specific grid member.
-- **csv_export**: Exports data from the WAPI to a CSV file.
-- **csv_import**: Imports data from a CSV file into the WAPI.
-- **grid_backup**: Backs up the Infoblox Grid and saves it to a local file.
-- **grid_restore**: Restores the Infoblox Grid database from a backup file.
-- **get_support_bundle**: Fetches a support bundle from an Infoblox member.
-- **get_log_files**: Retrieves specified log files from the NIOS system.
-
-### Internal Helper Functions
-
-- **_upload_init**: Initializes a file upload to the Infoblox WAPI.
-- **__upload_file**: Uploads a file to the specified URL using the Infoblox WAPI.
-- **__csv_import**: Performs a CSV import job via WAPI.
-- **csvtask_status**: Fetches the status of a CSV import task from the CSV Job Manager.
-- **get_csv_errors_file**: Downloads the CSV errors file for a specified job.
-- **__getgriddata**: Executes a 'getgriddata' file operation call to the Infoblox WAPI.
-- **__download_file**: Downloads a file from a specified Infoblox URL.
-- **__download_complete**: Notifies the completion of a file download process in the Infoblox WAPI.
-- **__restore_database**: Performs a database restore operation in the Infoblox WAPI.
-
-### Example Usage
-
-```python
-# Initialize WAPI instance
-wapi_instance = WAPI(...)
-
-# Download a member configuration file
-config_file = wapi_instance.member_config(
-   member='grid-member.example.com',
-   conf_type='DNS'
-)
-
-# Export data to CSV
-wapi_instance.csv_export('network', 'network_data.csv')
-
-# Import data from CSV
-csv_task = wapi_instance.csv_import('IMPORT', '/path/to/import.csv')
-
-# Perform a Grid backup
-wapi_instance.grid_backup('grid_backup.tgz')
-
-# Restore Grid from a backup file
-wapi_instance.grid_restore('grid_backup.tgz', 'NORMAL', True)
-
-# Fetch a support bundle
-wapi_instance.get_support_bundle(member='grid-member.example.com')
-
-# Retrieve log files
-wapi_instance.get_log_files(log_type='syslog', member='grid-member.example.com')
-```
 
 ## Grid Services Module Overview
 
@@ -128,46 +32,102 @@ The `Grid Services` module in Python provides functions to interact with and man
 environment. It includes capabilities to restart services, update their status, and retrieve the status of service
 restarts.
 
-### Key Functions
+# Contributing
 
-1. **service_restart**: Restarts specified services of a group, member, or all services on the grid.
-    - **Arguments**: Accepts arbitrary keyword arguments to specify services to restart.
-    - **Return Value**: None. Logs the result of the operation.
-    - **Exception**: Raises `requests.exceptions.RequestException` for request-related errors.
+## Testing
 
-2. **update_service_status**: Updates the restart status of specified grid services.
-    - **Arguments**: `services` (str) - specifies the services to check the restart status for. Defaults to 'ALL'.
-    - **Return Value**: None. Logs the response text upon successful completion of the request.
-    - **Exception**: Raises `requests.exceptions.RequestException` for request-related errors.
+Testing is a requirement for contributing code to this project. You're expected to write test cases which "covers" your
+code additions, changes, and/or deletions. This section describes how to setup, configure and implement testing of the 
+Basic API Toolkit.
 
-3. **get_service_restart_status**: Retrieves the restart status of all member services.
-    - **Return Value**: Returns a dictionary containing the restart status of all member services.
-    - **Exception**: Raises `requests.exceptions.SSLError`, `requests.exceptions.HTTPError`,
-      or `requests.exceptions.RequestException` for various request-related errors.
+### Software Requirements
 
-### Example Usage
+Install the following set of Python modules for testing:
+* coverage
+* pytest
+* pytest-env
+* pytest-dotenv
 
-```python
-# Initialize the WAPI instance
-wapi_instance = WAPI(...)
+This is done as follows:
 
-# Restart all services
-wapi_instance.service_restart(services='ALL')
-
-# Update the service status
-wapi_instance.update_service_status('DNS')
-
-# Get service restart status
-status = wapi_instance.get_service_restart_status()
-print(status)
+```shell
+pip install pytest pytest-env pytest-dotenv coverage
 ```
-## Logger functions
 
-* init_logger
-* init_console_logger
-* increase_log_level
-* set_log_level
+### Testing Configuration
 
-## Scripts Folder
+It's recommended that you configure your own env variables. The best, safest, and easiest way is to create a `.env` file
+at the root of the project. Create the file with the following variables:
 
+```dotenv
+GRID_MGR=192.168.1.2
+USERNAME=admin
+PASSWORD=infoblox
+SSL_VERIFY=False
+WAPI_VER=2.12
+```
 
+The above is a sample file only - please update it with sane values according to your testing environment. 
+
+### Running Tests
+
+To run tests, perform the following from the root of the project:
+
+```shell
+coverage run -m pytest -svvv
+```
+
+You should see output like the following:
+```shell
+(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage run -m pytest -svvv
+============================================== test session starts ===============================================
+platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /Users/ppiper/workspace/ibx-tools/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/ppiper/workspace/ibx-tools
+configfile: pytest.ini
+plugins: env-1.1.3, dotenv-0.5.2
+collected 9 items
+
+tests/wapi/test_env_variables_pytest_env.py::test_env_variables_pytest_env PASSED
+tests/wapi/test_wapi.py::test_instantiate_wapi_without_properties PASSED
+tests/wapi/test_wapi.py::test_instantiate_wapi_with_positional_arguments PASSED
+tests/wapi/test_wapi.py::test_instantiate_wapi_with_named_arguments PASSED
+tests/wapi/test_wapi.py::test_instantiate_wapi_with_dictionary_of_arguments PASSED
+tests/wapi/test_wapi.py::test_ssl_verify_as_string_value PASSED
+tests/wapi/test_wapi.py::test_ssl_verify_as_boolean_value PASSED
+tests/wapi/test_wapi.py::test_wapi_basic_auth_connection PASSED
+tests/wapi/test_wapi.py::test_wapi_basic_auth_connection_with_bad_password PASSED
+
+=============================================== 9 passed in 0.10s ================================================
+```
+
+Once you run the test suite, you can examine the code coverage of the tests - always strive for 100%:
+```shell
+coverage 
+```
+
+or 
+
+```shell
+coverage -m
+```
+
+```shell
+(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage report
+Name                                          Stmts   Miss  Cover
+-----------------------------------------------------------------
+src/ibx_tools/__init__.py                         0      0   100%
+src/ibx_tools/nios/__init__.py                    0      0   100%
+src/ibx_tools/nios/fileop.py                    359    335     7%
+src/ibx_tools/nios/service.py                    42     35    17%
+src/ibx_tools/nios/wapi.py                      125     59    53%
+src/ibx_tools/util/__init__.py                    0      0   100%
+src/ibx_tools/util/util.py                      167    149    11%
+tests/wapi/__init__.py                            0      0   100%
+tests/wapi/test_env_variables_pytest_env.py       8      0   100%
+tests/wapi/test_wapi.py                          50      0   100%
+-----------------------------------------------------------------
+TOTAL                                           751    578    23%
+```
+
+This shows we're only hitting 53% of the WAPI code in our testing. 
