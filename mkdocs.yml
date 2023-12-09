@@ -97,7 +97,7 @@ nav:
   - Home: index.md
   - User Guide:
       - Introduction: user_guide/index.md
-      - Connection: user_guide/connection.md
+      - Connecting to WAPI: user_guide/connection.md
       - Fetching Objects: user_guide/get.md
       - Creating Objects: user_guide/post.md
       - Updating Objects: user_guide/put.md
