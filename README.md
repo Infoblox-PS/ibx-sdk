@@ -103,13 +103,13 @@ tests/wapi/test_wapi.py::test_wapi_basic_auth_connection_with_bad_password PASSE
 
 Once you run the test suite, you can examine the code coverage of the tests - always strive for 100%:
 ```shell
-coverage 
+coverage report
 ```
 
 or 
 
 ```shell
-coverage -m
+coverage report -m
 ```
 
 ```shell
