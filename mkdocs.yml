@@ -115,21 +115,22 @@ plugins:
 
 nav:
   - Home: index.md
-  - User Guides:
-      - Classes:
-          - wapi: classes/wapi.md
-          - fileop: classes/fileop.md
-          - service: classes/service.md
-      - Examples:
-          - CSV Export: examples/csvexport.md
-          - CSV Import: examples/csvimport.md
-          - Get File: examples/get_file.md
-          - Get Log: examples/get_log.md
-          - Get Support Bundle: examples/get_supportbundle.md
-          - Grid Backup: examples/grid_backup.md
-          - Grid Restore: examples/grid_restore.md
-          - Restart Service: examples/restart_service.md
-          - Restart Status: examples/restart_status.md
+  - User Guide:
+      - user_guide/index.md
+  - Example Scripts:
+      - CSV Export: examples/csvexport.md
+      - CSV Import: examples/csvimport.md
+      - Get File: examples/get_file.md
+      - Get Log: examples/get_log.md
+      - Get Support Bundle: examples/get_supportbundle.md
+      - Grid Backup: examples/grid_backup.md
+      - Grid Restore: examples/grid_restore.md
+      - Restart Service: examples/restart_service.md
+      - Restart Status: examples/restart_status.md
+  - Classes:
+      - wapi: classes/wapi.md
+      - fileop: classes/fileop.md
+      - service: classes/service.md
   - Change Log: changelog.md
   - License: LICENSE.md
 
