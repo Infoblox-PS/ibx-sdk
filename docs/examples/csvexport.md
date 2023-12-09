@@ -34,7 +34,7 @@ Options:
 
 ## Example
 
-### CSV Export Process
+### CSV Export
 
 ```shell
 csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
