@@ -1,4 +1,4 @@
-# Introduction / Overview
+# Introduction
 
 The Infoblox Basic API Toolkit is a set of tools written to help users create effective automation scripts 
 for accessing the Infoblox NIOS Web API or WAPI. The Basic API Toolkit provides the following:

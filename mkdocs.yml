@@ -29,7 +29,7 @@ theme:
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.prune
-    - navigation.sections
+#    - navigation.sections
     # - navigation.tabs
     # - navigation.tabs.sticky
     - navigation.top
@@ -116,17 +116,24 @@ plugins:
 nav:
   - Home: index.md
   - User Guide:
-      - user_guide/index.md
-  - Example Scripts:
-      - CSV Export: examples/csvexport.md
-      - CSV Import: examples/csvimport.md
-      - Get File: examples/get_file.md
-      - Get Log: examples/get_log.md
-      - Get Support Bundle: examples/get_supportbundle.md
-      - Grid Backup: examples/grid_backup.md
-      - Grid Restore: examples/grid_restore.md
-      - Restart Service: examples/restart_service.md
-      - Restart Status: examples/restart_status.md
+      - Introduction: user_guide/index.md
+      - Connection: user_guide/connection.md
+      - Fetching Objects: user_guide/get.md
+      - Creating Objects: user_guide/post.md
+      - Updating Objects: user_guide/put.md
+      - Deleting Objects: user_guide/delete.md
+      - Calling Functions: user_guide/functions.md
+      - Cookbook: user_guide/cookbook.md
+  - Tools:
+      - csvexport: examples/csvexport.md
+      - csvimport: examples/csvimport.md
+      - get-file: examples/get_file.md
+      - get-log: examples/get_log.md
+      - get-supportbundle: examples/get_supportbundle.md
+      - grid-backup: examples/grid_backup.md
+      - grid-restore: examples/grid_restore.md
+      - restart-service: examples/restart_service.md
+      - restart-status: examples/restart_status.md
   - Classes:
       - wapi: classes/wapi.md
       - fileop: classes/fileop.md
