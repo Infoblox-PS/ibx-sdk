@@ -9,6 +9,7 @@ def test_instantiate_wapi_without_properties():
     assert wapi.grid_mgr is None
     assert wapi.wapi_ver == '2.5'
     assert wapi.ssl_verify is False
+    assert isinstance(wapi, WAPI)
 
 
 def test_instantiate_wapi_with_positional_arguments():
