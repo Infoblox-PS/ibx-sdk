@@ -1,7 +1,11 @@
 """
 WAPI test module
 """
-from ibx_tools.nios.wapi import WAPI
+import urllib3
+
+from ibx_tools.nios.wapi import WAPI, WapiRequestException
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def test_instantiate_wapi_without_properties():
@@ -46,3 +50,16 @@ def test_ssl_verify_as_boolean_value():
     assert wapi.ssl_verify is False
 
 
+def test_wapi_basic_auth_connection():
+    wapi = WAPI(grid_mgr='192.168.40.60', wapi_ver='2.12', ssl_verify=False)
+    wapi.connect(username='admin', password='infoblox')
+    assert wapi.grid_ref is not None
+
+
+def test_wapi_basic_auth_connection_with_bad_password():
+    wapi = WAPI(grid_mgr='192.168.40.60', wapi_ver='2.12', ssl_verify=False)
+    try:
+        wapi.connect(username='admin', password='bad_password')
+    except WapiRequestException as err:
+        assert '401 Client Error: Authorization Required' in str(err)
+    assert wapi.grid_ref is None

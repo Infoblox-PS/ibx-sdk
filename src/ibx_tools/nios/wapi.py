@@ -252,7 +252,6 @@ class WAPI(requests.sessions.Session):
                 grid = res.json()
                 setattr(self, 'conn', conn)
                 setattr(self, 'grid_ref', grid[0].get('_ref'))
-            finally:
                 return grid[0].get('_ref', '')
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
