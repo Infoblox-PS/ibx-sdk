@@ -16,7 +16,10 @@ There are three (3) ways of instantiating the WAPI class:
 
 1. positional arguments
 2. named arguments
-3. dictionary of properties or key-value pairs
+3. instance variables
+4. dictionary of properties or key-value pairs
+
+## Positional Arguments
 
 To establish a connection to a NIOS Grid Manager using positional arguments, use the following:
 
@@ -40,6 +43,8 @@ wapi.connect(username, password)
     arguments to remove any abiguity. Positional arguments require specific order - if you get the order wrong
     the method/call will fail and you may have a hard time figuring out how to resolve it.
 
+## Named Arguments
+
 Instead of positional arguments it's recommended you use named args and parameters as shown below:
 
 ```python
@@ -48,6 +53,8 @@ from ibx_tools.nios.wapi import WAPI
 wapi = WAPI(grid_mgr='infoblox.localdomain', wapi_ver='2.11', ssl_verify='/path/to/certfile')
 wapi.connect(username='admin', password='infoblox')
 ```
+
+## Instance Variables
 
 In the next example, we establish our connection to the NIOS Grid Manager by instantiating the `WAPI` class, and
 building it up using the `WAPI` class properties.
@@ -97,6 +104,8 @@ line 17 - we call a method/function in the code to get the Grid object
 lines 6-8 - we make a call with the `wapi` instance. It's visible to the function because we made it global
 
 If a `WAPI` instance is not global, you will need to pass it around to any methods and functions which use it.
+
+## Dictionary of properties
 
 In addition to the above, you can instantiate the `WAPI` class using a dictionary and passing that into the
 constructor shown below:
