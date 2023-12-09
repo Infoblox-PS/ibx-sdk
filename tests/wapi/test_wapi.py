@@ -31,3 +31,17 @@ def test_instantiate_wapi_with_dictionary_of_arguments():
     assert wapi.grid_mgr == '192.168.1.2'
     assert wapi.wapi_ver == '2.12'
     assert wapi.ssl_verify == '/path/to/certfile'
+
+
+def test_ssl_verify_as_string_value():
+    wapi = WAPI(ssl_verify='/path/to/certfile')
+    assert isinstance(wapi.ssl_verify, str)
+    assert wapi.ssl_verify == '/path/to/certfile'
+
+
+def test_ssl_verify_as_boolean_value():
+    wapi = WAPI(ssl_verify=False)
+    assert isinstance(wapi.ssl_verify, bool)
+    assert wapi.ssl_verify is False
+
+
