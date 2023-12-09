@@ -11,7 +11,10 @@ copyright: |
 
 # Configuration
 theme:
+  extra_css:
+    - stylesheets/extra.css
   name: material
+  #  sticky_navigation: sture
   features:
     - announce.dismiss
     #    - content.action.edit
@@ -47,14 +50,14 @@ theme:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: black
-      accent: greeen
+      #      accent: green
       toggle:
         icon: material/toggle-switch
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: black
-      accent: green
+      #      accent: green
       toggle:
         icon: material/toggle-switch-off
         name: Switch to system preference
@@ -72,13 +75,13 @@ markdown_extensions:
   - def_list
   - footnotes
   - md_in_html
-  #  - toc:
-  #      permalink: true
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
   - pymdownx.details
   - pymdownx.highlight:
       linenums: true
@@ -86,7 +89,6 @@ markdown_extensions:
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.keys
   #  - pymdownx.magiclink:
   #      normalize_issue_symbols: true
   #      repo_url_shorthand: true
@@ -99,19 +101,23 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-      combine_header_slug: true
-      slugify: !!python/object/apply:pymdownx.slugs.slugify
-        kwds:
-          case: lower
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tilde
+            #  - pymdownx.tabbed:
+            #      alternate_style: true
+            #      combine_header_slug: true
+            #      slugify: !!python/object/apply:pymdownx.slugs.slugify
+            #        kwds:
+            #          case: lower
+            #  - pymdownx.tasklist:
+            #      custom_checkbox: true
+
 
 plugins:
   - search
   - mkdocstrings
+  - git-authors
+#  - git-committers:
+#      repository: Infoblox-PS/ibx-tools
+#      branch: main
 
 nav:
   - Home: index.md
@@ -120,6 +126,8 @@ nav:
           - wapi: classes/wapi.md
           - fileop: classes/fileop.md
           - service: classes/service.md
+          - ibx_logger: classes/logger.md
+
       - Examples:
           - CSV Export: examples/csvexport.md
           - CSV Import: examples/csvimport.md
