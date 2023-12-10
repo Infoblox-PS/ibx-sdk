@@ -10,7 +10,7 @@ Additionally, the script offers debugging capabilities for advanced users. Wheth
 information, including logs and configuration files, from an Infoblox member, this utility simplifies the process,
 making it a valuable tool for troubleshooting and support purposes.
 
-# Usage
+## Usage
 
 ```
 Usage: get-supportbundle [OPTIONS]

@@ -1,6 +1,6 @@
 # Grid Backup
 
-# Overview
+## Overview
 
 This Python script serves as a command-line utility for creating a backup of an Infoblox NIOS Grid using the Infoblox
 Web API (WAPI). Users can specify key parameters such as the Grid Manager address and the desired backup file name when
