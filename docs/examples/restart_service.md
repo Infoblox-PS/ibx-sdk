@@ -57,7 +57,7 @@ grid-restore -u admin -g 192.168.1.2 -s DNS
 **Screen output from command**
 
 ```text
- restart-service -u admin -g 100.64.40.40 -s DNS
+ restart-service -u admin -g 192.168.1.2 -s DNS
 Enter password for [admin]: 
 2023-12-09 21:04:52 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:04:52 [service.py:65] INFO successfully restarted ['DNS'] services
