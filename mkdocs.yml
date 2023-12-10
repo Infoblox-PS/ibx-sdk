@@ -11,8 +11,8 @@ copyright: |
 
 # Configuration
 theme:
-  #  extra_css:
-  #    - stylesheets/extra.css
+  extra_css:
+    - stylesheets/extra.css
   name: material
   sticky_navigation: true
   features:

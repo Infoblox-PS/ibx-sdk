@@ -84,9 +84,9 @@ def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    res = wapi.get_service_restart_status()
+    response = wapi.get_service_restart_status()
 
-    formatted_json = json.dumps(res, indent=4)
+    formatted_json = json.dumps(response, indent=4)
     print(formatted_json)
 
     sys.exit()
