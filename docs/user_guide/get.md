@@ -101,6 +101,71 @@ response = wapi.get('network', params={'_max_results': 10000})
 
 The above call now sets the `_max_results` to 10,000 rows of data. 
 
+### Filtering Requests with Query Parameters
+
+You should always try to optimize your API fetches to your desired result set. Here's a few 
+written examples:
+
+- fetch all **network** objects which have a Grid DHCP Member named _dhcp01.example.com_ assigned
+- fetch all **record:a** objects from the zone _example.com_
+- fetch all **record:a** objects from the _example.com_ zone but from the _external_ DNS view
+
+These are filtered lists of objects instead of simply returning:
+- fetch all **network** objects
+- fetch all **record:a** objects
+
+These would potentially result in exceeding our `_max_results` value of 1000, not to mention it 
+would return a lot of other data we'd have to sift through to ultimately ignore. So, it's vital 
+to write API requests to be well-thought, filtered, and optimized to your desired result set. 
+This is done by using Query Parameters!
+
+To fetch all **network** objects which have a Grid DHCP Member named _dhcp01.example.com_ we 
+could perform that query as follows:
+
+```python
+response = wapi.get(
+    'network',
+    params={'member': 'dhcp01.example.com'}
+)
+```
+
+Behind the scenes, the program would generate an API request that would look something like this:
+
+```
+GET https://gm.example.com/wapi/v2.5/network?member=dhcp01.example.com 
+```
+
+The NIOS WAPI would return all network object(s) that were configured w/ the Grid DHCP Member 
+_dhcp01.example.com_ on them.
+
+To fetch all **record:a** objects from the zone _example.com_, we'd similarly write that as:
+
+```python
+response = wapi.get(
+    'record:a',
+    params={'zone': 'example.com'}
+)
+```
+
+Query Parameters can be a set of params and you can create compound filters when requesting. To 
+fetch all **record:a** from the _example.com_ zone but from the _external_ DNS view, we'd simply 
+add to the previous request the `view` parameter as follows:
+
+```python
+response = wapi.get(
+    'record:a',
+    params={'zone': 'example.com', 'view', 'external'}
+)
+```
+
+!!! tip
+
+    Not all WAPI object properties can be used in searches. You will need to consult the Infoblox
+    Web RESTful or WAPI Guide on your local Grid Manager by visiting https://<grid_mgr>/wapidoc for
+    more details. 
+
+
+
 ## Handling Exceptions
 
 

@@ -103,6 +103,7 @@ nav:
       - Updating Objects: user_guide/put.md
       - Deleting Objects: user_guide/delete.md
       - Calling Functions: user_guide/functions.md
+      - Logging: user_guide/logging.md
       - Cookbook: user_guide/cookbook.md
   - Tools:
       - Introduction: examples/index.md
