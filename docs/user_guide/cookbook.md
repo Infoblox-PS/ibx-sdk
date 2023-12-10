@@ -41,7 +41,48 @@ response = wapi.get(
 )
 ```
 
-## Appending EAs to objects
+## Updating EAs on objects
+
+```python
+ea_data = {
+    'extattrs-': {
+        'attrstring': {},
+        'attrinteger': {}
+    }
+}
+wapi.put(network_ref, json=ea_data)
+```
+
+```python
+ea_data = {
+    'extattrs-': {
+        'attrstring': {'value': 'test string'},
+    }
+}
+wapi.put(network_ref, json=ea_data)
+```
+
+```python
+ea_data = {
+    'extattrs+': {
+        'attrstring': {'value': 'new string'},
+    }
+}
+wapi.put(network_ref, json=ea_data)
+```
+
+```python
+ea_data = {
+    "extattrs": {
+        "attrstring": {"value": "test string"},
+        "attrinteger": {"value": -1},
+        "attremail": {"value": "test@test.com"},
+        "attrdate": {"value": "2011-11-23T11:01:00Z"},
+        "attrenum": {"value": "Enum Value"},
+    }
+}
+wapi.put(network_ref, json=ea_data)
+```
 
 ## Using the `request` Object
 
