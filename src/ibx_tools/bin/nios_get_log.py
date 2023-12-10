@@ -53,6 +53,20 @@ Get NIOS Log from Member
 """
 
 
+def validate_rotated_logs(ctx, param, value):
+    """
+    Args:
+        ctx: A Click context object containing information about the current invocation of the command.
+        param: The Click parameter object being validated.
+        value: The value passed to the parameter being validated.
+
+    """
+    log_type = ctx.params.get('log_type')
+    if value and log_type != 'SYSLOG':
+        raise click.BadParameter('--rotated-logs can only be set when --log-type is SYSLOG')
+    return value
+
+
 @click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
@@ -62,7 +76,7 @@ Get NIOS Log from Member
 @optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True, help='select log type')
 @optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
                  show_default=True, help='Node: ACTIVE | PASSIVE')
-@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Exclude Rotated Logs')
+@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs', callback=validate_rotated_logs)
 @optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
