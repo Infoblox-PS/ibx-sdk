@@ -20,6 +20,7 @@ import sys
 
 import click
 from click_option_group import optgroup
+
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
 from ibx_tools.nios.wapi import WAPI, WapiRequestException
 
@@ -51,8 +52,6 @@ help_text = """
 Get NIOS Log from Member
 """
 
-LogType = Literal['SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
-
 
 def validate_rotated_logs(ctx, param, value):
     """
@@ -74,10 +73,7 @@ def validate_rotated_logs(ctx, param, value):
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
 @optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-t', '--log-type', type=click.Choice(
-    ['SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']),
-                 default='SYSLOG',
-                 show_default=True, help='Select log type')
+@optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True, help='select log type')
 @optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
                  show_default=True, help='Node: ACTIVE | PASSIVE')
 @optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs', callback=validate_rotated_logs)
