@@ -1019,16 +1019,14 @@ def get_log_files(
         payload["node_type"] = node_type
     if msserver:
         payload["msserver"] = msserver
-    json_payload = json.dumps(payload)
 
-    logging.debug("json payload %s", json_payload)
+    logging.debug("json payload %s", payload)
 
     try:
-        res = self.conn.post(
+        res = self.post(
             'fileop',
             params={'_function': 'get_log_files'},
-            data=json_payload,
-            verify=self.ssl_verify
+            json=payload
         )
         logging.debug(res.text)
         res.raise_for_status()

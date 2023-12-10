@@ -66,6 +66,12 @@ def test_ssl_verify_as_boolean_value():
     assert wapi.ssl_verify is False
 
 
+def test_wapi_repr_function(get_wapi):
+    wapi = get_wapi
+    res = wapi.__repr__()
+    assert 'grid_ref' in res
+
+
 def test_wapi_basic_auth_connection():
     wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     wapi.connect(username=USERNAME, password=PASSWORD)
