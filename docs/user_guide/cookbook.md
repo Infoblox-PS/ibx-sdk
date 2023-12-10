@@ -28,6 +28,10 @@ This query is an example of a case-insensitive search for all networks which con
 Extensible Attribute or EA of **Building** with a value of **data center**. Searches for 
 extensible attributes are sent by prefixing the extensible attribute name with an asterisk (*).
 
+## WAPI Inheritance Data Fetching
+
+show dhcp options inheritance example
+
 ## Regex searches in Query Params
 
 Some object properties allow you to search using regular expressions. The **network** object for 
