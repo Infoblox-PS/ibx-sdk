@@ -61,7 +61,7 @@ Enter password for [admin]:
     initiating a restoration process unless you are in a Disaster Recovery (DR) scenario or directed to do so by
     Infoblox Technical Support.
 
-### Restore Grid Backup from File to a Lab
+### Restore Grid Backup from file to a Lab
 
 The following example will restore a backup of a Grid Manager to another system (lab).
 
