@@ -9,7 +9,7 @@ Grid is dependent on having a valid connection to the Grid using the `WAPI` Pyth
 All WAPI object posts should take the basic form:
 
 ```python
-resesponse = wapi.post('<wapi_object>', params={}, **kwargs)
+resesponse = wapi.post('<wapi_object>', json={body}, **kwargs)
 ```
 
 ## Create Network
@@ -57,7 +57,7 @@ log = init_logger(
     num_logs=1)
 
 wapi = WAPI(
-    grid_mgr='100.64.40.40',
+    grid_mgr='infoblox.localdomain',
     wapi_ver='2.12',
 )
 
