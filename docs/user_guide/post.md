@@ -34,8 +34,9 @@ wapi = WAPI(
 wapi.connect(username='admin', password='infoblox')
 
 # Create the Body
-body = { "network": "192.168.1.0/24", 
-         "comment": "this is my test network i'm creating" 
+body = {
+    "network": "192.168.1.0/24",
+    "comment": "this is my test network i'm creating"
 }
 
 # Create the Netwokr
@@ -74,8 +75,9 @@ wapi = WAPI(
 
 wapi.connect(username='admin', password='infoblox')
 
-body = { "network": "192.168.1.0/24", 
-         "comment": "this is my test network i'm creating" 
+body = {
+    "network": "192.168.1.0/24",
+    "comment": "this is my test network i'm creating"
 }
 
 response = wapi.post('network', json=body)
@@ -102,8 +104,8 @@ network/ZG5zLm5ldHdvcmskMTkyLjE2OC4zLjAvMjQvMA:192.168.1.0/24/default
 An unsessful call may look like the following:
 ```text linenums="0"
 {
-  'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)',
-  'code': 'Client.Ibap.Data.Conflict',
-  'text': 'The network 192.168.1.0/24 already exists.  Select another network.'
+    'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)',
+    'code': 'Client.Ibap.Data.Conflict',
+    'text': 'The network 192.168.1.0/24 already exists.  Select another network.'
 }
 ```
