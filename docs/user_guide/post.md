@@ -101,5 +101,9 @@ network/ZG5zLm5ldHdvcmskMTkyLjE2OC4zLjAvMjQvMA:192.168.1.0/24/default
 
 An unsessful call may look like the following:
 ```text linenums="0"
-{'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)', 'code': 'Client.Ibap.Data.Conflict', 'text': 'The network 192.168.1.0/24 already exists.  Select another network.'}
+{
+  'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)',
+  'code': 'Client.Ibap.Data.Conflict',
+  'text': 'The network 192.168.1.0/24 already exists.  Select another network.'
+}
 ```
