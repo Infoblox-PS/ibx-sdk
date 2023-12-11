@@ -8,9 +8,18 @@ Grid is dependent on having a valid connection to the Grid using the `WAPI` Pyth
 
 All WAPI object posts should take the basic form:
 
-```python
+```python linenums="0"
 resesponse = wapi.post('<wapi_object>', json={body}, **kwargs)
 ```
+!!! tip
+
+    The Infoblox NIOS WAPI API is fully documented and available online. You can access the API guide by using 
+    the following url path on your Infoblox Grid Manager:
+
+    `https://<grid_mgr>/wapidoc`
+
+    See the WAPI Guide for details on all objects, properties, functions, and parameters.
+
 
 ## Create Network
 
@@ -25,7 +34,9 @@ wapi = WAPI(
 wapi.connect(username='admin', password='infoblox')
 
 # Create the Body
-body = { "network": "192.168.1.0/24", "comment": "this is my test network i'm creating" }
+body = { "network": "192.168.1.0/24", 
+         "comment": "this is my test network i'm creating" 
+}
 
 # Create the Netwokr
 response = wapi.post('network', json=body)
@@ -63,8 +74,9 @@ wapi = WAPI(
 
 wapi.connect(username='admin', password='infoblox')
 
-body = { "network": "192.168.1.0/24", "comment": "this is my test network i'm creating" }
-
+body = { "network": "192.168.1.0/24", 
+         "comment": "this is my test network i'm creating" 
+}
 
 response = wapi.post('network', json=body)
 
@@ -83,11 +95,11 @@ results = response.json()
 print(results)
 ```
 When creating objects, the reference of the object will be retured upon the successful creation
-```text
+```text linenums="0"
 network/ZG5zLm5ldHdvcmskMTkyLjE2OC4zLjAvMjQvMA:192.168.1.0/24/default
 ```
 
 An unsessful call may look like the following:
-```text
+```text linenums="0"
 {'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)', 'code': 'Client.Ibap.Data.Conflict', 'text': 'The network 192.168.1.0/24 already exists.  Select another network.'}
 ```
