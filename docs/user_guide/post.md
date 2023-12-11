@@ -9,7 +9,7 @@ Grid is dependent on having a valid connection to the Grid using the `WAPI` Pyth
 All WAPI object posts should take the basic form:
 
 ```python linenums="0"
-resesponse = wapi.post('<wapi_object>', json={body}, **kwargs)
+response = wapi.post('<wapi_object>', json={body}, **kwargs)
 ```
 !!! tip
 
