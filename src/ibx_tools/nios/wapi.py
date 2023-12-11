@@ -349,6 +349,31 @@ class WAPI(requests.sessions.Session):
         url = f'{self.url}/{wapi_object}'
         return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
 
+    def getone(self, wapi_object: str, params=None, **kwargs) -> Response:
+        """
+        return the reference of a single WAPI object
+
+        Args:
+            wapi_object: A string representing the object to retrieve data from.
+            params: Optional parameters to include in the request.
+            **kwargs: Additional keyword arguments to be passed to the request.
+
+        Returns:
+            Response: A Response object containing the data returned from the WAPI.
+
+        Raises:
+            WapiRequestException: If multiple data records were returned or no data was returned.
+
+        """
+        url = f'{self.url}/{wapi_object}'
+        response = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+        data = response.json()
+        if len(data) > 1:
+            raise WapiRequestException('Multiple data records were returned')
+        elif len(data) == 0:
+            raise WapiRequestException('No data was returned')
+        return data[0].get('_ref', '')
+
     def post(self, wapi_object, data=None, json=None, **kwargs) -> Response:
         """
         Create a POST request to create a WAPI object
