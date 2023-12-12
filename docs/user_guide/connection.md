@@ -12,7 +12,7 @@ file. The last thing you want to do is hard-code these in your scripts which wou
 insecure. In the Toolkit scripts, we used the Python `@click` module which provides superior
 CLI script argument parsing and validation.
 
-There are three (3) ways of instantiating the WAPI class:
+There are three (4) ways of instantiating the WAPI class:
 
 1. positional arguments
 2. named arguments

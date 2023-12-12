@@ -3,13 +3,12 @@
 Fetching Infoblox objects from the Grid using the NIOS Web RESTful API is without a doubt the most
 common task for an administrator. The Basic API Toolkit's WAPI class has been written in such a way
 to extend the Python Requests nodule to help programmers do just that! This section of the User
-Guide
-is devoted to providing a tutorial on how to fetch data from the NIOS Grid. Fetching data from the
-Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
+Guide is devoted to providing a tutorial on how to fetch data from the NIOS Grid. Fetching data 
+from the Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
 
 All WAPI object fetches should take the basic form:
 
-```python
+```python linenums="0"
 res = wapi.get('<wapi_object>', params={}, **kwargs)
 ```
 
@@ -63,7 +62,7 @@ The ones used most often in working with WAPI data are:
 We can test the success or failure of the above request by checking for an OK status on
 the `response` object this is done like so:
 
-```python
+```python linenums="14"
 response = wapi.get('network')
 if response.status_code == 200:
     log.info('yay! we succeeded')
@@ -75,7 +74,7 @@ Let's assume we got a successful `response` above, to get the JSON-encoded resul
 do is unpack
 the results. Simply do the following:
 
-```python
+```python linenums="19"
 results = response.json()
 ```
 
@@ -96,7 +95,7 @@ The `wapi.get()` method signature supports a `params` option (see the wapi class
 set `_max_results` on our previous attempt to fetch all networks, we could adjust this property as
 follows:
 
-```python
+```python linenums="0"
 response = wapi.get('network', params={'_max_results': 10000})
 ```
 
@@ -155,7 +154,10 @@ add to the previous request the `view` parameter as follows:
 ```python
 response = wapi.get(
     'record:a',
-    params={'zone': 'example.com', 'view': 'external'}
+    params={
+        'zone': 'example.com', 
+        'view': 'external'
+    }
 )
 ```
 
