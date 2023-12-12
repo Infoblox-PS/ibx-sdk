@@ -9,8 +9,22 @@ provides the following:
 2. Detailed usage and example documentation
 3. Sample operations scripts
 
-The `Gift` Python `requests.session` wrapper supports the same HTTP Request methods that are 
-supported by the NIOS WAPI. See the table below:
+!!! note
+
+    **What is `Gift`??**
+
+    `Gift` is an object-oriented Python class which is a wrapper to the Python `requests` package. 
+    It specifically builds and extends the `requests.session` module. Why the name "Gift"? We 
+    named it `Gift` because of the fact it's a wrapper. Get it?? We'd like to think it will be the 
+    "Gift" that keeps on giving... Other names considered were:
+
+    * Cellophane - for its transparent, light-weight wrapping prowess!
+    * Bacon - because bacon wrapped anything is good!
+
+    We hope you enjoy!
+
+The `Gift()` Python class is a wrapper for `requests.session`, supporting the same HTTP Request
+methods that are supported by the NIOS WAPI. See the table below:
 
 | WAPI Method | Gift Request Method | Description                                                           |
 |:-----------:|---------------------|-----------------------------------------------------------------------|
@@ -19,7 +33,7 @@ supported by the NIOS WAPI. See the table below:
 |     PUT     | Gift.put()          | The PUT method is used to update an existing object.                  |
 |   DELETE    | Gift.delete()       | The DELETE method is used to remove an existing object.               |
 
-!!! info
+!!! note
 
     There is also a convenience method that has been added to the Gift() class for fetcing a single
     object. The `Gift.getone()` method expects to fetch a single record and returns the record's 
