@@ -99,7 +99,7 @@ def init_logger(
     Example:
 
     **Basic FileHandler**
-    ```py
+    ```python
     from ibx-tools.logger.ibx_logger import init_logger
 
     # Initialize a basic logger to a file using write mode
@@ -107,7 +107,7 @@ def init_logger(
     ```
 
     **Advanced RotatingFileHandler**
-    ```py
+    ```python
     from ibx-tools.logger.ibx_logger import init_logger
 
     # Initialize rotating file logging
@@ -171,7 +171,7 @@ def init_console_logger(level: Optional[str] = None):
     Example:
 
     **Initialize Colored console logger with a custom logging level**
-    ```py
+    ```python
     from ibx-tools.logger.ibx_logger import init_console_logger
 
     # Initialize a console logger with a custom logging level
@@ -214,7 +214,8 @@ def increase_log_level(handler_type: str = 'both') -> None:
     # Increase the logging level for both console and file handlers
     increase_log_level()
 
-    # Increase the logging level for console handlers only
+    # Increase the logging level for console handlers only - use 'both' to increase the file and
+    # console handlers
     increase_log_level(handler_type='console')
     ```
     """
@@ -260,11 +261,14 @@ def set_log_level(level: str, handler_type: str = 'both') -> None:
 
     **Set the logging level for both console and file handlers to 'DEBUG'**
 
-    ```py
+    ```python
     from your_module import set_log_level
 
     # Set the logging level for both console and file handlers
     set_log_level(level='DEBUG')
+
+    # or more explicitly using:
+    set_log_level(level='DEBUG', handler_type='both')
 
     # Set the logging level for console handlers only to 'INFO'
     set_log_level(level='INFO', handler_type='console')

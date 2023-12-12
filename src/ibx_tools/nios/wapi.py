@@ -15,33 +15,16 @@ limitations under the License.
 """
 
 import logging
-from typing import Optional, Union, Literal
+from typing import Union
 
 import requests
 import urllib3
 from requests import Response
 
-from ibx_tools.nios import fileop
-from ibx_tools.nios import service
+from ibx_tools.nios.fileop import NiosFileopMixin
+from ibx_tools.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-ServiceRestartOption = Literal['FORCE_RESTART', 'RESTART_IF_NEEDED']
-ServiceRestartServices = Literal['ALL', 'DNS', 'DHCP', 'DHCPV4', 'DHCPV6']
-ServiceRestartMode = Literal['GROUPED', 'SEQUENTIAL', 'SIMULTANEOUS']
-CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
-GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
-MemberDataType = Literal[
-    'DNS_CACHE',
-    'DNS_CFG',
-    'DHCP_CFG',
-    'DHCPV6_CFG',
-    'TRAFFIC_CAPTURE_FILE',
-    'DNS_STATS',
-    'DNS_RECURSING_CACHE'
-]
-LogType = Literal[
-    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
 
 
 class BaseWapiException(Exception):
@@ -61,7 +44,7 @@ class WapiRequestException(BaseWapiException):
         )
 
 
-class WAPI(requests.sessions.Session):
+class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,
@@ -191,8 +174,8 @@ class WAPI(requests.sessions.Session):
     def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
         """
         This private method performs a certificate authentication request to the API. It uses the
-        provided
-        certificate to establish a connection with the API server using the requests library.
+        provided certificate to establish a connection with the API server using the requests
+        library.
 
         Args:
             certificate (str): The certificate to be used for authentication with the API.
@@ -224,10 +207,8 @@ class WAPI(requests.sessions.Session):
     def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
         This private method makes a request to the specified URL with basic authentication using
-        the provided username
-        and password. It stores the session connection in the instance attribute 'conn*' and the
-        grid reference in the
-        instance attribute 'grid_ref'.
+        the provided username and password. It stores the session connection in the instance
+        attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.
 
         Note:
             This method requires the 'requests' library to be installed.
@@ -422,285 +403,3 @@ class WAPI(requests.sessions.Session):
         """
         url = f'{self.url}/{wapi_object_ref}'
         return self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
-
-    def member_config(self, member: str, conf_type: MemberDataType, remote_url: str = None) -> str:
-        """
-        Fetch a Grid Member's DNS or DHCP config file
-
-        Args:
-            member (str): The name or IP address of the member.
-            conf_type (MemberDataType): The type of configuration file to download.
-            remote_url (str, optional): The remote URL from which to download the configuration
-            file. Defaults to None.
-
-        Returns:
-            str: The path of the downloaded configuration file.
-
-        """
-        return fileop.member_config(self, member, conf_type, remote_url)
-
-    def csv_export(self, wapi_object: str, filename: Optional[str] = None) -> None:
-        """
-        Export data from the WAPI to a CSV file.
-
-        Args:
-            wapi_object (str): The WAPI object to export data from.
-            filename (Optional[str]): The name of the CSV file to export the data to. If not
-            provided,
-                the data will be exported to a default file.
-
-        Raises:
-            None
-
-        Returns:
-            None
-        """
-        fileop.csv_export(self, wapi_object, filename)
-
-    def csv_import(
-            self,
-            task_operation: CsvOperation,
-            csv_import_file: str,
-            exit_on_error: bool = False) -> dict:
-        """
-        Imports a CSV file into the Infoblox WAPI.
-
-        Args:
-            task_operation (CsvOperation): The operation to perform on the CSV file.
-            csv_import_file (str): The path to the CSV file to import.
-            exit_on_error (bool, optional): Whether to exit on error. Defaults to False.
-
-        Returns:
-            dict: The response from the CSV import task.
-        """
-        return fileop.csv_import(self, task_operation, csv_import_file, exit_on_error)
-
-    def grid_restore(
-            self,
-            filename: str = "database.tgz",
-            mode: GridRestoreMode = "NORMAL",
-            keep_grid_ip: bool = False):
-        """
-        Restores the Infoblox grid database from a backup file.
-
-        Args:
-            self: The current instance of the WAPI class.
-            filename (str): The name of the backup file to restore. Defaults to "database.tgz".
-            mode (str): The restore mode. Defaults to "NORMAL".
-            keep_grid_ip (bool): Boolean flag to indicate whether to keep the grid IP address.
-            Defaults to False.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Example:
-
-        ```py
-        wapi = WAPI()
-        wapi.grid_restore(filename="database.tgz", mode="NORMAL", keep_grid_ip=True)
-        ```
-        :rtype: object
-        """
-        fileop.grid_restore(self, filename, mode, keep_grid_ip)
-
-    def grid_backup(self, filename: str = "database.tgz"):
-        """
-        Perform a NIOS Grid Backup
-
-        Args:
-            filename (str): The name of the backup file. Defaults to "database.tgz".
-
-        Returns:
-            None
-
-        Description:
-        This method is used to initiate a grid backup in the Infoblox NIOS WAPI. It makes use of the
-        fileop.grid_backup() method from the infoblox_pslib.nios.fileop module. The backup is
-        saved with the
-        specified filename in the Infoblox Grid.
-
-        Example:
-
-        ```py
-        session = WAPI()
-        session.grid_backup(filename="backup_file.tgz")
-        ```
-
-        This will initiate a grid backup with the provided filename "backup_file.tgz".
-        """
-        fileop.grid_backup(self, filename)
-
-    def get_service_restart_status(self) -> dict:
-        """
-            Retrieves the restart status of a service through the Infoblox WAPI.
-
-            Args:
-                self: The WAPI session object.
-
-            Returns:
-                Optional[Union[str, bool]]: The restart status of the service.
-                It returns None if the service restart status is not available or
-                if there was an error retrieving the restart status.
-
-            Raises:
-                None.
-
-        """
-        return service.get_service_restart_status(self)
-
-    def service_restart(
-            self,
-            groups: Optional[list] = None,
-            members: Optional[list[str]] = None,
-            mode: Optional[ServiceRestartMode] = None,
-            restart_option: Optional[ServiceRestartOption] = 'RESTART_IF_NEEDED',
-            services: Optional[list[ServiceRestartServices]] = None,
-            user_name: Optional[str] = None,
-    ):
-        """
-        Restarts services on Infoblox appliances.
-
-        Args:
-            groups (Optional[list]): List of group names containing appliances. Default is None.
-            members (Optional[list[str]]): List of member names within the given groups. Default
-            is None.
-            mode (Optional[ServiceRestartMode]): Service restart mode. Default is None.
-            restart_option (Optional[ServiceRestartOption]): Service restart option. Default is
-            'RESTART_IF_NEEDED'.
-            services (Optional[list[ServiceRestartServices]]): List of member services to
-            restart. Default is
-            'ALL'.
-            user_name (Optional[str]): Username for authentication. Default is None.
-
-        """
-        service.service_restart(
-            self,
-            groups=groups,
-            members=members,
-            mode=mode,
-            restart_option=restart_option,
-            services=services,
-            user_name=user_name
-        )
-
-    def csv_task_status(self, csvtask: dict) -> dict:
-        """
-        fetch the CSV task status of a CSV import task
-
-        Args:
-            csvtask: A dictionary representing the csv task.
-
-        Returns:
-            A dictionary containing the status of the csv task.
-
-        Raises:
-            None.
-        """
-        return fileop.csvtask_status(self, csvtask=csvtask)
-
-    def get_csv_errors_file(self, filename: str, job_id: str) -> None:
-        """
-        fetch the CSV Errors file of a CSV task
-
-        Args:
-            filename (str): The name of the CSV errors file.
-            job_id (str): The ID of the job that generated the CSV errors file.
-
-        """
-        return fileop.get_csv_errors_file(self, filename=filename, job_id=job_id)
-
-    def get_support_bundle(
-            self,
-            member: str,
-            cached_zone_data: bool = False,
-            core_files: bool = False,
-            log_files: bool = False,
-            nm_snmp_logs: bool = False,
-            recursive_cache_file: bool = False,
-            remote_url: Optional[str] = None,
-            rotate_log_files: bool = False
-    ):
-        """
-        fetch a support bundle from the specified Grid Member
-
-        Args:
-            member (str): The name or IP address of the target member.
-            cached_zone_data (bool): Whether to include cached zone data in the support bundle.
-            Default is False.
-            core_files (bool): Whether to include core files in the support bundle. Default is
-            False.
-            log_files (bool): Whether to include log files in the support bundle. Default is False.
-            nm_snmp_logs (bool): Whether to include NIOS Maintenance SNMP logs in the support
-            bundle. Default is False.
-            recursive_cache_file (bool): Whether to recursively include the cache in the support
-            bundle. Default is
-            False.
-            remote_url (str, optional): The URL of a remote server to upload the support bundle
-            to. Default is None.
-            rotate_log_files (bool): Whether to rotate log files after creating the support
-            bundle. Default is False.
-
-        Returns:
-            Response: The response object containing the result of the support bundle creation
-            request.
-
-        Raises:
-            requests.exceptions.RequestException: If an error occurs while making the support
-            bundle creation request.
-        """
-        return fileop.get_support_bundle(
-            self,
-            member=member,
-            cached_zone_data=cached_zone_data,
-            core_files=core_files,
-            log_files=log_files,
-            nm_snmp_logs=nm_snmp_logs,
-            recursive_cache_file=recursive_cache_file,
-            remote_url=remote_url,
-            rotate_log_files=rotate_log_files
-        )
-
-    def get_log_files(
-            self,
-            log_type: LogType,
-            endpoint: Optional[str] = None,
-            include_rotated: bool = False,
-            member: Optional[str] = None,
-            msserver: Optional[str] = None,
-            node_type: Optional[Literal['ACTIVE', 'BACKUP']] = None
-    ):
-        """
-        Fetches the log(s) from NIOS for given log_type
-
-        Args:
-            log_type: The type of log files to retrieve. Accepted values are 'debug', 'query',
-            'dhcp', 'dns',
-            'auto_discovery', 'event', 'object_management', 'reporting', 'file_integration',
-            'traffic_management',
-            'threat_insight', 'cloud_network', 'external_dns', 'external_autodiscover',
-            and 'external_forwarding'.
-            endpoint: The endpoint IP address or hostname for which to retrieve the log files.
-            include_rotated: Whether to include rotated log files. Defaults to False.
-            member: The member name for which to retrieve the log files.
-            msserver: The Microsoft Windows server IP address or hostname for which to retrieve
-            the log files.
-            node_type: The node type of the appliance for which to retrieve the log files.
-            Accepted values are
-            'ACTIVE' and 'BACKUP'.
-
-        Returns:
-            The response object containing the log files.
-
-        """
-        return fileop.get_log_files(
-            self,
-            log_type=log_type,
-            endpoint=endpoint,
-            include_rotated=include_rotated,
-            member=member,
-            msserver=msserver,
-            node_type=node_type
-        )
