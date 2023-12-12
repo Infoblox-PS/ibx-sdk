@@ -75,12 +75,12 @@ the `pip` and `setuptools` modules.
 
 Remember to always source your environment prior to working on your next project:
 
-```shell
+```shell linenums="0"
 source .venv/bin/activate
 ```
 
 You can deactivate when you are done using/modifying the project code:
 
-```shell
+```shell linenums="0"
 deactivate
 ```
