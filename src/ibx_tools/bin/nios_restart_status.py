@@ -23,8 +23,8 @@ import click
 from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.gift import Gift
 from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_tools.nios.gift import Gift
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -41,12 +41,15 @@ Retrieve Restart Status
 """
 
 
-@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(help=help_text,
+               context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.option('-u', '--username', default='admin', show_default=True,
+                 help='Infoblox admin username')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
+                 help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:

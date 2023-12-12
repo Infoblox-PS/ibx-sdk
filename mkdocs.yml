@@ -115,9 +115,9 @@ nav:
       - restart-service: examples/restart_service.md
       - restart-status: examples/restart_status.md
   - Classes:
-      - wapi: classes/wapi.md
-      - fileop: classes/fileop.md
-      - service: classes/service.md
+      - wapi: classes/nios/gift.md
+      - fileop: classes/nios/fileop.md
+      - service: classes/nios/service.md
   - Modules:
       - util: modules/util.md
       - ibx_logger: modules/logger.md
