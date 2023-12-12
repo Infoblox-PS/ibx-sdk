@@ -17,7 +17,6 @@ limitations under the License.
 import logging
 import pprint
 from typing import Literal, Optional
-from ibx_tools.nios.gift import Gift
 
 import requests
 
