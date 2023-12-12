@@ -155,7 +155,7 @@ add to the previous request the `view` parameter as follows:
 ```python
 response = wapi.get(
     'record:a',
-    params={'zone': 'example.com', 'view', 'external'}
+    params={'zone': 'example.com', 'view': 'external'}
 )
 ```
 
