@@ -24,8 +24,8 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 ## Create Network
 
 ```python
+import sys
 from ibx_tools.nios.gift import Gift
-from ibx_tools.nios.exceptions import WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -58,46 +58,11 @@ We can test the success or failure of the above request by checking for an OK st
 the `response` object this is done like so:
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.gift import Gift
-from ibx_tools.nios.exceptions import WapiRequestException
-
-log = init_logger(
-    logfile_name='wapi.log',
-    logfile_mode='a',
-    console_log=True,
-    level='info',
-    max_size=10000,
-    num_logs=1)
-
-wapi = Gift(
-    grid_mgr='infoblox.localdomain',
-    wapi_ver='2.12',
-)
-
-wapi.connect(username='admin', password='infoblox')
-
-body = {
-    "network": "192.168.1.0/24",
-    "comment": "this is my test network i'm creating"
-}
-
-response = wapi.post('network', json=body)
-
-# Output Status
-if response.status_code == 200:
-    log.info('yay! we succeeded')
-else:
-    log.error(response.text)
+if response.status_code != 200:
+    print(f'We hit a snag {response.text}')
+    sys.exit(1) # Exit program
 ```
 
-Let's assume we got a successful `response` above, to get the JSON-encoded results to see the details, all we need to
-do is unpack the results. Simply do the following:
-
-```python
-results = response.json()
-print(results)
-```
 When creating objects, the reference of the object will be retured upon the successful creation
 ```text linenums="0"
 network/ZG5zLm5ldHdvcmskMTkyLjE2OC4zLjAvMjQvMA:192.168.1.0/24/default
@@ -110,4 +75,38 @@ An unsessful call may look like the following:
     'code': 'Client.Ibap.Data.Conflict',
     'text': 'The network 192.168.1.0/24 already exists.  Select another network.'
 }
+```
+
+## Create Host Record
+
+```python
+from ibx_tools.nios.gift import Gift, WapiRequestException
+
+wapi = Gift(
+    grid_mgr='infoblox.localdomain',
+    wapi_ver='2.12',
+)
+
+wapi.connect(username='admin', password='infoblox')
+
+# Create the Body
+body = {
+    "name": "my-router.example.com",
+    "ipv4addrs": [
+        {
+            "ipv4addr": "192.168.0.1"
+
+        }
+    ]
+}
+response = wapi.post('record:host', json=body)
+```
+
+We can test the success or failure of the above request by checking for an OK status on the 
+`response` object this is done like adding the following to our script:
+
+```python
+if response.status_code != 200:
+    print(f'We hit a snag {response.text}')
+    sys.exit(1) # Exit program
 ```
