@@ -7,7 +7,7 @@ import logging
 import pytest
 import urllib3
 
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.gift import Gift
 from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
 
 log = logging.getLogger(__name__)
@@ -21,22 +21,22 @@ SSL_VERIFY = False if os.environ.get('SSL_VERIFY') == 'False' else True
 
 
 def test_instantiate_wapi_without_properties():
-    wapi = WAPI()
+    wapi = Gift()
     assert wapi.grid_mgr is None
     assert wapi.wapi_ver == '2.5'
     assert wapi.ssl_verify is False
-    assert isinstance(wapi, WAPI)
+    assert isinstance(wapi, Gift)
 
 
 def test_instantiate_wapi_with_positional_arguments():
-    wapi = WAPI(GRID_MGR, WAPI_VER, SSL_VERIFY)
+    wapi = Gift(GRID_MGR, WAPI_VER, SSL_VERIFY)
     assert wapi.grid_mgr == GRID_MGR
     assert wapi.wapi_ver == WAPI_VER
     assert wapi.ssl_verify == SSL_VERIFY
 
 
 def test_instantiate_wapi_with_named_arguments():
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     assert wapi.grid_mgr == GRID_MGR
     assert wapi.wapi_ver == WAPI_VER
     assert wapi.ssl_verify == SSL_VERIFY
@@ -44,26 +44,26 @@ def test_instantiate_wapi_with_named_arguments():
 
 def test_instantiate_wapi_with_dictionary_of_arguments():
     props = dict(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
-    wapi = WAPI(**props)
+    wapi = Gift(**props)
     assert wapi.grid_mgr == GRID_MGR
     assert wapi.wapi_ver == WAPI_VER
     assert wapi.ssl_verify == SSL_VERIFY
 
 
 def test_wapi_connect_without_arguments():
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     with pytest.raises(WapiInvalidParameterException):
         wapi.connect()
 
 
 def test_ssl_verify_as_string_value():
-    wapi = WAPI(ssl_verify='/path/to/certfile')
+    wapi = Gift(ssl_verify='/path/to/certfile')
     assert isinstance(wapi.ssl_verify, str)
     assert wapi.ssl_verify == '/path/to/certfile'
 
 
 def test_ssl_verify_as_boolean_value():
-    wapi = WAPI(ssl_verify=False)
+    wapi = Gift(ssl_verify=False)
     assert isinstance(wapi.ssl_verify, bool)
     assert wapi.ssl_verify is False
 
@@ -75,19 +75,19 @@ def test_wapi_repr_function(get_wapi):
 
 
 def test_wapi_basic_auth_connection():
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     wapi.connect(username=USERNAME, password=PASSWORD)
     assert wapi.grid_ref is not None
 
 
 def test_wapi_certificate_auth_cert_not_found():
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     with pytest.raises(OSError):
         wapi.connect(certificate='/path/to/certfile')
 
 
 def test_wapi_basic_auth_connection_with_bad_password():
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     with pytest.raises(WapiRequestException):
         wapi.connect(username=USERNAME, password='bad_password')
     assert wapi.grid_ref is None

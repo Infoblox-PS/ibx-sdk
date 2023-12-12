@@ -28,7 +28,7 @@ from ibx_tools.nios.service import NiosServiceMixin
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
+class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,
