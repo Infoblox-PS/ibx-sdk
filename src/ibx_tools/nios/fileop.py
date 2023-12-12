@@ -15,15 +15,264 @@ limitations under the License.
 """
 
 import datetime
-import json
 import logging
 import os
 import pprint
-from typing import Optional
+from typing import Literal, Optional
 
 import requests.exceptions
 
 from ibx_tools.util import util
+
+LogType = Literal[
+    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
+]
+
+
+class NiosFileopMixin:
+    """
+    NiosFileopMixin class provides:
+
+    - get_support_bundle()
+    - get_log_files()
+
+    """
+
+    def get_support_bundle(
+            self,
+            member: str,
+            cached_zone_data: bool = False,
+            core_files: bool = False,
+            log_files: bool = False,
+            nm_snmp_logs: bool = False,
+            recursive_cache_file: bool = False,
+            remote_url: Optional[str] = None,
+            rotate_log_files: bool = False
+    ):
+        """
+        Fetches and downloads a support bundle from the specified Infoblox member.
+
+        This method requests a support bundle from an Infoblox member and downloads it. The support
+        bundle may
+        include various data like cached zone data, core files, log files, and more, depending on the
+        options
+        specified. The method sends a request to the WAPI and handles the download and saving of the
+        resulting
+        support bundle file.
+
+        Args:
+            self: Instance of the `WAPI` class.
+            member (str): The name or IP address of the target member.
+            cached_zone_data (bool, optional): If True, includes cached zone data in the bundle.
+            Defaults to False.
+            core_files (bool, optional): If True, includes core files in the bundle. Defaults to False.
+            log_files (bool, optional): If True, includes log files in the bundle. Defaults to False.
+            nm_snmp_logs (bool, optional): If True, includes NIOS Maintenance SNMP logs in the
+            bundle. Defaults to False.
+            recursive_cache_file (bool, optional): If True, includes the cache file recursively.
+            Defaults to False.
+            remote_url (str, optional): URL of a remote server to upload the support bundle to.
+            Defaults to None.
+            rotate_log_files (bool, optional): If True, rotates log files after creating the support
+            bundle. Defaults to False.
+
+        Returns:
+            None: This method does not return a value. It performs the operation of fetching and
+            saving the support bundle.
+
+        Raises:
+            requests.exceptions.RequestException: If an error occurs during the request or file
+            download process.
+
+        """
+
+        logging.info('performing get_support_bundle for %s object(s)', member)
+        payload = {
+            "member": member,
+            "cached_zone_data": cached_zone_data,
+            "core_files": core_files,
+            "log_files": log_files,
+            "nm_snmp_logs": nm_snmp_logs,
+            "recursive_cache_file": recursive_cache_file,
+            "rotate_log_files": rotate_log_files
+        }
+        if remote_url:
+            payload["remote_url"] = remote_url
+        logging.debug(pprint.pformat(payload))
+        try:
+            res = self.post(
+                'fileop',
+                params={'_function': 'get_support_bundle'},
+                json=payload
+            )
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+        obj = res.json()
+        download_url = obj.get('url')
+        download_token = obj.get('token')
+
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies['ibapauth']
+        req_cookies = {'ibapauth': ibapauth_cookie}
+
+        logging.info('downloading data from %s', download_url)
+        try:
+            res = self.__download_file(download_url, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+        filename = f'{date_time}-{member}-SupportBundle.tgz'
+
+        NiosFileopMixin.__write_file(filename=filename, data=res)
+
+        try:
+            self.__download_complete(download_token, filename, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+    def get_log_files(
+            self,
+            log_type: LogType,
+            endpoint: Optional[str] = None,
+            include_rotated: bool = False,
+            member: Optional[str] = None,
+            msserver: Optional[str] = None,
+            node_type: Optional[Literal['ACTIVE', 'BACKUP']] = None
+    ):
+        """
+        Fetches specified log files from NIOS and writes them to disk.
+
+        This method is used to retrieve log files of a specified type from the NIOS system. It can
+        target
+        specific members, endpoints, or MSServers, and optionally include rotated log files. The logs
+        are
+        downloaded and saved to a file on disk.
+
+        Args:
+            self: Instance of the `WAPI` class calling this method.
+            log_type (str): The type of log files to fetch, as defined in the LogType enum.
+            endpoint (str, optional): Specific endpoint to fetch log files for. Default is None.
+            include_rotated (bool, optional): Whether to include rotated log files. Default is False.
+            member (str, optional): Specific member to fetch log files for. Default is None.
+            msserver (str, optional): Specific MSServer to fetch log files for. Default is None.
+            node_type (str, optional): Type of node to fetch log files for. Default is None.
+
+        Returns:
+            None: This method does not return a value. It performs the operation of fetching and
+            saving the log files.
+
+        Raises:
+            requests.exceptions.RequestException: If an error occurs during the request or file
+            download process.
+
+        """
+
+        logging.info('fetching %s log files for %s', log_type, member)
+        payload = {
+            "log_type": log_type,
+            "include_rotated": include_rotated
+        }
+
+        if endpoint:
+            payload["endpoint"] = endpoint
+        if member:
+            payload["member"] = member
+        if node_type:
+            payload["node_type"] = node_type
+        if msserver:
+            payload["msserver"] = msserver
+
+        logging.debug("json payload %s", payload)
+
+        try:
+            res = self.post(
+                'fileop',
+                params={'_function': 'get_log_files'},
+                json=payload
+            )
+            logging.debug(res.text)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+        obj = res.json()
+        download_url = obj.get('url')
+        download_token = obj.get('token')
+
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies['ibapauth']
+        req_cookies = {'ibapauth': ibapauth_cookie}
+
+        logging.info('downloading data from %s', download_url)
+        try:
+            res = self.__download_file(download_url, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+        filename = f'{date_time}-{member}-{log_type}.tgz'
+
+        NiosFileopMixin.__write_file(filename=filename, data=res)
+
+        try:
+            self.__download_complete(download_token, filename, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+    @staticmethod
+    def __write_file(filename: str, data: requests.Response) -> None:
+        logging.info('writing file: %s', filename)
+        with open(filename, 'wb') as file:
+            for chunk in data.iter_content(chunk_size=1024):
+                if chunk:
+                    file.write(chunk)
+
+    def __download_complete(
+            self,
+            token: str,
+            filename: str,
+            req_cookies: dict) -> None:
+        header = {'Content-type': 'application/json'}
+        payload = {'token': token}
+        try:
+            res = self.post(
+                'fileop',
+                params={'_function': 'downloadcomplete'},
+                json=payload,
+                headers=header,
+                cookies=req_cookies
+            )
+            logging.info("file %s download complete", filename)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+
+    def __download_file(self, download_url, req_cookies):
+        header = {'Content-type': 'application/force-download'}
+        try:
+            logging.info(download_url)
+            res = self.conn.get(
+                download_url,
+                headers=header,
+                stream=True,
+                cookies=req_cookies,
+                verify=self.ssl_verify
+            )
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise
+        return res
 
 
 def __write_file(filename: str, data: requests.Response) -> None:
@@ -865,197 +1114,3 @@ def grid_restore(self,
             logging.error('step 3 - Error: %s', err)
             raise
         logging.info("Grid restore successful!")
-
-
-def get_support_bundle(
-        self,
-        member: str,
-        cached_zone_data: bool = False,
-        core_files: bool = False,
-        log_files: bool = False,
-        nm_snmp_logs: bool = False,
-        recursive_cache_file: bool = False,
-        remote_url: Optional[str] = None,
-        rotate_log_files: bool = False
-):
-    """
-    Fetches and downloads a support bundle from the specified Infoblox member.
-
-    This method requests a support bundle from an Infoblox member and downloads it. The support
-    bundle may
-    include various data like cached zone data, core files, log files, and more, depending on the
-    options
-    specified. The method sends a request to the WAPI and handles the download and saving of the
-    resulting
-    support bundle file.
-
-    Args:
-        self: Instance of the `WAPI` class.
-        member (str): The name or IP address of the target member.
-        cached_zone_data (bool, optional): If True, includes cached zone data in the bundle.
-        Defaults to False.
-        core_files (bool, optional): If True, includes core files in the bundle. Defaults to False.
-        log_files (bool, optional): If True, includes log files in the bundle. Defaults to False.
-        nm_snmp_logs (bool, optional): If True, includes NIOS Maintenance SNMP logs in the
-        bundle. Defaults to False.
-        recursive_cache_file (bool, optional): If True, includes the cache file recursively.
-        Defaults to False.
-        remote_url (str, optional): URL of a remote server to upload the support bundle to.
-        Defaults to None.
-        rotate_log_files (bool, optional): If True, rotates log files after creating the support
-        bundle. Defaults to False.
-
-    Returns:
-        None: This method does not return a value. It performs the operation of fetching and
-        saving the support bundle.
-
-    Raises:
-        requests.exceptions.RequestException: If an error occurs during the request or file
-        download process.
-
-    """
-
-    logging.info('performing get_support_bundle for %s object(s)', member)
-    payload = {
-        "member": member,
-        "cached_zone_data": cached_zone_data,
-        "core_files": core_files,
-        "log_files": log_files,
-        "nm_snmp_logs": nm_snmp_logs,
-        "recursive_cache_file": recursive_cache_file,
-        "rotate_log_files": rotate_log_files
-    }
-    if remote_url:
-        payload["remote_url"] = remote_url
-    logging.debug(pprint.pformat(payload))
-    # json_payload = json.dumps(payload)
-    # logging.debug('payload: %s', pprint.pformat(json_payload))
-    try:
-        res = self.post(
-            'fileop',
-            params={'_function': 'get_support_bundle'},
-            json=payload
-        )
-        res.raise_for_status()
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise
-
-    obj = res.json()
-    download_url = obj.get('url')
-    download_token = obj.get('token')
-
-    # get auth cookie from cookie jar
-    ibapauth_cookie = self.conn.cookies['ibapauth']
-    req_cookies = {'ibapauth': ibapauth_cookie}
-
-    logging.info('downloading data from %s', download_url)
-    try:
-        res = __download_file(self, download_url, req_cookies)
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise
-
-    date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-    filename = f'{date_time}-{member}-SupportBundle.tgz'
-
-    __write_file(filename=filename, data=res)
-
-    try:
-        __download_complete(self, download_token, filename, req_cookies)
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise
-
-
-def get_log_files(
-        self,
-        log_type: str,
-        endpoint: Optional[str] = None,
-        include_rotated: bool = False,
-        member: Optional[str] = None,
-        msserver: Optional[str] = None,
-        node_type: Optional[str] = None
-):
-    """
-    Fetches specified log files from NIOS and writes them to disk.
-
-    This method is used to retrieve log files of a specified type from the NIOS system. It can
-    target
-    specific members, endpoints, or MSServers, and optionally include rotated log files. The logs
-    are
-    downloaded and saved to a file on disk.
-
-    Args:
-        self: Instance of the `WAPI` class calling this method.
-        log_type (str): The type of log files to fetch, as defined in the LogType enum.
-        endpoint (str, optional): Specific endpoint to fetch log files for. Default is None.
-        include_rotated (bool, optional): Whether to include rotated log files. Default is False.
-        member (str, optional): Specific member to fetch log files for. Default is None.
-        msserver (str, optional): Specific MSServer to fetch log files for. Default is None.
-        node_type (str, optional): Type of node to fetch log files for. Default is None.
-
-    Returns:
-        None: This method does not return a value. It performs the operation of fetching and
-        saving the log files.
-
-    Raises:
-        requests.exceptions.RequestException: If an error occurs during the request or file
-        download process.
-
-    """
-
-    logging.info('fetching %s log files for %s', log_type, member)
-    payload = {
-        "log_type": log_type,
-        "include_rotated": include_rotated
-    }
-
-    if endpoint:
-        payload["endpoint"] = endpoint
-    if member:
-        payload["member"] = member
-    if node_type:
-        payload["node_type"] = node_type
-    if msserver:
-        payload["msserver"] = msserver
-
-    logging.debug("json payload %s", payload)
-
-    try:
-        res = self.post(
-            'fileop',
-            params={'_function': 'get_log_files'},
-            json=payload
-        )
-        logging.debug(res.text)
-        res.raise_for_status()
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise
-
-    obj = res.json()
-    download_url = obj.get('url')
-    download_token = obj.get('token')
-
-    # get auth cookie from cookie jar
-    ibapauth_cookie = self.conn.cookies['ibapauth']
-    req_cookies = {'ibapauth': ibapauth_cookie}
-
-    logging.info('downloading data from %s', download_url)
-    try:
-        res = __download_file(self, download_url, req_cookies)
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise
-
-    date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-    filename = f'{date_time}-{member}-{log_type}.tgz'
-
-    __write_file(filename=filename, data=res)
-
-    try:
-        __download_complete(self, download_token, filename, req_cookies)
-    except requests.exceptions.RequestException as err:
-        logging.error(err)
-        raise

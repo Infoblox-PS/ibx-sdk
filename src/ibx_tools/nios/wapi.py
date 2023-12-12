@@ -22,6 +22,7 @@ import urllib3
 from requests import Response
 
 from ibx_tools.nios import fileop
+from ibx_tools.nios.fileop import NiosFileopMixin
 from ibx_tools.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -37,8 +38,6 @@ MemberDataType = Literal[
     'DNS_STATS',
     'DNS_RECURSING_CACHE'
 ]
-LogType = Literal[
-    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
 
 
 class BaseWapiException(Exception):
@@ -58,7 +57,7 @@ class WapiRequestException(BaseWapiException):
         )
 
 
-class WAPI(requests.sessions.Session, NiosServiceMixin):
+class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,
@@ -555,96 +554,3 @@ class WAPI(requests.sessions.Session, NiosServiceMixin):
 
         """
         return fileop.get_csv_errors_file(self, filename=filename, job_id=job_id)
-
-    def get_support_bundle(
-            self,
-            member: str,
-            cached_zone_data: bool = False,
-            core_files: bool = False,
-            log_files: bool = False,
-            nm_snmp_logs: bool = False,
-            recursive_cache_file: bool = False,
-            remote_url: Optional[str] = None,
-            rotate_log_files: bool = False
-    ):
-        """
-        fetch a support bundle from the specified Grid Member
-
-        Args:
-            member (str): The name or IP address of the target member.
-            cached_zone_data (bool): Whether to include cached zone data in the support bundle.
-            Default is False.
-            core_files (bool): Whether to include core files in the support bundle. Default is
-            False.
-            log_files (bool): Whether to include log files in the support bundle. Default is False.
-            nm_snmp_logs (bool): Whether to include NIOS Maintenance SNMP logs in the support
-            bundle. Default is False.
-            recursive_cache_file (bool): Whether to recursively include the cache in the support
-            bundle. Default is
-            False.
-            remote_url (str, optional): The URL of a remote server to upload the support bundle
-            to. Default is None.
-            rotate_log_files (bool): Whether to rotate log files after creating the support
-            bundle. Default is False.
-
-        Returns:
-            Response: The response object containing the result of the support bundle creation
-            request.
-
-        Raises:
-            requests.exceptions.RequestException: If an error occurs while making the support
-            bundle creation request.
-        """
-        return fileop.get_support_bundle(
-            self,
-            member=member,
-            cached_zone_data=cached_zone_data,
-            core_files=core_files,
-            log_files=log_files,
-            nm_snmp_logs=nm_snmp_logs,
-            recursive_cache_file=recursive_cache_file,
-            remote_url=remote_url,
-            rotate_log_files=rotate_log_files
-        )
-
-    def get_log_files(
-            self,
-            log_type: LogType,
-            endpoint: Optional[str] = None,
-            include_rotated: bool = False,
-            member: Optional[str] = None,
-            msserver: Optional[str] = None,
-            node_type: Optional[Literal['ACTIVE', 'BACKUP']] = None
-    ):
-        """
-        Fetches the log(s) from NIOS for given log_type
-
-        Args:
-            log_type: The type of log files to retrieve. Accepted values are 'debug', 'query',
-            'dhcp', 'dns',
-            'auto_discovery', 'event', 'object_management', 'reporting', 'file_integration',
-            'traffic_management',
-            'threat_insight', 'cloud_network', 'external_dns', 'external_autodiscover',
-            and 'external_forwarding'.
-            endpoint: The endpoint IP address or hostname for which to retrieve the log files.
-            include_rotated: Whether to include rotated log files. Defaults to False.
-            member: The member name for which to retrieve the log files.
-            msserver: The Microsoft Windows server IP address or hostname for which to retrieve
-            the log files.
-            node_type: The node type of the appliance for which to retrieve the log files.
-            Accepted values are
-            'ACTIVE' and 'BACKUP'.
-
-        Returns:
-            The response object containing the log files.
-
-        """
-        return fileop.get_log_files(
-            self,
-            log_type=log_type,
-            endpoint=endpoint,
-            include_rotated=include_rotated,
-            member=member,
-            msserver=msserver,
-            node_type=node_type
-        )
