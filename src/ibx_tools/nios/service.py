@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from typing import Literal, Optional
 import logging
 import pprint
+from typing import Literal, Optional
 
 import requests
 
@@ -26,6 +26,9 @@ ServiceRestartServices = Literal['ALL', 'DNS', 'DHCP', 'DHCPV4', 'DHCPV6']
 
 
 class NiosServiceMixin:
+    """
+    NIOS Service Mixin class
+    """
 
     def service_restart(
             self,
@@ -36,28 +39,6 @@ class NiosServiceMixin:
             services: Optional[list[ServiceRestartServices]] = None,
             user_name: Optional[str] = None,
     ) -> None:
-        """
-            Restarts specified services of a group, member, or all.
-
-            This method allows for flexible service restarts based on the provided keyword arguments.
-            It constructs a data payload from these arguments and sends a POST request to initiate
-            the service restart. The method handles request-related exceptions and logs relevant
-            information about the operation.
-
-            Args:
-            self (WAPI): An instance of the WAPI class
-            **kwargs: Arbitrary keyword arguments. These are used to specify which services
-            to restart. If 'services' is not specified, it defaults to restarting 'ALL'.
-
-            Raises:
-            requests.exceptions.RequestException: If an error occurs during the POST request.
-
-            Returns:
-            None: This method does not return a value but logs the result of the operation,
-            indicating the success of the service restart.
-
-            """
-
         data = {}
         if groups:
             data['groups'] = [groups]
@@ -89,25 +70,6 @@ class NiosServiceMixin:
             )
 
     def update_service_status(self, services: str = 'ALL') -> None:
-        """Updates the restart status of grid services.
-
-            This method sends a POST request to update the restart status of specified grid services.
-            It handles request-related exceptions and logs the response or any errors encountered.
-
-            Args:
-            self (WAPI): An instance of the WAPI class
-            services (str): The name of the service(s) to check the restart status for.
-            Defaults to 'ALL', indicating all services.
-
-            Raises:
-            requests.exceptions.RequestException: If an error occurs during the POST request.
-
-            Returns:
-            None: This method does not return a value but logs the response text upon
-            successful completion of the request.
-
-
-            """
         payload = {'service_option': services}
         try:
             res = self.post(
@@ -120,23 +82,6 @@ class NiosServiceMixin:
             raise
 
     def get_service_restart_status(self) -> dict:
-        """Gets the restart status of all member services.
-
-            This method sends a GET request to the specified URL to retrieve the restart status
-            of all member services. It handles various exceptions related to the request, such as
-            SSL errors, HTTP errors, and other request exceptions, and logs any errors encountered.
-
-            Returns:
-            dict: A dictionary containing the restart status of all member services. The
-            dictionary is obtained by parsing the JSON response from the request.
-
-            Raises:
-            requests.exceptions.SSLError: If an SSL error occurs during the request.
-            requests.exceptions.HTTPError: If an HTTP error occurs during the request.
-            requests.exceptions.RequestException: For other request-related errors.
-
-            """
-
         try:
             response = self.get('restartservicestatus')
             logging.debug(response.text)

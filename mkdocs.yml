@@ -116,9 +116,9 @@ nav:
       - restart-status: examples/restart_status.md
   - Classes:
       - wapi: classes/wapi.md
+      - fileop: classes/fileop.md
+      - service: classes/service.md
   - Modules:
-      - fileop: modules/fileop.md
-      - service: modules/service.md
       - util: modules/util.md
       - ibx_logger: modules/logger.md
   - Change Log: changelog.md

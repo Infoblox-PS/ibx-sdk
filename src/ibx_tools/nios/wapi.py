@@ -15,29 +15,16 @@ limitations under the License.
 """
 
 import logging
-from typing import Optional, Union, Literal
+from typing import Union
 
 import requests
 import urllib3
 from requests import Response
 
-from ibx_tools.nios import fileop
 from ibx_tools.nios.fileop import NiosFileopMixin
 from ibx_tools.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
-GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
-MemberDataType = Literal[
-    'DNS_CACHE',
-    'DNS_CFG',
-    'DHCP_CFG',
-    'DHCPV6_CFG',
-    'TRAFFIC_CAPTURE_FILE',
-    'DNS_STATS',
-    'DNS_RECURSING_CACHE'
-]
 
 
 class BaseWapiException(Exception):
@@ -187,8 +174,8 @@ class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
         """
         This private method performs a certificate authentication request to the API. It uses the
-        provided
-        certificate to establish a connection with the API server using the requests library.
+        provided certificate to establish a connection with the API server using the requests
+        library.
 
         Args:
             certificate (str): The certificate to be used for authentication with the API.
@@ -220,10 +207,8 @@ class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
         This private method makes a request to the specified URL with basic authentication using
-        the provided username
-        and password. It stores the session connection in the instance attribute 'conn*' and the
-        grid reference in the
-        instance attribute 'grid_ref'.
+        the provided username and password. It stores the session connection in the instance
+        attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.
 
         Note:
             This method requires the 'requests' library to be installed.
@@ -418,139 +403,3 @@ class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         """
         url = f'{self.url}/{wapi_object_ref}'
         return self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
-
-    def member_config(self, member: str, conf_type: MemberDataType, remote_url: str = None) -> str:
-        """
-        Fetch a Grid Member's DNS or DHCP config file
-
-        Args:
-            member (str): The name or IP address of the member.
-            conf_type (MemberDataType): The type of configuration file to download.
-            remote_url (str, optional): The remote URL from which to download the configuration
-            file. Defaults to None.
-
-        Returns:
-            str: The path of the downloaded configuration file.
-
-        """
-        return fileop.member_config(self, member, conf_type, remote_url)
-
-    def csv_export(self, wapi_object: str, filename: Optional[str] = None) -> None:
-        """
-        Export data from the WAPI to a CSV file.
-
-        Args:
-            wapi_object (str): The WAPI object to export data from.
-            filename (Optional[str]): The name of the CSV file to export the data to. If not
-            provided,
-                the data will be exported to a default file.
-
-        Raises:
-            None
-
-        Returns:
-            None
-        """
-        fileop.csv_export(self, wapi_object, filename)
-
-    def csv_import(
-            self,
-            task_operation: CsvOperation,
-            csv_import_file: str,
-            exit_on_error: bool = False) -> dict:
-        """
-        Imports a CSV file into the Infoblox WAPI.
-
-        Args:
-            task_operation (CsvOperation): The operation to perform on the CSV file.
-            csv_import_file (str): The path to the CSV file to import.
-            exit_on_error (bool, optional): Whether to exit on error. Defaults to False.
-
-        Returns:
-            dict: The response from the CSV import task.
-        """
-        return fileop.csv_import(self, task_operation, csv_import_file, exit_on_error)
-
-    def grid_restore(
-            self,
-            filename: str = "database.tgz",
-            mode: GridRestoreMode = "NORMAL",
-            keep_grid_ip: bool = False):
-        """
-        Restores the Infoblox grid database from a backup file.
-
-        Args:
-            self: The current instance of the WAPI class.
-            filename (str): The name of the backup file to restore. Defaults to "database.tgz".
-            mode (str): The restore mode. Defaults to "NORMAL".
-            keep_grid_ip (bool): Boolean flag to indicate whether to keep the grid IP address.
-            Defaults to False.
-
-        Returns:
-            None
-
-        Raises:
-            None
-
-        Example:
-
-        ```py
-        wapi = WAPI()
-        wapi.grid_restore(filename="database.tgz", mode="NORMAL", keep_grid_ip=True)
-        ```
-        :rtype: object
-        """
-        fileop.grid_restore(self, filename, mode, keep_grid_ip)
-
-    def grid_backup(self, filename: str = "database.tgz"):
-        """
-        Perform a NIOS Grid Backup
-
-        Args:
-            filename (str): The name of the backup file. Defaults to "database.tgz".
-
-        Returns:
-            None
-
-        Description:
-        This method is used to initiate a grid backup in the Infoblox NIOS WAPI. It makes use of the
-        fileop.grid_backup() method from the infoblox_pslib.nios.fileop module. The backup is
-        saved with the
-        specified filename in the Infoblox Grid.
-
-        Example:
-
-        ```py
-        session = WAPI()
-        session.grid_backup(filename="backup_file.tgz")
-        ```
-
-        This will initiate a grid backup with the provided filename "backup_file.tgz".
-        """
-        fileop.grid_backup(self, filename)
-
-    def csv_task_status(self, csvtask: dict) -> dict:
-        """
-        fetch the CSV task status of a CSV import task
-
-        Args:
-            csvtask: A dictionary representing the csv task.
-
-        Returns:
-            A dictionary containing the status of the csv task.
-
-        Raises:
-            None.
-        """
-        return fileop.csvtask_status(self, csvtask=csvtask)
-
-    def get_csv_errors_file(self, filename: str, job_id: str) -> None:
-        """
-        fetch the CSV Errors file of a CSV task
-
-        Args:
-            filename (str): The name of the CSV errors file.
-            job_id (str): The ID of the job that generated the CSV errors file.
-
-        """
-        return fileop.get_csv_errors_file(self, filename=filename, job_id=job_id)
