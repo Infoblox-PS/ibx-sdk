@@ -129,7 +129,7 @@ _ref = wapi.getone('network',
 )
 ```
 
-To fetch the next available 2 networks within the network container 192.168.0.0/16 we add the following to our script:
+To fetch the next 10 available ips within the network 192.168.2.0/24 we add the following to our script:
 
 ```python
 params = {
@@ -146,7 +146,7 @@ response = wapi.post(_ref, json=body, params=params)
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
-````
+```
 
 To build/create the 10 fixed addresses recevied by the function we called, we add the following to our script:
 
