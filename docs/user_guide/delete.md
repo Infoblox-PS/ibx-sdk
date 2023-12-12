@@ -48,7 +48,7 @@ _ref = wapi.getone(
     'network',
     params={'network': '192.168.2.0/23',
             'network_view': 'default'
-            }
+    }
 )
 ```
 
@@ -100,7 +100,7 @@ _ref = wapi.getone(
     'record:host',
     params={'name': 'my-router.example.com',
             'network_view': 'default'
-            }
+    }
 )
 ```
 
