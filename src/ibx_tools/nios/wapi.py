@@ -22,13 +22,10 @@ import urllib3
 from requests import Response
 
 from ibx_tools.nios import fileop
-from ibx_tools.nios import service
+from ibx_tools.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-ServiceRestartOption = Literal['FORCE_RESTART', 'RESTART_IF_NEEDED']
-ServiceRestartServices = Literal['ALL', 'DNS', 'DHCP', 'DHCPV4', 'DHCPV6']
-ServiceRestartMode = Literal['GROUPED', 'SEQUENTIAL', 'SIMULTANEOUS']
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
 MemberDataType = Literal[
@@ -61,7 +58,7 @@ class WapiRequestException(BaseWapiException):
         )
 
 
-class WAPI(requests.sessions.Session):
+class WAPI(requests.sessions.Session, NiosServiceMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,
@@ -532,59 +529,6 @@ class WAPI(requests.sessions.Session):
         This will initiate a grid backup with the provided filename "backup_file.tgz".
         """
         fileop.grid_backup(self, filename)
-
-    def get_service_restart_status(self) -> dict:
-        """
-            Retrieves the restart status of a service through the Infoblox WAPI.
-
-            Args:
-                self: The WAPI session object.
-
-            Returns:
-                Optional[Union[str, bool]]: The restart status of the service.
-                It returns None if the service restart status is not available or
-                if there was an error retrieving the restart status.
-
-            Raises:
-                None.
-
-        """
-        return service.get_service_restart_status(self)
-
-    def service_restart(
-            self,
-            groups: Optional[list] = None,
-            members: Optional[list[str]] = None,
-            mode: Optional[ServiceRestartMode] = None,
-            restart_option: Optional[ServiceRestartOption] = 'RESTART_IF_NEEDED',
-            services: Optional[list[ServiceRestartServices]] = None,
-            user_name: Optional[str] = None,
-    ):
-        """
-        Restarts services on Infoblox appliances.
-
-        Args:
-            groups (Optional[list]): List of group names containing appliances. Default is None.
-            members (Optional[list[str]]): List of member names within the given groups. Default
-            is None.
-            mode (Optional[ServiceRestartMode]): Service restart mode. Default is None.
-            restart_option (Optional[ServiceRestartOption]): Service restart option. Default is
-            'RESTART_IF_NEEDED'.
-            services (Optional[list[ServiceRestartServices]]): List of member services to
-            restart. Default is
-            'ALL'.
-            user_name (Optional[str]): Username for authentication. Default is None.
-
-        """
-        service.service_restart(
-            self,
-            groups=groups,
-            members=members,
-            mode=mode,
-            restart_option=restart_option,
-            services=services,
-            user_name=user_name
-        )
 
     def csv_task_status(self, csvtask: dict) -> dict:
         """
