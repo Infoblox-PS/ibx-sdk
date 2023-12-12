@@ -314,7 +314,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         url = f'{self.url}/{wapi_object}'
         return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
 
-    def getone(self, wapi_object: str, params=None, **kwargs) -> Response:
+    def getone(self, wapi_object: str, params=None, **kwargs) -> str:
         """
         return the reference of a single WAPI object
 
@@ -324,7 +324,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             **kwargs: Additional keyword arguments to be passed to the request.
 
         Returns:
-            Response: A Response object containing the data returned from the WAPI.
+            str: A str response containing the _ref of the WAPI object.
 
         Raises:
             WapiRequestException: If multiple data records were returned or no data was returned.
