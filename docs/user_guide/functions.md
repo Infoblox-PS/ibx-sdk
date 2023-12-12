@@ -26,6 +26,11 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 2. Fetch 2 available networks from the network container
 3. Create the 2 networks received 
 
+!!! tip
+
+    The wapi.getone('<wapi_object', params, **kwargs) method does not return a response object. 
+    It will return an object reference of type string.
+
 To fetch the reference for network container 192.168.0.0/16 from the Grid, we start to create our script with the following:
 
 ```python
