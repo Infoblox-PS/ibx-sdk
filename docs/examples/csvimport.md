@@ -121,14 +121,14 @@ The CSV import option supports insert, merge/override and delete operations. To 
 single CSV file, you must specify an optional `IMPORT-ACTION` column in the CSV import file. The column value for each
 data row describes the type of action that the appliance supports for the respective row. 
 
-| Action | Description       | Notes                                                                                                                                           |
-|--------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| I      | Insert            | If it exists, an error will be generated.                                                                                                       |
-| M      | Merge             | If it exists, additional fields will be merged into the record. If the object does not exist, you must first perform the insert operation to add the data.                                 |
-| O      | Override          | If it exists, all fields will be overridden. If the object does not exist, you must first perform the insert operation to add the data.                                                                                                   |
-| IM     | Insert + Merge    | The appliance first checks if the corresponding object exists. If it exists, the appliance performs the merge or override operation accordingly. |
-| IO     | Insert + Override | The appliance first checks if the corresponding object exists. If it exists, the appliance performs the merge or override operation accordingly. |
-| D      | Delete            | If it exists, record will be deleted.  If it does not exists, an error will be generated.                                                       |
+| Action | Description       | Notes                                                                                                                                                      |
+|--------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| I      | Insert            | If it exists, an error will be generated.                                                                                                                  |
+| M      | Merge             | If it exists, additional fields will be merged into the record. If the object does not exist, you must first perform the insert operation to add the data. |
+| O      | Override          | If it exists, all fields will be overridden. If the object does not exist, you must first perform the insert operation to add the data.                    |
+| IM     | Insert + Merge    | The appliance first checks if the corresponding object exists. If it exists, the appliance performs the merge or override operation accordingly.           |
+| IO     | Insert + Override | The appliance first checks if the corresponding object exists. If it exists, the appliance performs the merge or override operation accordingly.           |
+| D      | Delete            | If it exists, record will be deleted.  If it does not exists, an error will be generated.                                                                  |
 
 !!! Danger
     CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
