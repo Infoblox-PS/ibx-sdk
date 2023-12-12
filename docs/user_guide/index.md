@@ -15,7 +15,7 @@ The NIOS WAPI supports the following API methods:
 | GET    | WAPI.get()          | An HTTP GET is used to read a single object or fetch multiple objects |
 | POST   | WAPI.post()         | The POST method is used to create a new object                        |
 | PUT    | WAPI.put()          | The PUT method is used to update an existing object.                  |
-| DELETE | WAPI.delete()       | The PUT method is used to update an existing object.                  |
+| DELETE | WAPI.delete()       | The DELETE method is used to remove an existing object.               |
 
 !!! info
 
