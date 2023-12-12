@@ -110,3 +110,17 @@ if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
 ```
+
+When creating objects, the reference of the object will be retured upon the successful creation
+```text linenums="0"
+record:host/ZG5zLmhvc3QkLl9kZWZhdWx0LmNvbS5leGFtcGxlLm15LXJvdXRlcg:my-router.example.com/Internal%20DNS
+```
+
+An unsessful call may look like the following:
+```text linenums="0"
+{
+    'Error': "AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The record 'my-router example.com' already exists.)", 
+    'code': 'Client.Ibap.Data.Conflict', 
+    'text': "The record 'my-rou
+}
+```
