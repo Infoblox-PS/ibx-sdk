@@ -7,10 +7,12 @@ requires-python = ">=3.8"
 license = { file = "LICENSE.md" }
 authors = [
     { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
     { name = "Michael Smith", email = "michaels@infoblox.com" },
 ]
 maintainers = [
     { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
     { name = "Michael Smith", email = "michaels@infoblox.com" },
 ]
 dependencies = [

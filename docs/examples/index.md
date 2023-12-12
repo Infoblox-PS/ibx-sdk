@@ -63,7 +63,7 @@ Let's delve into each of these tools, understanding their purpose and capabiliti
 8. **Restart Service Tool**
     - Restart Infoblox NIOS Protocol Services.
     - Select the Grid Manager address and the specific service(s) to restart.
-    - Further customize with optional parameters and debugging features.
+    - Further, customize with optional parameters and debugging features.
     - [Restart Service Tool Details](restart_service.md)
 
 9. **Service Status Tool**

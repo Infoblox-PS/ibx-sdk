@@ -67,7 +67,7 @@ response = wapi.get('network')
 if response.status_code == 200:
     log.info('yay! we succeeded')
 else:
-    log.error(res.text)
+    log.error(response.text)
 ```
 
 Let's assume we got a successful `response` above, to get the JSON-encoded results, all we need to
