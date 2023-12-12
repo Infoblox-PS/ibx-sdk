@@ -20,7 +20,7 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 
     See the WAPI Guide for details on all objects, properties, functions, and parameters.
 
-## Basics - Get Next Available Network 
+## Next Available Network 
 
 1. Retrieve the object reference from the network container
 2. Fetch 2 available networks from the network container
@@ -101,7 +101,7 @@ for network in networks_dict['networks']:
         print(f'error: {response.text}')
 ```
 
-## Basics - Get Next Available IP
+## Next Available IP
 
 1. Retrieve the object reference from the network
 2. Fetch 10 available networks from the network
@@ -165,3 +165,53 @@ for ip in ip_dict['ips']:
     else:
         print(f'error: {response.text}')
 ```
+
+## Expand Network
+
+1. Retrieve the object reference from the network
+2. Expand Network to a /23
+
+To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the following:
+
+```python
+import sys
+from ibx_tools.nios.wapi import WAPI
+
+wapi = WAPI(
+    grid_mgr='infoblox.localdomain',
+    wapi_ver='2.12',
+)
+
+wapi.connect(username='admin', password='infoblox')
+
+my_network = '192.168.2.0/24'
+
+# Retrieve the reference for my_network
+_ref = wapi.getone('network',
+    params={'network': my_network,
+            'network_view': 'default'}
+)
+```
+
+Expand network to 192.168.2.0/23 we add the following to our script:
+
+```python
+params = {
+    '_function': 'expand_network'
+}
+
+# Create the Body of the request
+body = {
+    'prefix': 23,
+}
+
+# Get the Network(s)
+response = wapi.post(_ref, json=body, params=params)
+```
+
+!!! Danger
+    This function reduces the subnet masks of a network by joining all networks that fall under it. All the ranges and 
+    fixed addresses of the original networks are reparented to the new joined network. Any network containers that fall 
+    inside the bounds of the joined network are removed. The member assignments for all the encompassed networks are 
+    joined together. The default router, broadcast address, and subnet mask overrided from the joined network, 
+    including the ranges and fixed addresses, are all cleaned up.
