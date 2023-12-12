@@ -134,3 +134,16 @@ data row describes the type of action that the appliance supports for the respec
     CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
     networks and all child objects, will significantly affect member performance, resulting in service outage.
 
+```mermaid
+sequenceDiagram
+  autonumber
+  Client->>NIOS: wapi.connect()
+  NIOS->>Client: cookies['ibapauth']
+  Client->>FileOp: wapi.csv_import()
+  loop file operation tasks
+    FileOp->>FileOp: __upload_init()
+    FileOp->>FileOp: __csv_import_file()
+    FileOp->>FileOp: __csv_import()
+  end
+  FileOp->>Client: csvtask
+```
