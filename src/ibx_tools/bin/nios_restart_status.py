@@ -23,7 +23,8 @@ import click
 from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.wapi import WAPI, WapiRequestException
+from ibx_tools.nios.gift import Gift
+from ibx_tools.nios.exceptions import WapiRequestException
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -33,7 +34,7 @@ log = init_logger(
     max_size=100000,
     num_logs=1)
 
-wapi = WAPI()
+wapi = Gift()
 
 help_text = """
 Retrieve Restart Status

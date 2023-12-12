@@ -35,9 +35,10 @@ couple of these are shown below:
 To fetch all `network` WAPI objects from the Grid, we'd fashion our script like the following:
 
 ```python
-from ibx_tools.nios.wapi import WAPI, WapiRequestException
+from ibx_tools.nios.gift import Gift
+from ibx_tools.nios.exceptions import WapiRequestException
 
-wapi = WAPI(
+wapi = Gift(
     grid_mgr='infoblox.localdomain',
     wapi_ver='2.12',
     ssl_verify='/path/to/certfile'

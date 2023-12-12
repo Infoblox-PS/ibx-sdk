@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.gift import Gift
 
 GRID_MGR = os.environ.get('GRID_MGR')
 WAPI_VER = os.environ.get('WAPI_VER')
@@ -23,10 +23,10 @@ def get_wapi():
         wapi = get_wapi()
 
     Returns:
-        WAPI: An instance of the WAPI class.
+        Gift: An instance of the WAPI class.
 
     """
-    wapi = WAPI(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     wapi.connect(username=USERNAME, password=PASSWORD)
     yield wapi
 

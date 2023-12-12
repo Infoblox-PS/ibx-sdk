@@ -21,30 +21,14 @@ import requests
 import urllib3
 from requests import Response
 
+from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
 from ibx_tools.nios.fileop import NiosFileopMixin
 from ibx_tools.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class BaseWapiException(Exception):
-    """BaseWapiException class"""
-
-
-class WapiInvalidParameterException(BaseWapiException):
-    """WapiInvalidParameterException class - raised when invalid args/params passed to methods"""
-
-
-class WapiRequestException(BaseWapiException):
-    """WapiRequestException class - returns error(s) returned from Infoblox WAPI calls"""
-
-    def __init__(self, msg):
-        super().__init__(
-            f'wapi error - {msg}'
-        )
-
-
-class WAPI(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
+class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,

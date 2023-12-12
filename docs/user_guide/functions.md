@@ -30,9 +30,9 @@ To fetch the reference for network container 192.168.0.0/16 from the Grid, we st
 
 ```python
 import sys
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.gift import Gift
 
-wapi = WAPI(
+wapi = Gift(
     grid_mgr='infoblox.localdomain',
     wapi_ver='2.12',
 )
@@ -111,9 +111,9 @@ To fetch the reference for network container 192.168.2.0/24 from the Grid, we st
 
 ```python
 import sys
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.gift import Gift
 
-wapi = WAPI(
+wapi = Gift(
     grid_mgr='infoblox.localdomain',
     wapi_ver='2.12',
 )
@@ -124,9 +124,9 @@ my_network = '192.168.2.0/24'
 
 # Retrieve the reference for my_network
 _ref = wapi.getone('network',
-    params={'network': my_network,
-            'network_view': 'default'}
-)
+                   params={'network': my_network,
+                           'network_view': 'default'}
+                   )
 ```
 
 To fetch the next 10 available ips within the network 192.168.2.0/24 we add the following to our script:
@@ -175,9 +175,9 @@ To fetch the reference for network container 192.168.2.0/24 from the Grid, we st
 
 ```python
 import sys
-from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.gift import Gift
 
-wapi = WAPI(
+wapi = Gift(
     grid_mgr='infoblox.localdomain',
     wapi_ver='2.12',
 )
@@ -188,9 +188,9 @@ my_network = '192.168.2.0/24'
 
 # Retrieve the reference for my_network
 _ref = wapi.getone('network',
-    params={'network': my_network,
-            'network_view': 'default'}
-)
+                   params={'network': my_network,
+                           'network_view': 'default'}
+                   )
 ```
 
 Expand network to 192.168.2.0/23 we add the following to our script:
