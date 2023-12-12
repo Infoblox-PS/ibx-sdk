@@ -33,14 +33,51 @@ Options:
 
 ```
 
-## Example
+## Examples
+
+### Restore Grid Backup from File
+
+The following example will restore a backup a Grid Manager.
 
 ```sh
-grid-restore -u admin -g 192.168.1.2 -f database.bak -m FORCED -k
+grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
+```
+
+**Screen output from command**
+
+```text
+grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
+Enter password for [admin]: 
+2023-12-09 20:45:21 [nios_grid_restore.py:94] INFO connected to Infoblox grid manager 192.168.1.2
+2023-12-09 20:45:21 [fileop.py:830] INFO step 1 - request uploadinit database.bak
+2023-12-09 20:45:22 [fileop.py:846] INFO step 2 - post the files using the upload_url provided
+2023-12-09 20:45:25 [fileop.py:855] INFO step 3 - execute the restore
+2023-12-09 20:45:35 [fileop.py:867] INFO Grid restore successful!
 ```
 
 !!! Danger
 
     Restoring an Infoblox Grid should only be considered as a final option for production deployments. Please refrain from
-    initiating a restoration process unless you are in a Disaster Recovery (DR) scenario.
+    initiating a restoration process unless you are in a Disaster Recovery (DR) scenario or directed to do so by
+    Infoblox Technical Support.
 
+### Restore Grid Backup from file to a Lab
+
+The following example will restore a backup of a Grid Manager to another system (lab).
+
+```sh
+grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
+```
+
+**Screen output from command**
+
+```text
+grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
+Enter password for [admin]: 
+2023-12-09 20:57:51 [nios_grid_restore.py:94] INFO connected to Infoblox grid manager  192.168.1.3
+2023-12-09 20:57:51 [fileop.py:830] INFO step 1 - request uploadinit database.bak
+2023-12-09 20:57:51 [fileop.py:846] INFO step 2 - post the files using the upload_url provided
+2023-12-09 20:57:53 [fileop.py:855] INFO step 3 - execute the restore
+2023-12-09 20:58:02 [fileop.py:867] INFO Grid restore successful!
+
+```
