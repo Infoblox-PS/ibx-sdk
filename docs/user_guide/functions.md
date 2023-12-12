@@ -20,7 +20,7 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 
     See the WAPI Guide for details on all objects, properties, functions, and parameters.
 
-## Basics 
+## Basics - Get Next Available Network 
 
 1. Retrieve the object reference from the network container
 2. Fetch 2 available networks from the network container
