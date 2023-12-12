@@ -29,7 +29,7 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 To fetch the reference for network container 192.168.0.0/16 from the Grid, we start to create our script with the following:
 
 ```python
-import sys
+
 from ibx_tools.nios.wapi import WAPI
 
 wapi = WAPI(
@@ -39,10 +39,12 @@ wapi = WAPI(
 
 wapi.connect(username='admin', password='infoblox')
 
-_ref = wapi.getone('networkcontainer',
-                    params={'network': '192.168.0.0/16',
-                            'network_view': 'default'
-                            }
+_ref = wapi.getone(
+    'networkcontainer',
+    params={
+        'network': '192.168.0.0/16',
+        'network_view': 'default'
+    }
 )
 ```
 
