@@ -66,7 +66,7 @@ body = {
     'exclude': ['192.168.0.0/24', '192.168.1.0/24']
 }
 response = wapi.post(_ref, json=body, params=params)
-````
+```
 
 Our `response` above is a Requests response object, and it will contain a number of properties and
 methods.
