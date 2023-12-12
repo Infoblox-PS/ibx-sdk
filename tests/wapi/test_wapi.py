@@ -7,7 +7,9 @@ import logging
 import pytest
 import urllib3
 
-from ibx_tools.nios.wapi import WAPI, WapiRequestException, WapiInvalidParameterException
+from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+
 log = logging.getLogger(__name__)
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

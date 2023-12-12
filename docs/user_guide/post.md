@@ -24,7 +24,8 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 ## Create Network
 
 ```python
-from ibx_tools.nios.wapi import WAPI, WapiRequestException
+from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.exceptions import WapiRequestException
 
 wapi = WAPI(
     grid_mgr='infoblox.localdomain',
@@ -58,7 +59,8 @@ the `response` object this is done like so:
 
 ```python
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.wapi import WAPI, WapiRequestException
+from ibx_tools.nios.wapi import WAPI
+from ibx_tools.nios.exceptions import WapiRequestException
 
 log = init_logger(
     logfile_name='wapi.log',
