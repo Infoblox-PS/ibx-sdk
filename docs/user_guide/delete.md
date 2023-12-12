@@ -75,3 +75,43 @@ if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
 ```
+
+## Delete Host Record
+1. Retrieve the object reference from the record:host
+2. Delete the host
+
+To fetch the reference for my_router.example.com from the Grid, we start to create 
+our script with the following:
+
+```python
+import sys
+from ibx_tools.nios.gift import Gift
+
+wapi = Gift(
+    grid_mgr='infoblox.localdomain',
+    wapi_ver='2.12',
+)
+
+wapi.connect(username='admin', password='infoblox')
+
+_ref = wapi.getone(
+    'record:host',
+    params={'name': 'my-router.example.com',
+            'network_view': 'default'
+            }
+)
+```
+
+To delete the record:host we add the following to our script:
+```python linenums="0"
+response = wapi.delete(_ref)
+```
+
+We can test the success or failure of the above request by checking for an OK status on the  
+`response` object this is done like adding the following to our script:
+
+```python
+if response.status_code != 200:
+    print(f'We hit a snag {response.text}')
+    sys.exit(1) # Exit program
+```
