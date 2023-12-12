@@ -51,3 +51,36 @@ wapi = Gift()
 
     We always recommend installing the Basic API Toolkit into a Python Virtual Environment to 
     avoid polluting your global Python module(s) environment.
+
+To create a Python virtual environment, perform this sequence of steps:
+
+```shell
+cd ~/workspace
+
+mkdir myproject
+cd myproject
+python3 -m venv .venv
+source .vent/bin/activate
+pip install -U pip setuptools
+```
+The above code was performed on a Mac, it leverages a `workspace` folder that would have all our 
+project(s) and code. We create a new project called `myproject` and "install" a virtual 
+environment in that folder with `python3`. We sourced the environment on line #6. Last we update 
+the `pip` and `setuptools` modules. 
+
+!!! warning
+
+    Always source your Python virutal environment of your project or you may end up polluting 
+    your own module space. 
+
+Remember to always source your environment prior to working on your next project:
+
+```shell
+source .venv/bin/activate
+```
+
+You can deactivate when you are done using/modifying the project code:
+
+```shell
+deactivate
+```
