@@ -44,15 +44,17 @@ wapi = Gift(
 
 wapi.connect(username='admin', password='infoblox')
 
-_ref = wapi.getone('network',
-                   params={'network': '192.168.2.0/23',
-                           'network_view': 'default'
-                           }
+_ref = wapi.getone(
+    'network',
+    params={'network': '192.168.2.0/23',
+            'network_view': 'default'
+            }
 )
 ```
 
 To delete the network we add the following to our script:
-```python linenums="0"
+
+```python linenums="17"
 response = wapi.delete(_ref)
 ```
 
@@ -70,7 +72,7 @@ The ones used most often in working with WAPI data are:
 We can test the success or failure of the above request by checking for an OK status on the  
 `response` object this is done like adding the following to our script:
 
-```python
+```python linenums="18"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
@@ -103,14 +105,14 @@ _ref = wapi.getone(
 ```
 
 To delete the record:host we add the following to our script:
-```python linenums="0"
+```python linenums="17"
 response = wapi.delete(_ref)
 ```
 
 We can test the success or failure of the above request by checking for an OK status on the  
 `response` object this is done like adding the following to our script:
 
-```python
+```python linenums="18"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program

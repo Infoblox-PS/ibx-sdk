@@ -57,7 +57,7 @@ The ones used most often in working with WAPI data are:
 We can test the success or failure of the above request by checking for an OK status on
 the `response` object this is done like so:
 
-```python
+```python linenums="19"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
@@ -105,7 +105,7 @@ response = wapi.post('record:host', json=body)
 We can test the success or failure of the above request by checking for an OK status on the 
 `response` object this is done like adding the following to our script:
 
-```python
+```python linenums="21"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program

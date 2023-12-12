@@ -55,7 +55,7 @@ _ref = wapi.getone(
 
 To fetch the next available 2 networks within the network container 192.168.0.0/16 we add the following to our script:
 
-```python
+```python  linenums="18"
 params = {
     '_function': 'next_available_network'
 }
@@ -82,7 +82,7 @@ The ones used most often in working with WAPI data are:
 We can test the success or failure of the above request by checking for an OK status on the `response` object this 
 is done like adding the following to our script:
 
-```python
+```python linenums="28"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
     sys.exit(1) # Exit program
@@ -90,7 +90,7 @@ if response.status_code != 200:
 
 To build/create the two next available networks by the function we called, we add the following to our script:
 
-```python
+```python linenums="31"
 networks_dict = response.json()
 
 for network in networks_dict['networks']:
@@ -128,15 +128,18 @@ wapi.connect(username='admin', password='infoblox')
 my_network = '192.168.2.0/24'
 
 # Retrieve the reference for my_network
-_ref = wapi.getone('network',
-                   params={'network': my_network,
-                           'network_view': 'default'}
-                   )
+_ref = wapi.getone(
+    'network',
+    params={
+        'network': my_network,
+        'network_view': 'default'
+    }
+)
 ```
 
 To fetch the next 10 available ips within the network 192.168.2.0/24 we add the following to our script:
 
-```python
+```python  linenums="21"
 params = {
     '_function': 'next_available_ip'
 }
@@ -155,7 +158,7 @@ if response.status_code != 200:
 
 To build/create the 10 fixed addresses recevied by the function we called, we add the following to our script:
 
-```python
+```python linenums="35"
 for ip in ip_dict['ips']:
     body = {
         "network": my_network,
@@ -192,15 +195,18 @@ wapi.connect(username='admin', password='infoblox')
 my_network = '192.168.2.0/24'
 
 # Retrieve the reference for my_network
-_ref = wapi.getone('network',
-                   params={'network': my_network,
-                           'network_view': 'default'}
-                   )
+_ref = wapi.getone(
+    'network',
+    params={
+        'network': my_network,
+        'network_view': 'default'
+    }
+)
 ```
 
 Expand network to 192.168.2.0/23 we add the following to our script:
 
-```python
+```python linenums="21"
 params = {
     '_function': 'expand_network'
 }
