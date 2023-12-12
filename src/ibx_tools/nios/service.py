@@ -17,6 +17,7 @@ limitations under the License.
 import logging
 import pprint
 from typing import Literal, Optional
+from ibx_tools.nios.gift import Gift
 
 import requests
 
@@ -42,6 +43,7 @@ class NiosServiceMixin:
         Restarts specified services on the grid.
 
         Args:
+            self (Gift): Gift object
             groups (Optional[list]): List of group names. Default is None.
             members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
@@ -112,7 +114,7 @@ class NiosServiceMixin:
         Updates the status of a service.
 
         Args:
-            self (object): The instance of the class.
+            self (Gift): The instance of the class.
             services (str): The service option to update the status for. Default value is 'ALL'.
 
         Returns:
@@ -135,6 +137,9 @@ class NiosServiceMixin:
     def get_service_restart_status(self) -> dict:
         """
         Retrieves the status of a service restart.
+
+        Args:
+            self (Gift): The instance of the Gift class
 
         Returns:
             dict: A dictionary containing the service restart status information.
