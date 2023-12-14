@@ -77,10 +77,8 @@ def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wap
         SystemExit: The function exits the system upon completion or upon encounter of an error.
 
     """
-    sys.tracebacklimit = 0
     if debug:
         increase_log_level()
-        sys.tracebacklimit = 1
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
@@ -94,11 +92,15 @@ def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wap
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    # noinspection PyTypeChecker
-    wapi.grid_restore(
-        filename=filename,
-        mode=mode,
-        keep_grid_ip=keep)
+    try:
+        wapi.grid_restore(
+            filename=filename,
+            mode=mode,
+            keep_grid_ip=keep
+        )
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -2,13 +2,14 @@
 
 ## Overview
 
-This Python script serves as a command-line utility for retrieving a Support Bundle from an Infoblox Grid Manager using
-the Infoblox Web API (WAPI). Users can specify essential parameters such as the Grid Manager address and the target
-member from which to retrieve the Support Bundle when executing the script from the command line. Optional parameters
-include the Infoblox admin username and the ability to include rotated logs and log files in the Support Bundle.
-Additionally, the script offers debugging capabilities for advanced users. Whether you need to gather diagnostic
-information, including logs and configuration files, from an Infoblox member, this utility simplifies the process,
-making it a valuable tool for troubleshooting and support purposes.
+This Python script serves as a command-line utility for retrieving a Support Bundle from an Infoblox
+Grid Manager using the Infoblox Web API (WAPI). Users can specify essential parameters such as the 
+Grid Manager address and the target member from which to retrieve the Support Bundle when executing 
+the script from the command line. Optional parameters include the Infoblox admin username and the 
+ability to include rotated logs and log files in the Support Bundle. Additionally, the script offers 
+debugging capabilities for advanced users. Whether you need to gather diagnostic information,
+including logs and configuration files, from an Infoblox member, this utility simplifies the 
+process, making it a valuable tool for troubleshooting and support purposes.
 
 ## Usage
 
@@ -36,7 +37,8 @@ Options:
 
 ### Support Bundle Download
 
-The following example will download the supportbundle with rotated logs and log files from the infoblox.localdomain.
+The following example will download the supportbundle with rotated logs and log files from the
+infoblox.localdomain.
 
 ```sh
 get-supportbundle -u admin -g 192.168.1.2 -m infoblox.localdomain -r -l
@@ -54,8 +56,4 @@ Enter password for [admin]:
 2023-12-09 19:22:33 [fileop.py:41] INFO writing file: 2023120933-infoblox.localdomain-SupportBundle.tgz
 2023-12-09 19:22:38 [fileop.py:727] INFO file 2023120933-infoblox.localdomain-SupportBundle.tgz download complete
 2023-12-09 19:22:38 [nios_get_supportbundle.py:99] INFO finished!
-```
-
-```
-
 ```

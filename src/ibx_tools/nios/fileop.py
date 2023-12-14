@@ -23,6 +23,8 @@ from typing import Literal, Optional
 import requests.exceptions
 
 from ibx_tools.util import util
+from ibx_tools.nios.exceptions import WapiRequestException
+
 
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
@@ -79,7 +81,7 @@ class NiosFileopMixin:
             response.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         obj = response.json()
         download_url = obj.get('url')
@@ -94,7 +96,7 @@ class NiosFileopMixin:
             response = self.__download_file(download_url, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         if not filename:
             filename = util.get_csv_from_url(download_url)
@@ -105,7 +107,7 @@ class NiosFileopMixin:
             self.__download_complete(download_token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def csv_import(
             self,
@@ -137,7 +139,7 @@ class NiosFileopMixin:
             obj = self.__upload_init(filename=filename)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         upload_url = obj.get('url')
         token = obj.get('token')
@@ -162,7 +164,7 @@ class NiosFileopMixin:
                 self.__upload_file(upload_url, upload_file, req_cookies)
             except requests.exceptions.RequestException as err:
                 logging.error(err)
-                raise
+                raise WapiRequestException(err)
 
             # submit task to CSV Job Manager
             logging.info(
@@ -178,7 +180,7 @@ class NiosFileopMixin:
                 )
             except requests.exceptions.RequestException as err:
                 logging.error(err)
-                raise
+                raise WapiRequestException(err)
             else:
                 return csvtask
 
@@ -237,7 +239,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         else:
             logging.debug(res.json())
 
@@ -266,7 +268,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         obj = res.json()
         token = obj.get('token')
@@ -281,7 +283,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         filename = f'csv-errors-{filename}.csv'
         NiosFileopMixin.__write_file(filename=filename, data=res)
@@ -291,7 +293,7 @@ class NiosFileopMixin:
             self.__download_complete(token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def get_log_files(
             self,
@@ -341,7 +343,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         obj = res.json()
         download_url = obj.get('url')
@@ -356,7 +358,7 @@ class NiosFileopMixin:
             res = self.__download_file(download_url, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
         filename = f'{date_time}-{member}-{log_type}.tgz'
@@ -367,7 +369,7 @@ class NiosFileopMixin:
             self.__download_complete(download_token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def get_support_bundle(
             self,
@@ -430,7 +432,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         obj = res.json()
         download_url = obj.get('url')
@@ -445,7 +447,7 @@ class NiosFileopMixin:
             res = self.__download_file(download_url, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
         filename = f'{date_time}-{member}-SupportBundle.tgz'
@@ -456,7 +458,7 @@ class NiosFileopMixin:
             self.__download_complete(download_token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def grid_backup(self, filename: str = 'database.tgz') -> None:
         """
@@ -481,7 +483,7 @@ class NiosFileopMixin:
             res = self.__getgriddata(payload, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         token = res.get('token')
         download_url = res.get('url')
@@ -493,7 +495,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -502,7 +504,7 @@ class NiosFileopMixin:
             self.__download_complete(token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def grid_restore(
             self,
@@ -529,7 +531,7 @@ class NiosFileopMixin:
             obj = self.__upload_init(filename)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         upload_url = obj.get('url')
         token = obj.get('token')
 
@@ -546,7 +548,7 @@ class NiosFileopMixin:
                 self.__upload_file(upload_url, upload_file, req_cookies)
             except requests.exceptions.RequestException as err:
                 logging.error(err)
-                raise
+                raise WapiRequestException(err)
 
             # Execute the restore
             logging.info('step 3 - execute the restore')
@@ -559,7 +561,7 @@ class NiosFileopMixin:
                 )
             except requests.exceptions.RequestException as err:
                 logging.error('step 3 - Error: %s', err)
-                raise
+                raise WapiRequestException(err)
             logging.info("Grid restore successful!")
 
     def member_config(
@@ -593,7 +595,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         obj = res.json()
         download_url = obj.get('url')
@@ -608,7 +610,7 @@ class NiosFileopMixin:
             res = self.__download_file(download_url, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         download_file = util.get_csv_from_url(download_url)
 
@@ -618,7 +620,7 @@ class NiosFileopMixin:
             self.__download_complete(download_token, download_file, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         return download_file
 
@@ -661,7 +663,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         return res.json()
 
@@ -684,7 +686,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def __download_file(self, download_url, req_cookies):
         header = {'Content-type': 'application/force-download'}
@@ -700,7 +702,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         return res
 
     def __getgriddata(self, payload: dict, req_cookies) -> dict:
@@ -717,7 +719,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         return res.json()
 
@@ -750,7 +752,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         return res
 
     def __upload_file(
@@ -770,7 +772,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def __upload_init(self, filename: str) -> dict:
         headers = {'content-type': 'application/json'}
@@ -782,7 +784,7 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
         return res.json()
 

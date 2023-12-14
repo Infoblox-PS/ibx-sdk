@@ -2,13 +2,14 @@
 
 ## Overview
 
-This Python program is a command-line utility designed to simplify the process of exporting data from an Infoblox Grid
-Manager using the Infoblox Web API (WAPI) and saving it to a CSV file. With this tool, users can specify essential
-parameters like the Grid Manager address, the desired output file name, and their authentication credentials.
-Additionally, it provides flexibility by allowing users to specify options such as the Infoblox WAPI version and the
-type of Infoblox objects to export. Whether you need to extract network information, DNS records, or other data managed
-by Infoblox, this utility streamlines the process, making it a valuable resource for Infoblox administrators and users
-who need to work with data in CSV format.
+This Python program is a command-line utility designed to simplify the process of exporting data
+from an Infoblox Grid Manager using the Infoblox Web API (WAPI) and saving it to a CSV file. With 
+this tool, users can specify essential parameters like the Grid Manager address, the desired output 
+file name, and their authentication credentials. Additionally, it provides flexibility by allowing 
+users to specify options such as the Infoblox WAPI version and the type of Infoblox objects to 
+export. Whether you need to extract network information, DNS records, or other data managed
+by Infoblox, this utility streamlines the process, making it a valuable resource for Infoblox
+administrators and users who need to work with data in CSV format.
 
 ## Usage
 
@@ -40,7 +41,8 @@ Options:
 csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 ```
 
-The command invokes the CSV Job Manager and creates a job to export objects of type network. Once the job is complete,
+The command invokes the CSV Job Manager and creates a job to export objects of type network. Once
+the job is complete,
 the data is exported and saved.
 
 **Screen output from command**

@@ -19,6 +19,7 @@ import pprint
 from typing import Literal, Optional
 
 import requests
+from ibx_tools.nios.exceptions import WapiRequestException
 
 
 class NiosServiceMixin:
@@ -102,7 +103,7 @@ class NiosServiceMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         else:
             logging.info(
                 'successfully restarted %s services', data.get('services')
@@ -131,7 +132,7 @@ class NiosServiceMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
 
     def get_service_restart_status(self) -> dict:
         """
@@ -154,12 +155,12 @@ class NiosServiceMixin:
             response.raise_for_status()
         except requests.exceptions.SSLError as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         except requests.exceptions.HTTPError as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise
+            raise WapiRequestException(err)
         else:
             return response.json()
