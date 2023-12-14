@@ -7,42 +7,43 @@
 
 # Overview
 
-A collection of basic tools and functions used by other integrations written by Infoblox Professional Services. This
-collection also contains scripts that perform various functions. These scripts are written as functioning examples.
+Welcome to the Basic API Toolkit for Infoblox Products. This toolkit contains the following:
 
-# NIOS API
+* Python wrapper for Infoblox NIOS Web RESTful API or WAPI
+* Suite of core Python scripts and tools
+* Full documentation
 
-## WAPI Module Overview
+The Basic API Toolkit is a designed collection of Python classes and methods tailored for 
+streamlined and effective interaction. This toolkit is developed with a focus on simplicity and
+efficiency, enabling users to perform a variety of API actions essential for integrations with 
+Infoblox Products.
 
-The `wapy.py` is a Python class library designed for interacting with the Infoblox NIOS Web API (WAPI). The primary
-class,
-`WAPI`, extends `requests.sessions.Session` and provides functionalities for session management, data retrieval, file
-operations, and service management
+The Basic API Toolkit is crafted to accommodate users at different levels of expertise. It offers an 
+intuitive interface for beginners, while still providing the robust functionality that experienced 
+developers require. The toolkit is an ideal solution for automating network management tasks, 
+ensuring seamless integration with diverse systems and workflows.
 
-## FILEOP Module Overview
+Included in this toolkit are several practical script and tools that illustrate the application 
+of its methods in real-world scenarios. These scripts are intended to provide users with a clear 
+understanding of how the toolkit can be utilized to its full potential, demonstrating its 
+versatility and effectiveness in various use cases.
 
-The `fileop.py` module provides a suite of functions for managing file operations in the context of the Infoblox Web
-API (WAPI). These functions are designed to be used within the `WAPI` class and handle various file-related tasks
-such as configuration file downloads, CSV exports and imports, grid backups and restorations, and log file management.
-
-
-## Grid Services Module Overview
-
-The `Grid Services` module in Python provides functions to interact with and manage services in an Infoblox Grid
-environment. It includes capabilities to restart services, update their status, and retrieve the status of service
-restarts.
+We invite you to explore the capabilities of the Basic API Toolkit. Our goal is to deliver a 
+toolkit that is not only reliable and efficient but also adaptable to the dynamic requirements of 
+contemporary network environments.
 
 # Contributing
 
 ## Testing
 
-Testing is a requirement for contributing code to this project. You're expected to write test cases which "covers" your
-code additions, changes, and/or deletions. This section describes how to setup, configure and implement testing of the 
-Basic API Toolkit.
+Testing is a requirement for contributing code to this project. You're expected to write test cases
+which "covers" your code additions, changes, and/or deletions. This section describes how to set up,
+configure, and implement testing of the Basic API Toolkit.
 
 ### Software Requirements
 
 Install the following set of Python modules for testing:
+
 * coverage
 * pytest
 * pytest-env
@@ -56,8 +57,8 @@ pip install pytest pytest-env pytest-dotenv coverage
 
 ### Testing Configuration
 
-It's recommended that you configure your own env variables. The best, safest, and easiest way is to create a `.env` file
-at the root of the project. Create the file with the following variables:
+It's recommended that you configure your own env variables. The best, safest, and easiest way is to
+create a `.env` file at the root of the project. Create the file with the following variables:
 
 ```dotenv
 GRID_MGR=192.168.1.2
@@ -67,7 +68,8 @@ SSL_VERIFY=False
 WAPI_VER=2.12
 ```
 
-The above is a sample file only - please update it with sane values according to your testing environment. 
+The above is a sample file only - please update it with sane values according to your testing
+environment.
 
 ### Running Tests
 
@@ -78,6 +80,7 @@ coverage run -m pytest -svvv
 ```
 
 You should see output like the following:
+
 ```shell
 (.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage run -m pytest -svvv
 ============================================== test session starts ===============================================
@@ -101,12 +104,14 @@ tests/wapi/test_wapi.py::test_wapi_basic_auth_connection_with_bad_password PASSE
 =============================================== 9 passed in 0.10s ================================================
 ```
 
-Once you run the test suite, you can examine the code coverage of the tests - always strive for 100%:
+Once you run the test suite, you can examine the code coverage of the tests - always strive for
+100%:
+
 ```shell
 coverage report
 ```
 
-or 
+or
 
 ```shell
 coverage report -m
