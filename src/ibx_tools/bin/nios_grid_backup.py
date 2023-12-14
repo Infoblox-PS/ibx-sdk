@@ -83,7 +83,11 @@ def main(grid_mgr: str, username: str, file: str, wapi_ver: str, debug: bool) ->
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    wapi.grid_backup(filename=file)
+    try:
+        wapi.grid_backup(filename=file)
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
     sys.exit()
 

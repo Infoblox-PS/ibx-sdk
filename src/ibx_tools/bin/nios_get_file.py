@@ -92,8 +92,12 @@ def main(grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    # noinspection PyTypeChecker
-    wapi.member_config(member=member, conf_type=cfg_type)
+    try:
+        # noinspection PyTypeChecker
+        wapi.member_config(member=member, conf_type=cfg_type)
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
     log.info('finished!')
     sys.exit()
 

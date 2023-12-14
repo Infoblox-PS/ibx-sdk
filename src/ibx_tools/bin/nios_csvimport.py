@@ -89,12 +89,16 @@ def main(grid_mgr: str, filename: str, operation: str, username: str, wapi_ver: 
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    # noinspection PyTypeChecker
-    wapi.csv_import(
-        task_operation=operation,
-        csv_import_file=filename,
-        exit_on_error=False,
-    )
+    try:
+        # noinspection PyTypeChecker
+        wapi.csv_import(
+            task_operation=operation,
+            csv_import_file=filename,
+            exit_on_error=False,
+        )
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
     sys.exit()
 

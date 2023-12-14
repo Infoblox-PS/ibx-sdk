@@ -87,12 +87,16 @@ def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool)
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    # noinspection PyTypeChecker
-    wapi.service_restart(
-        mode='SEQUENTIAL',
-        restart_option='RESTART_IF_NEEDED',
-        services=service
-    )
+    try:
+        # noinspection PyTypeChecker
+        wapi.service_restart(
+            mode='SEQUENTIAL',
+            restart_option='RESTART_IF_NEEDED',
+            services=service
+        )
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
     sys.exit()
 

@@ -87,10 +87,14 @@ def main(grid_mgr: str, filename: str, username: str, wapi_ver: str, obj: str, d
         sys.exit(1)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
-    wapi.csv_export(
-        wapi_object=obj,
-        filename=filename
-    )
+    try:
+        wapi.csv_export(
+            wapi_object=obj,
+            filename=filename
+        )
+    except WapiRequestException as err:
+        log.error(err)
+        sys.exit(1)
 
     sys.exit()
 
