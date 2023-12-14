@@ -104,12 +104,10 @@ def named_compilezone(
     try:
         subprocess.run([
             'named-compilezone',
-            '-k',
-            'ignore',
-            '-f',
-            input_format,
-            '-o',
-            output_file,
+            '-i', 'none',
+            '-k', 'ignore',
+            '-f', input_format,
+            '-o', output_file,
             zone_name,
             zone_file
         ], check=True, capture_output=True, text=True)
