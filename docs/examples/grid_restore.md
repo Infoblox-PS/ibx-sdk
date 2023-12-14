@@ -2,13 +2,15 @@
 
 ## Overview
 
-This Python script is a command-line utility designed to facilitate the restoration of an Infoblox NIOS Grid using the
-Infoblox Web API (WAPI). Users can specify essential parameters such as the Grid Manager's IP or hostname and the
-filename of the backup to be restored when executing the script via the command line. Optional parameters include the
-Infoblox NIOS username, the restoration mode (NORMAL, FORCED, or CLONE), and the option to retain the existing IP
-configuration or use the IP settings from the backup. Additionally, the script offers debugging capabilities for
-advanced users. Whether you need to recover a previous configuration or clone a Grid setup, this utility simplifies the
-restoration process, making it a valuable tool for data recovery and system replication within an Infoblox environment.
+This Python script is a command-line utility designed to facilitate the restoration of an Infoblox
+NIOS Grid using the Infoblox Web API (WAPI). Users can specify essential parameters such as the Grid 
+Manager's IP or hostname and the filename of the backup to be restored when executing the script via 
+the command line. Optional parameters include the Infoblox NIOS username, the restoration mode 
+(NORMAL, FORCED, or CLONE), and the option to retain the existing IP configuration or use the IP 
+settings from the backup. Additionally, the script offers debugging capabilities for advanced users. 
+Whether you need to recover a previous configuration or clone a Grid setup, this utility simplifies 
+the restoration process, making it a valuable tool for data recovery and system replication within 
+an Infoblox environment.
 
 ## Usage
 
@@ -57,9 +59,9 @@ Enter password for [admin]:
 
 !!! Danger
 
-    Restoring an Infoblox Grid should only be considered as a final option for production deployments. Please refrain from
-    initiating a restoration process unless you are in a Disaster Recovery (DR) scenario or directed to do so by
-    Infoblox Technical Support.
+    Restoring an Infoblox Grid should only be considered as a final option for production 
+    deployments. Please refrain from initiating a restoration process unless you are in a Disaster 
+    Recovery (DR) scenario or directed to do so by Infoblox Technical Support.
 
 ### Restore Grid Backup from file to a Lab
 
@@ -79,5 +81,4 @@ Enter password for [admin]:
 2023-12-09 20:57:51 [fileop.py:846] INFO step 2 - post the files using the upload_url provided
 2023-12-09 20:57:53 [fileop.py:855] INFO step 3 - execute the restore
 2023-12-09 20:58:02 [fileop.py:867] INFO Grid restore successful!
-
 ```

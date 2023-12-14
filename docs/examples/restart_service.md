@@ -2,13 +2,14 @@
 
 ## Overview
 
-This Python script is a command-line utility designed to streamline the process of restarting Infoblox NIOS Protocol
-Services using the Infoblox Web API (WAPI). Users can specify essential parameters such as the Grid Manager's address
-and the service to be restarted (DNS, DHCP, DHCPv4, DHCPv6, or all services) when executing the script via the command
-line. Optional parameters include the Infoblox admin username and the ability to customize the Infoblox WAPI version.
-Additionally, the script offers debugging capabilities for advanced users. Whether you need to restart specific services
-or all services within your Infoblox environment, this utility simplifies the process, making it a valuable tool for
-maintaining the health and performance of your network infrastructure.
+This Python script is a command-line utility designed to streamline the process of restarting
+Infoblox NIOS Protocol Services using the Infoblox Web API (WAPI). Users can specify essential 
+parameters such as the Grid Manager's address and the service to be restarted (DNS, DHCP, DHCPv4, 
+DHCPv6, or all services) when executing the script via the command line. Optional parameters include
+the Infoblox admin username and the ability to customize the Infoblox WAPI version. Additionally, 
+the script offers debugging capabilities for advanced users. Whether you need to restart specific 
+services or all services within your Infoblox environment, this utility simplifies the process, 
+making it a valuable tool for maintaining the health and performance of your network infrastructure.
 
 ## Usage
 
@@ -39,6 +40,7 @@ The following example restart all services (DNS,DHCP,DHCPV6).
 ```sh
 grid-restore -u admin -g 192.168.1.2
 ```
+
 **Screen output from command**
 
 ```text
@@ -47,6 +49,7 @@ Enter password for [admin]:
 2023-12-09 21:04:03 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:04:03 [service.py:65] INFO successfully restarted ['ALL'] services
 ```
+
 ### Restart DNS Services
 
 The following example restart DNS services.
@@ -54,6 +57,7 @@ The following example restart DNS services.
 ```sh
 grid-restore -u admin -g 192.168.1.2 -s DNS
 ```
+
 **Screen output from command**
 
 ```text

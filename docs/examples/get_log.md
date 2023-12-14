@@ -2,13 +2,14 @@
 
 ## Overview
 
-This Python script is a command-line utility designed to simplify the process of retrieving logs from an Infoblox Grid
-Manager using the Infoblox Web API (WAPI). Users can specify key parameters such as the Grid Manager address, the target
-member to retrieve logs from, and the log type (e.g., SYSLOG) when executing the script from the command line.
-Additionally, optional parameters include the Infoblox admin username, node type (ACTIVE or PASSIVE), and the ability to
-exclude rotated logs. The script also provides debugging capabilities for enhanced troubleshooting. Whether you need to
-access system logs or specific log types, this utility streamlines the process, making it a valuable tool for managing
-and analyzing logs within an Infoblox environment.
+This Python script is a command-line utility designed to simplify the process of retrieving logs
+from an Infoblox Grid Manager using the Infoblox Web API (WAPI). Users can specify key parameters 
+such as the Grid Manager address, the target member to retrieve logs from, and the log type 
+(e.g., SYSLOG) when executing the script from the command line. Additionally, optional parameters
+include the Infoblox admin username, node type (ACTIVE or PASSIVE), and the ability to exclude
+rotated logs. The script also provides debugging capabilities for enhanced troubleshooting.
+Whether you need to access system logs or specific log types, this utility streamlines the process,
+making it a valuable tool for managing and analyzing logs within an Infoblox environment.
 
 ## Usage
 

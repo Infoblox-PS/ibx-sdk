@@ -2,13 +2,14 @@
 
 ## Overview
 
-This Python script serves as a command-line tool designed to streamline the process of importing data into an Infoblox
-Grid Manager using the Infoblox Web API (WAPI) and CSV files. Users can specify essential parameters such as the Grid
-Manager address, the name of the CSV import file, and the desired import operation (**INSERT**, **OVERRIDE**, **MERGE**,
-**DELETE**, or **CUSTOM**) when executing the script via the command line. Optional parameters, including username and
-WAPI version, provide additional flexibility. The utility also offers debugging capabilities for advanced users. Whether
-you need to add, update, or delete data within Infoblox, this script simplifies the import process and offers
-customization options to suit your needs.
+This Python script serves as a command-line tool designed to streamline the process of importing
+data into an Infoblox Grid Manager using the Infoblox Web API (WAPI) and CSV files. Users can
+specify essential parameters such as the Grid Manager address, the name of the CSV import file, and
+the desired import operation (**INSERT**, **OVERRIDE**, **MERGE**, **DELETE**, or **CUSTOM**) when
+executing the script via the command line. Optional parameters, including username and WAPI version,
+provide additional flexibility. The utility also offers debugging capabilities for advanced users.
+Whether you need to add, update, or delete data within Infoblox, this script simplifies the import
+process and offers customization options to suit your needs.
 
 ## Usage
 
@@ -34,13 +35,14 @@ Options:
 
 ## Examples
 
-### CSV Import 
+### CSV Import
 
 ```shell
 csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
 ```
 
-The command invokes the CSV Job Manager and creates a job to import objects using the INSERT Operation.
+The command invokes the CSV Job Manager and creates a job to import objects using the INSERT
+Operation.
 
 ```text
 csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
@@ -53,6 +55,7 @@ Enter password for [admin]:
 ```
 
 **Sample CSV File**
+
 ```text
 header-network,address*,netmask*,dhcp_members,disabled,domain_name,domain_name_servers,network_view,routers
 network,192.168.1.0,255.255.255.0,ns1.ffy.network,FALSE,ffy.corp,"100.64.50.53,100.64.50.54",default,192.168.1.1
@@ -64,7 +67,8 @@ network,192.168.1.0,255.255.255.0,ns1.ffy.network,FALSE,ffy.corp,"100.64.50.53,1
 csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_add_network.csv
 ```
 
-The command invokes the CSV Job Manager and creates a job to delete objects using the DELETE Operation.
+The command invokes the CSV Job Manager and creates a job to delete objects using the DELETE
+Operation.
 
 **Screen output from command**
 
@@ -79,6 +83,7 @@ Enter password for [admin]:
 ```
 
 **Sample CSV File**
+
 ```text
 header-network,address*,netmask*
 network,192.168.1.0,255.255.255.0
@@ -90,7 +95,8 @@ network,192.168.1.0,255.255.255.0
 csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_networks.csv 
 ```
 
-The command invokes the CSV Job Manager and creates a job to take specific actions for objects using the Multiple Action CUSTOM Operation.
+The command invokes the CSV Job Manager and creates a job to take specific actions for objects using
+the Multiple Action CUSTOM Operation.
 
 **Screen output from command**
 
@@ -113,13 +119,14 @@ network,O,100.64.40.0,255.255.255.0,,FALSE,nd.ffy.network,,,default,
 
 **Importing Multiple Action CSV file**
 
-When you import data, you can include multiple actions, such as add, modify, and delete, in one single CSV file. The
-multiple action CSV import file contains multiple types of objects with its headers and data rows listed in the order of
-their dependency hierarchy.
+When you import data, you can include multiple actions, such as add, modify, and delete, in one
+single CSV file. The multiple action CSV import file contains multiple types of objects with its
+headers and data rows listed in the order of their dependency hierarchy.
 
-The CSV import option supports insert, merge/override and delete operations. To combine these operations together in a
-single CSV file, you must specify an optional `IMPORT-ACTION` column in the CSV import file. The column value for each
-data row describes the type of action that the appliance supports for the respective row. 
+The CSV import option supports insert, merge/override and delete operations. To combine these
+operations together in a single CSV file, you must specify an optional `IMPORT-ACTION` column in the
+CSV import file. The column value for each data row describes the type of action that the appliance
+supports for the respective row.
 
 | Action | Description       | Notes                                                                                                                                                      |
 |--------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -130,9 +137,11 @@ data row describes the type of action that the appliance supports for the respec
 | IO     | Insert + Override | The appliance first checks if the corresponding object exists. If it exists, the appliance performs the merge or override operation accordingly.           |
 | D      | Delete            | If it exists, record will be deleted.  If it does not exists, an error will be generated.                                                                  |
 
-!!! Danger
-    CSV imports and operations that involve massive data, such as deleting large zones and recursive deletion of
-    networks and all child objects, will significantly affect member performance, resulting in service outage.
+!!! warning
+
+    CSV imports and operations that involve massive data, such as deleting large zones and recursive
+    deletion of networks and all child objects, will significantly affect member performance,
+    resulting in service outage.
 
 ```mermaid
 sequenceDiagram

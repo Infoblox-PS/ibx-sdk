@@ -2,12 +2,13 @@
 
 ## Overview
 
-This Python script serves as a command-line utility for retrieving files from an Infoblox Grid Manager using the
-Infoblox Web API (WAPI). Users can specify key parameters such as the Grid Manager address, the target member from
-which to retrieve configuration data, and the type of configuration  (e.g., DNS_CFG, DHCP_CFG) when executing the
-script from the command line. Optional parameters include the Infoblox admin username, the option to exclude rotated
-logs, and the ability to enable debugging for troubleshooting purposes. Whether you need to access DNS, DHCP, or
-other file data from Infoblox, this utility simplifies the process.
+This Python script serves as a command-line utility for retrieving files from an Infoblox Grid
+Manager using the Infoblox Web API (WAPI). Users can specify key parameters such as the Grid Manager
+address, the target member from which to retrieve configuration data, and the type of configuration
+(e.g., DNS_CFG, DHCP_CFG) when executing the script from the command line. Optional parameters
+include the Infoblox admin username, the option to exclude rotated logs, and the ability to enable
+debugging for troubleshooting purposes. Whether you need to access DNS, DHCP, or other file data
+from Infoblox, this utility simplifies the process.
 
 ## Usage
 
@@ -56,6 +57,7 @@ Enter password for [admin]:
 ```
 
 ### DHCP Configuration Download
+
 The following example will download the dhcpd.conf file from the infoblox.localdomain.
 
 ```sh
@@ -76,6 +78,7 @@ Enter password for [admin]:
 ```
 
 ### DHCPV6 Configuration Download
+
 The following example will download the dhcpv6.conf file from the infoblox.localdomain.
 
 ```sh
@@ -116,6 +119,7 @@ Enter password for [admin]:
 2023-12-09 17:05:11 [nios_get_file.py:98] INFO finished!
 ```
 
-!!! Warning
-    Configuration files can only be downloaded if the file exists on the appliance.  If the file does not exist a
-    "400 Client Error: Bad Request for url" will be received.
+!!! warning
+
+    Configuration files can only be downloaded if the file exists on the appliance. If the file 
+    does not exist a "400 Client Error: Bad Request for url" will be received.
