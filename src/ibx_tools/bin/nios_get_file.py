@@ -76,10 +76,8 @@ def main(grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str
         SystemExit: The function exits the system upon completion or upon encounter of an error.
 
     """
-    sys.tracebacklimit = 0
     if debug:
         increase_log_level()
-        sys.tracebacklimit = 1
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
