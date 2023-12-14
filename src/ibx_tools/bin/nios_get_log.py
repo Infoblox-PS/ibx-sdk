@@ -128,7 +128,6 @@ def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: st
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
-        # noinspection PyTypeChecker
         wapi.get_log_files(
             member=member,
             log_type=log_type,

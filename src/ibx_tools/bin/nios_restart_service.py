@@ -88,7 +88,6 @@ def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool)
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
-        # noinspection PyTypeChecker
         wapi.service_restart(
             mode='SEQUENTIAL',
             restart_option='RESTART_IF_NEEDED',

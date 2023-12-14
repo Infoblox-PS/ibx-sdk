@@ -93,7 +93,6 @@ def main(grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
-        # noinspection PyTypeChecker
         wapi.member_config(member=member, conf_type=cfg_type)
     except WapiRequestException as err:
         log.error(err)

@@ -93,7 +93,6 @@ def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wap
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
-        # noinspection PyTypeChecker
         wapi.grid_restore(
             filename=filename,
             mode=mode,
