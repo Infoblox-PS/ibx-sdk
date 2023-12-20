@@ -13,10 +13,10 @@ administrators and users who need to work with data in CSV format.
 
 ## Usage
 
-To invoke the usage run `csvexport --help`
+To invoke the usage run `nios-csvexport --help`
 
 ```
-Usage: csvexport [OPTIONS]
+Usage: nios-csvexport [OPTIONS]
 
   CSV Export by object
 

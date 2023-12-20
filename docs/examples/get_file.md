@@ -12,8 +12,10 @@ from Infoblox, this utility simplifies the process.
 
 ## Usage
 
+To invoke the usage run `nios-get-file --help`
+
 ```
-Usage: get-file [OPTIONS]
+Usage: nios-get-file [OPTIONS]
 
   Get NIOS File
 

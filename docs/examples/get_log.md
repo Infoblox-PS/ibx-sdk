@@ -13,8 +13,10 @@ making it a valuable tool for managing and analyzing logs within an Infoblox env
 
 ## Usage
 
+To invoke the usage run `nios-get-log --help`
+
 ```
-Usage: get-log [OPTIONS]
+Usage: nios-get-log [OPTIONS]
 
   Get NIOS Log from Member
 

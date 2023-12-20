@@ -13,8 +13,10 @@ process and offers customization options to suit your needs.
 
 ## Usage
 
+To invoke the usage run `nios-csvimport --help`
+
 ```
-Usage: csvimport [OPTIONS]
+Usage: nios-csvimport [OPTIONS]
 
   CSV Import Data
 

@@ -14,8 +14,10 @@ an Infoblox environment.
 
 ## Usage
 
+To invoke the usage run `nios-grid-restore --help`
+
 ```
-Usage: grid-restore [OPTIONS]
+Usage: nios-grid-restore [OPTIONS]
 
   Restore NIOS Grid.
 

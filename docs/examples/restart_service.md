@@ -13,6 +13,8 @@ making it a valuable tool for maintaining the health and performance of your net
 
 ## Usage
 
+To invoke the usage run `nios-restart-service --help`
+
 ```
 Usage: restart-service [OPTIONS]
 

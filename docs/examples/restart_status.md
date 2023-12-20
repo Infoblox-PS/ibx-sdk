@@ -13,8 +13,10 @@ network infrastructure.
 
 ## Usage
 
+To invoke the usage run `nios-restart-status --help`
+
 ```
-Usage: restart-status [OPTIONS]
+Usage: nios-restart-status [OPTIONS]
 
   Retrieve Restart Status
 

@@ -12,8 +12,10 @@ process, making it a valuable tool for data protection and disaster recovery.
 
 ## Usage
 
+To invoke the usage run `nios-grid-backup --help`
+
 ```
-Usage: grid-backup [OPTIONS]
+Usage: nios-grid-backup [OPTIONS]
 
   Backup NIOS Grid
 

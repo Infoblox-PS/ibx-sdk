@@ -13,8 +13,10 @@ process, making it a valuable tool for troubleshooting and support purposes.
 
 ## Usage
 
+To invoke the usage run `nios-get-supportbundle --help`
+
 ```
-Usage: get-supportbundle [OPTIONS]
+Usage: nios-get-supportbundle [OPTIONS]
 
   Retrieve Support Bundle from Member
 
