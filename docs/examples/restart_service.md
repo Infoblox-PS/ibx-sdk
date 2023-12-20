@@ -16,7 +16,7 @@ making it a valuable tool for maintaining the health and performance of your net
 To invoke the usage run `nios-restart-service --help`
 
 ```
-Usage: restart-service [OPTIONS]
+Usage: nios-restart-service [OPTIONS]
 
   Restart NIOS Protocol Services
 
@@ -40,13 +40,13 @@ Options:
 The following example restart all services (DNS,DHCP,DHCPV6).
 
 ```sh
-nios-grid-restart-services -u admin -g 192.168.1.2
+nios-restart-service -u admin -g 192.168.1.2
 ```
 
 **Screen output from command**
 
 ```text
-nios-grid-restart-services -u admin -g 192.168.1.2 
+nios-restart-service -u admin -g 192.168.1.2 
 Enter password for [admin]: 
 2023-12-09 21:04:03 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:04:03 [service.py:65] INFO successfully restarted ['ALL'] services
@@ -57,13 +57,13 @@ Enter password for [admin]:
 The following example restart DNS services.
 
 ```sh
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DNS
+nios-restart-service -u admin -g 192.168.1.2 -s DNS
 ```
 
 **Screen output from command**
 
 ```text
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DNS
+nios-restart-service -u admin -g 192.168.1.2 -s DNS
 Enter password for [admin]: 
 2023-12-09 21:04:52 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:04:52 [service.py:65] INFO successfully restarted ['DNS'] services
@@ -74,13 +74,13 @@ Enter password for [admin]:
 The following example restart DHCP services.
 
 ```sh
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DHCP
+nios-restart-service -u admin -g 192.168.1.2 -s DHCP
 ```
 
 **Screen output from command**
 
 ```text
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DHCP
+nios-restart-service -u admin -g 192.168.1.2 -s DHCP
 Enter password for [admin]: 
 2023-12-09 21:05:18 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:05:18 [service.py:65] INFO successfully restarted ['DHCP'] services
@@ -91,13 +91,13 @@ Enter password for [admin]:
 The following example restart DHCPV6 services.
 
 ```sh
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DHCPV6
+nios-restart-service -u admin -g 192.168.1.2 -s DHCPV6
 ```
 
 **Screen output from command**
 
 ```text
-nios-grid-restart-services -u admin -g 192.168.1.2 -s DHCPV6
+nios-restart-service -u admin -g 192.168.1.2 -s DHCPV6
 Enter password for [admin]: 
 2023-12-09 21:09:10 [nios_restart_service.py:89] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 21:09:10 [service.py:65] INFO successfully restarted ['DHCPV6'] services
