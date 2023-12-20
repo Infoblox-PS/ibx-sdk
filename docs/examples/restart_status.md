@@ -35,6 +35,6 @@ Options:
 ## Example
 
 ```sh
-restart-status -u admin -g 192.168.1.2
+nios-restart-status -u admin -g 192.168.1.2
 ```
 

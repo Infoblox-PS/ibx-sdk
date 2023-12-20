@@ -43,13 +43,13 @@ Options:
 The following example will download the SYSLOG file from the infoblox.localdomain.
 
 ```sh
-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t SYSLOG
+nios-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t SYSLOG
 ```
 
 **Screen output from command**
 
 ```text
-get-log -u admin -g 192.168.1.2 -m infoblox.localdomain -t SYSLOG
+nios-get-log -u admin -g 192.168.1.2 -m infoblox.localdomain -t SYSLOG
 Enter password for [admin]: 
 2023-12-09 17:13:42 [nios_get_log.py:108] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 17:13:42 [fileop.py:982] INFO fetching SYSLOG log files for infoblox.localdomain
@@ -64,13 +64,13 @@ Enter password for [admin]:
 The following example will download the AUDITLOG file from the infoblox.localdomain.
 
 ```sh
-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t AUDITLOG
+nios-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t AUDITLOG
 ```
 
 **Screen output from command**
 
 ```text
-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t AUDITLOG
+nios-get-log -u admin -g 192.168.1.2 -u admin -m infoblox.localdomain -t AUDITLOG
 Enter password for [admin]: 
 2023-12-09 19:13:02 [nios_get_log.py:122] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 19:13:02 [fileop.py:1008] INFO fetching AUDITLOG log files for infoblox.localdomain

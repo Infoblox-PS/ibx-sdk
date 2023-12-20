@@ -40,14 +40,14 @@ Options:
 ### CSV Import
 
 ```shell
-csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
+nios-csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
 ```
 
 The command invokes the CSV Job Manager and creates a job to import objects using the INSERT
 Operation.
 
 ```text
-csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
+nios-csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
 Enter password for [admin]: 
 2023-12-09 16:23:07 [nios_csvimport.py:91] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 16:23:07 [fileop.py:243] INFO step 1 - request uploadinit ibcsv_add_network.csv
@@ -66,7 +66,7 @@ network,192.168.1.0,255.255.255.0,ns1.ffy.network,FALSE,ffy.corp,"100.64.50.53,1
 ### CSV Delete
 
 ```shell
-csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_add_network.csv
+nios-csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_add_network.csv
 ```
 
 The command invokes the CSV Job Manager and creates a job to delete objects using the DELETE
@@ -75,7 +75,7 @@ Operation.
 **Screen output from command**
 
 ```text
-csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_delete_network.csv
+nios-csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_delete_network.csv
 Enter password for [admin]: 
 2023-12-09 16:23:07 [nios_csvimport.py:91] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 16:23:07 [fileop.py:243] INFO step 1 - request uploadinit ibcsv_delete_network.csv
@@ -94,7 +94,7 @@ network,192.168.1.0,255.255.255.0
 ### CSV Multiple Action
 
 ```shell
-csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_networks.csv 
+nios-csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_networks.csv 
 ```
 
 The command invokes the CSV Job Manager and creates a job to take specific actions for objects using
@@ -103,7 +103,7 @@ the Multiple Action CUSTOM Operation.
 **Screen output from command**
 
 ```text
-csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_network.csv
+nios-csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_network.csv
 Enter password for [admin]: 
 2023-12-09 14:35:20 [nios_csvimport.py:91] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 14:35:20 [fileop.py:243] INFO step 1 - request uploadinit ibcsv_networks.csv

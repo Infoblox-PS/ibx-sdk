@@ -38,7 +38,7 @@ Options:
 ### CSV Export
 
 ```shell
-csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
+nios-csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 ```
 
 The command invokes the CSV Job Manager and creates a job to export objects of type network. Once
@@ -48,6 +48,7 @@ the data is exported and saved.
 **Screen output from command**
 
 ```text
+nios-csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 Enter password for [admin]:
 2023-12-09 12:36:27 [nios_csvexport.py:88] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 12:36:27 [fileop.py:154] INFO performing csv export for network object(s)

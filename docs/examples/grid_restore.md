@@ -44,13 +44,13 @@ Options:
 The following example will restore a backup a Grid Manager.
 
 ```sh
-grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
+nios-grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
 ```
 
 **Screen output from command**
 
 ```text
-grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
+nios-grid-restore -u admin -g 192.168.1.2 -f database.bak -m NORMAL
 Enter password for [admin]: 
 2023-12-09 20:45:21 [nios_grid_restore.py:94] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 20:45:21 [fileop.py:830] INFO step 1 - request uploadinit database.bak
@@ -70,13 +70,13 @@ Enter password for [admin]:
 The following example will restore a backup of a Grid Manager to another system (lab).
 
 ```sh
-grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
+nios-grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
 ```
 
 **Screen output from command**
 
 ```text
-grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
+nios-grid-restore -u admin -g 192.168.1.3 -f database.bak -m FORCED -k
 Enter password for [admin]: 
 2023-12-09 20:57:51 [nios_grid_restore.py:94] INFO connected to Infoblox grid manager  192.168.1.3
 2023-12-09 20:57:51 [fileop.py:830] INFO step 1 - request uploadinit database.bak

@@ -43,13 +43,13 @@ The following example will download the supportbundle with rotated logs and log 
 infoblox.localdomain.
 
 ```sh
-get-supportbundle -u admin -g 192.168.1.2 -m infoblox.localdomain -r -l
+nios-get-supportbundle -u admin -g 192.168.1.2 -m infoblox.localdomain -r -l
 ```
 
 **Screen output from command**
 
 ```text
-et-supportbundle -g 192.168.1.2 -m ns1.ffy.network -r -l
+nios-get-supportbundle -g 192.168.1.2 -m ns1.ffy.network -r -l
 Enter password for [admin]: 
 2023-12-09 19:21:32 [nios_get_supportbundle.py:91] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 19:21:32 [fileop.py:918] INFO performing get_support_bundle for ns1.ffy.network object(s)

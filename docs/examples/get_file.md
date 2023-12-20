@@ -42,13 +42,13 @@ Options:
 The following example will download the named.conf file from the infoblox.localdomain.
 
 ```sh
-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_CFG
+nios-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_CFG
 ```
 
 **Screen output from command**
 
 ```text
-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_CFG 
+nios-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_CFG 
 Enter password for [admin]: 
 2023-12-09 16:56:51 [nios_get_file.py:94] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 16:56:51 [fileop.py:65] INFO fetching DNS_CFG config file for grid member infoblox.localdomain
@@ -63,13 +63,13 @@ Enter password for [admin]:
 The following example will download the dhcpd.conf file from the infoblox.localdomain.
 
 ```sh
-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCP_CFG
+nios-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCP_CFG
 ```
 
 **Screen output from command**
 
 ```text
-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DHCP_CFG          
+nios-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DHCP_CFG          
 Enter password for [admin]: 
 2023-12-09 16:54:44 [nios_get_file.py:94] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 16:54:44 [fileop.py:65] INFO fetching DHCP_CFG config file for grid member infoblox.localdomain
@@ -84,13 +84,13 @@ Enter password for [admin]:
 The following example will download the dhcpv6.conf file from the infoblox.localdomain.
 
 ```sh
-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCPV6_CFG
+nios-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DHCPV6_CFG
 ```
 
 **Screen output from command**
 
 ```text
-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DHCPV6_CFG        
+nios-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DHCPV6_CFG        
 Enter password for [admin]: 
 2023-12-09 17:03:59 [nios_get_file.py:94] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 17:03:59 [fileop.py:65] INFO fetching DHCPV6_CFG config file for grid member infoblox.localdomain
@@ -105,13 +105,13 @@ Enter password for [admin]:
 The following example will download the named.stats file from the infoblox.localdomain.
 
 ```sh
-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_STATS
+nios-get-file -u admin -g 192.168.1.2 -m infoblox.localdomain -t DNS_STATS
 ```
 
 **Screen output from command**
 
 ```text
-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DNS_STATS 
+nios-get-file -u admin -g 192.168.1.2 -m ns1.ffy.network -t DNS_STATS 
 Enter password for [admin]: 
 2023-12-09 17:05:10 [nios_get_file.py:94] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 17:05:10 [fileop.py:65] INFO fetching DNS_STATS config file for grid member infoblox.localdomain

@@ -38,13 +38,13 @@ Options:
 The following example will download backup of the Grid Manager.
 
 ```sh
-grid-backup -u admin -g 192.168.1.2 -f database.bak
+nios-grid-backup -u admin -g 192.168.1.2 -f database.bak
 ```
 
 **Screen output from command**
 
 ```text
-grid-backup -u admin -g 192.168.1.2 -f database.bak
+nios-grid-backup -u admin -g 192.168.1.2 -f database.bak
 Enter password for [admin]: 
 2023-12-09 20:40:55 [nios_grid_backup.py:85] INFO connected to Infoblox grid manager 192.168.1.2
 2023-12-09 20:40:55 [fileop.py:618] INFO step 1 - request gridbackup database.bak

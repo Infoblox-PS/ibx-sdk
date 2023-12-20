@@ -109,15 +109,15 @@ nav:
       - Cookbook: user_guide/cookbook.md
   - Tools:
       - Introduction: examples/index.md
-      - csvexport: examples/csvexport.md
-      - csvimport: examples/csvimport.md
-      - get-file: examples/get_file.md
-      - get-log: examples/get_log.md
-      - get-supportbundle: examples/get_supportbundle.md
-      - grid-backup: examples/grid_backup.md
-      - grid-restore: examples/grid_restore.md
-      - restart-service: examples/restart_service.md
-      - restart-status: examples/restart_status.md
+      - nios-csvexport: examples/csvexport.md
+      - nios-csvimport: examples/csvimport.md
+      - nios-get-file: examples/get_file.md
+      - nios-get-log: examples/get_log.md
+      - nios-get-supportbundle: examples/get_supportbundle.md
+      - nios-grid-backup: examples/grid_backup.md
+      - nios-grid-restore: examples/grid_restore.md
+      - nios-restart-service: examples/restart_service.md
+      - nios-restart-status: examples/restart_status.md
   - Classes:
       - wapi: classes/nios/gift.md
       - fileop: classes/nios/fileop.md
