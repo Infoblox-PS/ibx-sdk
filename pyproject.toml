@@ -1,0 +1,77 @@
+[project]
+name = "ibx-tools"
+version = "0.1.0"
+description = "Infoblox basic API Toolkit"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Environment :: MacOS X",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apple Public Source License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Logging",
+]
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE.md" }
+authors = [
+    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
+    { name = "Michael Smith", email = "michaels@infoblox.com" },
+]
+maintainers = [
+    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
+    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
+    { name = "Michael Smith", email = "michaels@infoblox.com" },
+]
+dependencies = [
+    "click",
+    "click-option-group",
+    "coloredlogs",
+    "dnspython",
+    "netaddr",
+    "requests",
+    "urllib3",
+]
+
+[project.scripts]
+get-log = 'ibx_tools.bin.nios_get_log:main'
+get-file = 'ibx_tools.bin.nios_get_file:main'
+get-supportbundle = 'ibx_tools.bin.nios_get_supportbundle:main'
+grid-backup = 'ibx_tools.bin.nios_grid_backup:main'
+grid-restore = 'ibx_tools.bin.nios_grid_restore:main'
+restart-service = 'ibx_tools.bin.nios_restart_service:main'
+restart-status = 'ibx_tools.bin.nios_restart_status:main'
+csvimport = 'ibx_tools.bin.nios_csvimport:main'
+csvexport = 'ibx_tools.bin.nios_csvexport:main'
+
+
+[project.optional-dependencies]
+dev = ["pylint", "codestyle", "sphinx", "mkdocstrings-python", "mkdocs-material"]
+test = ["coverage", "pytest", "pytest-env", "pytest-dotenv"]
+
+[project.urls]
+"homepage" = "https://github.com/Infoblox-PS/ibx-tools"
+
+[tools.setuptools]
+packages = ["ibx_tools"]
+python_requires = ">=3.8"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools >= 61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
