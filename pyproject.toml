@@ -73,6 +73,9 @@ python_requires = ">=3.8"
 where = ["src"]
 
 [tool.coverage.report]
+omit = [
+    "tests/*"
+]
 exclude_also = [
     "except requests.exceptions.RequestException",
     "except requests.exceptions.SSLError",
