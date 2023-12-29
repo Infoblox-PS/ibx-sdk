@@ -101,6 +101,8 @@ def test_wapi_get_support_bundle(get_wapi):
 def test_wapi_member_config(get_wapi):
     wapi = get_wapi
     wapi.member_config(member=GRID_MEMBER, conf_type='DNS_CFG')
+    assert os.path.exists('dnsconf.tar.gz')
+    os.remove('dnsconf.tar.gz')
 
 
 def test_wapi_grid_backup(get_wapi):

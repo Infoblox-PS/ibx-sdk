@@ -76,7 +76,14 @@ where = ["src"]
 exclude_also = [
     "except requests.exceptions.RequestException",
     "def __certificate_auth_request",
-
+    "if endpoint:",
+    "if member",
+    "if node_type",
+    "if msserver",
+    "if not filename",
+    "if remote_url",
+    "if task_operation == 'MERGE'",
+    "if task_operation == 'OVERRIDE'",
 ]
 
 [build-system]
