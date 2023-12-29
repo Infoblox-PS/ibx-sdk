@@ -102,3 +102,8 @@ def test_wapi_grid_backup(get_wapi):
     wapi = get_wapi
     wapi.grid_backup()
     assert os.path.exists('database.tgz')
+
+
+def test_wapi_grid_restore(get_wapi):
+    wapi = get_wapi
+    wapi.grid_restore()
