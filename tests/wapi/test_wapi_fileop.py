@@ -6,7 +6,8 @@ import os
 
 import pytest
 import urllib3
-from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+
+from ibx_tools.nios.exceptions import WapiRequestException
 
 log = logging.getLogger(__name__)
 

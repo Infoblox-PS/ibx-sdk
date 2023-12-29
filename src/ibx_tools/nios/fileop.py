@@ -768,8 +768,9 @@ class NiosFileopMixin:
         headers = {'content-type': 'application/json'}
         payload = {'filename': filename}
         try:
-            res = self.post('fileop', params={'_function': 'uploadinit'}, headers=headers,
-                            json=payload)
+            res = self.post(
+                'fileop', params={'_function': 'uploadinit'}, headers=headers, json=payload
+            )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
         except requests.exceptions.RequestException as err:

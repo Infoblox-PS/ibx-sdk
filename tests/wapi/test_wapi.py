@@ -51,6 +51,12 @@ def test_instantiate_wapi_with_dictionary_of_arguments():
     assert wapi.ssl_verify == SSL_VERIFY
 
 
+def test_wapi_connect_with_bogus_server():
+    wapi = Gift(grid_mgr='1.1.1.1')
+    with pytest.raises(WapiRequestException):
+        wapi.connect(username=USERNAME, password=PASSWORD)
+
+
 def test_wapi_connect_with_invalid_url():
     wapi = Gift()
     with pytest.raises(WapiInvalidParameterException):
@@ -182,3 +188,14 @@ def test_wapi_getone_no_data(get_wapi):
         wapi.getone('grid', params={'name': 'does not exist'})
         assert err == 'No data was returned'
 
+
+def test_wapi_object_fields(get_wapi):
+    wapi = get_wapi
+    response = wapi.object_fields('grid')
+    assert isinstance(response, str)
+
+
+def test_wapi_max_version(get_wapi):
+    wapi = get_wapi
+    wapi.max_wapi_ver()
+    assert wapi.wapi_ver != '1.0'
