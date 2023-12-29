@@ -23,9 +23,7 @@ import subprocess
 from urllib.parse import urlparse
 
 
-def named_checkconf(
-        chroot_path: str,
-        conf_path: str) -> None:
+def named_checkconf(chroot_path: str, conf_path: str) -> None:
     """
     perform named-checkconf and re-write a canonicalized copy of the named.conf file
 
@@ -74,9 +72,11 @@ def named_compilezone(
 
     Args:
         zone_name (str): The name of the DNS zone being processed.
-        zone_file (str): The path to the file containing the DNS zone information to be read/processed.
+        zone_file (str): The path to the file containing the DNS zone information to be
+        read/processed.
         output_file (str): The path where the canonicalized zone file will be written to.
-        input_format (str, optional): The format in which the zone information is currently presented in the zone file.
+        input_format (str, optional): The format in which the zone information is currently
+        presented in the zone file.
             This should be either 'text' or 'raw'. Defaults to 'text'.
 
     Returns:
@@ -88,7 +88,8 @@ def named_compilezone(
         ValueError: If `input_format` is neither 'text' or 'raw'
 
     Usage:
-        Call this function to check for, log, and return errors in a DNS zone file as it is being processed:
+        Call this function to check for, log, and return errors in a DNS zone file as it is being
+        processed:
         >>> errors = named_compilezone('my_zone', '/path/to/my_zone_file', '/path/to/output_file')
         >>> if errors:
         ...     print('Errors found during zone processing.')
@@ -135,9 +136,11 @@ def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: s
 
     Args:
         file_path (str): The fully qualified path to the file from which lines are to be removed.
-        lines_to_remove (list): A list of integers, with each integer being a line number (1-indexed) of the line
+        lines_to_remove (list): A list of integers, with each integer being a line number (
+        1-indexed) of the line
             to be removed from the file.
-        output_path (str, optional): Path to the output file. If provided, the function will write result to this file.
+        output_path (str, optional): Path to the output file. If provided, the function will
+        write result to this file.
             If not provided, the function will overwrite the original file. Defaults to None.
 
     Returns:
@@ -204,7 +207,8 @@ def get_csv_header(csvfile: io.TextIOWrapper) -> list:
     The function get_csv_header retrieves the header from a CSV file.
 
     Args:
-        csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the header.
+        csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the
+        header.
 
     Returns:
         list: A list of strings where each string is a column name from the CSV file's header row.
@@ -302,11 +306,13 @@ def ibx_csv_file_split(filename: str, output_path: str = '.'):
         Exception: An exception is raised if the output directory cannot be created.
 
     Logging:
-        This function logs warning messages when a CSV object type has no associated objects in the source CSV.
+        This function logs warning messages when a CSV object type has no associated objects in
+        the source CSV.
         It also logs informational messages when it creates output CSV files.
 
     Usage:
-        Use this function to split a `Infoblox` exported CSV file into separate CSV files for each CSV object type:
+        Use this function to split a `Infoblox` exported CSV file into separate CSV files for
+        each CSV object type:
         >>> ibx_csv_file_split('/path/to/my_exported_csv_file', '/path/to/output_directory')
     """
 
@@ -385,20 +391,26 @@ def generate_from_includes(chroot: str, filepath: str) -> str:
 
     Args:
         chroot (str): The path to the chroot environment where the config file to process exists.
-        filepath (str): Path to the initial config file to process. The path is relative to chroot if
+        filepath (str): Path to the initial config file to process. The path is relative to
+        chroot if
             it starts with '/'.
 
     Returns:
-        str: A single string containing the full contents of the config file. This includes data from
-            the initial config file and all files included with include directives. If the file specified
+        str: A single string containing the full contents of the config file. This includes data
+        from
+            the initial config file and all files included with include directives. If the file
+            specified
             in the filepath parameter does not exist, an empty string is returned.
 
     Logging:
-        This function logs informational messages indicating the files it's processing and any 'include'
-        directives it encounters. An error message is logged if it attempts to process a file that doesn't exist.
+        This function logs informational messages indicating the files it's processing and any
+        'include'
+        directives it encounters. An error message is logged if it attempts to process a file
+        that doesn't exist.
 
     Usage:
-        Use this function to generate a full config file from one that includes other files with include directives:
+        Use this function to generate a full config file from one that includes other files with
+        include directives:
         >>> full_config = generate_from_includes('/path/to/chroot', '/path/to/my_config')
     """
 
