@@ -289,6 +289,7 @@ class NiosFileopMixin:
     def get_log_files(
             self,
             log_type: LogType,
+            filename: Optional[str] = None,
             endpoint: Optional[str] = None,
             include_rotated: bool = False,
             member: Optional[str] = None,
@@ -300,6 +301,7 @@ class NiosFileopMixin:
 
         Args:
             log_type: The type of log files to fetch.
+            filename: The name of the log file to download (Default value = None)
             endpoint: The specific endpoint for which to fetch log files. (Default: None)
             include_rotated: Whether to include rotated log files. (Default: False)
             member: The member for which to fetch log files. (Default: None)
@@ -351,8 +353,9 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-        filename = f'{date_time}-{member}-{log_type}.tgz'
+        if not filename:
+            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+            filename = f'{date_time}-{member}-{log_type}.tgz'
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -365,6 +368,7 @@ class NiosFileopMixin:
     def get_support_bundle(
             self,
             member: str,
+            filename: str = None,
             cached_zone_data: bool = False,
             core_files: bool = False,
             log_files: bool = False,
@@ -378,6 +382,7 @@ class NiosFileopMixin:
 
         Args:
             member (str): The member for which to retrieve the support bundle.
+            filename (str, optional): The filename of the support bundle.
             cached_zone_data (bool, optional): Whether to include cached zone data in the support
             bundle. Defaults to False.
             core_files (bool, optional): Whether to include core files in the support bundle.
@@ -440,8 +445,9 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-        filename = f'{date_time}-{member}-SupportBundle.tgz'
+        if not filename:
+            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+            filename = f'{date_time}-{member}-SupportBundle.tgz'
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 

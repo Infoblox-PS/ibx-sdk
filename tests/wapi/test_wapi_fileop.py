@@ -80,16 +80,22 @@ def test_wapi_get_csv_errors(get_wapi):
         filename=CSV_TASK['csv_import_task'].get('file_name'),
         job_id=CSV_TASK['csv_import_task'].get('import_id')
     )
+    assert os.path.exists(f'csv-errors-{CSV_TASK["csv_import_task"].get("file_name")}.csv')
+    os.remove(f'csv-errors-{CSV_TASK["csv_import_task"].get("file_name")}.csv')
 
 
 def test_wapi_get_log_files(get_wapi):
     wapi = get_wapi
-    wapi.get_log_files(log_type='AUDITLOG', node_type='ACTIVE')
+    wapi.get_log_files(log_type='AUDITLOG', node_type='ACTIVE', filename='auditlog.tgz')
+    assert os.path.exists('auditlog.tgz')
+    os.remove('auditlog.tgz')
 
 
 def test_wapi_get_support_bundle(get_wapi):
     wapi = get_wapi
-    wapi.get_support_bundle(member=GRID_MEMBER)
+    wapi.get_support_bundle(member=GRID_MEMBER, filename='test-support-bundle.tgz')
+    assert os.path.exists('test-support-bundle.tgz')
+    os.remove('test-support-bundle.tgz')
 
 
 def test_wapi_grid_backup(get_wapi):
