@@ -98,6 +98,11 @@ def test_wapi_get_support_bundle(get_wapi):
     os.remove('test-support-bundle.tgz')
 
 
+def test_wapi_member_config(get_wapi):
+    wapi = get_wapi
+    wapi.member_config(member=GRID_MEMBER, conf_type='DNS_CFG')
+
+
 def test_wapi_grid_backup(get_wapi):
     wapi = get_wapi
     wapi.grid_backup()
