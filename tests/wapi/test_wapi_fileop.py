@@ -107,3 +107,4 @@ def test_wapi_grid_backup(get_wapi):
 def test_wapi_grid_restore(get_wapi):
     wapi = get_wapi
     wapi.grid_restore()
+    os.remove('database.tgz')
