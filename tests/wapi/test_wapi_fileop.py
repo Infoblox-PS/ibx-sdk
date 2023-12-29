@@ -3,6 +3,7 @@ WAPI test module
 """
 import logging
 import os
+import time
 
 import pytest
 import urllib3
@@ -16,7 +17,9 @@ GRID_MGR = os.environ.get('GRID_MGR')
 WAPI_VER = os.environ.get('WAPI_VER')
 PASSWORD = os.environ.get('PASSWORD')
 USERNAME = os.environ.get('USERNAME')
+GRID_MEMBER = os.environ.get('GRID_MEMBER')
 SSL_VERIFY = False if os.environ.get('SSL_VERIFY') == 'False' else True
+CSV_TASK = {}
 
 
 def test_wapi_csv_import_file_not_exist(get_wapi):
@@ -49,12 +52,47 @@ def test_wapi_csv_export_with_no_filename(get_wapi):
 def test_wapi_csv_import_networks_custom_load(get_wapi):
     wapi = get_wapi
     data = """
-    header-network,address,netmask,comment,import-action
-    network,10.0.0.0,255.255.255.0,vlan-0 patrick-FAKE,IO
-    network,10.0.1.0,255.255.255.0,vlan-1 patrick-FAKE,IO
+    header-network,address,netmask,comment,network_view,import-action
+    network,10.0.0.0,255.255.255.0,vlan-0 patrick-FAKE,,IO
+    network,10.0.1.0,255.255.255.0,vlan-1 patrick-FAKE,not_exist,IO
     """
     with open('test.csv', 'w', encoding='utf-8') as file:
         file.write(data)
-        wapi.csv_import(csv_import_file='test.csv', task_operation='CUSTOM')
     file.close()
+    res = wapi.csv_import(csv_import_file='test.csv', task_operation='CUSTOM')
+    CSV_TASK.update(res)
     os.remove('test.csv')
+
+
+def test_wapi_csv_task_status(get_wapi):
+    wapi = get_wapi
+    while True:
+        response = wapi.csvtask_status(csvtask=CSV_TASK)
+        assert isinstance(response, dict)
+        if response.get('status') in ['COMPLETED', 'STOPPED', 'FAILED']:
+            break
+        time.sleep(5)
+
+
+def test_wapi_get_csv_errors(get_wapi):
+    wapi = get_wapi
+    wapi.get_csv_errors_file(
+        filename=CSV_TASK['csv_import_task'].get('file_name'),
+        job_id=CSV_TASK['csv_import_task'].get('import_id')
+    )
+
+
+def test_wapi_get_log_files(get_wapi):
+    wapi = get_wapi
+    wapi.get_log_files(log_type='AUDITLOG', node_type='ACTIVE')
+
+
+def test_wapi_get_support_bundle(get_wapi):
+    wapi = get_wapi
+    wapi.get_support_bundle(member=GRID_MEMBER)
+
+
+def test_wapi_grid_backup(get_wapi):
+    wapi = get_wapi
+    wapi.grid_backup()
+    assert os.path.exists('database.tgz')

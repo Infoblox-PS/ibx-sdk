@@ -28,7 +28,7 @@ from ibx_tools.util import util
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
 LogType = Literal[
-    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
+    'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
 ]
 MemberDataType = Literal[
     'DNS_CACHE',
