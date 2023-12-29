@@ -22,14 +22,13 @@ from typing import Literal, Optional
 
 import requests.exceptions
 
-from ibx_tools.util import util
 from ibx_tools.nios.exceptions import WapiRequestException
-
+from ibx_tools.util import util
 
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
 LogType = Literal[
-    'SYSLOG', 'AUDIT_LOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
+    'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
 ]
 MemberDataType = Literal[
     'DNS_CACHE',
@@ -92,22 +91,14 @@ class NiosFileopMixin:
         req_cookies = {'ibapauth': ibapauth_cookie}
 
         logging.info('downloading data from %s', download_url)
-        try:
-            response = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        response = self.__download_file(download_url, req_cookies)
 
         if not filename:
             filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=response)
 
-        try:
-            self.__download_complete(download_token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.__download_complete(download_token, filename, req_cookies)
 
     def csv_import(
             self,
@@ -298,6 +289,7 @@ class NiosFileopMixin:
     def get_log_files(
             self,
             log_type: LogType,
+            filename: Optional[str] = None,
             endpoint: Optional[str] = None,
             include_rotated: bool = False,
             member: Optional[str] = None,
@@ -309,6 +301,7 @@ class NiosFileopMixin:
 
         Args:
             log_type: The type of log files to fetch.
+            filename: The name of the log file to download (Default value = None)
             endpoint: The specific endpoint for which to fetch log files. (Default: None)
             include_rotated: Whether to include rotated log files. (Default: False)
             member: The member for which to fetch log files. (Default: None)
@@ -360,8 +353,9 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-        filename = f'{date_time}-{member}-{log_type}.tgz'
+        if not filename:
+            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+            filename = f'{date_time}-{member}-{log_type}.tgz'
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -374,6 +368,7 @@ class NiosFileopMixin:
     def get_support_bundle(
             self,
             member: str,
+            filename: str = None,
             cached_zone_data: bool = False,
             core_files: bool = False,
             log_files: bool = False,
@@ -387,6 +382,7 @@ class NiosFileopMixin:
 
         Args:
             member (str): The member for which to retrieve the support bundle.
+            filename (str, optional): The filename of the support bundle.
             cached_zone_data (bool, optional): Whether to include cached zone data in the support
             bundle. Defaults to False.
             core_files (bool, optional): Whether to include core files in the support bundle.
@@ -449,8 +445,9 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-        filename = f'{date_time}-{member}-SupportBundle.tgz'
+        if not filename:
+            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+            filename = f'{date_time}-{member}-SupportBundle.tgz'
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -686,10 +683,10 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err)
 
     def __download_file(self, download_url, req_cookies):
         header = {'Content-type': 'application/force-download'}
+        res = None
         try:
             logging.info(download_url)
             res = self.conn.get(
@@ -702,7 +699,6 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err)
         return res
 
     def __getgriddata(self, payload: dict, req_cookies) -> dict:
@@ -778,8 +774,9 @@ class NiosFileopMixin:
         headers = {'content-type': 'application/json'}
         payload = {'filename': filename}
         try:
-            res = self.post('fileop', params={'_function': 'uploadinit'}, headers=headers,
-                            json=payload)
+            res = self.post(
+                'fileop', params={'_function': 'uploadinit'}, headers=headers, json=payload
+            )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
         except requests.exceptions.RequestException as err:

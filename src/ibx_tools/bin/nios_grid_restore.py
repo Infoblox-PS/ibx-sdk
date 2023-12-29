@@ -22,8 +22,8 @@ import click
 from click_option_group import optgroup
 
 from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.gift import Gift
 from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_tools.nios.gift import Gift
 
 # from pkg_resources import parse_versio
 
@@ -44,19 +44,29 @@ Restore NIOS Grid.
 """
 
 
-@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(
+    help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help'])
+)
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
 @optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', show_default=True, help="Infoblox NIOS username")
-@optgroup.option('-m', '--mode', type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
-                 default="FORCED", show_default=True, help="Grid Restore Mode [NORMAL|FORCED|CLONE]")
+@optgroup.option(
+    '-u', '--username', default="admin", show_default=True, help=("Infoblox NIOS username")
+)
+@optgroup.option(
+    '-m', '--mode',
+    type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
+    default="FORCED", show_default=True,
+    help="Grid Restore Mode [NORMAL|FORCED|CLONE]"
+)
 @optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
+                 help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
-def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str, debug: bool) -> None:
+def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str,
+         debug: bool) -> None:
     """
     Restore NIOS Grid
 

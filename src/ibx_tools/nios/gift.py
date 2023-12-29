@@ -254,7 +254,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             data = res.json()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err) from err
+            raise WapiRequestException(err)
         else:
             fields = ",".join(
                 field["name"] for field in data.get('fields') if "r" in field.get('supports')
@@ -289,7 +289,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             data = res.json()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err) from err
+            raise WapiRequestException(err)
         else:
             versions = data.get('supported_versions')
             versions.sort(key=lambda s: list(map(int, s.split('.'))))
