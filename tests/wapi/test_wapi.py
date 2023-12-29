@@ -1,14 +1,14 @@
 """
 WAPI test module
 """
-import os
 import logging
+import os
 
 import pytest
 import urllib3
 
-from ibx_tools.nios.gift import Gift
 from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+from ibx_tools.nios.gift import Gift
 
 log = logging.getLogger(__name__)
 
@@ -25,6 +25,7 @@ def test_instantiate_wapi_without_properties():
     assert wapi.grid_mgr is None
     assert wapi.wapi_ver == '2.5'
     assert wapi.ssl_verify is False
+    assert wapi.url == ''
     assert isinstance(wapi, Gift)
 
 
@@ -48,6 +49,12 @@ def test_instantiate_wapi_with_dictionary_of_arguments():
     assert wapi.grid_mgr == GRID_MGR
     assert wapi.wapi_ver == WAPI_VER
     assert wapi.ssl_verify == SSL_VERIFY
+
+
+def test_wapi_connect_with_invalid_url():
+    wapi = Gift()
+    with pytest.raises(WapiInvalidParameterException):
+        wapi.connect(username=USERNAME, password=PASSWORD)
 
 
 def test_wapi_connect_without_arguments():
@@ -154,3 +161,24 @@ def test_wapi_object_delete(get_wapi):
         assert res.status_code == 200
         _ref = wapi.delete(reference)
         assert _ref.json() == reference
+
+
+def test_wapi_getone_success(get_wapi):
+    wapi = get_wapi
+    response = wapi.getone('grid')
+    assert isinstance(response, str)
+
+
+def test_wapi_getone_multiple(get_wapi):
+    wapi = get_wapi
+    with pytest.raises(WapiRequestException) as err:
+        wapi.getone('network')
+        assert err == 'Multiple data records were returned'
+
+
+def test_wapi_getone_no_data(get_wapi):
+    wapi = get_wapi
+    with pytest.raises(WapiRequestException) as err:
+        wapi.getone('grid', params={'name': 'does not exist'})
+        assert err == 'No data was returned'
+

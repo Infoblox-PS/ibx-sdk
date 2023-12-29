@@ -22,9 +22,8 @@ from typing import Literal, Optional
 
 import requests.exceptions
 
-from ibx_tools.util import util
 from ibx_tools.nios.exceptions import WapiRequestException
-
+from ibx_tools.util import util
 
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']
@@ -92,22 +91,14 @@ class NiosFileopMixin:
         req_cookies = {'ibapauth': ibapauth_cookie}
 
         logging.info('downloading data from %s', download_url)
-        try:
-            response = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        response = self.__download_file(download_url, req_cookies)
 
         if not filename:
             filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=response)
 
-        try:
-            self.__download_complete(download_token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.__download_complete(download_token, filename, req_cookies)
 
     def csv_import(
             self,
@@ -686,10 +677,10 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err)
 
     def __download_file(self, download_url, req_cookies):
         header = {'Content-type': 'application/force-download'}
+        res = None
         try:
             logging.info(download_url)
             res = self.conn.get(
@@ -702,7 +693,6 @@ class NiosFileopMixin:
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
-            raise WapiRequestException(err)
         return res
 
     def __getgriddata(self, payload: dict, req_cookies) -> dict:
