@@ -48,9 +48,9 @@ class NiosServiceMixin:
             members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
             restart_option (Optional[ServiceRestartOption]): Restart option. Default is
-            'RESTART_IF_NEEDED'.
+                            'RESTART_IF_NEEDED'.
             services (Optional[list[ServiceRestartServices]]): List of services to restart.
-            Default is None.
+                                                               Default is None.
             user_name (Optional[str]): Username. Default is None.
 
         Returns:

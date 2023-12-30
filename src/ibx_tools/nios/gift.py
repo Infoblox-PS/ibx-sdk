@@ -15,7 +15,7 @@ limitations under the License.
 """
 
 import logging
-from typing import Union
+from typing import Union, Any, Optional
 
 import requests
 import urllib3
@@ -39,7 +39,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         wapi_ver (str): Version of the Infoblox WAPI.
         ssl_verify (bool): Flag to determine SSL certificate verification.
         conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is
-        None.
+                                                    None.
         grid_ref (str, optional): Reference ID of the connected grid. Default is None.
 
     Examples:
@@ -141,7 +141,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         Raises:
             WapiInvalidParameterException: If neither a username and password nor a certificate
-            is provided.
+                                           is provided.
 
         """
         if not self.url:
@@ -263,24 +263,29 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
     def max_wapi_ver(self) -> None:
         """
-        Retrieves the maximum supported version of the WAPI.
+        Retrieves and sets the maximum supported version of the WAPI.
 
-        Returns:
-            None
+        This method queries the WAPI to find the highest supported version and updates
+        the `wapi_ver` attribute of the instance with this value. It does not return
+        any value.
 
         Raises:
-            WapiRequestException: If there is an error making the GET request to retrieve the
-            WAPI version.
+            WapiRequestException: If there is an error in making the GET request to retrieve
+                                  the WAPI version. This could be due to network issues,
+                                  authentication errors,
+                                  or other problems in the request process.
 
         Example Usage:
-
-        ```py
+        ```python
         session = WAPI()
         session.max_wapi_ver()
         print(session.wapi_ver)  # Prints the maximum supported WAPI version
         ```
 
+        Note:
+            This method updates the `wapi_ver` attribute of the WAPI session instance.
         """
+
         url = f'https://{self.grid_mgr}/wapi/v1.0/?_schema'
         try:
             logging.debug('trying %s', url)
@@ -297,38 +302,34 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             max_wapi_ver = versions.pop()
             setattr(self, 'wapi_ver', max_wapi_ver)
 
-    def get(self, wapi_object: str, params=None, **kwargs) -> Response:
+    def get(self, wapi_object: str, params=None, **kwargs: Any) -> Response:
         """
-        Create a GET request to retrieve WAPI object data
-
         Args:
-            wapi_object: A string representing the path or object to be accessed using the GET
-            method.
-            params: Optional. A dictionary of query parameters to be included in the request.
-            **kwargs: Optional. Additional keyword arguments to be passed to the `request` method.
+            wapi_object (str): The name of the WAPI object.
+            params (Optional[Dict[str, Any]]): Additional parameters to include in the request URL. Defaults to None.
+            **kwargs: Additional keyword arguments to pass to the request.
 
         Returns:
-            A `Response` object representing the HTTP response returned by the server.
+            Response: The response from the GET request.
 
         """
         url = f'{self.url}/{wapi_object}'
         return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
 
-    def getone(self, wapi_object: str, params=None, **kwargs) -> str:
+    def getone(self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any) -> str:
         """
-        return the reference of a single WAPI object
+        Return the reference of a single WAPI object.
 
         Args:
             wapi_object: A string representing the object to retrieve data from.
-            params: Optional parameters to include in the request.
+            params: Optional dictionary of parameters to include in the request.
             **kwargs: Additional keyword arguments to be passed to the request.
 
         Returns:
-            str: A str response containing the _ref of the WAPI object.
+            str: A string response containing the _ref of the WAPI object.
 
         Raises:
             WapiRequestException: If multiple data records were returned or no data was returned.
-
         """
         url = f'{self.url}/{wapi_object}'
         response = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
@@ -339,50 +340,61 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException('No data was returned')
         return data[0].get('_ref', '')
 
-    def post(self, wapi_object, data=None, json=None, **kwargs) -> Response:
+    def post(self,
+             wapi_object: str,
+             data: Optional[Union[dict, str]] = None,
+             json: Optional[dict] = None,
+             **kwargs: Any) -> Response:
         """
-        Create a POST request to create a WAPI object
+        Create a POST request to create a WAPI object.
 
         Args:
             wapi_object: The object to which the POST request is being made.
-            data (optional): The data to be sent in the body of the request. Default is None.
-            json (optional): The JSON data to be sent in the body of the request. Default is None.
+            data (optional): The data to be sent in the body of the request.
+                             Can be a dictionary or a string. Default is None.
+            json (optional): The JSON data to be sent in the body of the request.
+                             Should be a dictionary. Default is None.
             **kwargs (optional): Additional keyword arguments to be passed to the request.
 
         Returns:
             Response: The response object containing the server's response to the POST request.
-
         """
         url = f'{self.url}/{wapi_object}'
-        return self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify,
-                                 **kwargs)
+        return self.conn.request(
+            'post', url, data=data, json=json, verify=self.ssl_verify,
+            **kwargs
+            )
 
-    def put(self, wapi_object_ref: str, data=None, **kwargs) -> Response:
+    def put(
+            self,
+            wapi_object_ref: str,
+            data: Optional[Union[dict, str]] = None,
+            **kwargs: Any
+            ) -> Response:
         """
-        Create a PUT request to update a WAPI object by its _ref
+        Create a PUT request to update a WAPI object by its _ref.
 
         Args:
             wapi_object_ref: The reference string for the WAPI object.
-            data: Optional data to be sent with the request. Defaults to None.
+            data: Optional data to be sent with the request. Can be a dictionary or a string. Defaults to None.
             **kwargs: Additional keyword arguments to be passed to the request.
 
         Returns:
             Response: The response object for the PUT request.
-
         """
         url = f'{self.url}/{wapi_object_ref}'
-        return self.conn.request('put', url, verify=self.ssl_verify, **kwargs)
+        return self.conn.request('put', url, data=data, verify=self.ssl_verify, **kwargs)
 
-    def delete(self, wapi_object_ref: str, **kwargs) -> Response:
+    def delete(self, wapi_object_ref: str, **kwargs: Any) -> Response:
         """
-        Deletes a resource specified by the WAPI object reference.
-
         Args:
-            wapi_object_ref (str): The WAPI object reference of the resource to delete.
-            **kwargs: Additional arguments to be passed to the HTTP delete request.
+            wapi_object_ref (str): A string representing the reference to the WAPI object that
+                                   needs to be deleted.
+            **kwargs (Any): Additional keyword arguments that can be passed to the `request` method
+                            of the connection object.
 
         Returns:
-            Response: The response object representing the HTTP response.
+            A `Response` object representing the response received from the server.
 
         """
         url = f'{self.url}/{wapi_object_ref}'

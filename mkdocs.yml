@@ -135,6 +135,7 @@ nav:
       - wapi: classes/nios/gift.md
       - fileop: classes/nios/fileop.md
       - service: classes/nios/service.md
+      - logger: classes/nios/logger.md
   - Modules:
       - util: modules/util.md
       - ibx_logger: modules/logger.md
