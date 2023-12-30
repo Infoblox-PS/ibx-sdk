@@ -1,5 +1,25 @@
+# Copyright (c) 2023 Infoblox Inc
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# Project information
 site_name: Basic API Toolkit
 site_author: Michael Smith, Patrick Piper
+site_url: https://infoblox-ps.github.io/ibx-tools/
+site_description: >-
+  The Basic API Toolkit is a designed collection of Python classes and methods tailored for 
+  streamlined and effective interaction.
 
 # Repository
 repo_name: Infoblox-PS/ibx-tools
@@ -27,9 +47,6 @@ theme:
     - navigation.instant.prefetch
     - navigation.instant.progress
     - navigation.prune
-    #    - navigation.sections
-    # - navigation.tabs
-    # - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
     - search.highlight
@@ -90,10 +107,6 @@ markdown_extensions:
 plugins:
   - search
   - mkdocstrings
-#  - git-authors
-#  - git-committers:
-#      repository: Infoblox-PS/ibx-tools
-#      branch: main
 
 nav:
   - Home: index.md
@@ -122,6 +135,7 @@ nav:
       - wapi: classes/nios/gift.md
       - fileop: classes/nios/fileop.md
       - service: classes/nios/service.md
+      - logger: classes/nios/logger.md
   - Modules:
       - util: modules/util.md
       - ibx_logger: modules/logger.md

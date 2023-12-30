@@ -56,7 +56,8 @@ class NiosFileopMixin:
         Args:
             wapi_object: The name of the WAPI object to perform a CSV export on.
             filename: Optional. The name of the file to save the exported data to. If not
-            provided, a default filename will be generated based on the download URL.
+                                provided, a default filename will be generated based on the
+                                download URL.
 
         Raises:
             requests.exceptions.RequestException: If there is an error in the request.
@@ -109,11 +110,11 @@ class NiosFileopMixin:
         Perform a CSV import task using the NIOS CSV Task Manager
 
         Args:
-            task_operation: The operation to be performed on the CSV file. Should be a value from
-            the `CsvOperation` enum.
-            csv_import_file: The path to the CSV file to be imported.
-            exit_on_error: Indicates whether the program should exit if an error occurs during
-            the import process. Default value is `False`.
+            task_operation (CsvOperation): The operation to be performed on the CSV file. Should be
+                                           a value from the `CsvOperation` enum.
+            csv_import_file (str): The path to the CSV file to be imported.
+            exit_on_error (bool): Indicates whether the program should exit if an error occurs
+                                  during the import process. Default value is `False`.
 
         Returns:
             A dictionary containing the result of the CSV import task.
@@ -300,14 +301,14 @@ class NiosFileopMixin:
         Fetch the log files for the provided member or msserver
 
         Args:
-            log_type: The type of log files to fetch.
-            filename: The name of the log file to download (Default value = None)
-            endpoint: The specific endpoint for which to fetch log files. (Default: None)
-            include_rotated: Whether to include rotated log files. (Default: False)
-            member: The member for which to fetch log files. (Default: None)
-            msserver: The msserver for which to fetch log files. (Default: None)
+            log_type (LogType): The type of log files to fetch.
+            filename (str): The name of the log file to download (Default value = None)
+            endpoint (str): The specific endpoint for which to fetch log files. (Default: None)
+            include_rotated (bool): Whether to include rotated log files. (Default: False)
+            member (str): The member for which to fetch log files. (Default: None)
+            msserver (str): The msserver for which to fetch log files. (Default: None)
             node_type: The type of node for which to fetch log files. Can be 'ACTIVE' or
-            'BACKUP'. (Default: None)
+                       'BACKUP'. (Default: None)
         """
         logging.info('fetching %s log files for %s', log_type, member)
         payload = {
@@ -384,25 +385,22 @@ class NiosFileopMixin:
             member (str): The member for which to retrieve the support bundle.
             filename (str, optional): The filename of the support bundle.
             cached_zone_data (bool, optional): Whether to include cached zone data in the support
-            bundle. Defaults to False.
+                                               bundle. Defaults to False.
             core_files (bool, optional): Whether to include core files in the support bundle.
-            Defaults to False.
+                                         Defaults to False.
             log_files (bool, optional): Whether to include log files in the support bundle.
-            Defaults to False.
+                                        Defaults to False.
             nm_snmp_logs (bool, optional): Whether to include NM SNMP logs in the support bundle.
-            Defaults to False.
+                                           Defaults to False.
             recursive_cache_file (bool, optional): Whether to include recursive cache file in the
-            support bundle. Defaults to False.
+                                                   support bundle. Defaults to False.
             remote_url (str, optional): The remote URL where the support bundle will be uploaded.
-            Defaults to None.
+                                        Defaults to None.
             rotate_log_files (bool, optional): Whether to rotate log files before creating the
-            support bundle. Defaults to False.
+                                               support bundle. Defaults to False.
 
         Raises:
             requests.exceptions.RequestException: If an error occurs during the request.
-
-        Returns:
-            None.
 
         """
         logging.info('performing get_support_bundle for %s object(s)', member)
@@ -512,9 +510,8 @@ class NiosFileopMixin:
         Perform a NIOS Grid restore of a database using a given file.
 
         Args:
-            self: Reference to the current object.
             filename (str): The filename of the database file to be restored. Default is
-            "database.tgz".
+                            "database.tgz".
             mode (GridRestoreMode): The restore mode to be used. Default is "NORMAL".
             keep_grid_ip (bool): Indicates whether to keep the grid IP address. Default is False.
 
