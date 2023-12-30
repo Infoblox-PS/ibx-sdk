@@ -73,11 +73,11 @@ def named_compilezone(
     Args:
         zone_name (str): The name of the DNS zone being processed.
         zone_file (str): The path to the file containing the DNS zone information to be
-        read/processed.
+                         read/processed.
         output_file (str): The path where the canonicalized zone file will be written to.
         input_format (str, optional): The format in which the zone information is currently
-        presented in the zone file.
-            This should be either 'text' or 'raw'. Defaults to 'text'.
+                                      presented in the zone file.
+                                      This should be either 'text' or 'raw'. Defaults to 'text'.
 
     Returns:
         list: A list of strings, each string being a line from the output of the named-compilezone
@@ -140,12 +140,12 @@ def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: s
 
     Args:
         file_path (str): The fully qualified path to the file from which lines are to be removed.
-        lines_to_remove (list): A list of integers, with each integer being a line number (
-        1-indexed) of the line
-            to be removed from the file.
+        lines_to_remove (list): A list of integers, with each integer being a line
+                                number (1-indexed) of the line to be removed from the file.
         output_path (str, optional): Path to the output file. If provided, the function will
-        write result to this file.
-            If not provided, the function will overwrite the original file. Defaults to None.
+                                     write result to this file.
+                                     If not provided, the function will overwrite the original
+                                     file. Defaults to None.
 
     Returns:
         None
@@ -396,8 +396,8 @@ def generate_from_includes(chroot: str, filepath: str) -> str:
     Args:
         chroot (str): The path to the chroot environment where the config file to process exists.
         filepath (str): Path to the initial config file to process. The path is relative to
-        chroot if
-            it starts with '/'.
+                        chroot if
+                            it starts with '/'.
 
     Returns:
         str: A single string containing the full contents of the config file. This includes data

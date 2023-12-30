@@ -17,7 +17,7 @@ limitations under the License.
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-from typing import Optional
+from typing import Optional, Any
 
 import coloredlogs
 
@@ -44,7 +44,7 @@ class CallCounted:
         self.method = method
         self.counter = 0
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> Any:
         """
         Call the decorated method and increment the call count.
 
