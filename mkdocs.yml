@@ -17,6 +17,8 @@
 site_name: Basic API Toolkit
 site_author: Michael Smith, Patrick Piper
 site_url: https://infoblox-ps.github.io/ibx-tools/
+docs_dir: src_docs
+site_dir: docs
 site_description: >-
   The Basic API Toolkit is a designed collection of Python classes and methods tailored for 
   streamlined and effective interaction.
