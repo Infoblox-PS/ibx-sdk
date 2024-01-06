@@ -53,7 +53,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         'wapi_ver': '2.11',
         'ssl_verify': False
     }
-    wapi = WAPI(wapi_properties)
+    wapi = Gift(wapi_properties)
 
     wapi.connect(username='admin', password='infoblox')
 
@@ -63,7 +63,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
     ```python
 
-    wapi = WAPI()
+    wapi = Gift()
 
     wapi.grid_mgr = 'gm.example.com'
     wapi.wapi_ver = '2.11'
@@ -111,7 +111,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         ```python
 
-        wapi = WAPI()
+        wapi = Gift()
         wapi.grid_mgr = '10.0.0.1'
         wapi.wapi_ver = '2.10'
         url = wapi.url
@@ -241,7 +241,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         Example:
 
         ```py
-        wapi = WAPI()
+        wapi = Gift()
         fields = wapi.object_fields('record:host')
         if fields is not None:
             print(f"Fields: {fields}")
@@ -277,7 +277,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         Example Usage:
         ```python
-        session = WAPI()
+        session = Gift()
         session.max_wapi_ver()
         print(session.wapi_ver)  # Prints the maximum supported WAPI version
         ```
@@ -302,16 +302,16 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             max_wapi_ver = versions.pop()
             setattr(self, 'wapi_ver', max_wapi_ver)
 
-    def get(self, wapi_object: str, params=None, **kwargs: Any) -> Response:
+    def get(self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any) -> Response:
         """
+        Return WAPI object(s).
         Args:
-            wapi_object (str): The name of the WAPI object.
-            params (Optional[Dict[str, Any]]): Additional parameters to include in the request URL. Defaults to None.
+            wapi_object (str): The name of the WAPI object to retrieve.
+            params (Optional[dict]): Optional parameters to include in the request URL.
             **kwargs: Additional keyword arguments to pass to the request.
 
         Returns:
-            Response: The response from the GET request.
-
+            Response: The response object containing the result of the request.
         """
         url = f'{self.url}/{wapi_object}'
         return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
