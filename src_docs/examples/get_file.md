@@ -2,13 +2,8 @@
 
 ## Overview
 
-This Python script serves as a command-line utility for retrieving files from an Infoblox Grid
-Manager using the Infoblox Web API (WAPI). Users can specify key parameters such as the Grid Manager
-address, the target member from which to retrieve configuration data, and the type of configuration
-(e.g., DNS_CFG, DHCP_CFG) when executing the script from the command line. Optional parameters
-include the Infoblox admin username, the option to exclude rotated logs, and the ability to enable
-debugging for troubleshooting purposes. Whether you need to access DNS, DHCP, or other file data
-from Infoblox, this utility simplifies the process.
+This Python program is a command-line utility designed to retrieve configuration files from the 
+Grid.
 
 ## Usage
 

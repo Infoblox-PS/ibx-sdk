@@ -1,15 +1,15 @@
 # Deleting Objects
 
-Creating Infoblox objects from the Grid using the NIOS Web RESTful API is a common task for an 
-administrator. The Basic API Toolkit's WAPI class has been written in such a way to extend the 
-Python Requests nodule to help programmers do just that! This section of the User Guide is 
-devoted to providing a tutorial on how to fetch and delete data from the NIOS Grid. Deleting data 
-from the Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
-
 All WAPI object deletes should take the basic form:   
 
+1. Get retreive the reference object
 ```python linenums="0"
-response = wapi.delete('<wapi_objct_reference>', **kwargs)
+_ref = wapi.getone('<wapi_object', params, **kwargs)
+```
+
+2. Delete the object
+```python linenums="0"
+response = wapi.delete(_ref, **kwargs)
 ```
 
 !!! tip

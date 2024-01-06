@@ -1,11 +1,5 @@
 # Creating Objects
 
-Creating Infoblox objects from the Grid using the NIOS Web RESTful API is a 
-common task for an administrator. The Basic API Toolkit's WAPI class has been written in such a way
-to extend the Python Requests nodule to help programmers do just that! This section of the User
-Guide is devoted to providing a tutorial on posting data to the NIOS Grid. Posting data 
-from the Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
-
 All WAPI object posts should take the basic form:
 
 ```python linenums="0"

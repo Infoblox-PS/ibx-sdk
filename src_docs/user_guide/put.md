@@ -1,16 +1,17 @@
 # Updating Objects
 
-Creating Infoblox objects from the Grid using the NIOS Web RESTful API is a common task for an 
-administrator. The Basic API Toolkit's WAPI class has been written in such a way to extend the 
-Python Requests nodule to help programmers do just that! This section of the User Guide is 
-devoted to providing a tutorial on how to fetch and update data from the NIOS Grid. Updating data 
-is dependent on having a valid connection to the Grid using the `WAPI` Python module.
+WAPI object puts can take this basic form:   
 
-All WAPI object put should take the basic form:   
-
+1. Get retreive the reference object
 ```python linenums="0"
-response = wapi.pute('<wapi_objct_reference>', **kwargs)
+_ref = wapi.getone('<wapi_object', params, **kwargs)
 ```
+
+2. Update the object
+```python linenums="0"
+response = wapi.put(_ref, json, **kwargs)
+```
+** See examples below **
 
 !!! tip
 

@@ -2,14 +2,8 @@
 
 ## Overview
 
-This Python script serves as a command-line tool designed to streamline the process of importing
-data into an Infoblox Grid Manager using the Infoblox Web API (WAPI) and CSV files. Users can
-specify essential parameters such as the Grid Manager address, the name of the CSV import file, and
-the desired import operation (**INSERT**, **OVERRIDE**, **MERGE**, **DELETE**, or **CUSTOM**) when
-executing the script via the command line. Optional parameters, including username and WAPI version,
-provide additional flexibility. The utility also offers debugging capabilities for advanced users.
-Whether you need to add, update, or delete data within Infoblox, this script simplifies the import
-process and offers customization options to suit your needs.
+This program is a command-line utility designed to simplify the process of importing csv 
+data into a Grid Manager.
 
 ## Usage
 

@@ -2,14 +2,8 @@
 
 ## Overview
 
-This Python script is a command-line utility that allows users to retrieve the restart status of
-Infoblox NIOS Protocol Services using the Infoblox Web API (WAPI). After specifying essential 
-parameters such as the Grid Manager's address and optional parameters like the Infoblox admin 
-username and WAPI version, users can execute the script via the command line. The script then 
-connects to the Infoblox grid manager and fetches the restart status, providing valuable insights
-into the current state of protocol services. This tool simplifies monitoring and troubleshooting of
-Infoblox services, helping network administrators ensure the reliability and stability of their 
-network infrastructure.
+This program is a command-line utility designed to retieve the restart services 
+status from the Grid Manager.
 
 ## Usage
 

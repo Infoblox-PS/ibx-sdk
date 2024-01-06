@@ -1,10 +1,5 @@
 # Logging
 
-Logging is an essential module of the Basic API Toolkit for building dependable scripts and
-integrations. Logging is used to keep track of requests, responses, events, and variables which
-helps the user/developer diagnose issues, understand runtime behavior, and analyzing user
-interaction.
-
 The logging module `ibx_logger.py` was written to simplify logging operations by reducing
 configuration down to a handful of variables.
 

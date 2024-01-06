@@ -2,15 +2,7 @@
 
 ## Overview
 
-This Python script is a command-line utility designed to facilitate the restoration of an Infoblox
-NIOS Grid using the Infoblox Web API (WAPI). Users can specify essential parameters such as the Grid 
-Manager's IP or hostname and the filename of the backup to be restored when executing the script via 
-the command line. Optional parameters include the Infoblox NIOS username, the restoration mode 
-(NORMAL, FORCED, or CLONE), and the option to retain the existing IP configuration or use the IP 
-settings from the backup. Additionally, the script offers debugging capabilities for advanced users. 
-Whether you need to recover a previous configuration or clone a Grid setup, this utility simplifies 
-the restoration process, making it a valuable tool for data recovery and system replication within 
-an Infoblox environment.
+This program is a command-line utility designed to restore backups to a Grid Manager.
 
 ## Usage
 
