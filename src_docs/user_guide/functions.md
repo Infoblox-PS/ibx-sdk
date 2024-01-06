@@ -1,6 +1,6 @@
 # Calling Functions
 
-All WAPI object posts should take the basic form:
+All WAPI object posts can take this basic form:
 
 ```python linenums="0"
 response = wapi.post('<wapi_object>', json={body}, **kwargs)

@@ -1,6 +1,6 @@
 # Deleting Objects
 
-All WAPI object deletes should take the basic form:   
+All WAPI object deletes can take the basic form:   
 
 1. Get retreive the reference object
 ```python linenums="0"

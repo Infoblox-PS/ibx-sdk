@@ -11,7 +11,6 @@ _ref = wapi.getone('<wapi_object', params, **kwargs)
 ```python linenums="0"
 response = wapi.put(_ref, json, **kwargs)
 ```
-** See examples below **
 
 !!! tip
 
