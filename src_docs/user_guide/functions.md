@@ -1,10 +1,13 @@
 # Calling Functions
 
-All WAPI object posts can take this basic form:
+Numerous WAPI objects support the ability to call functions on objects. Functions are generally called by issuing a
+POST request, along with a set of attributes and associated values in a Python Dictionary. The dictionary of
+properties are sent as a JSON body in the request. Object function calls to WAPI object generally take the form:
 
 ```python linenums="0"
 response = wapi.post('<wapi_object>', json={body}, **kwargs)
 ```
+
 !!! tip
 
     The Infoblox NIOS WAPI API is fully documented and available online. You can access the API guide by using 
@@ -14,18 +17,19 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 
     See the WAPI Guide for details on all objects, properties, functions, and parameters.
 
-## Next Available Network 
+## Next Available Network
 
 1. Retrieve the object reference from the network container
 2. Fetch 2 available networks from the network container
-3. Create the 2 networks received 
+3. Create the 2 networks received
 
 !!! tip
 
-    The wapi.getone('<wapi_object', params, **kwargs) method does not return a response object. 
+    The `wapi.getone('<wapi_object>', params, **kwargs)` method does not return a response object. 
     It will return an object reference of type string.
 
-To fetch the reference for network container 192.168.0.0/16 from the Grid, we start to create our script with the following:
+To fetch the reference for network container 192.168.0.0/16 from the Grid, we start to create our script with the
+following:
 
 ```python
 import sys
@@ -73,13 +77,13 @@ The ones used most often in working with WAPI data are:
 | `status_code`   | A property representing the HTTP Status Code (200 is OK, 404 is Not Found and so on) |
 | `text`          | A property which returns the content of the response in unicode                      |
 
-We can test the success or failure of the above request by checking for an OK status on the `response` object this 
+We can test the success or failure of the above request by checking for an OK status on the `response` object this
 is done like adding the following to our script:
 
 ```python linenums="28"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
-    sys.exit(1) # Exit program
+    sys.exit(1)  # Exit program
 ```
 
 To build/create the two next available networks by the function we called, we add the following to our script:
@@ -104,9 +108,10 @@ for network in networks_dict['networks']:
 
 1. Retrieve the object reference from the network
 2. Fetch 10 available networks from the network
-3. Create the 10 IP Reservations from the ips received 
+3. Create the 10 IP Reservations from the ips received
 
-To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the following:
+To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the
+following:
 
 ```python
 import sys
@@ -147,7 +152,7 @@ response = wapi.post(_ref, json=body, params=params)
 
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
-    sys.exit(1) # Exit program
+    sys.exit(1)  # Exit program
 ```
 
 To build/create the 10 fixed addresses recevied by the function we called, we add the following to our script:
@@ -173,7 +178,8 @@ for ip in ip_dict['ips']:
 1. Retrieve the object reference from the network
 2. Expand Network to a /23
 
-To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the following:
+To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the
+following:
 
 ```python
 import sys
@@ -215,8 +221,9 @@ response = wapi.post(_ref, json=body, params=params)
 ```
 
 !!! Danger
-    This function reduces the subnet masks of a network by joining all networks that fall under it. All the ranges and 
-    fixed addresses of the original networks are reparented to the new joined network. Any network containers that fall 
-    inside the bounds of the joined network are removed. The member assignments for all the encompassed networks are 
-    joined together. The default router, broadcast address, and subnet mask overrided from the joined network, 
+
+    This function reduces the subnet masks of a network by joining all networks that fall under it. All the ranges and
+    fixed addresses of the original networks are reparented to the new joined network. Any network containers that fall
+    inside the bounds of the joined network are removed. The member assignments for all the encompassed networks are
+    joined together. The default router, broadcast address, and subnet mask overrided from the joined network,
     including the ranges and fixed addresses, are all cleaned up.
