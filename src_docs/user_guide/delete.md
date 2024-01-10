@@ -33,8 +33,8 @@ references to objects, and perform a delete call on those object references. Ord
     The wapi.getone('<wapi_object', params, **kwargs) method does not return a response object. 
     It will return an object reference of type string.
 
-To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create 
-our script with the following:
+To fetch the reference for network container 192.168.2.0/24 from the Grid, we start to create our script with the 
+following:
 
 ```python
 import sys
@@ -61,8 +61,7 @@ To delete the network we add the following to our script:
 response = wapi.delete(_ref)
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and
-methods.
+Our `response` above is a Requests response object, and it will contain a number of properties and methods.
 
 The ones used most often in working with WAPI data are:
 
@@ -72,8 +71,8 @@ The ones used most often in working with WAPI data are:
 | `status_code`   | A property representing the HTTP Status Code (200 is OK, 404 is Not Found and so on) |
 | `text`          | A property which returns the content of the response in unicode                     |
 
-We can test the success or failure of the above request by checking for an OK status on the  
-`response` object this is done like adding the following to our script:
+We can test the success or failure of the above request by checking for an OK status on the  `response` object this is 
+done like adding the following to our script:
 
 ```python linenums="18"
 if response.status_code != 200:
@@ -85,8 +84,7 @@ if response.status_code != 200:
 1. Retrieve the object reference from the record:host
 2. Delete the host
 
-To fetch the reference for my_router.example.com from the Grid, we start to create 
-our script with the following:
+To fetch the reference for my_router.example.com from the Grid, we start to create our script with the following:
 
 ```python
 import sys
@@ -112,8 +110,8 @@ To delete the record:host we add the following to our script:
 response = wapi.delete(_ref)
 ```
 
-We can test the success or failure of the above request by checking for an OK status on the  
-`response` object this is done like adding the following to our script:
+We can test the success or failure of the above request by checking for an OK status on the  `response` object this is 
+done like adding the following to our script:
 
 ```python linenums="18"
 if response.status_code != 200:
