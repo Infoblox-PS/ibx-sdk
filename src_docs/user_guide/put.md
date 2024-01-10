@@ -1,16 +1,20 @@
 # Updating Objects
 
-WAPI object puts can take this basic form:   
+When using the WAPI to update objects from the Grid, often times you will need to obtain a reference or a list of
+references to objects, and perform a PUT call on those object references while passing in data you want to update 
+against the reference. Ordinarily it is two (2) calls:
 
-1. Get retreive the reference object
-```python linenums="0"
-_ref = wapi.getone('<wapi_object', params, **kwargs)
-```
+1. Obtain reference by performing a GET request for the `_ref` of an object
 
-2. Update the object
-```python linenums="0"
-response = wapi.put(_ref, json, **kwargs)
-```
+    ```python linenums="0"
+    _ref = wapi.getone(<wapi_object>, params, **kwargs)
+    ```
+
+2. Make a PUT request on the `_ref` of the object
+
+    ```python linenums="0"
+    response = wapi.put(_ref, **kwargs)
+    ```
 
 !!! tip
 

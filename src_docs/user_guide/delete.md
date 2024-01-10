@@ -1,16 +1,19 @@
 # Deleting Objects
 
-All WAPI object deletes can take the basic form:   
+When using the WAPI to remove objects from the Grid, often times you will need to obtain a reference or a list of 
+references to objects, and perform a delete call on those object references. Ordinarily it is two (2) calls:
 
-1. Get retreive the reference object
-```python linenums="0"
-_ref = wapi.getone('<wapi_object', params, **kwargs)
-```
+1. Obtain reference by performing a GET request for the `_ref` of an object
 
-2. Delete the object
-```python linenums="0"
-response = wapi.delete(_ref, **kwargs)
-```
+    ```python linenums="0"
+    _ref = wapi.getone(<wapi_object>, params, **kwargs)
+    ```
+
+2. Make a DELETE request on the `_ref` of the object
+
+    ```python linenums="0"
+    response = wapi.delete(_ref, **kwargs)
+    ```
 
 !!! tip
 
