@@ -100,7 +100,7 @@ def init_logger(
 
     **Basic FileHandler**
     ```python
-    from ibx-tools.logger.ibx_logger import init_logger
+    from ibx_sdk.logger.ibx_logger import init_logger
 
     # Initialize a basic logger to a file using write mode
     log = init_logger('logs/mylog.log', 'w')
@@ -108,7 +108,7 @@ def init_logger(
 
     **Advanced RotatingFileHandler**
     ```python
-    from ibx-tools.logger.ibx_logger import init_logger
+    from ibx_sdk.logger.ibx_logger import init_logger
 
     # Initialize rotating file logging
 
@@ -172,7 +172,7 @@ def init_console_logger(level: Optional[str] = None):
 
     **Initialize Colored console logger with a custom logging level**
     ```python
-    from ibx-tools.logger.ibx_logger import init_console_logger
+    from ibx_sdk.logger.ibx_logger import init_console_logger
 
     # Initialize a console logger with a custom logging level
     init_console_logger(level='DEBUG')
