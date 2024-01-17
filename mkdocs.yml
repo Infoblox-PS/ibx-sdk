@@ -14,7 +14,7 @@
 
 
 # Project information
-site_name: Basic API Toolkit
+site_name: ibx-sdk
 site_author: Michael Smith, Patrick Piper
 site_url: https://infoblox-ps.github.io/ibx-sdk/
 docs_dir: src_docs
