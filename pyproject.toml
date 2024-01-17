@@ -1,6 +1,6 @@
 [project]
 name = "ibx-sdk"
-version = "0.1.0"
+version = "0.2.0-RC1"
 description = "Infoblox basic API Toolkit"
 classifiers = [
     "Development Status :: 4 - Beta",
