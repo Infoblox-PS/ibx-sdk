@@ -31,7 +31,7 @@ To configure the logger to display console logging for viewing runtime logged ev
 console, simply import and run `init_console_logger`.
 
 ```python
-from ibx_tools.logger.ibx_logger import init_console_logger
+from ibx_sdk.logger.ibx_logger import init_console_logger
 
 log = init_console_logger(level='INFO')
 log.info('This is an informational log message')
@@ -43,7 +43,7 @@ Configure the console logger with either a standard file or rotating file log ha
 the `console_log` to the `init_logger` function.
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(
     logfile_name='mylog.log',
@@ -65,7 +65,7 @@ these three variables:
 The simplest way to get started with the `ibx_logger` is to run as follows:
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(logfile_name='mylog.log')
 ```
@@ -85,7 +85,7 @@ It is possible to set the logging level two (2) ways:
 - update the current logger by setting `set_log_level`
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger, set_log_level
+from ibx_sdk.logger.ibx_logger import init_logger, set_log_level
 
 log = init_logger(
     logfile_name='mylog.log',
@@ -115,7 +115,7 @@ and you need to retain message data over a long period of time, configure the `i
 follows:
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(
     logfile_name='mylog.log',

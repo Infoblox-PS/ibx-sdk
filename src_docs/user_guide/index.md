@@ -50,13 +50,13 @@ pip install ibx-toolkit
 First, you have to import it into your scripts:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 ```
 
 Once imported you can instantiate the class as follows:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift()
 ```

@@ -33,7 +33,7 @@ following:
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -115,7 +115,7 @@ following:
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -183,7 +183,7 @@ following:
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',

@@ -24,7 +24,7 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -79,7 +79,7 @@ An unsessful call may look like the following:
 ## Create Host Record
 
 ```python
-from ibx_tools.nios.gift import Gift, WapiRequestException
+from ibx_sdk.nios.gift import Gift, WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',

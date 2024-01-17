@@ -38,7 +38,7 @@ following:
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -51,7 +51,7 @@ _ref = wapi.getone(
     'network',
     params={'network': '192.168.2.0/23',
             'network_view': 'default'
-    }
+            }
 )
 ```
 
@@ -88,7 +88,7 @@ To fetch the reference for my_router.example.com from the Grid, we start to crea
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -101,7 +101,7 @@ _ref = wapi.getone(
     'record:host',
     params={'name': 'my-router.example.com',
             'network_view': 'default'
-    }
+            }
 )
 ```
 

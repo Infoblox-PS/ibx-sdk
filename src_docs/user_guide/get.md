@@ -30,8 +30,8 @@ couple of these are shown below:
 To fetch all `network` WAPI objects from the Grid, we'd fashion our script like the following:
 
 ```python
-from ibx_tools.nios.gift import Gift
-from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
+from ibx_sdk.nios.exceptions import WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',

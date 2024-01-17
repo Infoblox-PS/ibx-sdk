@@ -39,7 +39,7 @@ To fetch the reference for network 192.168.0.0/24 from the Grid, we start to cre
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift, WapiRequestException
+from ibx_sdk.nios.gift import Gift, WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -96,7 +96,7 @@ To fetch the reference for host my-router.example.com from the Grid, we start to
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift, WapiRequestException
+from ibx_sdk.nios.gift import Gift, WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',

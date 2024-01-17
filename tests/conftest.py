@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 GRID_MGR = os.environ.get('GRID_MGR')
 WAPI_VER = os.environ.get('WAPI_VER')

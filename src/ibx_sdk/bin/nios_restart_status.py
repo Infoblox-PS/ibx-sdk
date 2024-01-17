@@ -16,16 +16,15 @@ limitations under the License.
 """
 
 import getpass
+import json
 import sys
 
 import click
 from click_option_group import optgroup
 
-from ibx_tools.logger.ibx_logger import (
-    init_logger, increase_log_level
-)
-from ibx_tools.nios.gift import Gift
-from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -38,31 +37,31 @@ log = init_logger(
 wapi = Gift()
 
 help_text = """
-CSV Export by object
+Retrieve Restart Status
 """
 
 
-@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(help=help_text,
+               context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
-@optgroup.option('-f', '--filename', required=True, help='Infoblox WAPI CSV export file name')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
-@optgroup.option('-o', '--obj', default='network', help='WAPI export object type')
+@optgroup.option('-u', '--username', default='admin', show_default=True,
+                 help='Infoblox admin username')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
+                 help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, filename: str, username: str, wapi_ver: str, obj: str, debug: bool) -> None:
+def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
     """
-    CSV Export
+    Retrieve Restart Status
 
     Args:
+        grid_mgr (str): Infoblox Grid Manager
         debug (bool): If True, it sets the log level to DEBUG. Default is False.
-        grid_mgr (str): Manager for the wapi grid.
+        grid-mgr (str): Manager for the wapi grid.
         username (str): Username for the wapi connection.
         wapi_ver (str): Version of wapi.
-        obj (str): Object to be exported to CSV.
-        filename (str): Filename/path where the CSV will be exported.
 
     Returns:
         None
@@ -88,13 +87,13 @@ def main(grid_mgr: str, filename: str, username: str, wapi_ver: str, obj: str, d
     log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
-        wapi.csv_export(
-            wapi_object=obj,
-            filename=filename
-        )
+        response = wapi.get_service_restart_status()
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
+    else:
+        formatted_json = json.dumps(response, indent=4)
+        print(formatted_json)
 
     sys.exit()
 

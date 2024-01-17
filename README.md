@@ -121,13 +121,13 @@ coverage report -m
 (.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage report
 Name                                          Stmts   Miss  Cover
 -----------------------------------------------------------------
-src/ibx_tools/__init__.py                         0      0   100%
-src/ibx_tools/nios/__init__.py                    0      0   100%
-src/ibx_tools/nios/fileop.py                    359    335     7%
-src/ibx_tools/nios/service.py                    42     35    17%
-src/ibx_tools/nios/wapi.py                      125     59    53%
-src/ibx_tools/util/__init__.py                    0      0   100%
-src/ibx_tools/util/util.py                      167    149    11%
+src/ibx_sdk/__init__.py                         0      0   100%
+src/ibx_sdk/nios/__init__.py                    0      0   100%
+src/ibx_sdk/nios/fileop.py                    359    335     7%
+src/ibx_sdk/nios/service.py                    42     35    17%
+src/ibx_sdk/nios/wapi.py                      125     59    53%
+src/ibx_sdk/util/__init__.py                    0      0   100%
+src/ibx_sdk/util/util.py                      167    149    11%
 tests/wapi/__init__.py                            0      0   100%
 tests/wapi/test_env_variables_pytest_env.py       8      0   100%
 tests/wapi/test_wapi.py                          50      0   100%

@@ -24,7 +24,7 @@ There are three (4) ways of instantiating the WAPI class:
 To establish a connection to a NIOS Grid Manager using positional arguments, use the following:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 grid_mgr = 'infoblox.localdomain'
 wapi_ver = '2.11'
@@ -48,7 +48,7 @@ wapi.connect(username, password)
 Instead of positional arguments it's recommended you use named args and parameters as shown below:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(grid_mgr='infoblox.localdomain', wapi_ver='2.11', ssl_verify='/path/to/certfile')
 wapi.connect(username='admin', password='infoblox')
@@ -60,7 +60,7 @@ In the next example, we establish our connection to the NIOS Grid Manager by ins
 building it up using the `WAPI` class properties.
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift()
 wapi.grid_mgr = 'infoblox.localdomain'
@@ -78,7 +78,7 @@ wapi.connect(username, password)
     of having to pass it around in your scripts to other functions and methods. See Below.
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift()
 
@@ -107,7 +107,7 @@ If a `WAPI` instance is not global, you will need to pass it around to any metho
 previous code would now look more like this:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 
 def get_grid(wapi):
@@ -134,7 +134,7 @@ In addition to the above, you can instantiate the `WAPI` class using a dictionar
 constructor shown below:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 username = "admin"
 password = "infoblox"
