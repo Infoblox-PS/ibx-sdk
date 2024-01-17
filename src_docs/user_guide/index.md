@@ -62,7 +62,7 @@ wapi = Gift()
 
 !!! tip
 
-    We always recommend installing the Basic API Toolkit into a Python Virtual Environment to avoid polluting your
+    We always recommend installing the `ibx-sdk` into a Python Virtual Environment to avoid polluting your
     global Python module(s) environment.
 
 To create a Python virtual environment, perform this sequence of steps:
