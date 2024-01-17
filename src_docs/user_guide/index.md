@@ -1,8 +1,8 @@
 # Introduction
 
-The Infoblox Basic API Toolkit is a library and it is a set of tools written to help users create 
-effective automation scripts for accessing the Infoblox NIOS Web API or WAPI. The Basic API Toolkit 
-provides the following:
+The Infoblox Basic API Toolkit is a library designed to assist users in developing efficient
+automation scripts for the Infoblox NIOS Web API (WAPI). This toolkit offers a range of tools 
+for effective API interaction. The Basic API Toolkit provides the following:
 
 1. The `Gift` wrapper class - The `Gift` class is a wrapper around the Python `requests`, which 
    in turn makes it easier to access the Infoblox Web API module.

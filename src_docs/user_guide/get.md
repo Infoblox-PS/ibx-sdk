@@ -1,12 +1,8 @@
 # Fetching Objects
 
-Fetching Infoblox objects from the Grid using the NIOS Web RESTful API is without a doubt the most
-common task for an administrator. The Basic API Toolkit's WAPI class has been written in such a way
-to extend the Python Requests nodule to help programmers do just that! This section of the User
-Guide is devoted to providing a tutorial on how to fetch data from the NIOS Grid. Fetching data 
-from the Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
-
-All WAPI object fetches should take the basic form:
+Fetching Infoblox objects from the Grid using the NIOS Web RESTful API is without a doubt the most common task for an
+administrator. When fetching objects from the Grid using WAPI, you will generally make GET request calls. These GET
+request calls for fetching objects from the Grid generally take the following form:
 
 ```python linenums="0"
 res = wapi.get('<wapi_object>', params={}, **kwargs)
@@ -50,8 +46,7 @@ response = wapi.get('network')
 ```
 
 Our `response` above is a Requests response object, and it will contain a number of properties and
-methods.
-The ones used most often in working with WAPI data are:
+methods. The ones used most often in working with WAPI data are:
 
 | property/method | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
@@ -71,8 +66,7 @@ else:
 ```
 
 Let's assume we got a successful `response` above, to get the JSON-encoded results, all we need to
-do is unpack
-the results. Simply do the following:
+do is unpack the results. Simply do the following:
 
 ```python linenums="19"
 results = response.json()
@@ -81,8 +75,7 @@ results = response.json()
 ## Query Parameters
 
 This code will fetch all networks (provided we don't hit the max result set limit!). A JSON response
-is
-returned by this request.
+is returned by this request.
 
 !!! note
 
@@ -99,11 +92,11 @@ follows:
 response = wapi.get('network', params={'_max_results': 10000})
 ```
 
-The above call now sets the `_max_results` to 10,000 rows of data. 
+The above call now sets the `_max_results` to 10,000 rows of data.
 
 ### Filtering Requests with Query Parameters
 
-You should always try to optimize your API fetches to your desired result set. Here's a few 
+You should always try to optimize your API fetches to your desired result set. Here's a few
 written examples:
 
 - fetch all **network** objects which have a Grid DHCP Member named _dhcp01.example.com_ assigned
@@ -111,16 +104,16 @@ written examples:
 - fetch all **record:a** objects from the _example.com_ zone but from the _external_ DNS view
 
 These are filtered lists of objects instead of simply returning:
+
 - fetch all **network** objects
 - fetch all **record:a** objects
 
-These would potentially result in exceeding our `_max_results` value of 1000, not to mention it 
-would return a lot of other data we'd have to sift through to ultimately ignore. So, it's vital 
-to write API requests to be well-thought, filtered, and optimized to your desired result set. 
-This is done by using Query Parameters!
+These would potentially result in exceeding our `_max_results` value of 1000, not to mention it would return a lot of
+other data we'd have to sift through to ultimately ignore. So, it's vital to write API requests to be well-thought,
+filtered, and optimized to your desired result set. This is done by using Query Parameters!
 
-To fetch all **network** objects which have a Grid DHCP Member named _dhcp01.example.com_ we 
-could perform that query as follows:
+To fetch all **network** objects which have a Grid DHCP Member named _dhcp01.example.com_ we could perform that query as
+follows:
 
 ```python
 response = wapi.get(
@@ -135,8 +128,8 @@ Behind the scenes, the program would generate an API request that would look som
 GET https://gm.example.com/wapi/v2.5/network?member=dhcp01.example.com 
 ```
 
-The NIOS WAPI would return all network object(s) that were configured w/ the Grid DHCP Member 
-_dhcp01.example.com_ on them.
+The NIOS WAPI would return all network object(s) that were configured w/ the Grid DHCP Member _dhcp01.example.com_ on
+them.
 
 To fetch all **record:a** objects from the zone _example.com_, we'd similarly write that as:
 
@@ -147,15 +140,15 @@ response = wapi.get(
 )
 ```
 
-Query Parameters can be a set of params and you can create compound filters when requesting. To 
-fetch all **record:a** from the _example.com_ zone but from the _external_ DNS view, we'd simply 
-add to the previous request the `view` parameter as follows:
+Query Parameters can be a set of params and you can create compound filters when requesting. To fetch all **record:a**
+from the _example.com_ zone but from the _external_ DNS view, we'd simply add to the previous request the `view`
+parameter as follows:
 
 ```python
 response = wapi.get(
     'record:a',
     params={
-        'zone': 'example.com', 
+        'zone': 'example.com',
         'view': 'external'
     }
 )
@@ -166,8 +159,6 @@ response = wapi.get(
     Not all WAPI object properties can be used in searches. You will need to consult the Infoblox
     Web RESTful or WAPI Guide on your local Grid Manager by visiting https://<grid_mgr>/wapidoc for
     more details. 
-
-
 
 ## Handling Exceptions
 

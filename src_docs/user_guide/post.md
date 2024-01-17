@@ -1,16 +1,15 @@
 # Creating Objects
 
-Creating Infoblox objects from the Grid using the NIOS Web RESTful API is a 
-common task for an administrator. The Basic API Toolkit's WAPI class has been written in such a way
-to extend the Python Requests nodule to help programmers do just that! This section of the User
-Guide is devoted to providing a tutorial on posting data to the NIOS Grid. Posting data 
-from the Grid is dependent on having a valid connection to the Grid using the `WAPI` Python module.
+When using the WAPI to create objects in the Grid, you will need to build up an object as a Python dictionary of 
+attributes and values. The object will likely have some attributes which are required. The dictionary is passed into a 
+POST request as JSON payload.
 
-All WAPI object posts should take the basic form:
+A POST request to create an object in the Grid will generally take the form:
 
 ```python linenums="0"
 response = wapi.post('<wapi_object>', json={body}, **kwargs)
 ```
+
 !!! tip
 
     The Infoblox NIOS WAPI API is fully documented and available online. You can access the API guide by using 

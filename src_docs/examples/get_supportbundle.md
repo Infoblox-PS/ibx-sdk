@@ -2,14 +2,7 @@
 
 ## Overview
 
-This Python script serves as a command-line utility for retrieving a Support Bundle from an Infoblox
-Grid Manager using the Infoblox Web API (WAPI). Users can specify essential parameters such as the 
-Grid Manager address and the target member from which to retrieve the Support Bundle when executing 
-the script from the command line. Optional parameters include the Infoblox admin username and the 
-ability to include rotated logs and log files in the Support Bundle. Additionally, the script offers 
-debugging capabilities for advanced users. Whether you need to gather diagnostic information,
-including logs and configuration files, from an Infoblox member, this utility simplifies the 
-process, making it a valuable tool for troubleshooting and support purposes.
+This program is a command-line utility designed to retrieve support-bundles from the Grid.
 
 ## Usage
 
