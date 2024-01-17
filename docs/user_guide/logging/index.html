@@ -6,13 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The Basic API Toolkit is a designed collection of Python classes and methods tailored for  streamlined and effective interaction.">
+        <meta name="description" content="The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction with Infoblox APIs.">
       
       
         <meta name="author" content="Michael Smith, Patrick Piper">
       
       
-        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-tools/user_guide/logging/">
+        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-sdk/user_guide/logging/">
       
       
         <link rel="prev" href="../functions/">
@@ -22,15 +22,15 @@
       
       
       <link rel="icon" href="../../assets/infoblox-favicon-green.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.0">
     
     
       
-        <title>Logging - Basic API Toolkit</title>
+        <title>Logging - ibx-sdk</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.45e1311d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Basic API Toolkit" class="md-header__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../.." title="ibx-sdk" class="md-header__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
@@ -109,7 +109,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Basic API Toolkit
+            ibx-sdk
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -209,13 +209,13 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
       </div>
@@ -245,22 +245,22 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Basic API Toolkit" class="md-nav__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../.." title="ibx-sdk" class="md-nav__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
     </a>
-    Basic API Toolkit
+    ibx-sdk
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
     </div>
@@ -701,8 +701,6 @@
       
         
       
-        
-      
     
     
     
@@ -914,8 +912,8 @@
 
 
 <h1 id="logging">Logging</h1>
-<p>The logging module <code>ibx_logger.py</code> was written to simplify logging operations by reducing
-configuration down to a handful of variables.</p>
+<p>The logging module <code>ibx_logger.py</code> was written to simplify logging operations by reducing configuration down to a
+handful of variables.</p>
 <table>
 <thead>
 <tr>
@@ -964,31 +962,30 @@ configuration down to a handful of variables.</p>
 </tr>
 </tbody>
 </table>
-<p>The logger is configured when using the <code>init_logger</code> method, and it creates any one of these
-logging handlers depending on which parameters to you pass to the method:</p>
+<p>The logger is configured when using the <code>init_logger</code> method, and it creates any one of these logging handlers depending
+on which parameters to you pass to the method:</p>
 <ul>
 <li>console logger</li>
 <li>standard log file handler</li>
 <li>rotating log file handler</li>
 </ul>
 <h2 id="console-logger">Console Logger</h2>
-<p>The Console Logger in the <code>ibx_logger</code> is basically a <code>StreamHandler</code> which emits logged
-messages to <em>sys.stderr</em>. It has been enhanced using the <code>coloredlogs</code> Python module to output
-logs in color.</p>
+<p>The Console Logger in the <code>ibx_logger</code> is basically a <code>StreamHandler</code> which emits logged messages to <em>sys.stderr</em>. It
+has been enhanced using the <code>coloredlogs</code> Python module to output logs in color.</p>
 <h3 id="console-only-logging">Console-Only Logging</h3>
-<p>To configure the logger to display console logging for viewing runtime logged events on the
-console, simply import and run <code>init_console_logger</code>.</p>
+<p>To configure the logger to display console logging for viewing runtime logged events on the console, simply import and
+run <code>init_console_logger</code>.</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
 <span class="normal"><a href="#__codelineno-0-2">2</a></span>
 <span class="normal"><a href="#__codelineno-0-3">3</a></span>
-<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_console_logger</span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_console_logger</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="n">log</span> <span class="o">=</span> <span class="n">init_console_logger</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;This is an informational log message&#39;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="console-file-logging">Console &amp; File Logging</h3>
-<p>Configure the console logger with either a standard file or rotating file log handler by passing
-the <code>console_log</code> to the <code>init_logger</code> function.</p>
+<p>Configure the console logger with either a standard file or rotating file log handler by passing the <code>console_log</code> to
+the <code>init_logger</code> function.</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
 <span class="normal"><a href="#__codelineno-1-2">2</a></span>
 <span class="normal"><a href="#__codelineno-1-3">3</a></span>
@@ -996,7 +993,7 @@ the <code>console_log</code> to the <code>init_logger</code> function.</p>
 <span class="normal"><a href="#__codelineno-1-5">5</a></span>
 <span class="normal"><a href="#__codelineno-1-6">6</a></span>
 <span class="normal"><a href="#__codelineno-1-7">7</a></span>
-<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="n">log</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a>    <span class="n">logfile_name</span><span class="o">=</span><span class="s1">&#39;mylog.log&#39;</span><span class="p">,</span>
@@ -1006,8 +1003,7 @@ the <code>console_log</code> to the <code>init_logger</code> function.</p>
 </span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="standard-file-logger">Standard File Logger</h2>
-<p>The standard file logger is configured any time <code>init_logger</code> is executed and is controlled by
-these three variables:</p>
+<p>The standard file logger is configured any time <code>init_logger</code> is executed and is controlled by these three variables:</p>
 <ol>
 <li>logfile_name (required)</li>
 <li>logfile_mode (default = 'w')</li>
@@ -1016,7 +1012,7 @@ these three variables:</p>
 <p>The simplest way to get started with the <code>ibx_logger</code> is to run as follows:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">log</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span><span class="n">logfile_name</span><span class="o">=</span><span class="s1">&#39;mylog.log&#39;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
@@ -1043,7 +1039,7 @@ logger will open the logfile and append its messages to the end of the file.</p>
 <span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
 <span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
 <span class="normal"><a href="#__codelineno-3-10">10</a></span>
-<span class="normal"><a href="#__codelineno-3-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">set_log_level</span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span><span class="p">,</span> <span class="n">set_log_level</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="n">log</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a>    <span class="n">logfile_name</span><span class="o">=</span><span class="s1">&#39;mylog.log&#39;</span><span class="p">,</span>
@@ -1055,18 +1051,16 @@ logger will open the logfile and append its messages to the end of the file.</p>
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="n">set_log_level</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;logger level is now currently set at DEBUG&#39;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<p>In the code above, the level is initially set to 'INFO', but later changed to 'DEBUG'. The
-ability to do this is handy when crafting CLI scripts. Often times in a CLI script, you want to
-provide the user an optional way of increasing the verbosity of logging with a <code>--debug</code> option.
-This can call the <code>set_log_level</code> method to increase logging levels potentially exposing lower
-level logging output messages that might be in the code.</p>
+<p>In the code above, the level is initially set to 'INFO', but later changed to 'DEBUG'. The ability to do this is handy
+when crafting CLI scripts. Often times in a CLI script, you want to provide the user an optional way of increasing the
+verbosity of logging with a <code>--debug</code> option. This can call the <code>set_log_level</code> method to increase logging levels
+potentially exposing lower level logging output messages that might be in the code.</p>
 <h2 id="rotating-file-logger">Rotating File Logger</h2>
-<p>The <em>ibx_logger.py</em> will create a <code>RotatingFileHandler</code> which supports rotation of disk log
-files any time the user supplies <code>num_logs</code> and <code>max_size</code> to the <code>init_logger</code> method. If these
-arguments are not passed to the function, it will only use a <code>FileHandler</code> instance.</p>
-<p>If you are coding an application for which you expect a significant number of logged messages,
-and you need to retain message data over a long period of time, configure the <code>ibx_logger</code> as
-follows:</p>
+<p>The <em>ibx_logger.py</em> will create a <code>RotatingFileHandler</code> which supports rotation of disk log files any time the user
+supplies <code>num_logs</code> and <code>max_size</code> to the <code>init_logger</code> method. If these arguments are not passed to the function, it
+will only use a <code>FileHandler</code> instance.</p>
+<p>If you are coding an application for which you expect a significant number of logged messages, and you need to retain
+message data over a long period of time, configure the <code>ibx_logger</code> as follows:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
 <span class="normal"><a href="#__codelineno-4-2">2</a></span>
 <span class="normal"><a href="#__codelineno-4-3">3</a></span>
@@ -1074,7 +1068,7 @@ follows:</p>
 <span class="normal"><a href="#__codelineno-4-5">5</a></span>
 <span class="normal"><a href="#__codelineno-4-6">6</a></span>
 <span class="normal"><a href="#__codelineno-4-7">7</a></span>
-<span class="normal"><a href="#__codelineno-4-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
+<span class="normal"><a href="#__codelineno-4-8">8</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.logger.ibx_logger</span> <span class="kn">import</span> <span class="n">init_logger</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="n">log</span> <span class="o">=</span> <span class="n">init_logger</span><span class="p">(</span>
 </span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a>    <span class="n">logfile_name</span><span class="o">=</span><span class="s1">&#39;mylog.log&#39;</span><span class="p">,</span>
@@ -1083,10 +1077,9 @@ follows:</p>
 </span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a>    <span class="n">max_size</span><span class="o">=</span><span class="mi">102400000</span>
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<p>This would save up to 4 files in 100mb increments. The logger would write to <em>mylog.log</em> until
-it got to the <code>max_size</code>. The logger closes the file, and a new file is opened for writing. This
-repeats until <code>num_logs</code>. Once <code>num_logs</code> is reached, files become overwritten. The filenames that
-would result are:</p>
+<p>This would save up to 4 files in 100mb increments. The logger would write to <em>mylog.log</em> until it got to the <code>max_size</code>.
+The logger closes the file, and a new file is opened for writing. This repeats until <code>num_logs</code>. Once <code>num_logs</code> is
+reached, files become overwritten. The filenames that would result are:</p>
 <div class="language-shell highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span>
 <span class="normal"><a href="#__codelineno-5-2">2</a></span>
 <span class="normal"><a href="#__codelineno-5-3">3</a></span>

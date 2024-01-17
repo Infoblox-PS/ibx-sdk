@@ -6,13 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The Basic API Toolkit is a designed collection of Python classes and methods tailored for  streamlined and effective interaction.">
+        <meta name="description" content="The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction with Infoblox APIs.">
       
       
         <meta name="author" content="Michael Smith, Patrick Piper">
       
       
-        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-tools/modules/logger/">
+        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-sdk/modules/logger/">
       
       
         <link rel="prev" href="../util/">
@@ -22,15 +22,15 @@
       
       
       <link rel="icon" href="../../assets/infoblox-favicon-green.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.0">
     
     
       
-        <title>ibx_logger - Basic API Toolkit</title>
+        <title>ibx_logger - ibx-sdk</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.45e1311d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Basic API Toolkit" class="md-header__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../.." title="ibx-sdk" class="md-header__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
@@ -109,7 +109,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Basic API Toolkit
+            ibx-sdk
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -209,13 +209,13 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
       </div>
@@ -245,22 +245,22 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Basic API Toolkit" class="md-nav__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../.." title="ibx-sdk" class="md-nav__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
     </a>
-    Basic API Toolkit
+    ibx-sdk
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
     </div>
@@ -424,8 +424,6 @@
       
         
       
-        
-      
     
     
     
@@ -576,7 +574,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger" class="md-nav__link">
     <span class="md-ellipsis">
       ibx_logger
     </span>
@@ -585,7 +583,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted" class="md-nav__link">
     <span class="md-ellipsis">
       CallCounted
     </span>
@@ -595,7 +593,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted.__call__" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted.__call__" class="md-nav__link">
     <span class="md-ellipsis">
       __call__()
     </span>
@@ -604,7 +602,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted.__init__" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       __init__()
     </span>
@@ -618,7 +616,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.increase_log_level" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.increase_log_level" class="md-nav__link">
     <span class="md-ellipsis">
       increase_log_level()
     </span>
@@ -627,7 +625,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.init_console_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.init_console_logger" class="md-nav__link">
     <span class="md-ellipsis">
       init_console_logger()
     </span>
@@ -636,7 +634,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.init_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.init_logger" class="md-nav__link">
     <span class="md-ellipsis">
       init_logger()
     </span>
@@ -645,7 +643,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.set_log_level" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.set_log_level" class="md-nav__link">
     <span class="md-ellipsis">
       set_log_level()
     </span>
@@ -736,7 +734,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger" class="md-nav__link">
     <span class="md-ellipsis">
       ibx_logger
     </span>
@@ -745,7 +743,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted" class="md-nav__link">
     <span class="md-ellipsis">
       CallCounted
     </span>
@@ -755,7 +753,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted.__call__" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted.__call__" class="md-nav__link">
     <span class="md-ellipsis">
       __call__()
     </span>
@@ -764,7 +762,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.CallCounted.__init__" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.CallCounted.__init__" class="md-nav__link">
     <span class="md-ellipsis">
       __init__()
     </span>
@@ -778,7 +776,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.increase_log_level" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.increase_log_level" class="md-nav__link">
     <span class="md-ellipsis">
       increase_log_level()
     </span>
@@ -787,7 +785,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.init_console_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.init_console_logger" class="md-nav__link">
     <span class="md-ellipsis">
       init_console_logger()
     </span>
@@ -796,7 +794,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.init_logger" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.init_logger" class="md-nav__link">
     <span class="md-ellipsis">
       init_logger()
     </span>
@@ -805,7 +803,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.logger.ibx_logger.set_log_level" class="md-nav__link">
+  <a href="#ibx_sdk.logger.ibx_logger.set_log_level" class="md-nav__link">
     <span class="md-ellipsis">
       set_log_level()
     </span>
@@ -838,7 +836,7 @@
 
 
 
-<a id="ibx_tools.logger.ibx_logger"></a>
+<a id="ibx_sdk.logger.ibx_logger"></a>
   <div class="doc doc-contents first">
   
       <p>Copyright 2023 Infoblox</p>
@@ -869,7 +867,7 @@ limitations under the License.</p>
 
 
 
-<h2 id="ibx_tools.logger.ibx_logger.CallCounted" class="doc doc-heading">
+<h2 id="ibx_sdk.logger.ibx_logger.CallCounted" class="doc doc-heading">
           <code>CallCounted</code>
 
 
@@ -915,7 +913,7 @@ called.</p>
   </table>
 
             <details class="quote">
-              <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+              <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25">25</a></span>
 <span class="normal"><a href="#__codelineno-0-26">26</a></span>
 <span class="normal"><a href="#__codelineno-0-27">27</a></span>
@@ -1008,7 +1006,7 @@ called.</p>
 
 
 
-<h3 id="ibx_tools.logger.ibx_logger.CallCounted.__call__" class="doc doc-heading">
+<h3 id="ibx_sdk.logger.ibx_logger.CallCounted.__call__" class="doc doc-heading">
           <code class="highlight language-python"><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -1087,7 +1085,7 @@ called.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-47">47</a></span>
 <span class="normal"><a href="#__codelineno-0-48">48</a></span>
 <span class="normal"><a href="#__codelineno-0-49">49</a></span>
@@ -1127,7 +1125,7 @@ called.</p>
 
 
 
-<h3 id="ibx_tools.logger.ibx_logger.CallCounted.__init__" class="doc doc-heading">
+<h3 id="ibx_sdk.logger.ibx_logger.CallCounted.__init__" class="doc doc-heading">
           <code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">method</span><span class="p">)</span></code>
 
 </h3>
@@ -1168,7 +1166,7 @@ called.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-37">37</a></span>
 <span class="normal"><a href="#__codelineno-0-38">38</a></span>
 <span class="normal"><a href="#__codelineno-0-39">39</a></span>
@@ -1207,7 +1205,7 @@ called.</p>
 
 
 
-<h2 id="ibx_tools.logger.ibx_logger.increase_log_level" class="doc doc-heading">
+<h2 id="ibx_sdk.logger.ibx_logger.increase_log_level" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">increase_log_level</span><span class="p">(</span><span class="n">handler_type</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span></code>
 
 </h2>
@@ -1291,7 +1289,7 @@ the logging level for. Can be 'both' (default), 'console', or 'file'.</p>
 </span></code></pre></div></td></tr></table></div></p>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-197">197</a></span>
 <span class="normal"><a href="#__codelineno-0-198">198</a></span>
 <span class="normal"><a href="#__codelineno-0-199">199</a></span>
@@ -1399,7 +1397,7 @@ the logging level for. Can be 'both' (default), 'console', or 'file'.</p>
 
 
 
-<h2 id="ibx_tools.logger.ibx_logger.init_console_logger" class="doc doc-heading">
+<h2 id="ibx_sdk.logger.ibx_logger.init_console_logger" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">init_console_logger</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
@@ -1451,7 +1449,7 @@ This field is case-insensitive and will default to 'INFO' if not provided.</p>
 </span></code></pre></div></td></tr></table></div></p>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-163">163</a></span>
 <span class="normal"><a href="#__codelineno-0-164">164</a></span>
 <span class="normal"><a href="#__codelineno-0-165">165</a></span>
@@ -1527,7 +1525,7 @@ This field is case-insensitive and will default to 'INFO' if not provided.</p>
 
 
 
-<h2 id="ibx_tools.logger.ibx_logger.init_logger" class="doc doc-heading">
+<h2 id="ibx_sdk.logger.ibx_logger.init_logger" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">init_logger</span><span class="p">(</span><span class="n">logfile_name</span><span class="p">,</span> <span class="n">logfile_mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">console_log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_logs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h2>
@@ -1697,7 +1695,7 @@ field is case-insensitive and will default to 'INFO' if not provided.</p>
 </span></code></pre></div></td></tr></table></div></p>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-72"> 72</a></span>
 <span class="normal"><a href="#__codelineno-0-73"> 73</a></span>
 <span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
@@ -1887,7 +1885,7 @@ field is case-insensitive and will default to 'INFO' if not provided.</p>
 
 
 
-<h2 id="ibx_tools.logger.ibx_logger.set_log_level" class="doc doc-heading">
+<h2 id="ibx_sdk.logger.ibx_logger.set_log_level" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">set_log_level</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">handler_type</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span></code>
 
 </h2>
@@ -1990,7 +1988,7 @@ logging level for. Can be 'both' (default), 'console', or 'file'.</p>
 </span></code></pre></div></td></tr></table></div>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/logger/ibx_logger.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/logger/ibx_logger.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-247">247</a></span>
 <span class="normal"><a href="#__codelineno-0-248">248</a></span>
 <span class="normal"><a href="#__codelineno-0-249">249</a></span>

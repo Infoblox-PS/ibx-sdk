@@ -6,13 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The Basic API Toolkit is a designed collection of Python classes and methods tailored for  streamlined and effective interaction.">
+        <meta name="description" content="The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction with Infoblox APIs.">
       
       
         <meta name="author" content="Michael Smith, Patrick Piper">
       
       
-        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-tools/user_guide/">
+        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-sdk/user_guide/">
       
       
         <link rel="prev" href="..">
@@ -22,15 +22,15 @@
       
       
       <link rel="icon" href="../assets/infoblox-favicon-green.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.0">
     
     
       
-        <title>Introduction - Basic API Toolkit</title>
+        <title>Introduction - ibx-sdk</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.45e1311d.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="Basic API Toolkit" class="md-header__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href=".." title="ibx-sdk" class="md-header__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
@@ -109,7 +109,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Basic API Toolkit
+            ibx-sdk
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -209,13 +209,13 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
       </div>
@@ -245,22 +245,22 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="Basic API Toolkit" class="md-nav__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href=".." title="ibx-sdk" class="md-nav__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
     </a>
-    Basic API Toolkit
+    ibx-sdk
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
     </div>
@@ -610,8 +610,6 @@
       
         
       
-        
-      
     
     
     
@@ -754,9 +752,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#installing-the-basic-api-toolkit" class="md-nav__link">
+  <a href="#installing-ibx-sdk" class="md-nav__link">
     <span class="md-ellipsis">
-      Installing the Basic API Toolkit
+      Installing ibx-sdk
     </span>
   </a>
   
@@ -790,11 +788,10 @@
 
 
 <h1 id="introduction">Introduction</h1>
-<p>The Infoblox Basic API Toolkit is a library designed to assist users in developing efficient
-automation scripts for the Infoblox NIOS Web API (WAPI). This toolkit offers a range of tools 
-for effective API interaction. The Basic API Toolkit provides the following:</p>
+<p>The Infoblox <code>ibx-sdk</code> is a library and SDK designed to assist users in developing efficient automation scripts for the
+Infoblox NIOS Web API (WAPI). The SDK offers a range of tools for effective API interaction, including the following:</p>
 <ol>
-<li>The <code>Gift</code> wrapper class - The <code>Gift</code> class is a wrapper around the Python <code>requests</code>, which 
+<li>The <code>Gift</code> wrapper class - The <code>Gift</code> class is a wrapper around the Python <code>requests</code>, which
    in turn makes it easier to access the Infoblox Web API module.</li>
 <li>Detailed usage and example documentation</li>
 <li>Sample operations scripts</li>
@@ -812,8 +809,8 @@ named it <code>Gift</code> because of the fact it's a wrapper. Get it?? We'd lik
 </ul>
 <p>We hope you enjoy!</p>
 </div>
-<p>The <code>Gift()</code> Python class is a wrapper for <code>requests.session</code>, supporting the same HTTP Request
-methods that are supported by the NIOS WAPI. See the table below:</p>
+<p>The <code>Gift()</code> Python class is a wrapper for <code>requests.session</code>, supporting the same HTTP Request methods that are
+supported by the NIOS WAPI. See the table below:</p>
 <table>
 <thead>
 <tr>
@@ -851,27 +848,27 @@ methods that are supported by the NIOS WAPI. See the table below:</p>
 object. The <code>Gift.getone()</code> method expects to fetch a single record and returns the record's 
 <code>_ref</code>. It raises an exception if it fails to return any data or if it finds &gt; 1 record.</p>
 </div>
-<h2 id="installing-the-basic-api-toolkit">Installing the Basic API Toolkit</h2>
-<div class="language-shell highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ibx-toolkit
+<h2 id="installing-ibx-sdk">Installing <code>ibx-sdk</code></h2>
+<div class="language-shell highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>ibx-sdk
 </span></code></pre></div></td></tr></table></div>
 <h2 id="initializing-the-wapi-class">Initializing the WAPI class</h2>
 <p>First, you have to import it into your scripts:</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.nios.gift</span> <span class="kn">import</span> <span class="n">Gift</span>
+<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.nios.gift</span> <span class="kn">import</span> <span class="n">Gift</span>
 </span></code></pre></div></td></tr></table></div>
 <p>Once imported you can instantiate the class as follows:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
 <span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">ibx_tools.nios.gift</span> <span class="kn">import</span> <span class="n">Gift</span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">ibx_sdk.nios.gift</span> <span class="kn">import</span> <span class="n">Gift</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="n">wapi</span> <span class="o">=</span> <span class="n">Gift</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>We always recommend installing the Basic API Toolkit into a Python Virtual Environment to 
-avoid polluting your global Python module(s) environment.</p>
+<p>We always recommend installing the Basic API Toolkit into a Python Virtual Environment to avoid polluting your
+global Python module(s) environment.</p>
 </div>
 <p>To create a Python virtual environment, perform this sequence of steps:</p>
-<p><div class="language-shell highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<div class="language-shell highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
 <span class="normal"><a href="#__codelineno-3-2">2</a></span>
 <span class="normal"><a href="#__codelineno-3-3">3</a></span>
 <span class="normal"><a href="#__codelineno-3-4">4</a></span>
@@ -885,14 +882,12 @@ avoid polluting your global Python module(s) environment.</p>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="nb">source</span><span class="w"> </span>.vent/bin/activate
 </span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip<span class="w"> </span>setuptools
 </span></code></pre></div></td></tr></table></div>
-The above code was performed on a Mac, it leverages a <code>workspace</code> folder that would have all our 
-project(s) and code. We create a new project called <code>myproject</code> and "install" a virtual 
-environment in that folder with <code>python3</code>. We sourced the environment on line #6. Last we update 
-the <code>pip</code> and <code>setuptools</code> modules. </p>
+<p>The above code was performed on a Mac, it leverages a <code>workspace</code> folder that would have all our project(s) and code. We 
+create a new project called <code>myproject</code> and "install" a virtual environment in that folder with <code>python3</code>. We sourced 
+the environment on line #6. Last we update the <code>pip</code> and <code>setuptools</code> modules.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Always source your Python virutal environment of your project or you may end up polluting 
-your own module space. </p>
+<p>Always source your Python virutal environment of your project or you may end up polluting your own module space. </p>
 </div>
 <p>Remember to always source your environment prior to working on your next project:</p>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate

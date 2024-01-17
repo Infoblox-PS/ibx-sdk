@@ -6,13 +6,13 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The Basic API Toolkit is a designed collection of Python classes and methods tailored for  streamlined and effective interaction.">
+        <meta name="description" content="The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction with Infoblox APIs.">
       
       
         <meta name="author" content="Michael Smith, Patrick Piper">
       
       
-        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-tools/classes/nios/gift/">
+        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-sdk/classes/nios/gift/">
       
       
         <link rel="prev" href="../../../examples/restart_status/">
@@ -22,15 +22,15 @@
       
       
       <link rel="icon" href="../../../assets/infoblox-favicon-green.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.0">
     
     
       
-        <title>wapi - Basic API Toolkit</title>
+        <title>wapi - ibx-sdk</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.45e1311d.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Basic API Toolkit" class="md-header__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../../.." title="ibx-sdk" class="md-header__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
@@ -109,7 +109,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Basic API Toolkit
+            ibx-sdk
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -209,13 +209,13 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
       </div>
@@ -245,22 +245,22 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Basic API Toolkit" class="md-nav__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../../.." title="ibx-sdk" class="md-nav__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
     </a>
-    Basic API Toolkit
+    ibx-sdk
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
     </div>
@@ -426,8 +426,6 @@
       
         
       
-        
-      
     
     
     
@@ -511,7 +509,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift" class="md-nav__link">
     <span class="md-ellipsis">
       gift
     </span>
@@ -520,7 +518,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift" class="md-nav__link">
     <span class="md-ellipsis">
       Gift
     </span>
@@ -530,7 +528,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.url" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.url" class="md-nav__link">
     <span class="md-ellipsis">
       url
     </span>
@@ -539,7 +537,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.__basic_auth_request" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.__basic_auth_request" class="md-nav__link">
     <span class="md-ellipsis">
       __basic_auth_request()
     </span>
@@ -548,7 +546,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.__certificate_auth_request" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.__certificate_auth_request" class="md-nav__link">
     <span class="md-ellipsis">
       __certificate_auth_request()
     </span>
@@ -557,7 +555,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.connect" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.connect" class="md-nav__link">
     <span class="md-ellipsis">
       connect()
     </span>
@@ -566,7 +564,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.delete" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.delete" class="md-nav__link">
     <span class="md-ellipsis">
       delete()
     </span>
@@ -575,7 +573,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.get" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.get" class="md-nav__link">
     <span class="md-ellipsis">
       get()
     </span>
@@ -584,7 +582,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.getone" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.getone" class="md-nav__link">
     <span class="md-ellipsis">
       getone()
     </span>
@@ -593,7 +591,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.max_wapi_ver" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.max_wapi_ver" class="md-nav__link">
     <span class="md-ellipsis">
       max_wapi_ver()
     </span>
@@ -602,7 +600,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.object_fields" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.object_fields" class="md-nav__link">
     <span class="md-ellipsis">
       object_fields()
     </span>
@@ -611,7 +609,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.post" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.post" class="md-nav__link">
     <span class="md-ellipsis">
       post()
     </span>
@@ -620,7 +618,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.put" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.put" class="md-nav__link">
     <span class="md-ellipsis">
       put()
     </span>
@@ -675,27 +673,6 @@
   
   <span class="md-ellipsis">
     service
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../logger/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    logger
   </span>
   
 
@@ -823,7 +800,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift" class="md-nav__link">
     <span class="md-ellipsis">
       gift
     </span>
@@ -832,7 +809,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift" class="md-nav__link">
     <span class="md-ellipsis">
       Gift
     </span>
@@ -842,7 +819,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.url" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.url" class="md-nav__link">
     <span class="md-ellipsis">
       url
     </span>
@@ -851,7 +828,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.__basic_auth_request" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.__basic_auth_request" class="md-nav__link">
     <span class="md-ellipsis">
       __basic_auth_request()
     </span>
@@ -860,7 +837,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.__certificate_auth_request" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.__certificate_auth_request" class="md-nav__link">
     <span class="md-ellipsis">
       __certificate_auth_request()
     </span>
@@ -869,7 +846,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.connect" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.connect" class="md-nav__link">
     <span class="md-ellipsis">
       connect()
     </span>
@@ -878,7 +855,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.delete" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.delete" class="md-nav__link">
     <span class="md-ellipsis">
       delete()
     </span>
@@ -887,7 +864,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.get" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.get" class="md-nav__link">
     <span class="md-ellipsis">
       get()
     </span>
@@ -896,7 +873,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.getone" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.getone" class="md-nav__link">
     <span class="md-ellipsis">
       getone()
     </span>
@@ -905,7 +882,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.max_wapi_ver" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.max_wapi_ver" class="md-nav__link">
     <span class="md-ellipsis">
       max_wapi_ver()
     </span>
@@ -914,7 +891,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.object_fields" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.object_fields" class="md-nav__link">
     <span class="md-ellipsis">
       object_fields()
     </span>
@@ -923,7 +900,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.post" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.post" class="md-nav__link">
     <span class="md-ellipsis">
       post()
     </span>
@@ -932,7 +909,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.gift.Gift.put" class="md-nav__link">
+  <a href="#ibx_sdk.nios.gift.Gift.put" class="md-nav__link">
     <span class="md-ellipsis">
       put()
     </span>
@@ -970,7 +947,7 @@
 
 
 
-<a id="ibx_tools.nios.gift"></a>
+<a id="ibx_sdk.nios.gift"></a>
   <div class="doc doc-contents first">
   
       <p>Copyright 2023 Infoblox</p>
@@ -1001,7 +978,7 @@ limitations under the License.</p>
 
 
 
-<h2 id="ibx_tools.nios.gift.Gift" class="doc doc-heading">
+<h2 id="ibx_sdk.nios.gift.Gift" class="doc doc-heading">
           <code>Gift</code>
 
 
@@ -1010,7 +987,7 @@ limitations under the License.</p>
 
   <div class="doc doc-contents ">
           <p class="doc doc-class-bases">
-            Bases: <code><span title="requests.sessions.Session">Session</span></code>, <code><a class="autorefs autorefs-internal" title="ibx_tools.nios.service.NiosServiceMixin" href="../service/#ibx_tools.nios.service.NiosServiceMixin">NiosServiceMixin</a></code>, <code><a class="autorefs autorefs-internal" title="ibx_tools.nios.fileop.NiosFileopMixin" href="../fileop/#ibx_tools.nios.fileop.NiosFileopMixin">NiosFileopMixin</a></code></p>
+            Bases: <code><span title="requests.sessions.Session">Session</span></code>, <code><a class="autorefs autorefs-internal" title="ibx_sdk.nios.service.NiosServiceMixin" href="../service/#ibx_sdk.nios.service.NiosServiceMixin">NiosServiceMixin</a></code>, <code><a class="autorefs autorefs-internal" title="ibx_sdk.nios.fileop.NiosFileopMixin" href="../fileop/#ibx_sdk.nios.fileop.NiosFileopMixin">NiosFileopMixin</a></code></p>
 
   
       <p>Handles interactions with the Infoblox WAPI.</p>
@@ -1122,7 +1099,7 @@ including session management, data retrieval, file operations, and service manag
 </span></code></pre></div></td></tr></table></div>
 
             <details class="quote">
-              <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+              <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-31"> 31</a></span>
 <span class="normal"><a href="#__codelineno-0-32"> 32</a></span>
 <span class="normal"><a href="#__codelineno-0-33"> 33</a></span>
@@ -1882,7 +1859,7 @@ including session management, data retrieval, file operations, and service manag
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.url" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.url" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">url</span><span class="p">:</span> <span class="nb">str</span></code>
   
   <span class="doc doc-labels">
@@ -1930,7 +1907,7 @@ The above code example will return output:</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.__basic_auth_request" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.__basic_auth_request" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">__basic_auth_request</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span></code>
 
 </h3>
@@ -2027,7 +2004,7 @@ attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.</
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2039,7 +2016,7 @@ attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.</
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-191">191</a></span>
 <span class="normal"><a href="#__codelineno-0-192">192</a></span>
 <span class="normal"><a href="#__codelineno-0-193">193</a></span>
@@ -2121,7 +2098,7 @@ attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.</
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.__certificate_auth_request" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.__certificate_auth_request" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">__certificate_auth_request</span><span class="p">(</span><span class="n">certificate</span><span class="p">)</span></code>
 
 </h3>
@@ -2200,7 +2177,7 @@ library.</p>
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2212,7 +2189,7 @@ library.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-158">158</a></span>
 <span class="normal"><a href="#__codelineno-0-159">159</a></span>
 <span class="normal"><a href="#__codelineno-0-160">160</a></span>
@@ -2288,7 +2265,7 @@ library.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.connect" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.connect" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">connect</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">certificate</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
@@ -2369,7 +2346,7 @@ library.</p>
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiInvalidParameterException">WapiInvalidParameterException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiInvalidParameterException">WapiInvalidParameterException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2382,7 +2359,7 @@ library.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-133">133</a></span>
 <span class="normal"><a href="#__codelineno-0-134">134</a></span>
 <span class="normal"><a href="#__codelineno-0-135">135</a></span>
@@ -2442,7 +2419,7 @@ library.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.delete" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.delete" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">delete</span><span class="p">(</span><span class="n">wapi_object_ref</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -2522,7 +2499,7 @@ library.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-388">388</a></span>
 <span class="normal"><a href="#__codelineno-0-389">389</a></span>
 <span class="normal"><a href="#__codelineno-0-390">390</a></span>
@@ -2562,7 +2539,7 @@ library.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.get" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.get" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">get</span><span class="p">(</span><span class="n">wapi_object</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -2601,7 +2578,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-305">305</a></span>
 <span class="normal"><a href="#__codelineno-0-306">306</a></span>
 <span class="normal"><a href="#__codelineno-0-307">307</a></span>
@@ -2639,7 +2616,7 @@ Args:
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.getone" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.getone" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">getone</span><span class="p">(</span><span class="n">wapi_object</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -2744,7 +2721,7 @@ Args:
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2756,7 +2733,7 @@ Args:
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-319">319</a></span>
 <span class="normal"><a href="#__codelineno-0-320">320</a></span>
 <span class="normal"><a href="#__codelineno-0-321">321</a></span>
@@ -2814,7 +2791,7 @@ Args:
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.max_wapi_ver" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.max_wapi_ver" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">max_wapi_ver</span><span class="p">()</span></code>
 
 </h3>
@@ -2840,7 +2817,7 @@ any value.</p>
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -2866,7 +2843,7 @@ any value.</p>
   <p>This method updates the <code>wapi_ver</code> attribute of the WAPI session instance.</p>
 </details>
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-264">264</a></span>
 <span class="normal"><a href="#__codelineno-0-265">265</a></span>
 <span class="normal"><a href="#__codelineno-0-266">266</a></span>
@@ -2958,7 +2935,7 @@ any value.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.object_fields" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.object_fields" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">object_fields</span><span class="p">(</span><span class="n">wapi_object</span><span class="p">)</span></code>
 
 </h3>
@@ -3045,7 +3022,7 @@ any value.</p>
     <tbody>
         <tr>
           <td>
-                <code><span title="ibx_tools.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
+                <code><span title="ibx_sdk.nios.exceptions.WapiRequestException">WapiRequestException</span></code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -3066,7 +3043,7 @@ any value.</p>
 </span></code></pre></div></td></tr></table></div>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-227">227</a></span>
 <span class="normal"><a href="#__codelineno-0-228">228</a></span>
 <span class="normal"><a href="#__codelineno-0-229">229</a></span>
@@ -3150,7 +3127,7 @@ any value.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.post" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.post" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">post</span><span class="p">(</span><span class="n">wapi_object</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -3259,7 +3236,7 @@ any value.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-343">343</a></span>
 <span class="normal"><a href="#__codelineno-0-344">344</a></span>
 <span class="normal"><a href="#__codelineno-0-345">345</a></span>
@@ -3319,7 +3296,7 @@ any value.</p>
 
 
 
-<h3 id="ibx_tools.nios.gift.Gift.put" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.gift.Gift.put" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">put</span><span class="p">(</span><span class="n">wapi_object_ref</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code>
 
 </h3>
@@ -3412,7 +3389,7 @@ any value.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/gift.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/gift.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-368">368</a></span>
 <span class="normal"><a href="#__codelineno-0-369">369</a></span>
 <span class="normal"><a href="#__codelineno-0-370">370</a></span>

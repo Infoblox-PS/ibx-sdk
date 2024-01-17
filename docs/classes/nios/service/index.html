@@ -6,31 +6,31 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The Basic API Toolkit is a designed collection of Python classes and methods tailored for  streamlined and effective interaction.">
+        <meta name="description" content="The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction with Infoblox APIs.">
       
       
         <meta name="author" content="Michael Smith, Patrick Piper">
       
       
-        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-tools/classes/nios/service/">
+        <link rel="canonical" href="https://infoblox-ps.github.io/ibx-sdk/classes/nios/service/">
       
       
         <link rel="prev" href="../fileop/">
       
       
-        <link rel="next" href="../logger/">
+        <link rel="next" href="../../../modules/util/">
       
       
       <link rel="icon" href="../../../assets/infoblox-favicon-green.svg">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.0">
     
     
       
-        <title>service - Basic API Toolkit</title>
+        <title>service - ibx-sdk</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.45e1311d.min.css">
       
         
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
@@ -96,7 +96,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../../.." title="Basic API Toolkit" class="md-header__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../../.." title="ibx-sdk" class="md-header__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
@@ -109,7 +109,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Basic API Toolkit
+            ibx-sdk
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -209,13 +209,13 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
       </div>
@@ -245,22 +245,22 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="Basic API Toolkit" class="md-nav__button md-logo" aria-label="Basic API Toolkit" data-md-component="logo">
+    <a href="../../.." title="ibx-sdk" class="md-nav__button md-logo" aria-label="ibx-sdk" data-md-component="logo">
       
   <img src="../../../assets/Infoblox_Logo_Primary_Reverse_RGB.png" alt="logo">
 
     </a>
-    Basic API Toolkit
+    ibx-sdk
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/Infoblox-PS/ibx-tools" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/Infoblox-PS/ibx-sdk" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
   </div>
   <div class="md-source__repository">
-    Infoblox-PS/ibx-tools
+    Infoblox-PS/ibx-sdk
   </div>
 </a>
     </div>
@@ -426,8 +426,6 @@
       
         
       
-        
-      
     
     
     
@@ -553,7 +551,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service" class="md-nav__link">
     <span class="md-ellipsis">
       service
     </span>
@@ -562,7 +560,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin" class="md-nav__link">
     <span class="md-ellipsis">
       NiosServiceMixin
     </span>
@@ -572,7 +570,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.get_service_restart_status" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.get_service_restart_status" class="md-nav__link">
     <span class="md-ellipsis">
       get_service_restart_status()
     </span>
@@ -581,7 +579,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart" class="md-nav__link">
     <span class="md-ellipsis">
       service_restart()
     </span>
@@ -591,7 +589,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services in a group
     </span>
@@ -600,7 +598,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services of specific members
     </span>
@@ -609,7 +607,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services with a specific restart mode
     </span>
@@ -618,7 +616,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services with a specific restart option
     </span>
@@ -627,7 +625,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-specific-services" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-specific-services" class="md-nav__link">
     <span class="md-ellipsis">
       Restart specific services
     </span>
@@ -636,7 +634,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services for a specific user
     </span>
@@ -650,7 +648,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.update_service_status" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.update_service_status" class="md-nav__link">
     <span class="md-ellipsis">
       update_service_status()
     </span>
@@ -667,27 +665,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../logger/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    logger
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -811,7 +788,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service" class="md-nav__link">
     <span class="md-ellipsis">
       service
     </span>
@@ -820,7 +797,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin" class="md-nav__link">
     <span class="md-ellipsis">
       NiosServiceMixin
     </span>
@@ -830,7 +807,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.get_service_restart_status" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.get_service_restart_status" class="md-nav__link">
     <span class="md-ellipsis">
       get_service_restart_status()
     </span>
@@ -839,7 +816,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart" class="md-nav__link">
     <span class="md-ellipsis">
       service_restart()
     </span>
@@ -849,7 +826,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services in a group
     </span>
@@ -858,7 +835,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services of specific members
     </span>
@@ -867,7 +844,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services with a specific restart mode
     </span>
@@ -876,7 +853,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services with a specific restart option
     </span>
@@ -885,7 +862,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-specific-services" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-specific-services" class="md-nav__link">
     <span class="md-ellipsis">
       Restart specific services
     </span>
@@ -894,7 +871,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user" class="md-nav__link">
     <span class="md-ellipsis">
       Restart services for a specific user
     </span>
@@ -908,7 +885,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ibx_tools.nios.service.NiosServiceMixin.update_service_status" class="md-nav__link">
+  <a href="#ibx_sdk.nios.service.NiosServiceMixin.update_service_status" class="md-nav__link">
     <span class="md-ellipsis">
       update_service_status()
     </span>
@@ -946,7 +923,7 @@
 
 
 
-<a id="ibx_tools.nios.service"></a>
+<a id="ibx_sdk.nios.service"></a>
   <div class="doc doc-contents first">
   
       <p>Copyright 2023 Infoblox</p>
@@ -977,7 +954,7 @@ limitations under the License.</p>
 
 
 
-<h2 id="ibx_tools.nios.service.NiosServiceMixin" class="doc doc-heading">
+<h2 id="ibx_sdk.nios.service.NiosServiceMixin" class="doc doc-heading">
           <code>NiosServiceMixin</code>
 
 
@@ -990,7 +967,7 @@ limitations under the License.</p>
       <p>NIOS Service Mixin class</p>
 
             <details class="quote">
-              <summary>Source code in <code>src/ibx_tools/nios/service.py</code></summary>
+              <summary>Source code in <code>src/ibx_sdk/nios/service.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-25"> 25</a></span>
 <span class="normal"><a href="#__codelineno-0-26"> 26</a></span>
 <span class="normal"><a href="#__codelineno-0-27"> 27</a></span>
@@ -1295,7 +1272,7 @@ limitations under the License.</p>
 
 
 
-<h3 id="ibx_tools.nios.service.NiosServiceMixin.get_service_restart_status" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.service.NiosServiceMixin.get_service_restart_status" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">get_service_restart_status</span><span class="p">()</span></code>
 
 </h3>
@@ -1404,7 +1381,7 @@ limitations under the License.</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/service.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/service.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-137">137</a></span>
 <span class="normal"><a href="#__codelineno-0-138">138</a></span>
 <span class="normal"><a href="#__codelineno-0-139">139</a></span>
@@ -1476,7 +1453,7 @@ limitations under the License.</p>
 
 
 
-<h3 id="ibx_tools.nios.service.NiosServiceMixin.service_restart" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">service_restart</span><span class="p">(</span><span class="n">groups</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">members</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">restart_option</span><span class="o">=</span><span class="s1">&#39;RESTART_IF_NEEDED&#39;</span><span class="p">,</span> <span class="n">services</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 </h3>
@@ -1653,22 +1630,22 @@ limitations under the License.</p>
 
 
 <p><strong>Examples:</strong></p>
-    <h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group">Restart services in a group</h4>
+    <h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-in-a-group">Restart services in a group</h4>
 <p>service_restart(groups=['group_name'])</p>
-<h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members">Restart services of specific members</h4>
+<h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-of-specific-members">Restart services of specific members</h4>
 <p>service_restart(members=['member1', 'member2'])</p>
-<h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode">Restart services with a specific restart mode</h4>
+<h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-mode">Restart services with a specific restart mode</h4>
 <p>service_restart(mode=ServiceRestartMode.IMMEDIATE)</p>
-<h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option">Restart services with a specific restart option</h4>
+<h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-with-a-specific-restart-option">Restart services with a specific restart option</h4>
 <p>service_restart(restart_option=ServiceRestartOption.RESTART_IF_NEEDED)</p>
-<h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-specific-services">Restart specific services</h4>
+<h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-specific-services">Restart specific services</h4>
 <p>service_restart(services=[ServiceRestartServices.SERVICE_NAME1,
 ServiceRestartServices.SERVICE_NAME2])</p>
-<h4 id="ibx_tools.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user">Restart services for a specific user</h4>
+<h4 id="ibx_sdk.nios.service.NiosServiceMixin.service_restart--restart-services-for-a-specific-user">Restart services for a specific user</h4>
 <p>service_restart(user_name='username')</p>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/service.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/service.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-33"> 33</a></span>
 <span class="normal"><a href="#__codelineno-0-34"> 34</a></span>
 <span class="normal"><a href="#__codelineno-0-35"> 35</a></span>
@@ -1836,7 +1813,7 @@ ServiceRestartServices.SERVICE_NAME2])</p>
 
 
 
-<h3 id="ibx_tools.nios.service.NiosServiceMixin.update_service_status" class="doc doc-heading">
+<h3 id="ibx_sdk.nios.service.NiosServiceMixin.update_service_status" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">update_service_status</span><span class="p">(</span><span class="n">services</span><span class="o">=</span><span class="s1">&#39;ALL&#39;</span><span class="p">)</span></code>
 
 </h3>
@@ -1939,7 +1916,7 @@ ServiceRestartServices.SERVICE_NAME2])</p>
   </table>
 
           <details class="quote">
-            <summary>Source code in <code>src/ibx_tools/nios/service.py</code></summary>
+            <summary>Source code in <code>src/ibx_sdk/nios/service.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-112">112</a></span>
 <span class="normal"><a href="#__codelineno-0-113">113</a></span>
 <span class="normal"><a href="#__codelineno-0-114">114</a></span>
@@ -2061,13 +2038,13 @@ ServiceRestartServices.SERVICE_NAME2])</p>
         
         
           
-          <a href="../logger/" class="md-footer__link md-footer__link--next" aria-label="Next: logger">
+          <a href="../../../modules/util/" class="md-footer__link md-footer__link--next" aria-label="Next: util">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                logger
+                util
               </div>
             </div>
             <div class="md-footer__button md-icon">
