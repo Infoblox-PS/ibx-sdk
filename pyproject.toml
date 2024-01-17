@@ -73,8 +73,13 @@ python_requires = ">=3.8"
 where = ["src"]
 
 [tool.coverage.report]
+show_missing = true
+include = [
+    "src/ibx_tools/*/*.py",
+]
 omit = [
-    "tests/*"
+    "tests/*",
+    "__init__.py"
 ]
 exclude_also = [
     "except requests.exceptions.RequestException",
