@@ -78,11 +78,11 @@ coverage run -m pytest -svvv
 You should see output like the following:
 
 ```shell
-(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage run -m pytest -svvv
+(.venv) ➜  ibx-sdk git:(dev-ppiper) ✗ coverage run -m pytest -svvv
 ============================================== test session starts ===============================================
-platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /Users/ppiper/workspace/ibx-tools/.venv/bin/python3
+platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /Users/ppiper/workspace/ibx-sdk/.venv/bin/python3
 cachedir: .pytest_cache
-rootdir: /Users/ppiper/workspace/ibx-tools
+rootdir: /Users/ppiper/workspace/ibx-sdk
 configfile: pytest.ini
 plugins: env-1.1.3, dotenv-0.5.2
 collected 9 items
@@ -114,7 +114,7 @@ coverage report -m
 ```
 
 ```shell
-(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage report
+(.venv) ➜  ibx-sdk git:(dev-ppiper) ✗ coverage report
 Name                                          Stmts   Miss  Cover
 -----------------------------------------------------------------
 src/ibx_sdk/__init__.py                         0      0   100%
