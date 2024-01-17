@@ -16,16 +16,16 @@
 # Project information
 site_name: Basic API Toolkit
 site_author: Michael Smith, Patrick Piper
-site_url: https://infoblox-ps.github.io/ibx-tools/
+site_url: https://infoblox-ps.github.io/ibx-sdk/
 docs_dir: src_docs
 site_dir: docs
 site_description: >-
-  The Basic API Toolkit is a designed collection of Python classes and methods tailored for 
-  streamlined and effective interaction.
+  The `ibx-sdk` is a collection of Python classes and methods tailored for streamlined and effective interaction
+  with Infoblox APIs.
 
 # Repository
-repo_name: Infoblox-PS/ibx-tools
-repo_url: https://github.com/Infoblox-PS/ibx-tools
+repo_name: Infoblox-PS/ibx-sdk
+repo_url: https://github.com/Infoblox-PS/ibx-sdk
 
 # Copyright
 copyright: |
@@ -137,7 +137,6 @@ nav:
       - wapi: classes/nios/gift.md
       - fileop: classes/nios/fileop.md
       - service: classes/nios/service.md
-      - logger: classes/nios/logger.md
   - Modules:
       - util: modules/util.md
       - ibx_logger: modules/logger.md

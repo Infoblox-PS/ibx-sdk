@@ -32,8 +32,8 @@ against the reference. Ordinarily it is two (2) calls:
 
 !!! tip
 
-    The wapi.getone('<wapi_object', params, **kwargs) method does not return a response object. It will return an object 
-    reference of type string.
+    The `wapi.getone('<wapi_object>', params, **kwargs)` method does not return a response object. It will return an 
+    object reference of type string.
 
 To fetch the reference for network 192.168.0.0/24 from the Grid, we start to create our script with the following:
 
@@ -78,7 +78,7 @@ The ones used most often in working with WAPI data are:
 | `status_code`   | A property representing the HTTP Status Code (200 is OK, 404 is Not Found and so on) |
 | `text`          | A property which returns the content of the response in unicode                      |
 
-We can test the success or failure of the above request by checking for an OK status on the  `response` object this is 
+We can test the success or failure of the above request by checking for an OK status on the  `response` object this is
 done like adding the following to our script:
 
 ```python  linenums="24"
@@ -123,7 +123,7 @@ body = {
 response = wapi.put(_ref, json=body)
 ```
 
-We can test the success or failure of the above request by checking for an OK status on the  `response` object this is 
+We can test the success or failure of the above request by checking for an OK status on the  `response` object this is
 done like adding the following to our script:
 
 ```python  linenums="22"

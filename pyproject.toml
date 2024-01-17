@@ -1,5 +1,5 @@
 [project]
-name = "ibx-tools"
+name = "ibx-sdk"
 version = "0.1.0"
 description = "Infoblox basic API Toolkit"
 classifiers = [
@@ -47,15 +47,15 @@ dependencies = [
 ]
 
 [project.scripts]
-get-log = 'ibx_tools.bin.nios_get_log:main'
-get-file = 'ibx_tools.bin.nios_get_file:main'
-get-supportbundle = 'ibx_tools.bin.nios_get_supportbundle:main'
-grid-backup = 'ibx_tools.bin.nios_grid_backup:main'
-grid-restore = 'ibx_tools.bin.nios_grid_restore:main'
-restart-service = 'ibx_tools.bin.nios_restart_service:main'
-restart-status = 'ibx_tools.bin.nios_restart_status:main'
-csvimport = 'ibx_tools.bin.nios_csvimport:main'
-csvexport = 'ibx_tools.bin.nios_csvexport:main'
+get-log = 'ibx_sdk.bin.nios_get_log:main'
+get-file = 'ibx_sdk.bin.nios_get_file:main'
+get-supportbundle = 'ibx_sdk.bin.nios_get_supportbundle:main'
+grid-backup = 'ibx_sdk.bin.nios_grid_backup:main'
+grid-restore = 'ibx_sdk.bin.nios_grid_restore:main'
+restart-service = 'ibx_sdk.bin.nios_restart_service:main'
+restart-status = 'ibx_sdk.bin.nios_restart_status:main'
+csvimport = 'ibx_sdk.bin.nios_csvimport:main'
+csvexport = 'ibx_sdk.bin.nios_csvexport:main'
 
 
 [project.optional-dependencies]
@@ -63,10 +63,10 @@ dev = ["pylint", "codestyle", "sphinx", "mkdocstrings-python", "mkdocs-material"
 test = ["coverage", "pytest", "pytest-env", "pytest-dotenv"]
 
 [project.urls]
-"homepage" = "https://github.com/Infoblox-PS/ibx-tools"
+"homepage" = "https://github.com/Infoblox-PS/ibx-sdk"
 
 [tools.setuptools]
-packages = ["ibx_tools"]
+packages = ["ibx_sdk"]
 python_requires = ">=3.8"
 
 [tool.setuptools.packages.find]
@@ -75,7 +75,7 @@ where = ["src"]
 [tool.coverage.report]
 show_missing = true
 include = [
-    "src/ibx_tools/*/*.py",
+    "src/ibx_sdk/*/*.py",
 ]
 omit = [
     "tests/*",

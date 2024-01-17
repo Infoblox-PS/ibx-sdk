@@ -66,8 +66,7 @@ body = {
 response = wapi.post(_ref, json=body, params=params)
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and
-methods.
+Our `response` above is a Requests response object, and it will contain a number of properties and methods.
 
 The ones used most often in working with WAPI data are:
 
@@ -155,7 +154,7 @@ if response.status_code != 200:
     sys.exit(1)  # Exit program
 ```
 
-To build/create the 10 fixed addresses recevied by the function we called, we add the following to our script:
+To build/create the 10 fixed addresses received by the function we called, we add the following to our script:
 
 ```python linenums="35"
 for ip in ip_dict['ips']:
