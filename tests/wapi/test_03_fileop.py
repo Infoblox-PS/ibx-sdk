@@ -8,7 +8,7 @@ import time
 import pytest
 import urllib3
 
-from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.exceptions import WapiRequestException
 
 log = logging.getLogger(__name__)
 

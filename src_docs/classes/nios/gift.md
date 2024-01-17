@@ -1,3 +1,3 @@
 # NIOS WAPI Operations
 
-::: ibx_tools.nios.gift
+::: ibx_sdk.nios.gift

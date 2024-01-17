@@ -7,38 +7,34 @@
 
 # Overview
 
-Welcome to the Basic API Toolkit for Infoblox Products. This toolkit contains the following:
+Welcome to the `ibx-sdk` for Infoblox Products. This SDK contains the following:
 
 * Python wrapper for Infoblox NIOS Web RESTful API or WAPI
 * Suite of core Python scripts and tools
 * Full documentation
 
-The Basic API Toolkit is a designed collection of Python classes and methods tailored for 
-streamlined and effective interaction. This toolkit is developed with a focus on simplicity and
-efficiency, enabling users to perform a variety of API actions essential for integrations with 
-Infoblox Products.
+The `ibx-sdk` is a designed collection of Python classes and methods tailored for streamlined and effective interaction.
+This SDK is developed with a focus on simplicity and efficiency, enabling users to perform a variety of API actions 
+essential for integrations with Infoblox Products.
 
-The Basic API Toolkit is crafted to accommodate users at different levels of expertise. It offers an 
-intuitive interface for beginners, while still providing the robust functionality that experienced 
-developers require. The toolkit is an ideal solution for automating network management tasks, 
-ensuring seamless integration with diverse systems and workflows.
+The `ibx-sdk` is crafted to accommodate users at different levels of expertise. It offers an intuitive interface for 
+beginners, while still providing the robust functionality that experienced developers require. The SDK is an ideal 
+solution for automating network management tasks, ensuring seamless integration with diverse systems and workflows.
 
-Included in this toolkit are several practical script and tools that illustrate the application 
-of its methods in real-world scenarios. These scripts are intended to provide users with a clear 
-understanding of how the toolkit can be utilized to its full potential, demonstrating its 
-versatility and effectiveness in various use cases.
+Included in this SDK are several practical script and tools that illustrate the application of its methods in real-world 
+scenarios. These scripts are intended to provide users with a clear understanding of how the toolkit can be utilized to 
+its full potential, demonstrating its versatility and effectiveness in various use cases.
 
-We invite you to explore the capabilities of the Basic API Toolkit. Our goal is to deliver a 
-toolkit that is not only reliable and efficient but also adaptable to the dynamic requirements of 
-contemporary network environments.
+We invite you to explore the capabilities of the `ibx-sdk`. Our goal is to deliver an SDK that is not only reliable and 
+efficient but also adaptable to the dynamic requirements of contemporary network environments.
 
 # Contributing
 
 ## Testing
 
-Testing is a requirement for contributing code to this project. You're expected to write test cases
-which "covers" your code additions, changes, and/or deletions. This section describes how to set up,
-configure, and implement testing of the Basic API Toolkit.
+Testing is a requirement for contributing code to this project. You're expected to write test cases which "covers" your 
+code additions, changes, and/or deletions. This section describes how to set up, configure, and implement testing of the 
+`ibx-sdk`.
 
 ### Software Requirements
 
@@ -82,11 +78,11 @@ coverage run -m pytest -svvv
 You should see output like the following:
 
 ```shell
-(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage run -m pytest -svvv
+(.venv) ➜  ibx-sdk git:(dev-ppiper) ✗ coverage run -m pytest -svvv
 ============================================== test session starts ===============================================
-platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /Users/ppiper/workspace/ibx-tools/.venv/bin/python3
+platform darwin -- Python 3.10.13, pytest-7.4.3, pluggy-1.3.0 -- /Users/ppiper/workspace/ibx-sdk/.venv/bin/python3
 cachedir: .pytest_cache
-rootdir: /Users/ppiper/workspace/ibx-tools
+rootdir: /Users/ppiper/workspace/ibx-sdk
 configfile: pytest.ini
 plugins: env-1.1.3, dotenv-0.5.2
 collected 9 items
@@ -118,16 +114,16 @@ coverage report -m
 ```
 
 ```shell
-(.venv) ➜  ibx-tools git:(dev-ppiper) ✗ coverage report
+(.venv) ➜  ibx-sdk git:(dev-ppiper) ✗ coverage report
 Name                                          Stmts   Miss  Cover
 -----------------------------------------------------------------
-src/ibx_tools/__init__.py                         0      0   100%
-src/ibx_tools/nios/__init__.py                    0      0   100%
-src/ibx_tools/nios/fileop.py                    359    335     7%
-src/ibx_tools/nios/service.py                    42     35    17%
-src/ibx_tools/nios/wapi.py                      125     59    53%
-src/ibx_tools/util/__init__.py                    0      0   100%
-src/ibx_tools/util/util.py                      167    149    11%
+src/ibx_sdk/__init__.py                         0      0   100%
+src/ibx_sdk/nios/__init__.py                    0      0   100%
+src/ibx_sdk/nios/fileop.py                    359    335     7%
+src/ibx_sdk/nios/service.py                    42     35    17%
+src/ibx_sdk/nios/wapi.py                      125     59    53%
+src/ibx_sdk/util/__init__.py                    0      0   100%
+src/ibx_sdk/util/util.py                      167    149    11%
 tests/wapi/__init__.py                            0      0   100%
 tests/wapi/test_env_variables_pytest_env.py       8      0   100%
 tests/wapi/test_wapi.py                          50      0   100%

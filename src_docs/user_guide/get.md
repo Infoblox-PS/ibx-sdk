@@ -17,8 +17,8 @@ res = wapi.get('<wapi_object>', params={}, **kwargs)
 
     See the WAPI Guide for details on all objects, properties, functions, and parameters.
 
-The Infoblox NIOS Web RESTful API supports Options when performing GET requests to fetch data. A
-couple of these are shown below:
+The Infoblox NIOS Web RESTful API supports Options when performing GET requests to fetch data. A couple of these are
+shown below:
 
 | Method Option                                      | Description                                                                                                                                                                                                                                                                     |
 |:---------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -30,8 +30,8 @@ couple of these are shown below:
 To fetch all `network` WAPI objects from the Grid, we'd fashion our script like the following:
 
 ```python
-from ibx_tools.nios.gift import Gift
-from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
+from ibx_sdk.nios.exceptions import WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -45,8 +45,8 @@ wapi.connect(username='admin', password='infoblox')
 response = wapi.get('network')
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and
-methods. The ones used most often in working with WAPI data are:
+Our `response` above is a Requests response object, and it will contain a number of properties and methods. The ones
+used most often in working with WAPI data are:
 
 | property/method | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
@@ -54,8 +54,8 @@ methods. The ones used most often in working with WAPI data are:
 | `status_code`   | A property representing the HTTP Status Code (200 is OK, 404 is Not Found and so on) |
 | `text`          | A property which returns the content of the response in unicode                      |
 
-We can test the success or failure of the above request by checking for an OK status on
-the `response` object this is done like so:
+We can test the success or failure of the above request by checking for an OK status on the `response` object this is
+done like so:
 
 ```python linenums="14"
 response = wapi.get('network')
@@ -65,8 +65,8 @@ else:
     log.error(response.text)
 ```
 
-Let's assume we got a successful `response` above, to get the JSON-encoded results, all we need to
-do is unpack the results. Simply do the following:
+Let's assume we got a successful `response` above, to get the JSON-encoded results, all we need to do is unpack the
+results. Simply do the following:
 
 ```python linenums="19"
 results = response.json()
@@ -74,8 +74,8 @@ results = response.json()
 
 ## Query Parameters
 
-This code will fetch all networks (provided we don't hit the max result set limit!). A JSON response
-is returned by this request.
+This code will fetch all networks (provided we don't hit the max result set limit!). A JSON response is returned by this
+request.
 
 !!! note
 
@@ -84,9 +84,8 @@ is returned by this request.
     When performing the above query, we can optionally pass this option w/ a larger value to avoid
     the raised Exception.
 
-The `wapi.get()` method signature supports a `params` option (see the wapi class docs). In order to
-set `_max_results` on our previous attempt to fetch all networks, we could adjust this property as
-follows:
+The `wapi.get()` method signature supports a `params` option (see the wapi class docs). In order to set `_max_results`
+on our previous attempt to fetch all networks, we could adjust this property as follows:
 
 ```python linenums="0"
 response = wapi.get('network', params={'_max_results': 10000})
@@ -159,7 +158,4 @@ response = wapi.get(
     Not all WAPI object properties can be used in searches. You will need to consult the Infoblox
     Web RESTful or WAPI Guide on your local Grid Manager by visiting https://<grid_mgr>/wapidoc for
     more details. 
-
-## Handling Exceptions
-
 

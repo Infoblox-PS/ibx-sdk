@@ -1,3 +1,3 @@
 # Services
 
-::: ibx_tools.nios.service
+::: ibx_sdk.nios.service

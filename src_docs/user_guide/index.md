@@ -1,10 +1,9 @@
 # Introduction
 
-The Infoblox Basic API Toolkit is a library designed to assist users in developing efficient
-automation scripts for the Infoblox NIOS Web API (WAPI). This toolkit offers a range of tools 
-for effective API interaction. The Basic API Toolkit provides the following:
+The Infoblox `ibx-sdk` is a library and SDK designed to assist users in developing efficient automation scripts for the
+Infoblox NIOS Web API (WAPI). The SDK offers a range of tools for effective API interaction, including the following:
 
-1. The `Gift` wrapper class - The `Gift` class is a wrapper around the Python `requests`, which 
+1. The `Gift` wrapper class - The `Gift` class is a wrapper around the Python `requests`, which
    in turn makes it easier to access the Infoblox Web API module.
 2. Detailed usage and example documentation
 3. Sample operations scripts
@@ -23,8 +22,8 @@ for effective API interaction. The Basic API Toolkit provides the following:
 
     We hope you enjoy!
 
-The `Gift()` Python class is a wrapper for `requests.session`, supporting the same HTTP Request
-methods that are supported by the NIOS WAPI. See the table below:
+The `Gift()` Python class is a wrapper for `requests.session`, supporting the same HTTP Request methods that are
+supported by the NIOS WAPI. See the table below:
 
 | WAPI Method | Gift Request Method | Description                                                           |
 |:-----------:|---------------------|-----------------------------------------------------------------------|
@@ -39,10 +38,10 @@ methods that are supported by the NIOS WAPI. See the table below:
     object. The `Gift.getone()` method expects to fetch a single record and returns the record's 
     `_ref`. It raises an exception if it fails to return any data or if it finds > 1 record.
 
-## Installing the Basic API Toolkit
+## Installing `ibx-sdk`
 
 ```shell
-pip install ibx-toolkit
+pip install ibx-sdk
 ```
 
 ## Initializing the WAPI class
@@ -50,21 +49,21 @@ pip install ibx-toolkit
 First, you have to import it into your scripts:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 ```
 
 Once imported you can instantiate the class as follows:
 
 ```python
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift()
 ```
 
 !!! tip
 
-    We always recommend installing the Basic API Toolkit into a Python Virtual Environment to 
-    avoid polluting your global Python module(s) environment.
+    We always recommend installing the `ibx-sdk` into a Python Virtual Environment to avoid polluting your
+    global Python module(s) environment.
 
 To create a Python virtual environment, perform this sequence of steps:
 
@@ -77,15 +76,14 @@ python3 -m venv .venv
 source .vent/bin/activate
 pip install -U pip setuptools
 ```
-The above code was performed on a Mac, it leverages a `workspace` folder that would have all our 
-project(s) and code. We create a new project called `myproject` and "install" a virtual 
-environment in that folder with `python3`. We sourced the environment on line #6. Last we update 
-the `pip` and `setuptools` modules. 
+
+The above code was performed on a Mac, it leverages a `workspace` folder that would have all our project(s) and code. We 
+create a new project called `myproject` and "install" a virtual environment in that folder with `python3`. We sourced 
+the environment on line #6. Last we update the `pip` and `setuptools` modules.
 
 !!! warning
 
-    Always source your Python virutal environment of your project or you may end up polluting 
-    your own module space. 
+    Always source your Python virutal environment of your project or you may end up polluting your own module space. 
 
 Remember to always source your environment prior to working on your next project:
 

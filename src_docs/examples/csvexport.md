@@ -35,8 +35,7 @@ Options:
 csvexport -u admin -g 192.168.1.2 -f ibcsv-networks.csv -o network
 ```
 
-The command invokes the CSV Job Manager and creates a job to export objects of type network. Once
-the job is complete,
+The command invokes the CSV Job Manager and creates a job to export objects of type network. Once the job is complete,
 the data is exported and saved.
 
 **Screen output from command**

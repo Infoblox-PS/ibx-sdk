@@ -1,7 +1,7 @@
 # Logging
 
-The logging module `ibx_logger.py` was written to simplify logging operations by reducing
-configuration down to a handful of variables.
+The logging module `ibx_logger.py` was written to simplify logging operations by reducing configuration down to a
+handful of variables.
 
 | Name         | Type | Description                                                                                                                                 | Default |
 |--------------|------|---------------------------------------------------------------------------------------------------------------------------------------------|---------|
@@ -12,8 +12,8 @@ configuration down to a handful of variables.
 | num_logs     | int  | Specify the number of logs to retain when using a rotating log file handler instead of standard log file handler.                           | None    |
 | max_size     | int  | Specify the maximum size for the log file (in bytes) if you want to use a rotating log file handler instead of a standard log file handler. | None    |
 
-The logger is configured when using the `init_logger` method, and it creates any one of these
-logging handlers depending on which parameters to you pass to the method:
+The logger is configured when using the `init_logger` method, and it creates any one of these logging handlers depending
+on which parameters to you pass to the method:
 
 - console logger
 - standard log file handler
@@ -21,17 +21,16 @@ logging handlers depending on which parameters to you pass to the method:
 
 ## Console Logger
 
-The Console Logger in the `ibx_logger` is basically a `StreamHandler` which emits logged
-messages to *sys.stderr*. It has been enhanced using the `coloredlogs` Python module to output
-logs in color.
+The Console Logger in the `ibx_logger` is basically a `StreamHandler` which emits logged messages to *sys.stderr*. It
+has been enhanced using the `coloredlogs` Python module to output logs in color.
 
 ### Console-Only Logging
 
-To configure the logger to display console logging for viewing runtime logged events on the
-console, simply import and run `init_console_logger`.
+To configure the logger to display console logging for viewing runtime logged events on the console, simply import and
+run `init_console_logger`.
 
 ```python
-from ibx_tools.logger.ibx_logger import init_console_logger
+from ibx_sdk.logger.ibx_logger import init_console_logger
 
 log = init_console_logger(level='INFO')
 log.info('This is an informational log message')
@@ -39,11 +38,11 @@ log.info('This is an informational log message')
 
 ### Console & File Logging
 
-Configure the console logger with either a standard file or rotating file log handler by passing
-the `console_log` to the `init_logger` function.
+Configure the console logger with either a standard file or rotating file log handler by passing the `console_log` to
+the `init_logger` function.
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(
     logfile_name='mylog.log',
@@ -55,8 +54,7 @@ log = init_logger(
 
 ## Standard File Logger
 
-The standard file logger is configured any time `init_logger` is executed and is controlled by
-these three variables:
+The standard file logger is configured any time `init_logger` is executed and is controlled by these three variables:
 
 1. logfile_name (required)
 2. logfile_mode (default = 'w')
@@ -65,7 +63,7 @@ these three variables:
 The simplest way to get started with the `ibx_logger` is to run as follows:
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(logfile_name='mylog.log')
 ```
@@ -85,7 +83,7 @@ It is possible to set the logging level two (2) ways:
 - update the current logger by setting `set_log_level`
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger, set_log_level
+from ibx_sdk.logger.ibx_logger import init_logger, set_log_level
 
 log = init_logger(
     logfile_name='mylog.log',
@@ -98,24 +96,22 @@ set_log_level(level='DEBUG')
 log.info('logger level is now currently set at DEBUG')
 ```
 
-In the code above, the level is initially set to 'INFO', but later changed to 'DEBUG'. The
-ability to do this is handy when crafting CLI scripts. Often times in a CLI script, you want to
-provide the user an optional way of increasing the verbosity of logging with a `--debug` option.
-This can call the `set_log_level` method to increase logging levels potentially exposing lower
-level logging output messages that might be in the code.
+In the code above, the level is initially set to 'INFO', but later changed to 'DEBUG'. The ability to do this is handy
+when crafting CLI scripts. Often times in a CLI script, you want to provide the user an optional way of increasing the
+verbosity of logging with a `--debug` option. This can call the `set_log_level` method to increase logging levels
+potentially exposing lower level logging output messages that might be in the code.
 
 ## Rotating File Logger
 
-The _ibx_logger.py_ will create a `RotatingFileHandler` which supports rotation of disk log
-files any time the user supplies `num_logs` and `max_size` to the `init_logger` method. If these
-arguments are not passed to the function, it will only use a `FileHandler` instance.
+The _ibx_logger.py_ will create a `RotatingFileHandler` which supports rotation of disk log files any time the user
+supplies `num_logs` and `max_size` to the `init_logger` method. If these arguments are not passed to the function, it
+will only use a `FileHandler` instance.
 
-If you are coding an application for which you expect a significant number of logged messages,
-and you need to retain message data over a long period of time, configure the `ibx_logger` as
-follows:
+If you are coding an application for which you expect a significant number of logged messages, and you need to retain
+message data over a long period of time, configure the `ibx_logger` as follows:
 
 ```python
-from ibx_tools.logger.ibx_logger import init_logger
+from ibx_sdk.logger.ibx_logger import init_logger
 
 log = init_logger(
     logfile_name='mylog.log',
@@ -125,10 +121,9 @@ log = init_logger(
 )
 ```
 
-This would save up to 4 files in 100mb increments. The logger would write to *mylog.log* until
-it got to the `max_size`. The logger closes the file, and a new file is opened for writing. This
-repeats until `num_logs`. Once `num_logs` is reached, files become overwritten. The filenames that
-would result are:
+This would save up to 4 files in 100mb increments. The logger would write to *mylog.log* until it got to the `max_size`.
+The logger closes the file, and a new file is opened for writing. This repeats until `num_logs`. Once `num_logs` is
+reached, files become overwritten. The filenames that would result are:
 
 ```shell
 mylog.log

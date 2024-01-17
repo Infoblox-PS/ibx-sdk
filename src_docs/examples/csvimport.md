@@ -2,8 +2,7 @@
 
 ## Overview
 
-This program is a command-line utility designed to simplify the process of importing csv 
-data into a Grid Manager.
+This program is a command-line utility designed to simplify the process of importing csv data into a Grid Manager.
 
 ## Usage
 
@@ -35,8 +34,7 @@ Options:
 csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
 ```
 
-The command invokes the CSV Job Manager and creates a job to import objects using the INSERT
-Operation.
+The command invokes the CSV Job Manager and creates a job to import objects using the INSERT Operation.
 
 ```text
 csvimport -u admin -g 192.168.1.2 -o INSERT -f ibcsv_add_network.csv
@@ -61,8 +59,7 @@ network,192.168.1.0,255.255.255.0,ns1.ffy.network,FALSE,ffy.corp,"100.64.50.53,1
 csvimport -u admin -g 192.168.1.2 -o DELETE -f ibcsv_add_network.csv
 ```
 
-The command invokes the CSV Job Manager and creates a job to delete objects using the DELETE
-Operation.
+The command invokes the CSV Job Manager and creates a job to delete objects using the DELETE Operation.
 
 **Screen output from command**
 
@@ -89,8 +86,8 @@ network,192.168.1.0,255.255.255.0
 csvimport -u admin -g 192.168.1.2 -o CUSTOM -f ibcsv_networks.csv 
 ```
 
-The command invokes the CSV Job Manager and creates a job to take specific actions for objects using
-the Multiple Action CUSTOM Operation.
+The command invokes the CSV Job Manager and creates a job to take specific actions for objects using the Multiple Action
+CUSTOM Operation.
 
 **Screen output from command**
 
@@ -113,14 +110,13 @@ network,O,100.64.40.0,255.255.255.0,,FALSE,nd.ffy.network,,,default,
 
 **Importing Multiple Action CSV file**
 
-When you import data, you can include multiple actions, such as add, modify, and delete, in one
-single CSV file. The multiple action CSV import file contains multiple types of objects with its
-headers and data rows listed in the order of their dependency hierarchy.
+When you import data, you can include multiple actions, such as add, modify, and delete, in one single CSV file. The
+multiple action CSV import file contains multiple types of objects with its headers and data rows listed in the order of
+their dependency hierarchy.
 
-The CSV import option supports insert, merge/override and delete operations. To combine these
-operations together in a single CSV file, you must specify an optional `IMPORT-ACTION` column in the
-CSV import file. The column value for each data row describes the type of action that the appliance
-supports for the respective row.
+The CSV import option supports insert, merge/override and delete operations. To combine these operations together in a
+single CSV file, you must specify an optional `IMPORT-ACTION` column in the CSV import file. The column value for each
+data row describes the type of action that the appliance supports for the respective row.
 
 | Action | Description       | Notes                                                                                                                                                      |
 |--------|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|

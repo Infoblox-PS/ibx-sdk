@@ -14,8 +14,7 @@ The Infoblox NIOS WAPI supports the following Search Modifiers:
 
 !!! note
 
-    Integers and dates support: !, < and >
-    All other types behave like strings and support: !, ~, and :
+    Integers and dates support: !, < and > All other types behave like strings and support: !, ~, and :
 
 ```python
 response = wapi.get(
@@ -24,9 +23,9 @@ response = wapi.get(
 )
 ```
 
-This query is an example of a case-insensitive search for all networks which contain the 
-Extensible Attribute or EA of **Building** with a value of **data center**. Searches for 
-extensible attributes are sent by prefixing the extensible attribute name with an asterisk (*).
+This query is an example of a case-insensitive search for all networks which contain the Extensible Attribute or EA of 
+**Building** with a value of **data center**. Searches for extensible attributes are sent by prefixing the extensible
+attribute name with an asterisk (*).
 
 ## WAPI Inheritance Data Fetching
 
@@ -34,9 +33,9 @@ show dhcp options inheritance example
 
 ## Regex searches in Query Params
 
-Some object properties allow you to search using regular expressions. The **network** object for 
-example, allows you to search using regular expression on the `network` property. The following 
-is an example of a regular expression search for all networks in the 172.16.0.0/16 space:
+Some object properties allow you to search using regular expressions. The **network** object for example, allows you to 
+search using regular expression on the `network` property. The following is an example of a regular expression search
+for all networks in the 172.16.0.0/16 space:
 
 ```python
 response = wapi.get(

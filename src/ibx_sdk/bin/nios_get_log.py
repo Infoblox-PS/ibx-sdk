@@ -21,9 +21,9 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_tools.logger.ibx_logger import init_logger, increase_log_level
-from ibx_tools.nios.exceptions import WapiRequestException
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
 
 log = init_logger(
     logfile_name='wapi.log',

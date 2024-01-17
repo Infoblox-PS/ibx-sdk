@@ -1,3 +1,3 @@
 # Logger
 
-:::ibx_tools.logger.ibx_logger
+:::ibx_sdk.logger.ibx_logger

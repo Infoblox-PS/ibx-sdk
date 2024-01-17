@@ -22,8 +22,8 @@ from typing import Literal, Optional
 
 import requests.exceptions
 
-from ibx_tools.nios.exceptions import WapiRequestException
-from ibx_tools.util import util
+from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.util import util
 
 CsvOperation = Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM']
 GridRestoreMode = Literal['NORMAL', 'FORCED', 'CLONE']

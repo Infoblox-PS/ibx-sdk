@@ -1,3 +1,3 @@
 # File Operations
 
-::: ibx_tools.nios.fileop
+::: ibx_sdk.nios.fileop

@@ -21,9 +21,9 @@ import requests
 import urllib3
 from requests import Response
 
-from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
-from ibx_tools.nios.fileop import NiosFileopMixin
-from ibx_tools.nios.service import NiosServiceMixin
+from ibx_sdk.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+from ibx_sdk.nios.fileop import NiosFileopMixin
+from ibx_sdk.nios.service import NiosServiceMixin
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

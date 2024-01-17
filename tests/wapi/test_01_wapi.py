@@ -7,8 +7,8 @@ import os
 import pytest
 import urllib3
 
-from ibx_tools.nios.exceptions import WapiInvalidParameterException, WapiRequestException
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+from ibx_sdk.nios.gift import Gift
 
 log = logging.getLogger(__name__)
 

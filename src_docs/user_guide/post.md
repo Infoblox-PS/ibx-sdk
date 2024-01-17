@@ -1,7 +1,7 @@
 # Creating Objects
 
-When using the WAPI to create objects in the Grid, you will need to build up an object as a Python dictionary of 
-attributes and values. The object will likely have some attributes which are required. The dictionary is passed into a 
+When using the WAPI to create objects in the Grid, you will need to build up an object as a Python dictionary of
+attributes and values. The object will likely have some attributes which are required. The dictionary is passed into a
 POST request as JSON payload.
 
 A POST request to create an object in the Grid will generally take the form:
@@ -19,12 +19,11 @@ response = wapi.post('<wapi_object>', json={body}, **kwargs)
 
     See the WAPI Guide for details on all objects, properties, functions, and parameters.
 
-
 ## Create Network
 
 ```python
 import sys
-from ibx_tools.nios.gift import Gift
+from ibx_sdk.nios.gift import Gift
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -43,9 +42,8 @@ body = {
 response = wapi.post('network', json=body)
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and
-methods.
-The ones used most often in working with WAPI data are:
+Our `response` above is a Requests response object, and it will contain a number of properties and methods. The ones
+used most often in working with WAPI data are:
 
 | property/method | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
@@ -53,21 +51,23 @@ The ones used most often in working with WAPI data are:
 | `status_code`   | A property representing the HTTP Status Code (200 is OK, 404 is Not Found and so on) |
 | `text`          | A property which returns the content of the response in unicode                      |
 
-We can test the success or failure of the above request by checking for an OK status on
-the `response` object this is done like so:
+We can test the success or failure of the above request by checking for an OK status on the `response` object this is
+done like so:
 
 ```python linenums="19"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
-    sys.exit(1) # Exit program
+    sys.exit(1)  # Exit program
 ```
 
-When creating objects, the reference of the object will be retured upon the successful creation
+When creating objects, the reference of the object will be returned upon the successful creation
+
 ```text linenums="0"
 network/ZG5zLm5ldHdvcmskMTkyLjE2OC4zLjAvMjQvMA:192.168.1.0/24/default
 ```
 
-An unsessful call may look like the following:
+An unsuccessful call may look like the following:
+
 ```text linenums="0"
 {
     'Error': 'AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The network 192.168.1.0/24 already exists.  Select another network.)',
@@ -79,7 +79,7 @@ An unsessful call may look like the following:
 ## Create Host Record
 
 ```python
-from ibx_tools.nios.gift import Gift, WapiRequestException
+from ibx_sdk.nios.gift import Gift, WapiRequestException
 
 wapi = Gift(
     grid_mgr='infoblox.localdomain',
@@ -101,21 +101,23 @@ body = {
 response = wapi.post('record:host', json=body)
 ```
 
-We can test the success or failure of the above request by checking for an OK status on the 
-`response` object this is done like adding the following to our script:
+We can test the success or failure of the above request by checking for an OK status on the `response` object this is
+done like adding the following to our script:
 
 ```python linenums="21"
 if response.status_code != 200:
     print(f'We hit a snag {response.text}')
-    sys.exit(1) # Exit program
+    sys.exit(1)  # Exit program
 ```
 
-When creating objects, the reference of the object will be retured upon the successful creation
+When creating objects, the reference of the object will be returned upon the successful creation
+
 ```text linenums="0"
 record:host/ZG5zLmhvc3QkLl9kZWZhdWx0LmNvbS5leGFtcGxlLm15LXJvdXRlcg:my-router.example.com/Internal%20DNS
 ```
 
-An unsessful call may look like the following:
+An unsuccessful call may look like the following:
+
 ```text linenums="0"
 {
     'Error': "AdmConDataError: None (IBDataConflictError: IB.Data.Conflict:The record 'my-router example.com' already exists.)", 

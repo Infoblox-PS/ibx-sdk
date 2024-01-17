@@ -19,7 +19,7 @@ import pprint
 from typing import Literal, Optional
 
 import requests
-from ibx_tools.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.exceptions import WapiRequestException
 
 
 class NiosServiceMixin:
