@@ -516,13 +516,15 @@ class NiosFileopMixin:
             keep_grid_ip (bool): Indicates whether to keep the grid IP address. Default is False.
 
         """
-        (_, filename) = os.path.split(filename)
-        filename = os.path.join(_, filename.replace('-', '_'))
+        actual_filepath = filename
+        (_, base_filename) = os.path.split(filename)
+        upload_filename = base_filename.replace('-', '_')
 
         # Call WAPI fileop Upload INIT
-        logging.info('step 1 - request uploadinit %s', filename)
+        logging.info('step 1 - Restoring database from %s', actual_filepath)
+        logging.info('step 2 - request uploadinit %s', upload_filename)
         try:
-            obj = self.__upload_init(filename)
+            obj = self.__upload_init(upload_filename)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
@@ -534,9 +536,9 @@ class NiosFileopMixin:
         req_cookies = {'ibapauth': ibapauth_cookie}
 
         # specify a file handle for the file data to be uploaded
-        with open(filename, "rb") as restore_file:
+        with open(actual_filepath, "rb") as restore_file:
             # Upload the contents of the CSV file
-            logging.info('step 2 - post the files using the upload_url provided')
+            logging.info('step 3 - post the files using the upload_url provided')
             upload_file = {'filedata': restore_file}
             try:
                 self.__upload_file(upload_url, upload_file, req_cookies)
@@ -545,7 +547,7 @@ class NiosFileopMixin:
                 raise WapiRequestException(err)
 
             # Execute the restore
-            logging.info('step 3 - execute the restore')
+            logging.info('step 4 - execute the grid restore')
             try:
                 self.__restore_database(
                     keep_grid_ip,
@@ -554,7 +556,7 @@ class NiosFileopMixin:
                     req_cookies
                 )
             except requests.exceptions.RequestException as err:
-                logging.error('step 3 - Error: %s', err)
+                logging.error('step 4 - Error: %s', err)
                 raise WapiRequestException(err)
             logging.info("Grid restore successful!")
 
