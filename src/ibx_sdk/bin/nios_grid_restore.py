@@ -17,6 +17,7 @@ limitations under the License.
 
 import getpass
 import sys
+from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -35,7 +36,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -52,7 +54,7 @@ Restore NIOS Grid.
 @optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
-    '-u', '--username', default="admin", show_default=True, help=("Infoblox NIOS username")
+    '-u', '--username', default="admin", show_default=True, help="Infoblox NIOS username"
 )
 @optgroup.option(
     '-m', '--mode',
@@ -61,12 +63,17 @@ Restore NIOS Grid.
     help="Grid Restore Mode [NORMAL|FORCED|CLONE]"
 )
 @optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option(
+    '-w', '--wapi-ver', default='2.11', show_default=True,
+    help='Infoblox WAPI version'
+)
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
-def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str,
-         debug: bool) -> None:
+def main(
+        grid_mgr: str, filename: str, username: str, mode: Literal['NORMAL', 'FORCED', 'CLONE'],
+        keep: bool, wapi_ver: str,
+        debug: bool
+) -> None:
     """
     Restore NIOS Grid
 

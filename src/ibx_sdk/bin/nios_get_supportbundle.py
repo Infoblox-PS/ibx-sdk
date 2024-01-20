@@ -31,7 +31,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=1000000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -40,23 +41,31 @@ Retrieve Support Bundle from Member
 """
 
 
-@click.command(help=help_text,
-               context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(
+    help=help_text,
+    context_settings=dict(max_content_width=95, help_option_names=['-h', '--help'])
+    )
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True,
-                 help='Infoblox admin username')
+@optgroup.option(
+    '-u', '--username', default='admin', show_default=True,
+    help='Infoblox admin username'
+    )
 @optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs')
 @optgroup.option('-l', '--log-files', is_flag=True, help='Include Log Files')
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option(
+    '-w', '--wapi-ver', default='2.11', show_default=True,
+    help='Infoblox WAPI version'
+    )
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, member: str, username: str, rotated_logs: bool, log_files: bool,
-         wapi_ver: str,
-         debug: bool) -> None:
+def main(
+        grid_mgr: str, member: str, username: str, rotated_logs: bool, log_files: bool,
+        wapi_ver: str,
+        debug: bool
+        ) -> None:
     """
     Get NIOS Support Bundle from Member.
 

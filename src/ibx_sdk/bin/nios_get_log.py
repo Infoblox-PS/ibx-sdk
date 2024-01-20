@@ -17,6 +17,7 @@ limitations under the License.
 
 import getpass
 import sys
+from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -31,7 +32,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -69,27 +71,43 @@ def validate_rotated_logs(ctx, param, value):
     return value
 
 
-@click.command(help=help_text,
-               context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(
+    help=help_text,
+    context_settings=dict(max_content_width=95, help_option_names=['-h', '--help'])
+)
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True,
-                 help='Infoblox admin username')
-@optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True,
-                 help='select log type')
-@optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
-                 show_default=True, help='Node: ACTIVE | PASSIVE')
-@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs',
-                 callback=validate_rotated_logs)
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option(
+    '-u', '--username', default='admin', show_default=True,
+    help='Infoblox admin username'
+)
+@optgroup.option(
+    '-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True,
+    help='select log type'
+)
+@optgroup.option(
+    '-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
+    show_default=True, help='Node: ACTIVE | PASSIVE'
+)
+@optgroup.option(
+    '-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs',
+    callback=validate_rotated_logs
+)
+@optgroup.option(
+    '-w', '--wapi-ver', default='2.11', show_default=True,
+    help='Infoblox WAPI version'
+)
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: str,
-         rotated_logs: bool,
-         wapi_ver: str, debug: bool) -> None:
+def main(
+        grid_mgr: str, member: str, username: str, log_type: Literal[
+            'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'],
+        node_type: Literal['ACTIVE', 'BACKUP'],
+        rotated_logs: bool,
+        wapi_ver: str, debug: bool
+) -> None:
     """
     Get NIOS Log from Member.
 

@@ -17,6 +17,7 @@ limitations under the License.
 
 import getpass
 import sys
+from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -24,8 +25,8 @@ from click_option_group import optgroup
 from ibx_sdk.logger.ibx_logger import (
     init_logger, increase_log_level
 )
-from ibx_sdk.nios.gift import Gift
 from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -33,7 +34,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -42,19 +44,31 @@ CSV Import Data
 """
 
 
-@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(
+    help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help'])
+    )
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.option('-f', '--filename', required=True, help='Infoblox WAPI CSV import file name')
-@optgroup.option('-o', '--operation', required=True,
-                 type=click.Choice(['INSERT', 'OVERRIDE', 'MERGE', 'DELETE', 'CUSTOM']),
-                 help='CSV import mode')
+@optgroup.option(
+    '-o', '--operation', required=True,
+    type=click.Choice(['INSERT', 'OVERRIDE', 'MERGE', 'DELETE', 'CUSTOM']),
+    help='CSV import mode'
+    )
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.option(
+    '-u', '--username', default='admin', show_default=True, help='Infoblox admin username'
+    )
+@optgroup.option(
+    '-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version'
+    )
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, filename: str, operation: str, username: str, wapi_ver: str, debug: bool) -> None:
+def main(
+        grid_mgr: str, filename: str,
+        operation: Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM'],
+        username: str, wapi_ver: str, debug: bool
+        ) -> None:
     """
     CSV Import
 
