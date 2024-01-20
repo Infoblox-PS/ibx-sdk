@@ -564,6 +564,7 @@ class NiosFileopMixin:
             self,
             member: str,
             conf_type: MemberDataType,
+            filename: str = None,
             remote_url: str = None) -> str:
         """
         Fetch member configuration file for given service type.
@@ -577,6 +578,13 @@ class NiosFileopMixin:
             A string representing the downloaded file.
 
         """
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies['ibapauth']
+        req_cookies = {'ibapauth': ibapauth_cookie}
+        if not filename:
+            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
+            filename = f'{date_time}-{member}-{conf_type}.tgz'
+
         conf_type = conf_type.upper()
         logging.info(
             'fetching %s config file for grid member %s',
@@ -595,30 +603,25 @@ class NiosFileopMixin:
 
         obj = res.json()
         download_url = obj.get('url')
-        download_token = obj.get('token')
+        token = obj.get('token')
 
-        # get auth cookie from cookie jar
-        ibapauth_cookie = self.conn.cookies['ibapauth']
-        req_cookies = {'ibapauth': ibapauth_cookie}
+        logging.info("step 2 - saving backup to %s", filename)
 
-        logging.info('downloading data from %s', download_url)
         try:
             res = self.__download_file(download_url, req_cookies)
+            res.raise_for_status()
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
 
-        download_file = util.get_csv_from_url(download_url)
+        NiosFileopMixin.__write_file(filename=filename, data=res)
 
-        NiosFileopMixin.__write_file(filename=download_file, data=res)
-
+        # we're done - post downloadcomplete function using the token
         try:
-            self.__download_complete(download_token, download_file, req_cookies)
+            self.__download_complete(token, filename, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
-
-        return download_file
 
     def __csv_import(
             self,
