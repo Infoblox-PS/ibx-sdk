@@ -573,6 +573,7 @@ class NiosFileopMixin:
             member: A string representing the grid member.
             conf_type: An enum representing the type of config file.
             remote_url: An optional string representing the remote URL.
+            filename: An optional string representing the filename
 
         Returns:
             A string representing the downloaded file.
