@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -64,9 +63,7 @@ Get NIOS File from member
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(
-        grid_mgr: str, member: str, username: str, cfg_type: Literal[
-            'DNS_CACHE', 'DNS_CFG', 'DHCP_CFG', 'DHCPV6_CFG', 'TRAFFIC_CAPTURE_FILE',
-            'DNS_STATS', 'DNS_RECURSING_CACHE'], wapi_ver: str, debug: bool
+        grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str, debug: bool
         ) -> None:
     """
     Get NIOS Configuration from Member

@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -66,7 +65,7 @@ CSV Import Data
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(
         grid_mgr: str, filename: str,
-        operation: Literal['INSERT', 'UPDATE', 'DELETE', 'REPLACE', 'MERGE', 'OVERRIDE', 'CUSTOM'],
+        operation: str,
         username: str, wapi_ver: str, debug: bool
         ) -> None:
     """

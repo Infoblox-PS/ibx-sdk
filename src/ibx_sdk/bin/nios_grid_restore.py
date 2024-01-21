@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -70,7 +69,7 @@ Restore NIOS Grid.
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
 def main(
-        grid_mgr: str, filename: str, username: str, mode: Literal['NORMAL', 'FORCED', 'CLONE'],
+        grid_mgr: str, filename: str, username: str, mode: str,
         keep: bool, wapi_ver: str,
         debug: bool
 ) -> None:

@@ -17,7 +17,6 @@ limitations under the License.
 
 import getpass
 import sys
-from typing import Literal
 
 import click
 from click_option_group import optgroup
@@ -102,9 +101,8 @@ def validate_rotated_logs(ctx, param, value):
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(
-        grid_mgr: str, member: str, username: str, log_type: Literal[
-            'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'],
-        node_type: Literal['ACTIVE', 'BACKUP'],
+        grid_mgr: str, member: str, username: str, log_type: str,
+        node_type: str,
         rotated_logs: bool,
         wapi_ver: str, debug: bool
 ) -> None:
