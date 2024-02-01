@@ -22,8 +22,8 @@ import click
 from click_option_group import optgroup
 
 from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
-from ibx_sdk.nios.gift import Gift
 from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.gift import Gift
 
 log = init_logger(
     logfile_name='wapi.log',
@@ -31,7 +31,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=10000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -73,15 +74,15 @@ def main(grid_mgr: str, username: str, file: str, wapi_ver: str, debug: bool) ->
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
-    password = getpass.getpass(
-        f'Enter password for [{username}]: '
-    )
+    password = getpass.getpass(f'Enter password for [{username}]: ')
+
     try:
         wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
-    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+    else:
+        log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
         wapi.grid_backup(filename=file)

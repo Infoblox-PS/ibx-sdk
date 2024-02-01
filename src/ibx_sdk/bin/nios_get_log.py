@@ -31,17 +31,15 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
 
 class LogType(click.ParamType):
     name = "log_type"
-    log_types = [
-        'SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG',
-        'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG'
-    ]
+    log_types = ['SYSLOG', 'AUDITLOG', 'MSMGMTLOG', 'DELTALOG', 'OUTBOUND', 'PTOPLOG', 'DISCOVERY_CSV_ERRLOG']
 
     def convert(self, value, param, ctx):
         if value.upper() in self.log_types:
@@ -75,21 +73,26 @@ def validate_rotated_logs(ctx, param, value):
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.option('-m', '--member', required=True, help='Member to retrieve log from')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True,
-                 help='Infoblox admin username')
-@optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True,
-                 help='select log type')
-@optgroup.option('-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]), default='ACTIVE',
-                 show_default=True, help='Node: ACTIVE | PASSIVE')
-@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs',
-                 callback=validate_rotated_logs)
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
+@optgroup.option('-t', '--log-type', default='SYSLOG', type=LogType(), show_default=True, help='select log type')
+@optgroup.option(
+    '-n', '--node-type', type=click.Choice(["ACTIVE", "PASSIVE"]),
+    default='ACTIVE', show_default=True, help='Node: ACTIVE | PASSIVE'
+)
+@optgroup.option('-r', '--rotated-logs', is_flag=True, help='Include Rotated Logs', callback=validate_rotated_logs)
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: str,
-         rotated_logs: bool,
-         wapi_ver: str, debug: bool) -> None:
+def main(
+        grid_mgr: str,
+        member: str,
+        username: str,
+        log_type: str,
+        node_type: str,
+        rotated_logs: bool,
+        wapi_ver: str,
+        debug: bool
+) -> None:
     """
     Get NIOS Log from Member.
 
@@ -116,16 +119,15 @@ def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: st
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
-    password = getpass.getpass(
-        f'Enter password for [{username}]: '
-    )
+    password = getpass.getpass(f'Enter password for [{username}]: ')
 
     try:
         wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
-    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+    else:
+        log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
         wapi.get_log_files(
@@ -137,6 +139,7 @@ def main(grid_mgr: str, member: str, username: str, log_type: str, node_type: st
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
+
     log.info('finished!')
     sys.exit()
 
