@@ -355,8 +355,7 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
         if not filename:
-            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-            filename = f'{date_time}-{member}-{log_type}.tgz'
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -369,7 +368,7 @@ class NiosFileopMixin:
     def get_support_bundle(
             self,
             member: str,
-            filename: str = None,
+            filename: Optional[str] = None,
             cached_zone_data: bool = False,
             core_files: bool = False,
             log_files: bool = False,
