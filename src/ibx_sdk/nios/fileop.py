@@ -443,8 +443,7 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
         if not filename:
-            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-            filename = f'{date_time}-{member}-SupportBundle.tgz'
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
