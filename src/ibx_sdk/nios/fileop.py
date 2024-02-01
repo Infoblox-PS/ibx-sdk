@@ -277,12 +277,12 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        filename = f'csv-errors-{filename}.csv'
-        NiosFileopMixin.__write_file(filename=filename, data=res)
+        csv_error_file = f'csv-errors-{filename}.csv'
+        NiosFileopMixin.__write_file(filename=csv_error_file, data=res)
 
         # We're done - so post to downloadcomplete function
         try:
-            self.__download_complete(token, filename, req_cookies)
+            self.__download_complete(token, csv_error_file, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
