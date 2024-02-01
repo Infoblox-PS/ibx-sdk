@@ -453,7 +453,7 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-    def grid_backup(self, filename: str = 'database.tgz') -> None:
+    def grid_backup(self, filename: Optional[str] = None) -> None:
         """
         Perform a NIOS Grid Backup.
 
@@ -489,6 +489,9 @@ class NiosFileopMixin:
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
+
+        if not filename:
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -562,6 +565,7 @@ class NiosFileopMixin:
             self,
             member: str,
             conf_type: MemberDataType,
+            filename: Optional[str] = None,
             remote_url: str = None) -> str:
         """
         Fetch member configuration file for given service type.
@@ -569,6 +573,7 @@ class NiosFileopMixin:
         Args:
             member: A string representing the grid member.
             conf_type: An enum representing the type of config file.
+            filename: A string value of the filename to save
             remote_url: An optional string representing the remote URL.
 
         Returns:
@@ -606,7 +611,10 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        download_file = util.get_csv_from_url(download_url)
+        if filename:
+            download_file = filename
+        else:
+            download_file = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=download_file, data=res)
 
