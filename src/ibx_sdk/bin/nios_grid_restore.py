@@ -35,7 +35,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -51,9 +52,7 @@ Restore NIOS Grid.
 @optgroup.option('-g', '--grid-mgr', required=True, help="Infoblox NIOS Grid Manager IP/Hostname")
 @optgroup.option('-f', '--filename', required=True, help="Infoblox NIOS Grid restore filename")
 @optgroup.group("Optional Parameters")
-@optgroup.option(
-    '-u', '--username', default="admin", show_default=True, help=("Infoblox NIOS username")
-)
+@optgroup.option('-u', '--username', default="admin", show_default=True, help="Infoblox NIOS username")
 @optgroup.option(
     '-m', '--mode',
     type=click.Choice(["NORMAL", "FORCED", "CLONE"], case_sensitive=True),
@@ -61,12 +60,10 @@ Restore NIOS Grid.
     help="Grid Restore Mode [NORMAL|FORCED|CLONE]"
 )
 @optgroup.option('-k', '--keep', is_flag=True, help="Keep existing IP otherwise use IP from backup")
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help="Enable verbose logging")
-def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str,
-         debug: bool) -> None:
+def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wapi_ver: str, debug: bool) -> None:
     """
     Restore NIOS Grid
 
@@ -92,15 +89,15 @@ def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wap
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
-    password = getpass.getpass(
-        f'Enter password for [{username}]: '
-    )
+    password = getpass.getpass(f'Enter password for [{username}]: ')
+
     try:
         wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
-    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+    else:
+        log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
         wapi.grid_restore(
@@ -114,5 +111,4 @@ def main(grid_mgr: str, filename: str, username: str, mode: str, keep: bool, wap
 
 
 if __name__ == "__main__":
-    # execute only if run as a script
     main()

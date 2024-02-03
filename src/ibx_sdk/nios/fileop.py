@@ -277,12 +277,12 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        filename = f'csv-errors-{filename}.csv'
-        NiosFileopMixin.__write_file(filename=filename, data=res)
+        csv_error_file = f'csv-errors-{filename}.csv'
+        NiosFileopMixin.__write_file(filename=csv_error_file, data=res)
 
         # We're done - so post to downloadcomplete function
         try:
-            self.__download_complete(token, filename, req_cookies)
+            self.__download_complete(token, csv_error_file, req_cookies)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
@@ -355,8 +355,7 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
         if not filename:
-            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-            filename = f'{date_time}-{member}-{log_type}.tgz'
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -369,7 +368,7 @@ class NiosFileopMixin:
     def get_support_bundle(
             self,
             member: str,
-            filename: str = None,
+            filename: Optional[str] = None,
             cached_zone_data: bool = False,
             core_files: bool = False,
             log_files: bool = False,
@@ -444,8 +443,7 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
         if not filename:
-            date_time = str(datetime.datetime.now().strftime('%Y%m%d%S'))
-            filename = f'{date_time}-{member}-SupportBundle.tgz'
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -455,7 +453,7 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-    def grid_backup(self, filename: str = 'database.tgz') -> None:
+    def grid_backup(self, filename: Optional[str] = None) -> None:
         """
         Perform a NIOS Grid Backup.
 
@@ -491,6 +489,9 @@ class NiosFileopMixin:
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
+
+        if not filename:
+            filename = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=res)
 
@@ -564,6 +565,7 @@ class NiosFileopMixin:
             self,
             member: str,
             conf_type: MemberDataType,
+            filename: Optional[str] = None,
             remote_url: str = None) -> str:
         """
         Fetch member configuration file for given service type.
@@ -571,6 +573,7 @@ class NiosFileopMixin:
         Args:
             member: A string representing the grid member.
             conf_type: An enum representing the type of config file.
+            filename: A string value of the filename to save
             remote_url: An optional string representing the remote URL.
 
         Returns:
@@ -608,7 +611,10 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
-        download_file = util.get_csv_from_url(download_url)
+        if filename:
+            download_file = filename
+        else:
+            download_file = util.get_csv_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=download_file, data=res)
 

@@ -32,7 +32,8 @@ log = init_logger(
     console_log=True,
     level='info',
     max_size=100000,
-    num_logs=1)
+    num_logs=1
+)
 
 wapi = Gift()
 
@@ -41,15 +42,12 @@ Retrieve Restart Status
 """
 
 
-@click.command(help=help_text,
-               context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
+@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
 @optgroup.group("Required Parameters")
 @optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
 @optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True,
-                 help='Infoblox admin username')
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True,
-                 help='Infoblox WAPI version')
+@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
+@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
 @optgroup.group("Logging Parameters")
 @optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
 def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
@@ -76,15 +74,15 @@ def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
-    password = getpass.getpass(
-        f'Enter password for [{username}]: '
-    )
+    password = getpass.getpass(f'Enter password for [{username}]: ')
+
     try:
         wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
-    log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+    else:
+        log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
 
     try:
         response = wapi.get_service_restart_status()
@@ -92,8 +90,7 @@ def main(grid_mgr: str, username: str, wapi_ver: str, debug: bool) -> None:
         log.error(err)
         sys.exit(1)
     else:
-        formatted_json = json.dumps(response, indent=4)
-        print(formatted_json)
+        print(json.dumps(response, indent=4))
 
     sys.exit()
 
