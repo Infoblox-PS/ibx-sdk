@@ -314,7 +314,14 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             Response: The response object containing the result of the request.
         """
         url = f'{self.url}/{wapi_object}'
-        return self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+        try:
+            res = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+        except requests.exceptions.RequestException as err:
+            raise WapiRequestException(err)
+        else:
+            if res.status_code != 200:
+                raise WapiRequestException(res.text)
+        return res
 
     def getone(self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any) -> str:
         """
@@ -332,12 +339,18 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             WapiRequestException: If multiple data records were returned or no data was returned.
         """
         url = f'{self.url}/{wapi_object}'
-        response = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
-        data = response.json()
-        if len(data) > 1:
-            raise WapiRequestException('Multiple data records were returned')
-        elif len(data) == 0:
-            raise WapiRequestException('No data was returned')
+        try:
+            response = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+        except requests.exceptions.RequestException as err:
+            raise WapiRequestException(err)
+        else:
+            if response.status_code != 200:
+                raise WapiRequestException(response.text)
+            data = response.json()
+            if len(data) > 1:
+                raise WapiRequestException('Multiple data records were returned')
+            elif len(data) == 0:
+                raise WapiRequestException('No data was returned')
         return data[0].get('_ref', '')
 
     def post(self,
@@ -360,17 +373,21 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             Response: The response object containing the server's response to the POST request.
         """
         url = f'{self.url}/{wapi_object}'
-        return self.conn.request(
-            'post', url, data=data, json=json, verify=self.ssl_verify,
-            **kwargs
-            )
+        try:
+            res = self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify, **kwargs)
+        except requests.exceptions.RequestException as err:
+            raise WapiRequestException(err)
+        else:
+            if res.status != 201:
+                raise WapiRequestException(res.text)
+            return res
 
     def put(
             self,
             wapi_object_ref: str,
             data: Optional[Union[dict, str]] = None,
             **kwargs: Any
-            ) -> Response:
+    ) -> Response:
         """
         Create a PUT request to update a WAPI object by its _ref.
 
@@ -383,7 +400,14 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             Response: The response object for the PUT request.
         """
         url = f'{self.url}/{wapi_object_ref}'
-        return self.conn.request('put', url, data=data, verify=self.ssl_verify, **kwargs)
+        try:
+            res = self.conn.request('put', url, data=data, verify=self.ssl_verify, **kwargs)
+        except requests.exceptions.RequestException as err:
+            raise WapiRequestException(err)
+        else:
+            if res.status != 200:
+                raise WapiRequestException(res.text)
+            return res
 
     def delete(self, wapi_object_ref: str, **kwargs: Any) -> Response:
         """
@@ -398,4 +422,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         """
         url = f'{self.url}/{wapi_object_ref}'
-        return self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
+        try:
+            res = self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
+        except requests.exceptions.RequestException as err:
+            raise WapiRequestException(err)
+        else:
+            if res.status != 200:
+                raise WapiRequestException(res.text)
+            return res
