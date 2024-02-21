@@ -378,7 +378,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
-            if res.status != 201:
+            if res.status_code != 201:
                 raise WapiRequestException(res.text)
             return res
 
@@ -405,7 +405,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
-            if res.status != 200:
+            if res.status_code != 200:
                 raise WapiRequestException(res.text)
             return res
 
@@ -427,6 +427,6 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
-            if res.status != 200:
+            if res.status_code != 200:
                 raise WapiRequestException(res.text)
             return res
