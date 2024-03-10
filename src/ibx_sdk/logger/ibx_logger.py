@@ -192,6 +192,7 @@ def init_console_logger(level: Optional[str] = None):
         level=log_level,
         fmt=log_fmt
     )
+    return root_logger
 
 
 def increase_log_level(handler_type: str = 'both') -> None:
