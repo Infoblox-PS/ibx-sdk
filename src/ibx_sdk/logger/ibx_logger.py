@@ -34,6 +34,7 @@ class CallCounted:
         method (callable): The method to be decorated.
 
     """
+
     def __init__(self, method):
         """
         Initialize the CallCounted decorator.
@@ -61,21 +62,22 @@ class CallCounted:
 
 
 log_levels = {
-    'DEBUG': logging.DEBUG,
-    'INFO': logging.INFO,
-    'WARNING': logging.WARNING,
-    'ERROR': logging.ERROR,
-    'CRITICAL': logging.CRITICAL
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+    "CRITICAL": logging.CRITICAL,
 }
 
 
 def init_logger(
-        logfile_name: str,
-        logfile_mode: Optional[str] = 'w',
-        console_log: Optional[bool] = None,
-        max_size: Optional[int] = None,
-        num_logs: Optional[int] = None,
-        level: Optional[str] = None) -> logging.Logger:
+    logfile_name: str,
+    logfile_mode: Optional[str] = "w",
+    console_log: Optional[bool] = None,
+    max_size: Optional[int] = None,
+    num_logs: Optional[int] = None,
+    level: Optional[str] = None,
+) -> logging.Logger:
     """
     Create and return a custom file/console logger.
 
@@ -123,26 +125,24 @@ def init_logger(
         log_level = log_levels.get(level.upper(), logging.INFO)
     else:
         log_level = logging.INFO
-    log_fmt = '%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s'
+    log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
     # feature - logfile path
-    if os.getenv('IBX_LOGDIR'):
-        if not os.path.exists(os.getenv('IBX_LOGDIR')):
+    if os.getenv("IBX_LOGDIR"):
+        if not os.path.exists(os.getenv("IBX_LOGDIR")):
             try:
-                os.makedirs(os.getenv('IBX_LOGDIR'))
+                os.makedirs(os.getenv("IBX_LOGDIR"))
             except FileExistsError as err:
                 logging.warning(err)
             except OSError as err:
                 logging.warning(err)
-        logfile_name = os.path.join(os.getenv('IBX_LOGDIR'), logfile_name)
+        logfile_name = os.path.join(os.getenv("IBX_LOGDIR"), logfile_name)
 
     if num_logs and max_size:
         lfh = RotatingFileHandler(
-            filename=logfile_name,
-            maxBytes=max_size,
-            backupCount=num_logs
+            filename=logfile_name, maxBytes=max_size, backupCount=num_logs
         )
     else:
         lfh = logging.FileHandler(
@@ -156,7 +156,7 @@ def init_logger(
     if console_log:
         init_console_logger(level)
 
-    root_logger.debug('using logfile_name = %s', logfile_name)
+    root_logger.debug("using logfile_name = %s", logfile_name)
     return root_logger
 
 
@@ -183,19 +183,15 @@ def init_console_logger(level: Optional[str] = None):
         log_level = log_levels.get(level.upper(), logging.INFO)
     else:
         log_level = logging.INFO
-    coloredlogs.DEFAULT_FIELD_STYLES['filename'] = dict(color='blue')
-    log_fmt = '%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s'
+    coloredlogs.DEFAULT_FIELD_STYLES["filename"] = dict(color="blue")
+    log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
-    coloredlogs.install(
-        logger=root_logger,
-        level=log_level,
-        fmt=log_fmt
-    )
+    coloredlogs.install(logger=root_logger, level=log_level, fmt=log_fmt)
     return root_logger
 
 
-def increase_log_level(handler_type: str = 'both') -> None:
+def increase_log_level(handler_type: str = "both") -> None:
     """
     Increase the logging level of the root logger and specific handlers.
 
@@ -228,24 +224,24 @@ def increase_log_level(handler_type: str = 'both') -> None:
     selected_index = max(0, current_index - 1)
     root_logger.setLevel(defined_levels[selected_index])
     for handle in root_logger.handlers:
-        if (
-                isinstance(handle, coloredlogs.StandardErrorHandler) and
-                handler_type in ['both', 'console']
-        ):
+        if isinstance(handle, coloredlogs.StandardErrorHandler) and handler_type in [
+            "both",
+            "console",
+        ]:
             current_index = defined_levels.index(handle.level)
             selected_index = max(0, current_index - 1)
             coloredlogs.set_level(defined_levels[selected_index])
         elif (
-                isinstance(handle, logging.FileHandler) or
-                isinstance(handle, logging.handlers.RotatingFileHandler) and
-                handler_type in ['both', 'file']
+            isinstance(handle, logging.FileHandler)
+            or isinstance(handle, logging.handlers.RotatingFileHandler)
+            and handler_type in ["both", "file"]
         ):
             current_index = defined_levels.index(handle.level)
             selected_index = max(0, current_index - 1)
             handle.setLevel(defined_levels[selected_index])
 
 
-def set_log_level(level: str, handler_type: str = 'both') -> None:
+def set_log_level(level: str, handler_type: str = "both") -> None:
     """
     Set the logging level for the root logger and specific handlers.
 
@@ -278,18 +274,18 @@ def set_log_level(level: str, handler_type: str = 'both') -> None:
     """
     log_level = log_levels.get(level.upper(), logging.INFO)
     root_logger = logging.getLogger()
-    if handler_type == 'both':
+    if handler_type == "both":
         root_logger.setLevel(log_level)
     for handle in root_logger.handlers:
-        if (
-                isinstance(handle, coloredlogs.StandardErrorHandler) and
-                handler_type in ['both', 'console']
-        ):
+        if isinstance(handle, coloredlogs.StandardErrorHandler) and handler_type in [
+            "both",
+            "console",
+        ]:
             coloredlogs.set_level(log_level)
         elif (
-                isinstance(handle, logging.FileHandler) or
-                isinstance(handle, logging.handlers.RotatingFileHandler) and
-                handler_type in ['both', 'file']
+            isinstance(handle, logging.FileHandler)
+            or isinstance(handle, logging.handlers.RotatingFileHandler)
+            and handler_type in ["both", "file"]
         ):
             handle.setLevel(log_level)
 
