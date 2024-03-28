@@ -677,6 +677,20 @@ class NiosFileopMixin:
             req_cookies: dict,
             exit_on_error: bool = False,
     ) -> dict:
+        """
+        Fetch DHCP lease history files from NIOS Grid member
+
+        Args:
+            task_operation (str): The operation to be performed on the CSV data. It can be either "MERGE" or "OVERRIDE".
+            upload_token (str): The token representing the uploaded CSV file.
+            req_cookies (dict): The cookies to be included in the request headers.
+            exit_on_error (bool, optional): Whether to stop the import process on encountering an error. Defaults to
+            False.
+
+        Returns:
+            dict: The response from the API call.
+
+        """
         headers = {"content-type": "application/json"}
 
         # set the request parameters
