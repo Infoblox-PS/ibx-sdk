@@ -685,7 +685,7 @@ class NiosFileopMixin:
             upload_token (str): The token representing the uploaded CSV file.
             req_cookies (dict): The cookies to be included in the request headers.
             exit_on_error (bool, optional): Whether to stop the import process on encountering an error. Defaults to
-            False.
+                False.
 
         Returns:
             dict: The response from the API call.
