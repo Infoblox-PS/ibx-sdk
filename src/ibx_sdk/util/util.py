@@ -39,33 +39,29 @@ def named_checkconf(chroot_path: str, conf_path: str) -> None:
         >>> named_checkconf("/path/to/chroot", "/path/to/conf")
     """
 
-    logging.info('parsing %s conf file', conf_path)
+    logging.info("parsing %s conf file", conf_path)
 
-    if not os.path.exists(f'{chroot_path}/{conf_path}'):
-        logging.error('%s does not exist', f'{chroot_path}/{conf_path}')
+    if not os.path.exists(f"{chroot_path}/{conf_path}"):
+        logging.error("%s does not exist", f"{chroot_path}/{conf_path}")
         raise FileNotFoundError
-    command = f'sudo named-checkconf -p -t {chroot_path} {conf_path} > name.conf'
+    command = f"sudo named-checkconf -p -t {chroot_path} {conf_path} > name.conf"
     logging.debug(command)
-    res = subprocess.run([
-        'sudo',
-        'named-checkconf',
-        '-p',
-        '-t',
-        chroot_path,
-        conf_path
-    ], capture_output=True, text=True, check=True)
+    res = subprocess.run(
+        ["sudo", "named-checkconf", "-p", "-t", chroot_path, conf_path],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
     if res.stdout:
-        with open('named.conf', 'w', encoding='utf8') as file:
+        with open("named.conf", "w", encoding="utf8") as file:
             file.write(res.stdout)
     if res.stderr:
         logging.error(res.stderr)
 
 
 def named_compilezone(
-        zone_name: str,
-        zone_file: str,
-        output_file: str,
-        input_format: str = 'text') -> list:
+    zone_name: str, zone_file: str, output_file: str, input_format: str = "text"
+) -> list:
     """
     The function named_compilezone performs the named-compilezone command to canonicalize and
     rewrite a specified DNS zone file, checking for errors in the file during the process.
@@ -97,34 +93,49 @@ def named_compilezone(
         ...         print(error)
     """
 
-    if input_format not in ['raw', 'text']:
+    if input_format not in ["raw", "text"]:
         raise ValueError('specify one of "text" or "raw" value')
-    command = f'named-compilezone -k ignore -i none -f {input_format} -o {output_file} ' \
-              f'{zone_name} {zone_file}'
+    command = (
+        f"named-compilezone -k ignore -i none -f {input_format} -o {output_file} "
+        f"{zone_name} {zone_file}"
+    )
     logging.debug(command)
     try:
-        subprocess.run([
-            'named-compilezone',
-            '-i', 'none',
-            '-k', 'ignore',
-            '-m', 'ignore',
-            '-n', 'ignore',
-            '-r', 'ignore',
-            '-s', 'full',
-            '-f', input_format,
-            '-o', output_file,
-            zone_name,
-            zone_file
-        ], check=True, capture_output=True, text=True)
+        subprocess.run(
+            [
+                "named-compilezone",
+                "-i",
+                "none",
+                "-k",
+                "ignore",
+                "-m",
+                "ignore",
+                "-n",
+                "ignore",
+                "-r",
+                "ignore",
+                "-s",
+                "full",
+                "-f",
+                input_format,
+                "-o",
+                output_file,
+                zone_name,
+                zone_file,
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
     except subprocess.CalledProcessError as err:
         if int(err.returncode) > 0 and "not loaded due to errors." in err.stdout:
-            logging.error('err_code: %s', err.returncode)
-            for line in err.stdout.split('\n'):
+            logging.error("err_code: %s", err.returncode)
+            for line in err.stdout.split("\n"):
                 if line:
                     logging.error(line)
             return _parse_named_checkzone_log(err.stdout)
 
-        for line in err.stdout.split('\n'):
+        for line in err.stdout.split("\n"):
             if line:
                 logging.debug(line)
             return []
@@ -134,7 +145,9 @@ def named_compilezone(
 rewrite_zone_file = named_compilezone
 
 
-def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: str = None) -> None:
+def remove_lines_from_file(
+    file_path: str, lines_to_remove: list, output_path: str = None
+) -> None:
     """
     The function remove_lines_from_file removes specific lines from a file.
 
@@ -167,18 +180,20 @@ def remove_lines_from_file(file_path: str, lines_to_remove: list, output_path: s
 
     if not output_path:
         output_path = file_path
-    logging.warning('file: %s lines to remove: %s', file_path, lines_to_remove)
-    with open(file_path, 'r', encoding='utf8') as fin:
+    logging.warning("file: %s lines to remove: %s", file_path, lines_to_remove)
+    with open(file_path, "r", encoding="utf8") as fin:
         lines = fin.readlines()
         ptr = 1
-        with open(output_path, 'w', encoding='utf8') as fout:
+        with open(output_path, "w", encoding="utf8") as fout:
             for line in lines:
                 if ptr not in lines_to_remove:
                     fout.write(line)
                 else:
-                    logging.warning('file: %s - removing line: %s', output_path, line.strip())
+                    logging.warning(
+                        "file: %s - removing line: %s", output_path, line.strip()
+                    )
                 ptr += 1
-            logging.info('file %s rewritten', output_path)
+            logging.info("file %s rewritten", output_path)
 
 
 def _parse_named_checkzone_log(error_output: str) -> list:
@@ -191,39 +206,36 @@ def _parse_named_checkzone_log(error_output: str) -> list:
     """
     line_numbers = []
     error_conditions = [
-        'dns_rdata_fromtext',
-        'dns_master_load',
+        "dns_rdata_fromtext",
+        "dns_master_load",
     ]
-    for line in error_output.split('\n'):
-        parts = line.split(':')
+    for line in error_output.split("\n"):
+        parts = line.split(":")
         if any(error_condition in line for error_condition in error_conditions):
             line_numbers.append(int(parts[2]))
-        if (
-                'NS record ' in line and
-                ' appears to be an address' in line
-        ):
+        if "NS record " in line and " appears to be an address" in line:
             line_numbers.append(int(parts[1]))
     return line_numbers
 
 
 def get_csv_header(csvfile: io.TextIOWrapper) -> list:
     """
-    The function get_csv_header retrieves the header from a CSV file.
+        The function get_csv_header retrieves the header from a CSV file.
 
-    Args:
-        csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the
-        header.
+        Args:
+            csvfile (io.TextIOWrapper): A file object for the CSV file from which to retrieve the
+            header.
 
-    Returns:
-        list: A list of strings where each string is a column name from the CSV file's header row.
-            If the CSV file has no header row, an empty list is returned.
+        Returns:
+            list: A list of strings where each string is a column name from the CSV file's header row.
+                If the CSV file has no header row, an empty list is returned.
 
-    Usage:
-        Use this function to get the header from a CSV file:
-        >>> with open('/path/to/my_file.csv', 'r') as csv_file:
-        ...     # noinspection PyTypeChecker
-header = get_csv_header(csv_file)
-        ...     print(header)
+        Usage:
+            Use this function to get the header from a CSV file:
+            >>> with open('/path/to/my_file.csv', 'r') as csv_file:
+            ...     # noinspection PyTypeChecker
+    header = get_csv_header(csv_file)
+            ...     print(header)
     """
     csvfile.seek(0)
     sample = csvfile.read(1024)
@@ -247,7 +259,7 @@ def csv_filtered_header(row: dict, col_filter: list = None) -> dict:
     header_object = {}
     items = list(row.keys())
     for col in row:
-        if 'header-' in col:
+        if "header-" in col:
             idx = items.index(col)
             header_object[col] = idx
         elif col.endswith("*"):
@@ -282,21 +294,21 @@ def get_csv_from_url(url) -> str:
         >>> file_name = get_csv_from_url('https://my-infoblox-instance/export.csv')
     """
 
-    logging.debug('parsing url: %s', url)
+    logging.debug("parsing url: %s", url)
     try:
         obj = urlparse(url)
     except Exception as err:
         logging.error(err)
         raise
     logging.debug(pprint.pformat(obj))
-    parts = obj.path.split('/')
+    parts = obj.path.split("/")
     filename = str(parts[-1]).lower()
-    logging.debug('parsed filename %s', filename)
+    logging.debug("parsed filename %s", filename)
 
     return filename
 
 
-def ibx_csv_file_split(filename: str, output_path: str = '.'):
+def ibx_csv_file_split(filename: str, output_path: str = "."):
     """
     The function ibx_csv_file_split splits a globally exported CSV file into separate CSV files
     based on the CSV object type(s).
@@ -321,9 +333,7 @@ def ibx_csv_file_split(filename: str, output_path: str = '.'):
     """
 
     if not os.path.exists(output_path):
-        logging.warning(
-            'output path %s does not exist, creating...', output_path
-        )
+        logging.warning("output path %s does not exist, creating...", output_path)
         try:
             os.makedirs(output_path, exist_ok=True)
         except Exception as err:
@@ -332,53 +342,54 @@ def ibx_csv_file_split(filename: str, output_path: str = '.'):
 
     # build the struct using the csv object type as the key
     csv_objects = {}
-    with open(filename, 'r', encoding='utf8') as handle:
+    with open(filename, "r", encoding="utf8") as handle:
         myreader = csv.reader(handle)
         for row in myreader:
-            if row[0].lower().startswith('header-'):
-                obj_type = row[0].lower().replace('header-', '')
-                csv_output_file = f'{obj_type}.csv'
-                csv_output_file_path = os.path.join(
-                    output_path, csv_output_file
-                )
+            if row[0].lower().startswith("header-"):
+                obj_type = row[0].lower().replace("header-", "")
+                csv_output_file = f"{obj_type}.csv"
+                csv_output_file_path = os.path.join(output_path, csv_output_file)
                 csv_objects[obj_type] = {}
-                csv_objects[obj_type]['filename'] = csv_output_file
-                csv_objects[obj_type]['filepath'] = csv_output_file_path
-                csv_objects[obj_type]['data'] = [row]
+                csv_objects[obj_type]["filename"] = csv_output_file
+                csv_objects[obj_type]["filepath"] = csv_output_file_path
+                csv_objects[obj_type]["data"] = [row]
             else:
                 obj_type = row[0].lower()
-                csv_objects[obj_type]['data'].append(row)
+                csv_objects[obj_type]["data"].append(row)
 
     # output the struct
     for obj_type, obj_data in csv_objects.items():
-        num_of_objects = len(obj_data['data'])
+        num_of_objects = len(obj_data["data"])
         if num_of_objects == 1:
             logging.warning(
-                'skipping creating output file %s, no %s objects',
-                obj_data['filename'], obj_type
+                "skipping creating output file %s, no %s objects",
+                obj_data["filename"],
+                obj_type,
             )
         else:
             logging.info(
-                'creating output file %s with %s %s objects',
-                obj_data['filename'], num_of_objects, obj_type
+                "creating output file %s with %s %s objects",
+                obj_data["filename"],
+                num_of_objects,
+                obj_type,
             )
-            with open(obj_data['filepath'], 'w', encoding='utf8') as fh_out:
+            with open(obj_data["filepath"], "w", encoding="utf8") as fh_out:
                 mywriter = csv.writer(fh_out)
-                for row in obj_data['data']:
+                for row in obj_data["data"]:
                     mywriter.writerow(row)
                 fh_out.close()
 
 
 def _get_include_data(chroot: str, include_file: str):
-    data = ''
-    full_path = f'{chroot}{include_file}'
+    data = ""
+    full_path = f"{chroot}{include_file}"
     if not os.path.exists(full_path):
-        logging.error('%s include file does not exist!', full_path)
+        logging.error("%s include file does not exist!", full_path)
         return data
-    with open(full_path, 'r', encoding='utf8') as file:
+    with open(full_path, "r", encoding="utf8") as file:
         for line in file:
-            if 'include ' in line:
-                logging.warning('nested include file found in %s', include_file)
+            if "include " in line:
+                logging.warning("nested include file found in %s", include_file)
                 _, _inc_file, _ = line.split('"', 2)
                 content = _get_include_data(chroot, _inc_file)
                 if content:
@@ -418,22 +429,22 @@ def generate_from_includes(chroot: str, filepath: str) -> str:
         >>> full_config = generate_from_includes('/path/to/chroot', '/path/to/my_config')
     """
 
-    if filepath.startswith('/'):
-        filepath = filepath.lstrip('/')
-    logging.info('processing file %s', f'{chroot}{filepath}')
-    data = ''
+    if filepath.startswith("/"):
+        filepath = filepath.lstrip("/")
+    logging.info("processing file %s", f"{chroot}{filepath}")
+    data = ""
     if os.path.exists(os.path.join(chroot, filepath)):
-        with open(os.path.join(chroot, filepath), 'r', encoding='utf8') as file:
+        with open(os.path.join(chroot, filepath), "r", encoding="utf8") as file:
             for line in file:
-                if line.startswith('include '):
+                if line.startswith("include "):
                     logging.debug(line.strip())
                     _, include_file, _ = line.split('"', 2)
-                    logging.info('processing include file %s', include_file)
+                    logging.info("processing include file %s", include_file)
                     contents = _get_include_data(chroot, include_file)
                     if contents:
                         data += contents
                 else:
                     data += line
     else:
-        logging.error('file %s does not exist!', os.path.join(chroot, filepath))
+        logging.error("file %s does not exist!", os.path.join(chroot, filepath))
     return data

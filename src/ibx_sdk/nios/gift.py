@@ -75,10 +75,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     """
 
     def __init__(
-            self,
-            grid_mgr: str = None,
-            wapi_ver: str = '2.5',
-            ssl_verify: Union[bool, str] = False) -> None:
+        self,
+        grid_mgr: str = None,
+        wapi_ver: str = "2.5",
+        ssl_verify: Union[bool, str] = False,
+    ) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
@@ -89,7 +90,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
     def __repr__(self):
         args = []
         for key, value in self.__dict__.items():
-            args.append(f'{key}={value}')
+            args.append(f"{key}={value}")
         return f"{self.__class__.__qualname__}({', '.join(args)})"
 
     @property
@@ -127,10 +128,12 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         """
         if self.grid_mgr and self.wapi_ver:
-            return f'https://{self.grid_mgr}/wapi/v{self.wapi_ver}'
-        return ''
+            return f"https://{self.grid_mgr}/wapi/v{self.wapi_ver}"
+        return ""
 
-    def connect(self, username: str = None, password: str = None, certificate: str = None) -> None:
+    def connect(
+        self, username: str = None, password: str = None, certificate: str = None
+    ) -> None:
         """
         Make a connection to the grid manager using the WAPI instance
 
@@ -145,7 +148,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
 
         """
         if not self.url:
-            logging.error('invalid url %s - unable to connect!', self.url)
+            logging.error("invalid url %s - unable to connect!", self.url)
             raise WapiInvalidParameterException
 
         if username and password:
@@ -174,9 +177,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         with requests.sessions.Session() as conn:
             try:
                 res = conn.get(
-                    f'{self.url}/grid',
-                    cert=certificate,
-                    verify=self.ssl_verify
+                    f"{self.url}/grid", cert=certificate, verify=self.ssl_verify
                 )
                 res.raise_for_status()
             except requests.exceptions.RequestException as err:
@@ -184,9 +185,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
                 raise WapiRequestException(err) from err
             else:
                 grid = res.json()
-                setattr(self, 'conn', conn)
-                setattr(self, 'grid_ref', grid[0].get('_ref'))
-                return grid[0].get('_ref', '')
+                setattr(self, "conn", conn)
+                setattr(self, "grid_ref", grid[0].get("_ref"))
+                return grid[0].get("_ref", "")
 
     def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
@@ -210,9 +211,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         with requests.sessions.Session() as conn:
             try:
                 res = conn.get(
-                    f'{self.url}/grid',
+                    f"{self.url}/grid",
                     auth=(username, password),
-                    verify=self.ssl_verify
+                    verify=self.ssl_verify,
                 )
                 res.raise_for_status()
             except requests.exceptions.RequestException as err:
@@ -220,9 +221,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
                 raise WapiRequestException(err) from err
             else:
                 grid = res.json()
-                setattr(self, 'conn', conn)
-                setattr(self, 'grid_ref', grid[0].get('_ref'))
-                return grid[0].get('_ref', '')
+                setattr(self, "conn", conn)
+                setattr(self, "grid_ref", grid[0].get("_ref"))
+                return grid[0].get("_ref", "")
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
         """
@@ -248,8 +249,10 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         ```
         """
         try:
-            logging.debug('trying %s/%s?_schema', self.url, wapi_object)
-            res = self.conn.get(f'{self.url}/{wapi_object}?_schema', verify=self.ssl_verify)
+            logging.debug("trying %s/%s?_schema", self.url, wapi_object)
+            res = self.conn.get(
+                f"{self.url}/{wapi_object}?_schema", verify=self.ssl_verify
+            )
             res.raise_for_status()
             data = res.json()
         except requests.exceptions.RequestException as err:
@@ -257,7 +260,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(err)
         else:
             fields = ",".join(
-                field["name"] for field in data.get('fields') if "r" in field.get('supports')
+                field["name"]
+                for field in data.get("fields")
+                if "r" in field.get("supports")
             )
         return fields
 
@@ -286,9 +291,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             This method updates the `wapi_ver` attribute of the WAPI session instance.
         """
 
-        url = f'https://{self.grid_mgr}/wapi/v1.0/?_schema'
+        url = f"https://{self.grid_mgr}/wapi/v1.0/?_schema"
         try:
-            logging.debug('trying %s', url)
+            logging.debug("trying %s", url)
             res = self.conn.get(url, verify=False)
             res.raise_for_status()
             data = res.json()
@@ -296,13 +301,15 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             logging.error(err)
             raise WapiRequestException(err)
         else:
-            versions = data.get('supported_versions')
-            versions.sort(key=lambda s: list(map(int, s.split('.'))))
+            versions = data.get("supported_versions")
+            versions.sort(key=lambda s: list(map(int, s.split("."))))
             logging.debug(versions)
             max_wapi_ver = versions.pop()
-            setattr(self, 'wapi_ver', max_wapi_ver)
+            setattr(self, "wapi_ver", max_wapi_ver)
 
-    def get(self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any) -> Response:
+    def get(
+        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+    ) -> Response:
         """
         Return WAPI object(s).
         Args:
@@ -313,9 +320,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object containing the result of the request.
         """
-        url = f'{self.url}/{wapi_object}'
+        url = f"{self.url}/{wapi_object}"
         try:
-            res = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+            res = self.conn.request(
+                "get", url, params=params, verify=self.ssl_verify, **kwargs
+            )
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
@@ -323,7 +332,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
                 raise WapiRequestException(res.text)
         return res
 
-    def getone(self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any) -> str:
+    def getone(
+        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+    ) -> str:
         """
         Return the reference of a single WAPI object.
 
@@ -338,9 +349,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         Raises:
             WapiRequestException: If multiple data records were returned or no data was returned.
         """
-        url = f'{self.url}/{wapi_object}'
+        url = f"{self.url}/{wapi_object}"
         try:
-            response = self.conn.request('get', url, params=params, verify=self.ssl_verify, **kwargs)
+            response = self.conn.request(
+                "get", url, params=params, verify=self.ssl_verify, **kwargs
+            )
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
@@ -348,16 +361,18 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
                 raise WapiRequestException(response.text)
             data = response.json()
             if len(data) > 1:
-                raise WapiRequestException('Multiple data records were returned')
+                raise WapiRequestException("Multiple data records were returned")
             elif len(data) == 0:
-                raise WapiRequestException('No data was returned')
-        return data[0].get('_ref', '')
+                raise WapiRequestException("No data was returned")
+        return data[0].get("_ref", "")
 
-    def post(self,
-             wapi_object: str,
-             data: Optional[Union[dict, str]] = None,
-             json: Optional[dict] = None,
-             **kwargs: Any) -> Response:
+    def post(
+        self,
+        wapi_object: str,
+        data: Optional[Union[dict, str]] = None,
+        json: Optional[dict] = None,
+        **kwargs: Any,
+    ) -> Response:
         """
         Create a POST request to create a WAPI object.
 
@@ -372,9 +387,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object containing the server's response to the POST request.
         """
-        url = f'{self.url}/{wapi_object}'
+        url = f"{self.url}/{wapi_object}"
         try:
-            res = self.conn.request('post', url, data=data, json=json, verify=self.ssl_verify, **kwargs)
+            res = self.conn.request(
+                "post", url, data=data, json=json, verify=self.ssl_verify, **kwargs
+            )
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
@@ -383,10 +400,10 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             return res
 
     def put(
-            self,
-            wapi_object_ref: str,
-            data: Optional[Union[dict, str]] = None,
-            **kwargs: Any
+        self,
+        wapi_object_ref: str,
+        data: Optional[Union[dict, str]] = None,
+        **kwargs: Any,
     ) -> Response:
         """
         Create a PUT request to update a WAPI object by its _ref.
@@ -399,9 +416,11 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object for the PUT request.
         """
-        url = f'{self.url}/{wapi_object_ref}'
+        url = f"{self.url}/{wapi_object_ref}"
         try:
-            res = self.conn.request('put', url, data=data, verify=self.ssl_verify, **kwargs)
+            res = self.conn.request(
+                "put", url, data=data, verify=self.ssl_verify, **kwargs
+            )
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
@@ -421,9 +440,9 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             A `Response` object representing the response received from the server.
 
         """
-        url = f'{self.url}/{wapi_object_ref}'
+        url = f"{self.url}/{wapi_object_ref}"
         try:
-            res = self.conn.request('delete', url, verify=self.ssl_verify, **kwargs)
+            res = self.conn.request("delete", url, verify=self.ssl_verify, **kwargs)
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:

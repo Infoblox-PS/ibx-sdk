@@ -26,12 +26,12 @@ from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
 
 log = init_logger(
-    logfile_name='wapi.log',
-    logfile_mode='a',
+    logfile_name="wapi.log",
+    logfile_mode="a",
     console_log=True,
-    level='info',
+    level="info",
     max_size=100000,
-    num_logs=1
+    num_logs=1,
 )
 
 wapi = Gift()
@@ -41,19 +41,36 @@ Restart NIOS Protocol Services
 """
 
 
-@click.command(help=help_text, context_settings=dict(max_content_width=95, help_option_names=['-h', '--help']))
-@optgroup.group("Required Parameters")
-@optgroup.option('-g', '--grid-mgr', required=True, help='Infoblox Grid Manager')
-@optgroup.group("Optional Parameters")
-@optgroup.option('-u', '--username', default='admin', show_default=True, help='Infoblox admin username')
-@optgroup.option(
-    '-s', '--service', type=click.Choice(['DNS', 'DHCP', 'DHCPV4', 'DHCPV6', 'ALL']),
-    default='ALL', show_default=True, help='select which service to restart'
+@click.command(
+    help=help_text,
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
-@optgroup.option('-w', '--wapi-ver', default='2.11', show_default=True, help='Infoblox WAPI version')
+@optgroup.group("Required Parameters")
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.group("Optional Parameters")
+@optgroup.option(
+    "-u",
+    "--username",
+    default="admin",
+    show_default=True,
+    help="Infoblox admin username",
+)
+@optgroup.option(
+    "-s",
+    "--service",
+    type=click.Choice(["DNS", "DHCP", "DHCPV4", "DHCPV6", "ALL"]),
+    default="ALL",
+    show_default=True,
+    help="select which service to restart",
+)
+@optgroup.option(
+    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+)
 @optgroup.group("Logging Parameters")
-@optgroup.option('--debug', is_flag=True, help='enable verbose debug output')
-def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool) -> None:
+@optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
+def main(
+    grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool
+) -> None:
     """
     Restart NIOS Protocol Services
 
@@ -80,7 +97,7 @@ def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool)
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
-    password = getpass.getpass(f'Enter password for [{username}]: ')
+    password = getpass.getpass(f"Enter password for [{username}]: ")
 
     try:
         wapi.connect(username=username, password=password)
@@ -88,13 +105,11 @@ def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool)
         log.error(err)
         sys.exit(1)
     else:
-        log.info('connected to Infoblox grid manager %s', wapi.grid_mgr)
+        log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
     try:
         wapi.service_restart(
-            mode='SEQUENTIAL',
-            restart_option='RESTART_IF_NEEDED',
-            services=service
+            mode="SEQUENTIAL", restart_option="RESTART_IF_NEEDED", services=service
         )
     except WapiRequestException as err:
         log.error(err)
@@ -103,5 +118,5 @@ def main(grid_mgr: str, username: str, service: str, wapi_ver: str, debug: bool)
     sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

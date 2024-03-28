@@ -26,18 +26,19 @@ class NiosServiceMixin:
     """
     NIOS Service Mixin class
     """
-    RestartMode = Literal['GROUPED', 'SEQUENTIAL', 'SIMULTANEOUS']
-    RestartOption = Literal['FORCE_RESTART', 'RESTART_IF_NEEDED']
-    RestartServices = Literal['ALL', 'DNS', 'DHCP', 'DHCPV4', 'DHCPV6']
+
+    RestartMode = Literal["GROUPED", "SEQUENTIAL", "SIMULTANEOUS"]
+    RestartOption = Literal["FORCE_RESTART", "RESTART_IF_NEEDED"]
+    RestartServices = Literal["ALL", "DNS", "DHCP", "DHCPV4", "DHCPV6"]
 
     def service_restart(
-            self,
-            groups: Optional[list] = None,
-            members: Optional[list[str]] = None,
-            mode: Optional[RestartMode] = None,
-            restart_option: Optional[RestartOption] = 'RESTART_IF_NEEDED',
-            services: Optional[list[RestartServices]] = None,
-            user_name: Optional[str] = None,
+        self,
+        groups: Optional[list] = None,
+        members: Optional[list[str]] = None,
+        mode: Optional[RestartMode] = None,
+        restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
+        services: Optional[list[RestartServices]] = None,
+        user_name: Optional[str] = None,
     ) -> None:
         """
         Restarts specified services on the grid.
@@ -81,23 +82,23 @@ class NiosServiceMixin:
         """
         data = {}
         if groups:
-            data['groups'] = [groups]
+            data["groups"] = [groups]
         if members:
-            data['members'] = [members]
+            data["members"] = [members]
         if mode:
-            data['mode'] = mode
+            data["mode"] = mode
         if restart_option:
-            data['restart_option'] = restart_option
+            data["restart_option"] = restart_option
         if services:
-            data['services'] = [services]
+            data["services"] = [services]
         if user_name:
-            data['user_name'] = user_name
+            data["user_name"] = user_name
 
         logging.debug(pprint.pformat(data))
 
         try:
             res = self.post(
-                self.grid_ref, params={'_function': 'restartservices'}, json=data
+                self.grid_ref, params={"_function": "restartservices"}, json=data
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -105,11 +106,9 @@ class NiosServiceMixin:
             logging.error(err)
             raise WapiRequestException(err)
         else:
-            logging.info(
-                'successfully restarted %s services', data.get('services')
-            )
+            logging.info("successfully restarted %s services", data.get("services"))
 
-    def update_service_status(self, services: str = 'ALL') -> None:
+    def update_service_status(self, services: str = "ALL") -> None:
         """
         Updates the status of a service.
 
@@ -123,10 +122,12 @@ class NiosServiceMixin:
         Raises:
             requests.exceptions.RequestException: If an error occurs while making the request.
         """
-        payload = {'service_option': services}
+        payload = {"service_option": services}
         try:
             res = self.post(
-                self.grid_ref, params={'_function': 'requestrestartservicestatus'}, json=payload
+                self.grid_ref,
+                params={"_function": "requestrestartservicestatus"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -150,7 +151,7 @@ class NiosServiceMixin:
             requests.exceptions.RequestException: If there is a general request error.
         """
         try:
-            response = self.get('restartservicestatus')
+            response = self.get("restartservicestatus")
             logging.debug(response.text)
             response.raise_for_status()
         except requests.exceptions.SSLError as err:
