@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import datetime
 import logging
 import os
 import pprint
@@ -107,10 +106,10 @@ class NiosFileopMixin:
         self.__download_complete(download_token, filename, req_cookies)
 
     def csv_import(
-        self,
-        task_operation: CsvOperation,
-        csv_import_file: str,
-        exit_on_error: bool = False,
+            self,
+            task_operation: CsvOperation,
+            csv_import_file: str,
+            exit_on_error: bool = False,
     ) -> dict:
         """
         Perform a CSV import task using the NIOS CSV Task Manager
@@ -292,14 +291,14 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def get_log_files(
-        self,
-        log_type: LogType,
-        filename: Optional[str] = None,
-        endpoint: Optional[str] = None,
-        include_rotated: bool = False,
-        member: Optional[str] = None,
-        msserver: Optional[str] = None,
-        node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
+            self,
+            log_type: LogType,
+            filename: Optional[str] = None,
+            endpoint: Optional[str] = None,
+            include_rotated: bool = False,
+            member: Optional[str] = None,
+            msserver: Optional[str] = None,
+            node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
     ):
         """
         Fetch the log files for the provided member or msserver
@@ -365,16 +364,16 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def get_support_bundle(
-        self,
-        member: str,
-        filename: Optional[str] = None,
-        cached_zone_data: bool = False,
-        core_files: bool = False,
-        log_files: bool = False,
-        nm_snmp_logs: bool = False,
-        recursive_cache_file: bool = False,
-        remote_url: Optional[str] = None,
-        rotate_log_files: bool = False,
+            self,
+            member: str,
+            filename: Optional[str] = None,
+            cached_zone_data: bool = False,
+            core_files: bool = False,
+            log_files: bool = False,
+            nm_snmp_logs: bool = False,
+            recursive_cache_file: bool = False,
+            remote_url: Optional[str] = None,
+            rotate_log_files: bool = False,
     ):
         """
         Get the support bundle for a member.
@@ -500,10 +499,10 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def grid_restore(
-        self,
-        filename: str = "database.tgz",
-        mode: GridRestoreMode = "NORMAL",
-        keep_grid_ip: bool = False,
+            self,
+            filename: str = "database.tgz",
+            mode: GridRestoreMode = "NORMAL",
+            keep_grid_ip: bool = False,
     ):
         """
         Perform a NIOS Grid restore of a database using a given file.
@@ -555,11 +554,11 @@ class NiosFileopMixin:
             logging.info("Grid restore successful!")
 
     def member_config(
-        self,
-        member: str,
-        conf_type: MemberDataType,
-        filename: Optional[str] = None,
-        remote_url: str = None,
+            self,
+            member: str,
+            conf_type: MemberDataType,
+            filename: Optional[str] = None,
+            remote_url: str = None,
     ) -> str:
         """
         Fetch member configuration file for given service type.
@@ -619,12 +618,64 @@ class NiosFileopMixin:
 
         return download_file
 
+    def get_lease_history(
+            self,
+            member: str,
+            start_time: int = None,
+            end_time: int = None,
+            remove_url: str = None
+    ) -> str:
+        logging.info("fetching DHCP lease history from grid member %s", member)
+        payload = {"member": member}
+        if start_time is not None:
+            payload["start_time"] = start_time
+        if end_time is not None:
+            payload["end_time"] = end_time
+        if remove_url is not None:
+            payload["remove_url"] = remove_url
+        try:
+            res = self.post(
+                "fileop", params={"_function": "getleasehistoryfiles"}, json=payload
+            )
+            logging.debug(res.text)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        obj = res.json()
+        download_url = obj.get("url")
+        download_token = obj.get("token")
+
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies["ibapauth"]
+        req_cookies = {"ibapauth": ibapauth_cookie}
+
+        logging.info("downloading data from %s", download_url)
+        try:
+            res = self.__download_file(download_url, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        download_file = util.get_csv_from_url(download_url)
+
+        NiosFileopMixin.__write_file(filename=download_file, data=res)
+
+        try:
+            self.__download_complete(download_token, download_file, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        return download_file
+
     def __csv_import(
-        self,
-        task_operation: str,
-        upload_token: str,
-        req_cookies: dict,
-        exit_on_error: bool = False,
+            self,
+            task_operation: str,
+            upload_token: str,
+            req_cookies: dict,
+            exit_on_error: bool = False,
     ) -> dict:
         headers = {"content-type": "application/json"}
 
@@ -715,7 +766,7 @@ class NiosFileopMixin:
         return res.json()
 
     def __restore_database(
-        self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
+            self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
     ) -> dict:
         # set content type back to JSON
         headers = {"content-type": "application/json"}
@@ -740,7 +791,7 @@ class NiosFileopMixin:
         return res
 
     def __upload_file(
-        self, upload_url: str, upload_file: dict, req_cookies: dict
+            self, upload_url: str, upload_file: dict, req_cookies: dict
     ) -> None:
         logging.debug(upload_url)
         try:
