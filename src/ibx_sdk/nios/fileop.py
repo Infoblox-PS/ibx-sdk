@@ -625,6 +625,22 @@ class NiosFileopMixin:
             end_time: int = None,
             remove_url: str = None
     ) -> str:
+        """
+        fetch DHCP lease history files from a NIOS Grid Member
+
+        Args:
+            member: A string representing the grid member that the DHCP lease history is being fetched from.
+            start_time: An optional integer representing the start time in epoch format. Defaults to None.
+            end_time: An optional integer representing the end time in epoch format. Defaults to None.
+            remove_url: An optional string representing the remove URL. Defaults to None.
+
+        Returns:
+            A string representing the filename of the downloaded DHCP lease history file.
+
+        Raises:
+            WapiRequestException: If there is an error in the API request.
+
+        """
         logging.info("fetching DHCP lease history from grid member %s", member)
         payload = {"member": member}
         if start_time is not None:
@@ -677,20 +693,6 @@ class NiosFileopMixin:
             req_cookies: dict,
             exit_on_error: bool = False,
     ) -> dict:
-        """
-        Fetch DHCP lease history files from NIOS Grid member
-
-        Args:
-            task_operation (str): The operation to be performed on the CSV data. It can be either "MERGE" or "OVERRIDE".
-            upload_token (str): The token representing the uploaded CSV file.
-            req_cookies (dict): The cookies to be included in the request headers.
-            exit_on_error (bool, optional): Whether to stop the import process on encountering an error. Defaults to
-                False.
-
-        Returns:
-            dict: The response from the API call.
-
-        """
         headers = {"content-type": "application/json"}
 
         # set the request parameters
