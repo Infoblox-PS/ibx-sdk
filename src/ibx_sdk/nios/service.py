@@ -37,7 +37,7 @@ class NiosServiceMixin:
         members: Optional[list[str]] = None,
         mode: Optional[RestartMode] = None,
         restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
-        services: Optional[RestartServices] = None,
+        services: Optional[list[RestartServices]] = None,
         user_name: Optional[str] = None,
     ) -> None:
         """
@@ -48,8 +48,10 @@ class NiosServiceMixin:
             groups (Optional[list]): List of group names. Default is None.
             members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
-            restart_option (Optional[ServiceRestartOption]): Restart option. Default is 'RESTART_IF_NEEDED'.
-            services (Optional[ServiceRestartServices]): service to restart. Default is None.
+            restart_option (Optional[ServiceRestartOption]): Restart option. Default is
+                            'RESTART_IF_NEEDED'.
+            services (Optional[list[ServiceRestartServices]]): List of services to restart.
+                                                               Default is None.
             user_name (Optional[str]): Username. Default is None.
 
         Returns:
@@ -71,8 +73,9 @@ class NiosServiceMixin:
             # Restart services with a specific restart option
             service_restart(restart_option=ServiceRestartOption.RESTART_IF_NEEDED)
 
-            # Restart specific service
-            service_restart(services=ServiceRestartServices.DHCPV4)
+            # Restart specific services
+            service_restart(services=[ServiceRestartServices.SERVICE_NAME1,
+            ServiceRestartServices.SERVICE_NAME2])
 
             # Restart services for a specific user
             service_restart(user_name='username')
@@ -87,7 +90,7 @@ class NiosServiceMixin:
         if restart_option:
             data["restart_option"] = restart_option
         if services:
-            data["services"] = services
+            data["services"] = [services]
         if user_name:
             data["user_name"] = user_name
 
