@@ -37,7 +37,7 @@ class NiosServiceMixin:
         members: Optional[list[str]] = None,
         mode: Optional[RestartMode] = None,
         restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
-        services: Optional[str[RestartServices]] = None,
+        services: Optional[RestartServices] = None,
         user_name: Optional[str] = None,
     ) -> None:
         """
@@ -49,7 +49,7 @@ class NiosServiceMixin:
             members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
             restart_option (Optional[ServiceRestartOption]): Restart option. Default is 'RESTART_IF_NEEDED'.
-            services (Optional[str[ServiceRestartServices]]): service to restart. Default is None.
+            services (Optional[ServiceRestartServices]): service to restart. Default is None.
             user_name (Optional[str]): Username. Default is None.
 
         Returns:
