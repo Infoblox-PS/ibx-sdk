@@ -34,7 +34,7 @@ class NiosServiceMixin:
     def service_restart(
         self,
         groups: Optional[list] = None,
-        members: Optional[list] = None,
+        members: Optional[list[str]] = None,
         mode: Optional[RestartMode] = None,
         restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
         services: Optional[list[RestartServices]] = None,
@@ -46,7 +46,7 @@ class NiosServiceMixin:
         Args:
             self (Gift): Gift object
             groups (Optional[list]): List of group names. Default is None.
-            members (Optional[list]): List of member names. Default is None.
+            members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
             restart_option (Optional[ServiceRestartOption]): Restart option. Default is
                             'RESTART_IF_NEEDED'.
