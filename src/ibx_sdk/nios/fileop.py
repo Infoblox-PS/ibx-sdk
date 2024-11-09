@@ -305,7 +305,31 @@ class NiosFileopMixin:
             org_unit: Optional[str] = None,
             state: Optional[str] = None,
             subject_alternative_names: Optional[list[dict]] = None
-    ):
+    ) -> None:
+        """
+        Generate a Certificate Signing Request
+
+        Generate and download a CSR for a member of the grid. Once the CSR is generated it is downloaded and saved
+        locally to the current working directory.
+
+        Args:
+            cn: Common Name for the certificate.
+            member: The member for which the certificate is being generated.
+            algorithm: Algorithm used for certificate generation, default is "SHA-256".
+            certificate_usage: Purpose of the certificate, default is "ADMIN".
+            comment: Optional comment for the certificate.
+            country: Optional country code for the certificate.
+            email: Optional email address for the certificate.
+            key_size: Optional key size for the certificate, default is 2048.
+            locality: Optional locality or city for the certificate.
+            org: Optional organization name for the certificate.
+            org_unit: Optional organizational unit for the certificate.
+            state: Optional state or province for the certificate.
+            subject_alternative_names: Optional list of subject alternative names (SANs) for the certificate.
+
+        Returns:
+            None
+        """
         logging.info("generating %s csr for %s", certificate_usage, member)
         payload = {
             "cn": cn,
