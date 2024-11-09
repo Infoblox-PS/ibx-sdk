@@ -126,6 +126,7 @@ nav:
       - Introduction: examples/index.md
       - csvexport: examples/csvexport.md
       - csvimport: examples/csvimport.md
+      - generate-csr: examples/generate_csr.md
       - get-file: examples/get_file.md
       - get-log: examples/get_log.md
       - get-supportbundle: examples/get_supportbundle.md
