@@ -290,6 +290,84 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
+    def generate_csr(
+            self,
+            cn: str,
+            member: str,
+            algorithm: str = "SHA-256",
+            certificate_usage: str = "ADMIN",
+            comment: Optional[str] = None,
+            country: Optional[str] = None,
+            email: Optional[str] = None,
+            key_size: Optional[int] = 2048,
+            locality: Optional[str] = None,
+            org: Optional[str] = None,
+            org_unit: Optional[str] = None,
+            state: Optional[str] = None,
+            subject_alternative_names: Optional[list] = None
+    ):
+        logging.info("generating %s csr for %s", certificate_usage, member)
+        payload = {
+            "cn": cn,
+            "member": member,
+            "algorithm": algorithm,
+            "certificate_usage": certificate_usage,
+        }
+        if comment:
+            payload["comment"] = comment
+        if country:
+            payload["country"] = country
+        if email:
+            payload["email"] = email
+        if key_size:
+            payload["key_size"] = key_size
+        if locality:
+            payload["locality"] = locality
+        if org:
+            payload["org"] = org
+        if org_unit:
+            payload["org_unit"] = org_unit
+        if state:
+            payload["state"] = state
+        if subject_alternative_names:
+            payload["subject_alternative_names"] = subject_alternative_names
+        logging.debug("json payload %s", payload)
+
+        try:
+            res = self.post(
+                "fileop", params={"_function": "generatecsr"}, json=payload
+            )
+            logging.debug(res.text)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        obj = res.json()
+        download_url = obj.get("url")
+        download_token = obj.get("token")
+
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies["ibapauth"]
+        req_cookies = {"ibapauth": ibapauth_cookie}
+
+        logging.info("downloading data from %s", download_url)
+        try:
+            res = self.__download_file(download_url, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        filename = util.get_csv_from_url(download_url)
+
+        NiosFileopMixin.__write_file(filename=filename, data=res)
+
+        try:
+            self.__download_complete(download_token, filename, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
     def get_log_files(
             self,
             log_type: LogType,
