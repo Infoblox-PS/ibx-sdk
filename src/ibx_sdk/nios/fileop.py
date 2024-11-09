@@ -304,7 +304,7 @@ class NiosFileopMixin:
             org: Optional[str] = None,
             org_unit: Optional[str] = None,
             state: Optional[str] = None,
-            subject_alternative_names: Optional[list] = None
+            subject_alternative_names: Optional[list[dict]] = None
     ):
         logging.info("generating %s csr for %s", certificate_usage, member)
         payload = {

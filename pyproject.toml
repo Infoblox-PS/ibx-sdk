@@ -56,6 +56,7 @@ restart-service = 'ibx_sdk.bin.nios_restart_service:main'
 restart-status = 'ibx_sdk.bin.nios_restart_status:main'
 csvimport = 'ibx_sdk.bin.nios_csvimport:main'
 csvexport = 'ibx_sdk.bin.nios_csvexport:main'
+generate-csr = 'ibx_sdk.bin.nios_gen_csr:main'
 
 
 [project.optional-dependencies]
