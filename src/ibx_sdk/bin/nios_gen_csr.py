@@ -20,7 +20,6 @@ import sys
 
 import click
 from click_option_group import optgroup
-from pygments.lexer import default
 
 from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
 from ibx_sdk.nios.exceptions import WapiRequestException

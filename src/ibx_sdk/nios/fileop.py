@@ -110,7 +110,7 @@ class NiosFileopMixin:
             token: str,
             url: str,
             filename: str = None,
-    ):
+    ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
 
