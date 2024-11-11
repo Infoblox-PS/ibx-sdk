@@ -111,6 +111,17 @@ class NiosFileopMixin:
             url: str,
             filename: str = None,
     ):
+        """
+        file_download downloads the generated file from the NIOS Grid using a token and url
+
+        Args:
+            token: Authentication token required for the download completion.
+            url: URL of the file to be downloaded.
+            filename: Optional; name for the downloaded file. If not provided, it will be extracted from the URL.
+
+        Returns:
+            None
+        """
         logging.info("downloading data from %s", url)
         try:
             res = self.__download_file(url, self.__get_cookies())
@@ -130,6 +141,18 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def file_upload(self, filename: str) -> str:
+        """
+        Perform a file upload into the NIOS Grid.
+
+        Args:
+            filename: The path of the file to be uploaded.
+
+        Returns:
+            str: The token received upon successful upload initialization.
+
+        Raises:
+            WapiRequestException: If there is a request exception during the upload process.
+        """
         (_, filename) = os.path.split(filename)
         filename = filename.replace("-", "_")
 
@@ -163,9 +186,20 @@ class NiosFileopMixin:
     def upload_certificate(
             self,
             member: str,
+            filename: str,
             certificate_usage: SupportedCertTypes = "ADMIN",
-            filename: Optional[str] = None,
     ):
+        """
+        Upload an SSL Certificate file to the Grid
+
+        Args:
+            member: The member identifier to which the certificate will be uploaded.
+            filename: The filename of the certificate to be uploaded.
+            certificate_usage: The usage type of the certificate. Default is "ADMIN".
+
+        Raises:
+            WapiRequestException: If there is an error during the request to upload the certificate.
+        """
         token = self.file_upload(filename=filename)
 
         # submit task to CSV Job Manager
@@ -338,6 +372,13 @@ class NiosFileopMixin:
             member: str,
             certificate_usage: SupportedCertTypes = "ADMIN",
     ):
+        """
+        Download SSL certificate from the Grid.
+
+        Args:
+            member: The identifier of the member for whom the certificate is being downloaded.
+            certificate_usage: The type of certificate to be downloaded (e.g., "ADMIN").
+        """
         logging.info("Downloading %s certificate for %s", certificate_usage, member)
         payload = {"member": member, "certificate_usage": certificate_usage}
         logging.debug("json payload %s", payload)
@@ -373,6 +414,26 @@ class NiosFileopMixin:
             state: Optional[str] = None,
             subject_alternative_names: Optional[list[dict]] = None
     ):
+        """
+        Generate a Self-Signed Certificate on the Grid.
+
+        Args:
+            cn: The common name for the certificate.
+            member: The member name for the certificate.
+            days_valid: The number of days the certificate is valid for. Default is 365.
+            algorithm: The algorithm used for certificate generation. Default is "SHA-256".
+            certificate_usage: The usage type of the certificate. Default is "ADMIN".
+            comment: Optional comment associated with the certificate.
+            country: Optional country code.
+            email: Optional email address.
+            key_size: The size of the key used in certificate generation. Default is 2048.
+            locality: Optional locality (e.g., city).
+            org: Optional organization name.
+            org_unit: Optional organizational unit.
+            state: Optional state or province.
+            subject_alternative_names: Optional list of subject alternative names.
+
+        """
         logging.info("generating self-signed certificate for %s", member)
         payload = {
             "cn": cn,
