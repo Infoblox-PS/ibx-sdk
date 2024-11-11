@@ -1,4 +1,4 @@
-<img alt="Professional Services" src="docs/assets/ibx-sdk-img.png" title="Infoblox Professional Services"/>
+<img alt="Professional Services" src="src_docs/assets/ibx-sdk-img.png" title="Infoblox Professional Services"/>
 
 # Table of Contents
 
