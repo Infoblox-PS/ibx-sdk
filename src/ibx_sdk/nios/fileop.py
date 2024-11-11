@@ -28,6 +28,10 @@ CsvOperation = Literal[
     "INSERT", "UPDATE", "DELETE", "REPLACE", "MERGE", "OVERRIDE", "CUSTOM"
 ]
 GridRestoreMode = Literal["NORMAL", "FORCED", "CLONE"]
+SupportedAlgorithms = Literal["SHA-1", "SHA-256", "SHA-384", "SHA-512"]
+SupportedKeySizes = Literal[1024, 2048, 4096]
+SupportedCertUsages = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
+SupportedCertTypes = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"]
 LogType = Literal[
     "SYSLOG",
     "AUDITLOG",
@@ -99,11 +103,70 @@ class NiosFileopMixin:
         response = self.__download_file(download_url, req_cookies)
 
         if not filename:
-            filename = util.get_csv_from_url(download_url)
+            filename = util.extract_filename_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=filename, data=response)
 
         self.__download_complete(download_token, filename, req_cookies)
+
+    def file_upload(self, filename: str) -> dict:
+        pass
+
+    def upload_certificate(
+            self,
+            member: str,
+            certificate_usage: SupportedCertTypes = "ADMIN",
+            filename: Optional[str] = None,
+    ):
+        (_, filename) = os.path.split(filename)
+        filename = filename.replace("-", "_")
+
+        # Call WAPI fileop Upload INIT
+        logging.info("step 1 - request uploadinit %s", filename)
+        try:
+            obj = self.__upload_init(filename=filename)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        upload_url = obj.get("url")
+        token = obj.get("token")
+
+        # save the authentication cookie for use in subsequent requests
+        ibapauth_cookie = self.conn.cookies["ibapauth"]
+
+        # specify a file handle for the file data to be uploaded
+        with open(filename, "rb") as csvfile:
+            # reset to top of the file
+            csvfile.seek(0)
+            upload_file = {"file": csvfile.read()}
+
+            # use the ibapauth cookie for auth to the upload_url
+            req_cookies = {"ibapauth": ibapauth_cookie}
+
+            # Upload the contents of the CSV file
+            logging.info("step 2 - post the files using the upload_url provided")
+            try:
+                self.__upload_file(upload_url, upload_file, req_cookies)
+            except requests.exceptions.RequestException as err:
+                logging.error(err)
+                raise WapiRequestException(err)
+
+            # submit task to CSV Job Manager
+            logging.info("step 3 - upload %s certificate on %s", certificate_usage, member)
+            payload = {"certificate_usage": certificate_usage, "member": member, "token": token}
+            try:
+                res = self.post(
+                    "fileop",
+                    params={"_function": "uploadcertificate"},
+                    json=payload,
+                    cookies=req_cookies,
+                )
+                logging.debug(pprint.pformat(res.text))
+                res.raise_for_status()
+            except requests.exceptions.RequestException as err:
+                logging.error(err)
+                raise WapiRequestException(err)
 
     def csv_import(
             self,
@@ -290,16 +353,128 @@ class NiosFileopMixin:
             logging.error(err)
             raise WapiRequestException(err)
 
+    def file_download(
+            self,
+            token: str,
+            url: str,
+            filename: str = None,
+    ):
+        # get auth cookie from cookie jar
+        ibapauth_cookie = self.conn.cookies["ibapauth"]
+        req_cookies = {"ibapauth": ibapauth_cookie}
+
+        logging.info("downloading data from %s", url)
+        try:
+            res = self.__download_file(url, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        if not filename:
+            filename = util.extract_filename_from_url(url)
+
+        NiosFileopMixin.__write_file(filename=filename, data=res)
+
+        try:
+            self.__download_complete(token, filename, req_cookies)
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+    def download_certificate(
+            self,
+            member: str,
+            certificate_usage: SupportedCertTypes = "ADMIN",
+    ):
+        logging.info("Downloading %s certificate for %s", certificate_usage, member)
+        payload = {"member": member, "certificate_usage": certificate_usage}
+        logging.debug("json payload %s", payload)
+
+        try:
+            res = self.post("fileop", params={"_function": "downloadcertificate"}, json=payload)
+            logging.debug(res.text)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        obj = res.json()
+        download_url = obj.get("url")
+        download_token = obj.get("token")
+
+        self.file_download(token=download_token, url=download_url)
+
+    def generate_selfsigned_cert(
+            self,
+            cn: str,
+            member: str,
+            days_valid: int = 365,
+            algorithm: SupportedAlgorithms = "SHA-256",
+            certificate_usage: SupportedCertUsages = "ADMIN",
+            comment: Optional[str] = None,
+            country: Optional[str] = None,
+            email: Optional[str] = None,
+            key_size: Optional[SupportedKeySizes] = 2048,
+            locality: Optional[str] = None,
+            org: Optional[str] = None,
+            org_unit: Optional[str] = None,
+            state: Optional[str] = None,
+            subject_alternative_names: Optional[list[dict]] = None
+    ):
+        logging.info("generating self-signed certificate for %s", member)
+        payload = {
+            "cn": cn,
+            "member": member,
+            "algorithm": algorithm,
+            "certificate_usage": certificate_usage,
+            "days_valid": days_valid,
+        }
+        if comment:
+            payload["comment"] = comment
+        if country:
+            payload["country"] = country
+        if email:
+            payload["email"] = email
+        if key_size:
+            payload["key_size"] = key_size
+        if locality:
+            payload["locality"] = locality
+        if org:
+            payload["org"] = org
+        if org_unit:
+            payload["org_unit"] = org_unit
+        if state:
+            payload["state"] = state
+        if subject_alternative_names:
+            payload["subject_alternative_names"] = subject_alternative_names
+        logging.debug("json payload %s", payload)
+
+        try:
+            res = self.post(
+                "fileop", params={"_function": "generateselfsignedcert"}, json=payload
+            )
+            logging.debug(res.text)
+            res.raise_for_status()
+        except requests.exceptions.RequestException as err:
+            logging.error(err)
+            raise WapiRequestException(err)
+
+        obj = res.json()
+        download_url = obj.get("url")
+        download_token = obj.get("token")
+
+        self.file_download(token=download_token, url=download_url)
+
     def generate_csr(
             self,
             cn: str,
             member: str,
-            algorithm: str = "SHA-256",
-            certificate_usage: str = "ADMIN",
+            algorithm: SupportedAlgorithms = "SHA-256",
+            certificate_usage: SupportedCertUsages = "ADMIN",
             comment: Optional[str] = None,
             country: Optional[str] = None,
             email: Optional[str] = None,
-            key_size: Optional[int] = 2048,
+            key_size: Optional[SupportedKeySizes] = 2048,
             locality: Optional[str] = None,
             org: Optional[str] = None,
             org_unit: Optional[str] = None,
@@ -371,26 +546,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        # get auth cookie from cookie jar
-        ibapauth_cookie = self.conn.cookies["ibapauth"]
-        req_cookies = {"ibapauth": ibapauth_cookie}
-
-        logging.info("downloading data from %s", download_url)
-        try:
-            res = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        filename = util.get_csv_from_url(download_url)
-
-        NiosFileopMixin.__write_file(filename=filename, data=res)
-
-        try:
-            self.__download_complete(download_token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.file_download(token=download_token, url=download_url)
 
     def get_log_files(
             self,
@@ -443,27 +599,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        # get auth cookie from cookie jar
-        ibapauth_cookie = self.conn.cookies["ibapauth"]
-        req_cookies = {"ibapauth": ibapauth_cookie}
-
-        logging.info("downloading data from %s", download_url)
-        try:
-            res = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        if not filename:
-            filename = util.get_csv_from_url(download_url)
-
-        NiosFileopMixin.__write_file(filename=filename, data=res)
-
-        try:
-            self.__download_complete(download_token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_support_bundle(
             self,
@@ -529,27 +665,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        # get auth cookie from cookie jar
-        ibapauth_cookie = self.conn.cookies["ibapauth"]
-        req_cookies = {"ibapauth": ibapauth_cookie}
-
-        logging.info("downloading data from %s", download_url)
-        try:
-            res = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        if not filename:
-            filename = util.get_csv_from_url(download_url)
-
-        NiosFileopMixin.__write_file(filename=filename, data=res)
-
-        try:
-            self.__download_complete(download_token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def grid_backup(self, filename: Optional[str] = None) -> None:
         """
@@ -580,25 +696,7 @@ class NiosFileopMixin:
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-
-        try:
-            res = self.__download_file(download_url, req_cookies)
-            res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        if not filename:
-            filename = util.get_csv_from_url(download_url)
-
-        NiosFileopMixin.__write_file(filename=filename, data=res)
-
-        # we're done - post downloadcomplete function using the token
-        try:
-            self.__download_complete(token, filename, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
             self,
@@ -708,7 +806,7 @@ class NiosFileopMixin:
         if filename:
             download_file = filename
         else:
-            download_file = util.get_csv_from_url(download_url)
+            download_file = util.extract_filename_from_url(download_url)
 
         NiosFileopMixin.__write_file(filename=download_file, data=res)
 
@@ -765,28 +863,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        # get auth cookie from cookie jar
-        ibapauth_cookie = self.conn.cookies["ibapauth"]
-        req_cookies = {"ibapauth": ibapauth_cookie}
-
-        logging.info("downloading data from %s", download_url)
-        try:
-            res = self.__download_file(download_url, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        download_file = util.get_csv_from_url(download_url)
-
-        NiosFileopMixin.__write_file(filename=download_file, data=res)
-
-        try:
-            self.__download_complete(download_token, download_file, req_cookies)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
-        return download_file
+        self.file_download(token=download_token, url=download_url)
 
     def __csv_import(
             self,
