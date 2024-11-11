@@ -685,7 +685,7 @@ class NiosFileopMixin:
         Perform a NIOS Grid Backup.
 
         Args:
-            filename: str, optional. The name of the backup file. Default is 'database.tgz'.
+            filename: str, optional. The name of the backup file. Default is 'database.bak'.
 
         Returns:
             None
@@ -710,7 +710,7 @@ class NiosFileopMixin:
 
     def grid_restore(
             self,
-            filename: str = "database.tgz",
+            filename: str = "database.bak",
             mode: GridRestoreMode = "NORMAL",
             keep_grid_ip: bool = False,
     ):
@@ -719,7 +719,7 @@ class NiosFileopMixin:
 
         Args:
             filename (str): The filename of the database file to be restored. Default is
-                            "database.tgz".
+                            "database.bak".
             mode (GridRestoreMode): The restore mode to be used. Default is "NORMAL".
             keep_grid_ip (bool): Indicates whether to keep the grid IP address. Default is False.
 

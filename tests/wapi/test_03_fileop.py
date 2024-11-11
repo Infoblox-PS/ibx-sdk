@@ -108,10 +108,44 @@ def test_wapi_member_config(get_wapi):
 def test_wapi_grid_backup(get_wapi):
     wapi = get_wapi
     wapi.grid_backup()
-    assert os.path.exists('database.tgz')
+    assert os.path.exists('database.bak')
 
 
 def test_wapi_grid_restore(get_wapi):
     wapi = get_wapi
     wapi.grid_restore()
-    os.remove('database.tgz')
+    os.remove('database.bak')
+
+
+def test_wapi_download_certificate(get_wapi):
+    wapi = get_wapi
+    wapi.download_certificate(
+        member=GRID_MEMBER,
+        certificate_usage='ADMIN'
+    )
+    assert os.path.exists('apache_server.crt')
+    os.remove('apache_server.crt')
+
+
+def test_wapi_generate_selfsigned_cert(get_wapi):
+    wapi = get_wapi
+    wapi.generate_selfsigned_cert(
+        member=GRID_MEMBER,
+        certificate_usage='ADMIN',
+        cn=GRID_MEMBER,
+    )
+    assert os.path.exists('cert.pem')
+    os.remove('cert.pem')
+
+
+def test_wapi_generate_csr(get_wapi):
+    wapi = get_wapi
+    wapi.generate_csr(
+        member=GRID_MEMBER,
+        certificate_usage='ADMIN',
+        cn=GRID_MEMBER,
+    )
+    assert os.path.exists('cert.pem')
+    os.remove('cert.pem')
+
+

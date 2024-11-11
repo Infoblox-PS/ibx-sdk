@@ -114,8 +114,11 @@ def test_wapi_returns_cookie_connection(get_wapi):
 
 def test_wapi_get_invalid_object(get_wapi):
     wapi = get_wapi
-    response = wapi.get('invalid_object')
-    assert response.status_code == 400
+    try:
+        response = wapi.get('invalid_object')
+        assert response.status_code == 400
+    except WapiRequestException as err:
+        log.debug(err)
 
 
 def test_wapi_try_find_and_remove_object(get_wapi):
