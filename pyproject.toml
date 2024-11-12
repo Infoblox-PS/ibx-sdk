@@ -1,50 +1,35 @@
-[project]
+[tool.poetry]
 name = "ibx-sdk"
 version = "0.2.0"
-description = "Infoblox basic API Toolkit"
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Environment :: Console",
-    "Environment :: MacOS X",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: Apple Public Source License",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: Implementation :: PyPy",
-    "Topic :: Software Development",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: System :: Logging",
-]
-readme = "README.md"
-requires-python = ">=3.8"
-license = { file = "LICENSE.md" }
 authors = [
-    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
-    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
-    { name = "Michael Smith", email = "michaels@infoblox.com" },
+    "Patrick Piper <patrick@ddiguru.com>",
+    "Patrick Piper <ppiper@infoblox.com>",
+    "Michael Smith <michaels@infoblox.com>",
 ]
-maintainers = [
-    { name = "Patrick Piper", email = "ppiper@infoblox.com" },
-    { name = "Patrick Piper", email = "patrick@ddiguru.com" },
-    { name = "Michael Smith", email = "michaels@infoblox.com" },
-]
-dependencies = [
-    "click",
-    "click-option-group",
-    "coloredlogs",
-    "dnspython",
-    "netaddr",
-    "requests",
-    "urllib3",
-]
+description = "Infoblox API software development kit"
+repository = "https://github.com/Infoblox-PS/ibx-sdk"
+documentation = "https://infoblox-ps.github.io/ibx-sdk/"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+click = "^8.1.7"
+click-option-group = "^0.5.6"
+coloredlogs = "^15.0.1"
+dnspython = "^2.7.0"
+netaddr = "^1.3.0"
+requests = "^2.32.3"
+urllib3 = "^2.2.3"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.3"
+mkdocstrings-python = "^1.12.2"
+mkdocs-material = "^9.5.44"
+
+[tool.poetry.group.test.dependencies]
+coverage = "^7.6.4"
+pytest = "^8.3.3"
+pytest-env = "^1.1.5"
+pytest-dotenv = "^0.5.2"
 
 [project.scripts]
 get-log = 'ibx_sdk.bin.nios_get_log:main'
@@ -58,51 +43,6 @@ csvimport = 'ibx_sdk.bin.nios_csvimport:main'
 csvexport = 'ibx_sdk.bin.nios_csvexport:main'
 nios-certificate = 'ibx_sdk.bin.nios_certificate:cli'
 
-
-[project.optional-dependencies]
-dev = ["pylint", "codestyle", "sphinx", "mkdocstrings-python", "mkdocs-material"]
-test = ["coverage", "pytest", "pytest-env", "pytest-dotenv"]
-
-[project.urls]
-"homepage" = "https://github.com/Infoblox-PS/ibx-sdk"
-
-[tools.setuptools]
-packages = ["ibx_sdk"]
-python_requires = ">=3.8"
-
-[tool.setuptools.packages.find]
-where = ["src"]
-
-[tool.coverage.report]
-show_missing = true
-include = [
-    "src/ibx_sdk/*/*.py",
-]
-omit = [
-    "tests/*",
-    "__init__.py"
-]
-exclude_also = [
-    "except requests.exceptions.RequestException",
-    "except requests.exceptions.SSLError",
-    "except requests.exceptions.HTTPError",
-    "def __certificate_auth_request",
-    "if endpoint:",
-    "if member",
-    "if node_type",
-    "if msserver",
-    "if not filename",
-    "if remote_url",
-    "if task_operation == 'MERGE'",
-    "if task_operation == 'OVERRIDE'",
-    "if groups",
-    "if members",
-    "if mode",
-    "if restart_option",
-    "if services",
-    "if user_name",
-]
-
 [build-system]
-requires = ["setuptools >= 61.0.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
