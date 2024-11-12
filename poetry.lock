@@ -326,6 +326,24 @@ python-dateutil = ">=2.8.1"
 dev = ["flake8", "markdown", "twine", "wheel"]
 
 [[package]]
+name = "gitverse"
+version = "3.2"
+description = "Get GitHub's release notes or commit history and format it into `reStructuredText`/`Markdown` documents."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "gitverse-3.2-py3-none-any.whl", hash = "sha256:cdbad0b5725c08346f64d299c7a87886ad7fc72fcba1f1be34154c2ac89bfe25"},
+]
+
+[package.dependencies]
+click = "*"
+python-dotenv = "*"
+requests = "*"
+
+[package.extras]
+dev = ["pre-commit", "xmltodict"]
+
+[[package]]
 name = "griffe"
 version = "1.5.1"
 description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
@@ -1217,4 +1235,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "4c7f96e3e98f39af7bea28abf9315b96117bcf199cb78fb5fae1087e78898d79"
+content-hash = "8bf83ad441c69d0a9ec0687b48b8cfc0bd45cef4fa55bba18a7a361f7272ce0f"
