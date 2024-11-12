@@ -37,10 +37,6 @@
          <lastmod>2024-11-12</lastmod>
     </url>
     <url>
-         <loc>https://infoblox-ps.github.io/ibx-sdk/examples/generate_csr/</loc>
-         <lastmod>2024-11-12</lastmod>
-    </url>
-    <url>
          <loc>https://infoblox-ps.github.io/ibx-sdk/examples/get_file/</loc>
          <lastmod>2024-11-12</lastmod>
     </url>
@@ -58,6 +54,10 @@
     </url>
     <url>
          <loc>https://infoblox-ps.github.io/ibx-sdk/examples/grid_restore/</loc>
+         <lastmod>2024-11-12</lastmod>
+    </url>
+    <url>
+         <loc>https://infoblox-ps.github.io/ibx-sdk/examples/nios_certificate/</loc>
          <lastmod>2024-11-12</lastmod>
     </url>
     <url>
