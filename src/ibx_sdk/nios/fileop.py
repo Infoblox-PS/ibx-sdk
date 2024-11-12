@@ -154,12 +154,12 @@ class NiosFileopMixin:
             WapiRequestException: If there is a request exception during the upload process.
         """
         (_, filename) = os.path.split(filename)
-        filename = filename.replace("-", "_")
+        valid_filename = filename.replace("-", "_")
 
         # Call WAPI fileop Upload INIT
         logging.info("step 1 - request uploadinit %s", filename)
         try:
-            obj = self.__upload_init(filename=filename)
+            obj = self.__upload_init(filename=valid_filename)
         except requests.exceptions.RequestException as err:
             logging.error(err)
             raise WapiRequestException(err)
@@ -168,10 +168,10 @@ class NiosFileopMixin:
         token = obj.get("token")
 
         # specify a file handle for the file data to be uploaded
-        with open(filename, "rb") as csvfile:
+        with open(filename, "rb") as fh:
             # reset to top of the file
-            csvfile.seek(0)
-            upload_file = {"file": csvfile.read()}
+            fh.seek(0)
+            upload_file = {"file": fh.read()}
 
             # Upload the contents of the CSV file
             logging.info("step 2 - post the files using the upload_url provided")
@@ -727,11 +727,11 @@ class NiosFileopMixin:
         token = self.file_upload(filename=filename)
 
         # Execute the restore
-        logging.info("step 4 - execute the grid restore")
+        logging.info("step 3 - execute the grid restore")
         try:
             self.__restore_database(keep_grid_ip, mode, token, self.__get_cookies())
         except requests.exceptions.RequestException as err:
-            logging.error("step 4 - Error: %s", err)
+            logging.error("step 3 - Error: %s", err)
             raise WapiRequestException(err)
         logging.info("Grid restore successful!")
 
