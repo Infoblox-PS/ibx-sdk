@@ -326,24 +326,6 @@ python-dateutil = ">=2.8.1"
 dev = ["flake8", "markdown", "twine", "wheel"]
 
 [[package]]
-name = "gitverse"
-version = "3.2"
-description = "Get GitHub's release notes or commit history and format it into `reStructuredText`/`Markdown` documents."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "gitverse-3.2-py3-none-any.whl", hash = "sha256:cdbad0b5725c08346f64d299c7a87886ad7fc72fcba1f1be34154c2ac89bfe25"},
-]
-
-[package.dependencies]
-click = "*"
-python-dotenv = "*"
-requests = "*"
-
-[package.extras]
-dev = ["pre-commit", "xmltodict"]
-
-[[package]]
 name = "griffe"
 version = "1.5.1"
 description = "Signatures for entire Python programs. Extract the structure, the frame, the skeleton of your project, to generate API documentation or find breaking changes in your API."
@@ -1133,6 +1115,17 @@ files = [
 ]
 
 [[package]]
+name = "syslog-rfc5424-formatter"
+version = "1.2.3"
+description = "Logging formatter which produces well-formatted RFC5424 Syslog Protocol messages"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4"
+files = [
+    {file = "syslog-rfc5424-formatter-1.2.3.tar.gz", hash = "sha256:9bc5c9c3fb6a92b6f85ca108f2be04ea50106113324b5d7b1f07fcc6ad2766d3"},
+    {file = "syslog_rfc5424_formatter-1.2.3-py3-none-any.whl", hash = "sha256:958b9896097fea58e271b95f70aa71d5330882a888f685f2ca8aac872be5efa3"},
+]
+
+[[package]]
 name = "tomli"
 version = "2.1.0"
 description = "A lil' TOML parser"
@@ -1235,4 +1228,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "8bf83ad441c69d0a9ec0687b48b8cfc0bd45cef4fa55bba18a7a361f7272ce0f"
+content-hash = "72bd3d7ec266ebc848c34dea786b0bfe2ae789c334cc229d83d0a0cfba8b78c3"

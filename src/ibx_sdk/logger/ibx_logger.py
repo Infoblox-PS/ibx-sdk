@@ -19,6 +19,7 @@ import os
 import socket
 from logging.handlers import RotatingFileHandler
 from typing import Optional, Any
+from syslog_rfc5424_formatter import RFC5424Formatter
 
 import coloredlogs
 
@@ -174,10 +175,15 @@ def init_remote_logger(
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
     socktype = socket.SOCK_STREAM if protocol == "TCP" else socket.SOCK_DGRAM
-    syslog_handler = logging.handlers.SysLogHandler(
+    handler = logging.handlers.SysLogHandler(
         address=address, facility=facility, socktype=socktype
     )
-    root_logger.addHandler(syslog_handler)
+    handler.append_nul = False
+    handler.setFormatter(RFC5424Formatter())
+    root_logger.addHandler(handler)
+    current_fmt = handler.formatter._fmt
+    new_fmt = logging.Formatter(current_fmt + "\n")
+    handler.setFormatter(new_fmt)
     return root_logger
 
 
