@@ -16,6 +16,7 @@ limitations under the License.
 
 import logging
 import os
+import socket
 from logging.handlers import RotatingFileHandler
 from typing import Optional, Any
 
@@ -157,6 +158,26 @@ def init_logger(
         init_console_logger(level)
 
     root_logger.debug("using logfile_name = %s", logfile_name)
+    return root_logger
+
+
+def init_remote_logger(
+        address: tuple[str, int] = ("localhost", 5140),
+        facility: str = "local0",
+        protocol: str = "TCP",
+        level: Optional[str] = None,
+) -> logging.Logger:
+    if level:
+        log_level = log_levels.get(level.upper())
+    else:
+        log_level = logging.INFO
+    root_logger = logging.getLogger()
+    root_logger.setLevel(log_level)
+    socktype = socket.SOCK_STREAM if protocol == "TCP" else socket.SOCK_DGRAM
+    syslog_handler = logging.handlers.SysLogHandler(
+        address=address, facility=facility, socktype=socktype
+    )
+    root_logger.addHandler(syslog_handler)
     return root_logger
 
 
