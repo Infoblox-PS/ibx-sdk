@@ -76,6 +76,7 @@ def init_logger(
     logfile_name: str,
     logfile_mode: Optional[str] = "w",
     console_log: Optional[bool] = None,
+    format: Optional[str] = None,
     max_size: Optional[int] = None,
     num_logs: Optional[int] = None,
     level: Optional[str] = None,
@@ -88,6 +89,7 @@ def init_logger(
         logfile_mode (str, optional): Specify the mode for the log file. 'a' for
             append or 'w' for write mode for basic file logging.
         console_log (bool, optional): If True, create a colored console log.
+        format (str, optional): Specify the format for the log messages.
         max_size (int, optional): Specify the maximum size for the log file (in
             bytes) if you want to use a rotating log file handler instead of a
             standard log file handler.
@@ -127,7 +129,10 @@ def init_logger(
         log_level = log_levels.get(level.upper(), logging.INFO)
     else:
         log_level = logging.INFO
-    log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+    if format:
+        log_fmt = format
+    else:
+        log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
