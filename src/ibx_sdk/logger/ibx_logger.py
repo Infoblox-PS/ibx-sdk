@@ -16,8 +16,10 @@ limitations under the License.
 
 import logging
 import os
+import socket
 from logging.handlers import RotatingFileHandler
 from typing import Optional, Any
+from syslog_rfc5424_formatter import RFC5424Formatter
 
 import coloredlogs
 
@@ -74,6 +76,7 @@ def init_logger(
     logfile_name: str,
     logfile_mode: Optional[str] = "w",
     console_log: Optional[bool] = None,
+    log_format: Optional[str] = None,
     max_size: Optional[int] = None,
     num_logs: Optional[int] = None,
     level: Optional[str] = None,
@@ -86,6 +89,7 @@ def init_logger(
         logfile_mode (str, optional): Specify the mode for the log file. 'a' for
             append or 'w' for write mode for basic file logging.
         console_log (bool, optional): If True, create a colored console log.
+        log_format (str, optional): Specify the format for the log messages.
         max_size (int, optional): Specify the maximum size for the log file (in
             bytes) if you want to use a rotating log file handler instead of a
             standard log file handler.
@@ -125,7 +129,10 @@ def init_logger(
         log_level = log_levels.get(level.upper(), logging.INFO)
     else:
         log_level = logging.INFO
-    log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+    if log_format:
+        log_fmt = log_format
+    else:
+        log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
@@ -157,6 +164,31 @@ def init_logger(
         init_console_logger(level)
 
     root_logger.debug("using logfile_name = %s", logfile_name)
+    return root_logger
+
+
+def init_remote_logger(
+        address: tuple[str, int] = ("localhost", 5140),
+        facility: str = "local0",
+        protocol: str = "TCP",
+        level: Optional[str] = None,
+) -> logging.Logger:
+    if level:
+        log_level = log_levels.get(level.upper())
+    else:
+        log_level = logging.INFO
+    root_logger = logging.getLogger()
+    root_logger.setLevel(log_level)
+    socktype = socket.SOCK_STREAM if protocol == "TCP" else socket.SOCK_DGRAM
+    handler = logging.handlers.SysLogHandler(
+        address=address, facility=facility, socktype=socktype
+    )
+    handler.append_nul = False
+    handler.setFormatter(RFC5424Formatter())
+    root_logger.addHandler(handler)
+    current_fmt = handler.formatter._fmt
+    new_fmt = logging.Formatter(current_fmt + "\n")
+    handler.setFormatter(new_fmt)
     return root_logger
 
 

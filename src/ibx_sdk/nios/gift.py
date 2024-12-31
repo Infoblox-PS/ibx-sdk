@@ -357,8 +357,6 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
-            if response.status_code != 200:
-                raise WapiRequestException(response.text)
             data = response.json()
             if len(data) > 1:
                 raise WapiRequestException("Multiple data records were returned")
@@ -423,10 +421,7 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
             )
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
-        else:
-            if res.status_code != 200:
-                raise WapiRequestException(res.text)
-            return res
+        return res
 
     def delete(self, wapi_object_ref: str, **kwargs: Any) -> Response:
         """
@@ -446,6 +441,4 @@ class Gift(requests.sessions.Session, NiosServiceMixin, NiosFileopMixin):
         except requests.exceptions.RequestException as err:
             raise WapiRequestException(err)
         else:
-            if res.status_code != 200:
-                raise WapiRequestException(res.text)
             return res

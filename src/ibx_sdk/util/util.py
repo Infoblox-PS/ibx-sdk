@@ -272,15 +272,15 @@ def csv_filtered_header(row: dict, col_filter: list = None) -> dict:
     return header_object
 
 
-def get_csv_from_url(url) -> str:
+def extract_filename_from_url(url) -> str:
     """
-    The function get_csv_from_url retrieves the name of the CSV file from a given URL.
+    The function extract_filename_from_url retrieves the name of the CSV file from a given URL.
 
     Args:
         url (str): An Infoblox download URL for CSV export.
 
     Returns:
-        str: The name of the CSV file that would be downloaded from the specified URL.
+        str: The name of the file that would be downloaded from the specified URL.
 
     Raises:
         Exception: An exception is raised if the URL cannot be parsed.
@@ -290,8 +290,8 @@ def get_csv_from_url(url) -> str:
         was raised while parsing.
 
     Usage:
-        Use this function to retrieve the name of a CSV file from an Infoblox download URL:
-        >>> file_name = get_csv_from_url('https://my-infoblox-instance/export.csv')
+        Use this function to retrieve the name of a file from an Infoblox download URL:
+        >>> file_name = extract_filename_from_url('https://my-infoblox-instance/export.csv')
     """
 
     logging.debug("parsing url: %s", url)
