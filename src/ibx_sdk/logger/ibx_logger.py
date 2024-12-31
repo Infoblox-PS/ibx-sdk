@@ -129,10 +129,12 @@ def init_logger(
         log_level = log_levels.get(level.upper(), logging.INFO)
     else:
         log_level = logging.INFO
+
     if log_format:
         log_fmt = log_format
     else:
         log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
 
@@ -161,7 +163,7 @@ def init_logger(
     root_logger.addHandler(lfh)
 
     if console_log:
-        init_console_logger(level)
+        init_console_logger(level, log_format)
 
     root_logger.debug("using logfile_name = %s", logfile_name)
     return root_logger
@@ -192,13 +194,16 @@ def init_remote_logger(
     return root_logger
 
 
-def init_console_logger(level: Optional[str] = None):
+def init_console_logger(level: Optional[str] = None, log_format: Optional[str] = None):
     """
     Initialize a colored console logger with optional custom logging level.
 
     Args:
         level (str, optional): Specify a string value of the logging level.
             This field is case-insensitive and will default to 'INFO' if not provided.
+        log_format (str, optional): Specify the format for the log messages.
+            This field has a default value.
+
 
     Example:
 
@@ -216,7 +221,11 @@ def init_console_logger(level: Optional[str] = None):
     else:
         log_level = logging.INFO
     coloredlogs.DEFAULT_FIELD_STYLES["filename"] = dict(color="blue")
-    log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+
+    if log_format:
+        log_fmt = log_format
+    else:
+        log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
     coloredlogs.install(logger=root_logger, level=log_level, fmt=log_fmt)
