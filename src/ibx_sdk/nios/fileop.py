@@ -153,7 +153,7 @@ class NiosFileopMixin:
         Raises:
             WapiRequestException: If there is a request exception during the upload process.
         """
-        (_, filename) = os.path.split(filename)
+        (path, filename) = os.path.split(filename)
         valid_filename = filename.replace("-", "_")
 
         # Call WAPI fileop Upload INIT
@@ -168,7 +168,7 @@ class NiosFileopMixin:
         token = obj.get("token")
 
         # specify a file handle for the file data to be uploaded
-        with open(filename, "rb") as fh:
+        with open(os.path.join(path, filename), "rb") as fh:
             # reset to top of the file
             fh.seek(0)
             upload_file = {"file": fh.read()}
