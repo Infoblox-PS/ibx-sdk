@@ -316,11 +316,11 @@ class IPv4Network(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class Ipv6NetworkContainer(BaseModel):
+class IPv6NetworkContainer(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     ipv6networkcontainer: str = Field(
-        alias="header-ipv6networkcontainer", default="ipv6networkcontainer"
+        alias="header-ipv6networkcontainer", default="ipv6networkcontainer", frozen=True
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     address: IPv6Address
@@ -359,7 +359,7 @@ class Ipv6NetworkContainer(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class Ipv6Network(BaseModel):
+class IPv6Network(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     ipv6network: str = Field(
@@ -404,7 +404,7 @@ class Ipv6Network(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class SharedNetwork(BaseModel):
+class IPv4SharedNetwork(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     sharednetwork: str = Field(alias="header-sharednetwork", default="sharednetwork")
@@ -480,7 +480,7 @@ class IPv6SharedNetwork(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class DhcpRange(BaseModel):
+class IPv4DhcpRange(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     dhcprange: str = Field(alias="header-dhcprange", default="dhcprange")
@@ -580,7 +580,7 @@ class IPv6DhcpRange(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class FixedAddress(BaseModel):
+class IPv4FixedAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     header_fixedaddress: str = Field(alias="header-fixedaddress", default="fixedaddress")
@@ -869,7 +869,7 @@ class IPv4OptionDefinition(BaseModel):
         }
 
 
-class Ipv6Optionspace(BaseModel):
+class IPv6Optionspace(BaseModel):
     ipv6optionspace: str = Field(alias="header-ipv6optionspace", default="ipv6optionspace")
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
@@ -878,7 +878,7 @@ class Ipv6Optionspace(BaseModel):
     ipv6_enterprise_number: str | None = None
 
 
-class Ipv6OptionDefinition(BaseModel):
+class IPv6OptionDefinition(BaseModel):
     ipv6optiondefinition: str = Field(
         alias="header-ipv6optiondefinition", default="ipv6optiondefinition"
     )
