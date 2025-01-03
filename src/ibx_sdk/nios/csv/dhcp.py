@@ -446,7 +446,7 @@ class IPv6Network(BaseModel):
         if (
                 code.startswith("OPTION-")
                 or code.startswith("EA-")
-                or code.startswith("EAInherited--")
+                or code.startswith("EAInherited-")
                 or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
