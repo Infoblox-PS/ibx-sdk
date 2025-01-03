@@ -252,27 +252,34 @@ class IPv4NetworkContainer(BaseModel):
 class IPv4Network(BaseModel):
     model_config = ConfigDict(extra="allow", use_enum_values=True)
 
-    network: str = Field(alias="header-network", default="network", frozen=True, description="Mandatory default header for network")
-    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action", description="CSV custom import action ")
+    network: str = Field(alias="header-network", default="network", frozen=True,
+                         description="Mandatory default header for network")
+    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action",
+                                                      description="CSV custom import action ")
     address: IPv4Address = Field(..., description="IP Address of the network")
     netmask: IPv4Address = Field(..., description="Subnet mask address of the network")
     rir_organization: Optional[str] = Field(None, description="RIR Organization name")
     rir_registration_status: Optional[str] = Field(None, description="RIR Registration status")
     network_view: Optional[str] = Field(None, description="Network view")
     enable_discovery: Optional[bool] = Field(None, description="Enable discovery flag")
-    discovery_member: Optional[str] = Field(None, description="Discovery member name if discovery is enabled")
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(None, description="List of IP Ranges to be excluded from discovery")
+    discovery_member: Optional[str] = Field(None,
+                                            description="Discovery member name if discovery is enabled")
+    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(None,
+                                                                   description="List of IP Ranges to be excluded from discovery")
     comment: Optional[str] = Field(None, description="Optional comment")
-    auto_create_reversezone: Optional[bool] = Field(None, description="Auto create reverse zone flag")
+    auto_create_reversezone: Optional[bool] = Field(None,
+                                                    description="Auto create reverse zone flag")
     is_authoritative: Optional[bool] = Field(None, description="DHCP authoritative flag")
-    option_logic_filters: Optional[List[str]] = Field(None, description="List of option logic filters")
+    option_logic_filters: Optional[List[str]] = Field(None,
+                                                      description="List of option logic filters")
     boot_file: Optional[str] = Field(None, description="Legacy boot-file option")
     boot_server: Optional[str] = Field(None, description="Legacy boot-server option")
     ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
     generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
     always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
     update_static_leases: Optional[bool] = Field(None, description="Update static leases flag")
-    update_dns_on_lease_renewal: Optional[bool] = Field(None, description="Update DNS on lease renewal flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(None,
+                                                        description="Update DNS on lease renewal flag")
     ddns_ttl: Optional[int] = Field(None, description="DDNS TTL option in seconds")
     enable_option81: Optional[bool] = Field(None, description="Enable option81 flag")
     deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
@@ -280,22 +287,27 @@ class IPv4Network(BaseModel):
     disabled: Optional[bool] = Field(None, description="Disabled flag")
     enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
     enable_thresholds: Optional[bool] = Field(None, description="Enable thresholds flag")
-    enable_threshold_email_warnings: Optional[bool] = Field(None, description="Enable email warnings flag")
-    enable_threshold_snmp_warnings: Optional[bool] = Field(None, description="Enable SNMP warnings flag")
+    enable_threshold_email_warnings: Optional[bool] = Field(None,
+                                                            description="Enable email warnings flag")
+    enable_threshold_snmp_warnings: Optional[bool] = Field(None,
+                                                           description="Enable SNMP warnings flag")
     range_high_water_mark: Optional[int] = Field(None, description="Range high water mark option")
-    ignore_client_requested_options: Optional[bool] = Field(None, description="Ignore client requested options flag")
+    ignore_client_requested_options: Optional[bool] = Field(None,
+                                                            description="Ignore client requested options flag")
     range_low_water_mark: Optional[int] = Field(None, description="Range low water mark option")
     next_server: Optional[str] = Field(None, description="Next server option")
     lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
     enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
     pxe_lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
     recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
-    threshold_email_addresses: Optional[list[str]] = Field(None, description="Email addresses to send warnings")
+    threshold_email_addresses: Optional[list[str]] = Field(None,
+                                                           description="Email addresses to send warnings")
     dhcp_members: Optional[str] = Field(None, description="DHCP members")
     routers: Optional[str] = Field(None, description="DHCP routers option")
     domain_name: Optional[str] = Field(None, description="DHCP option domain-name")
     domain_name_servers: Optional[str] = Field(None, description="DHCP option domain-name-servers")
-    zone_associations: Optional[List[str]] = Field(None, description="List of DNS zone associations")
+    zone_associations: Optional[List[str]] = Field(None,
+                                                   description="List of DNS zone associations")
     vlans: Optional[str] = Field(None, description="VLAN assignments - Example: default/1/4094/1")
 
     # OPTION-# string where the name implies DHCP vendor class
@@ -848,15 +860,17 @@ class IPv4OptionDefinition(BaseModel):
         alias="header-optiondefinition", default="optiondefinition", frozen=True,
         description="Header for optiondefinition"
     )
-    import_action: ImportActionEnum | None = Field(None, alias="import-action",
-                                                   description="CSV Custom import action")
-    space: str = Field(alias="optionspace", default="optionspace",
-                       description="IPv4 DHCP Option Space")
-    new_space: Optional[str] = Field(None, alias="_new_space",
-                                     description="New name of the optionspace")
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV Custom import action"
+    )
+    space: str = Field(..., alias="optionspace", description="IPv4 DHCP Option Space")
+    new_space: Optional[str] = Field(
+        None, alias="_new_space", description="New name of the optionspace"
+    )
     name: str = Field(..., description="IPv4 DHCP Option name")
-    new_name: Optional[str] = Field(None, alias="_new_name",
-                                    description="New IPv4 DHCP Option name")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="New IPv4 DHCP Option name"
+    )
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
