@@ -831,13 +831,19 @@ class DhcpFingerprintFilter(BaseModel):
 
 
 class IPv4OptionSpace(BaseModel):
-    optionspace: str = Field(alias="header-optionspace", default="optionspace",
-                             description="Header for optionspace")
-    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action",
-                                                      description="CSV Custom import action")
+    model_config = ConfigDict(use_enum_values=True)
+
+    optionspace: str = Field(
+        alias="header-optionspace", frozen=True, default="optionspace",
+        description="Header for optionspace"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV Custom import action"
+    )
     name: str = Field(..., description="Name of the IPv4 optionspace")
-    new_name: Optional[str] = Field(None, alias="_new_name",
-                                    description="New name of the optionspace")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="New name of the optionspace"
+    )
     comment: Optional[str] = Field(None, description="Comment for the optionspace")
 
     class Config:
@@ -856,6 +862,8 @@ class IPv4OptionSpace(BaseModel):
 
 
 class IPv4OptionDefinition(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+
     optiondefinition: str = Field(
         alias="header-optiondefinition", default="optiondefinition", frozen=True,
         description="Header for optiondefinition"
