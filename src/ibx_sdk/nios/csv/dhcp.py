@@ -2,9 +2,9 @@ import re
 from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address
 from typing import List, Optional
-from typing_extensions import Self
 
 from pydantic import BaseModel, Field, ConfigDict, model_validator, PositiveInt
+from typing_extensions import Self
 
 from .enums import (
     ImportActionEnum,
@@ -175,10 +175,15 @@ class NetworkView(BaseModel):
 
 
 class IPv4NetworkContainer(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
-    networkcontainer: str = Field(alias="header-networkcontainer", default="networkcontainer", description="Mandatory default header for networkcontainer")
-    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action")
+    networkcontainer: str = Field(
+        alias="header-networkcontainer", default="networkcontainer", frozen=True,
+        description="Mandatory default header for networkcontainer"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV custom import action "
+    )
     address: IPv4Address = Field(..., description="IP Address of the network container")
     netmask: IPv4Address = Field(..., description="Subnet mask address of the network container")
     comment: Optional[str] = Field(None, description="Optional comment")
@@ -197,36 +202,51 @@ class IPv4NetworkContainer(BaseModel):
     enable_dhcp_thresholds: Optional[bool] = Field(None, description="Enable DHCP thresholds flag")
     enable_email_warnings: Optional[bool] = Field(None, description="Enable email warnings flag")
     enable_snmp_warnings: Optional[bool] = Field(None, description="Enable SNMP warnings flag")
-    threshold_email_addresses: Optional[List[str]] = Field(None, description="List of email addresses to send warnings")
+    threshold_email_addresses: Optional[List[str]] = Field(
+        None, description="List of email addresses to send warnings"
+    )
     pxe_lease_time: Optional[int] = Field(None, description="PXE DHCP lease time option in seconds")
     deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
     boot_file: Optional[str] = Field(None, description="Legacy boot-file option")
     boot_server: Optional[str] = Field(None, description="Legacy boot-server option")
     next_server: Optional[str] = Field(None, description="Legacy next-server option")
-    option_logic_filters: Optional[list[str]] = Field(None, description="List of option logic filters")
-    lease_scavenge_time: Optional[PositiveInt] = Field(None, description="DHCP lease scavenge time option in seconds")
+    option_logic_filters: Optional[list[str]] = Field(
+        None, description="List of option logic filters"
+    )
+    lease_scavenge_time: Optional[PositiveInt] = Field(
+        None, description="DHCP lease scavenge time option in seconds"
+    )
     is_authoritative: Optional[bool] = Field(None, description="DHCP authoritative flag")
     recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
-    ignore_client_requested_options: Optional[bool] = Field(None, description="Ignore client requested options flag")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options flag"
+    )
     network_view: Optional[str] = Field(None, description="Network view")
     rir_organization: Optional[str] = Field(None, description="RIR organization")
     rir_registration_status: Optional[str] = Field(None, description="RIR registration status")
     # last_rir_registration_update_sent: str | None = None # Read-only
     # last_rir_registration_update_status: str | None = None # Read-only
     enable_discovery: Optional[bool] = Field(None, description="Enable discovery flag")
-    discovery_member: Optional[str] = Field(None, description="Discovery member name if discovery is enabled")
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(None, description="List of IP Ranges to be excluded from discovery")
-    remove_subnets: Optional[bool] = Field(None, description="Remove subnets flag, specify False to keep subnets or True to remove them.")
+    discovery_member: Optional[str] = Field(
+        None, description="Discovery member name if discovery is enabled"
+    )
+    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(
+        None, description="List of IP Ranges to be excluded from discovery"
+    )
+    remove_subnets: Optional[bool] = Field(
+        None,
+        description="Remove subnets flag, specify False to keep subnets or True to remove them."
+    )
 
-    def add_property(self, code: str, value: str):
+    def add_property(self, prop: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+                prop.startswith("OPTION-")
+                or prop.startswith("EA-")
+                or prop.startswith("ADMGRP-")
         ):
-            self.__setattr__(code, value)
+            self.__setattr__(prop, value)
         else:
-            raise Exception(f"Invalid field name: {code}")
+            raise Exception(f"Invalid field name: {prop}")
 
 
 class Network(BaseModel):
@@ -799,10 +819,13 @@ class DhcpFingerprintFilter(BaseModel):
 
 
 class IPv4OptionSpace(BaseModel):
-    optionspace: str = Field(alias="header-optionspace", default="optionspace", description="Header for optionspace")
-    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action", description="CSV Custom import action")
+    optionspace: str = Field(alias="header-optionspace", default="optionspace",
+                             description="Header for optionspace")
+    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action",
+                                                      description="CSV Custom import action")
     name: str = Field(..., description="Name of the IPv4 optionspace")
-    new_name: Optional[str] = Field(None, alias="_new_name", description="New name of the optionspace")
+    new_name: Optional[str] = Field(None, alias="_new_name",
+                                    description="New name of the optionspace")
     comment: Optional[str] = Field(None, description="Comment for the optionspace")
 
     class Config:
@@ -821,12 +844,17 @@ class IPv4OptionSpace(BaseModel):
 
 
 class IPv4OptionDefinition(BaseModel):
-    optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition", description="Header for optiondefinition")
-    import_action: ImportActionEnum | None = Field(None, alias="import-action", description="CSV Custom import action")
-    space: str = Field(alias="optionspace", default="optionspace", description="IPv4 DHCP Option Space")
-    new_space: Optional[str] = Field(None, alias="_new_space", description="New name of the optionspace")
+    optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition",
+                                  description="Header for optiondefinition")
+    import_action: ImportActionEnum | None = Field(None, alias="import-action",
+                                                   description="CSV Custom import action")
+    space: str = Field(alias="optionspace", default="optionspace",
+                       description="IPv4 DHCP Option Space")
+    new_space: Optional[str] = Field(None, alias="_new_space",
+                                     description="New name of the optionspace")
     name: str = Field(..., description="IPv4 DHCP Option name")
-    new_name: Optional[str] = Field(None, alias="_new_name", description="New IPv4 DHCP Option name")
+    new_name: Optional[str] = Field(None, alias="_new_name",
+                                    description="New IPv4 DHCP Option name")
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
@@ -891,5 +919,3 @@ class DhcpFailoverAssociation(BaseModel):
             self.__setattr__(code, value)
         else:
             raise Exception(f"Invalid field name: {code}")
-
-
