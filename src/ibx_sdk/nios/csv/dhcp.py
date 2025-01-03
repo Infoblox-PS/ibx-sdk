@@ -846,14 +846,6 @@ class IPv4OptionSpace(BaseModel):
     )
     comment: Optional[str] = Field(None, description="Comment for the optionspace")
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "name": "Cisco-Option-Space",
-                "comment": "Cisco Systems Inc. DHCP v4 option space"
-            }
-        }
-
     @model_validator(mode="after")
     def check_alphanumeric(self) -> Self:
         if not re.match(r"\w+", self.name):
@@ -871,7 +863,7 @@ class IPv4OptionDefinition(BaseModel):
     import_action: Optional[ImportActionEnum] = Field(
         None, alias="import-action", description="CSV Custom import action"
     )
-    space: str = Field(..., alias="optionspace", description="IPv4 DHCP Option Space")
+    space: str = Field(..., description="IPv4 DHCP Option Space")
     new_space: Optional[str] = Field(
         None, alias="_new_space", description="New name of the optionspace"
     )
@@ -881,16 +873,6 @@ class IPv4OptionDefinition(BaseModel):
     )
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "name": "controller-ip",
-                "space": "Cisco-Option-Space",
-                "comment": "Cisco Systems Inc. wifi controller IP address",
-                "type": DhcpTypeEnum.T_ARRAY_IP_ADDRESS
-            }
-        }
 
 
 class IPv6Optionspace(BaseModel):
@@ -916,27 +898,32 @@ class IPv6OptionDefinition(BaseModel):
 
 
 class DhcpFailoverAssociation(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     dhcpfailoverassociation: str = Field(
-        alias="header-dhcpfailoverassociation", default="dhcpfailoverassociation"
+        alias="header-dhcpfailoverassociation", frozen=True, default="dhcpfailoverassociation",
+        description="Header for dhcpfailoverassociation object"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    comment: str | None = None
-    primary_server_type: FailoverServerType
-    grid_primary: str | None = None
-    external_primary: str | None = None
-    secondary_server_type: FailoverServerType
-    grid_secondary: str | None = None
-    external_secondary: str | None = None
-    failover_port: PositiveInt | None = Field(gt=0, lt=63999, default=647)
-    max_response_delay: PositiveInt | None = Field(ge=1, default=60)
-    mclt: PositiveInt | None = Field(ge=0, le=4294967295, default=3600)
-    max_load_balance_delay: PositiveInt | None = Field(ge=0, le=4294967295, default=3)
-    load_balance_split: PositiveInt | None = Field(ge=0, le=255, default=128)
-    recycle_leases: bool | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV Custom import action"
+    )
+    name: str = Field(..., description="Name of the DHCP failover association")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="New name of the DHCP failover association"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
+    primary_server_type: FailoverServerType = Field(..., description="Primary server type")
+    grid_primary: Optional[str] = Field(None, description="Primary Grid Member FQDN")
+    external_primary: Optional[str] = Field(None, description="Primary External Server FQDN")
+    secondary_server_type: FailoverServerType = Field(..., description="Secondary server type")
+    grid_secondary: Optional[str] = Field(None, description="Secondary Grid Member FQDN")
+    external_secondary: Optional[str] = Field(None, description="Secondary External Server FQDN")
+    failover_port: Optional[PositiveInt] = Field(647, gt=0, lt=63999)
+    max_response_delay: Optional[PositiveInt] = Field(60, ge=1)
+    mclt: Optional[PositiveInt] = Field(3600, ge=0, le=4294967295)
+    max_load_balance_delay: Optional[PositiveInt] = Field(3, ge=0, le=4294967295)
+    load_balance_split: Optional[PositiveInt] = Field(128, ge=0, le=255)
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-"):
