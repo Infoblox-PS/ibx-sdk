@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ibx-sdk"
-version = "0.3.0"
+version = "0.4.0"
 authors = [
     "Patrick Piper <patrick@ddiguru.com>",
     "Patrick Piper <ppiper@infoblox.com>",
@@ -20,6 +20,7 @@ netaddr = "^1.3.0"
 requests = "^2.32.3"
 urllib3 = "^2.2.3"
 syslog-rfc5424-formatter = "^1.2.3"
+pydantic = "^2.10.4"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7.3"
