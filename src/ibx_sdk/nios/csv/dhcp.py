@@ -2,8 +2,9 @@ import re
 from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address
 from typing import List
+from typing_extensions import Self
 
-from pydantic import BaseModel, Field, ConfigDict, field_validator, PositiveInt
+from pydantic import BaseModel, Field, ConfigDict, model_validator, PositiveInt
 
 from .enums import (
     ImportActionEnum,
@@ -797,18 +798,37 @@ class DhcpFingerprintFilter(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class OptionSpace(BaseModel):
-    optionspace: str = Field(alias="header-optionspace", default="optionspace")
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    comment: str | None = None
+class IPv4OptionSpace(BaseModel):
+    optionspace: str = Field(alias="header-optionspace", default="optionspace", description="Header for optionspace")
+    import_action: ImportActionEnum | None = Field(None, alias="import-action", description="CSV Custom import action")
+    name: str = Field(..., description="Name of the IPv4 optionspace")
+    new_name: str | None = Field(None, alias="_new_name", description="New name of the optionspace")
+    comment: str | None = Field(None, description="Comment for the optionspace")
 
-    @field_validator("name")
-    def check_alphanumeric(cls, v: str) -> str:
-        if not re.match(r"\w+", v):
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "Cisco-Option-Space",
+                "comment": "Cisco Systems Inc. DHCP v4 option space"
+            }
+        }
+
+    @model_validator(mode="after")
+    def check_alphanumeric(self) -> Self:
+        if not re.match(r"\w+", self.name):
             raise ValueError("The name of an optionspace MUST be alphanumeric.")
-        return v
+        return self
+
+
+class IPv4OptionDefinition(BaseModel):
+    optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition", description="Header for optiondefinition")
+    import_action: ImportActionEnum | None = Field(None, alias="import-action", description="CSV Custom import action")
+    space: str = Field(alias="optionspace", default="optionspace", description="IPv4 DHCP Option Space")
+    new_space: str | None = Field(None, alias="_new_space", description="New name of the optionspace")
+    name: str = Field(..., description="IPv4 DHCP Option name")
+    new_name: str | None = Field(None, alias="_new_name", description="New IPv4 DHCP Option name")
+    code: str = Field(..., description="IPv4 DHCP option code number")
+    type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
 
 class Ipv6Optionspace(BaseModel):
@@ -818,17 +838,6 @@ class Ipv6Optionspace(BaseModel):
     new_name: str | None = Field(alias="_new_name", default=None)
     comment: str | None = None
     ipv6_enterprise_number: str | None = None
-
-
-class OptionDefinition(BaseModel):
-    optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition")
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    space: str
-    new_space: str | None = Field(alias="_new_space", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    code: str
-    type: DhcpTypeEnum
 
 
 class Ipv6OptionDefinition(BaseModel):
