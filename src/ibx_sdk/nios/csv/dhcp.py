@@ -844,8 +844,10 @@ class IPv4OptionSpace(BaseModel):
 
 
 class IPv4OptionDefinition(BaseModel):
-    optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition",
-                                  description="Header for optiondefinition")
+    optiondefinition: str = Field(
+        alias="header-optiondefinition", default="optiondefinition", frozen=True,
+        description="Header for optiondefinition"
+    )
     import_action: ImportActionEnum | None = Field(None, alias="import-action",
                                                    description="CSV Custom import action")
     space: str = Field(alias="optionspace", default="optionspace",
