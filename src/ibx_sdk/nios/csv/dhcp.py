@@ -830,6 +830,16 @@ class IPv4OptionDefinition(BaseModel):
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": "controller-ip",
+                "space": "Cisco-Option-Space",
+                "comment": "Cisco Systems Inc. wifi controller IP address",
+                "type": DhcpTypeEnum.T_ARRAY_IP_ADDRESS
+            }
+        }
+
 
 class Ipv6Optionspace(BaseModel):
     ipv6optionspace: str = Field(alias="header-ipv6optionspace", default="ipv6optionspace")
