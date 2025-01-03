@@ -22,7 +22,12 @@ from .enums import (
 class GridDhcp(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    griddhcp: str = Field(alias="header-griddhcp", default="griddhcp")
+    griddhcp: str = Field(
+        "griddhcp",
+        frozen=True,
+        alias="header-griddhcp",
+        description="Default header for griddhcp"
+    )
     authority: bool | None = None
     domain_name: str | None = None
     recycle_leases: bool | None = None
@@ -91,7 +96,12 @@ class GridDhcp(BaseModel):
 class MemberDhcp(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    memberdhcp: str = Field(alias="header-memberdhcp", default="memberdhcp")
+    memberdhcp: str = Field(
+        "memberdhcp",
+        frozen=True,
+        alias="header-memberdhcp",
+        description="Default header for memberdhcp",
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     broadcast_address: IPv4Address | None
     domain_name_servers: str | None
@@ -159,9 +169,14 @@ class MemberDhcp(BaseModel):
 
 
 class NetworkView(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
-    networkview: str = Field(alias="header-networkview", default="networkview")
+    networkview: str = Field(
+        "networkview",
+        frozen=True,
+        alias="header-networkview",
+        description="Default header for networkview",
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -178,8 +193,10 @@ class IPv4NetworkContainer(BaseModel):
     model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     networkcontainer: str = Field(
-        alias="header-networkcontainer", default="networkcontainer", frozen=True,
-        description="Mandatory default header for networkcontainer"
+        "networkcontainer",
+        frozen=True,
+        alias="header-networkcontainer",
+        description="Default header for networkcontainer",
     )
     import_action: Optional[ImportActionEnum] = Field(
         None, alias="import-action", description="CSV custom import action "
@@ -252,34 +269,44 @@ class IPv4NetworkContainer(BaseModel):
 class IPv4Network(BaseModel):
     model_config = ConfigDict(extra="allow", use_enum_values=True)
 
-    network: str = Field(alias="header-network", default="network", frozen=True,
-                         description="Mandatory default header for network")
-    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action",
-                                                      description="CSV custom import action ")
+    network: str = Field(
+        "network",
+        frozen=True,
+        alias="header-network",
+        description="Default header for network"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV custom import action"
+    )
     address: IPv4Address = Field(..., description="IP Address of the network")
     netmask: IPv4Address = Field(..., description="Subnet mask address of the network")
     rir_organization: Optional[str] = Field(None, description="RIR Organization name")
     rir_registration_status: Optional[str] = Field(None, description="RIR Registration status")
     network_view: Optional[str] = Field(None, description="Network view")
     enable_discovery: Optional[bool] = Field(None, description="Enable discovery flag")
-    discovery_member: Optional[str] = Field(None,
-                                            description="Discovery member name if discovery is enabled")
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(None,
-                                                                   description="List of IP Ranges to be excluded from discovery")
+    discovery_member: Optional[str] = Field(
+        None, description="Discovery member name if discovery is enabled"
+    )
+    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(
+        None, description="List of IP Ranges to be excluded from discovery"
+    )
     comment: Optional[str] = Field(None, description="Optional comment")
-    auto_create_reversezone: Optional[bool] = Field(None,
-                                                    description="Auto create reverse zone flag")
+    auto_create_reversezone: Optional[bool] = Field(
+        None, description="Auto create reverse zone flag"
+    )
     is_authoritative: Optional[bool] = Field(None, description="DHCP authoritative flag")
-    option_logic_filters: Optional[List[str]] = Field(None,
-                                                      description="List of option logic filters")
+    option_logic_filters: Optional[List[str]] = Field(
+        None, description="List of option logic filters"
+    )
     boot_file: Optional[str] = Field(None, description="Legacy boot-file option")
     boot_server: Optional[str] = Field(None, description="Legacy boot-server option")
     ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
     generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
     always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
     update_static_leases: Optional[bool] = Field(None, description="Update static leases flag")
-    update_dns_on_lease_renewal: Optional[bool] = Field(None,
-                                                        description="Update DNS on lease renewal flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal flag"
+    )
     ddns_ttl: Optional[int] = Field(None, description="DDNS TTL option in seconds")
     enable_option81: Optional[bool] = Field(None, description="Enable option81 flag")
     deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
@@ -287,27 +314,32 @@ class IPv4Network(BaseModel):
     disabled: Optional[bool] = Field(None, description="Disabled flag")
     enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
     enable_thresholds: Optional[bool] = Field(None, description="Enable thresholds flag")
-    enable_threshold_email_warnings: Optional[bool] = Field(None,
-                                                            description="Enable email warnings flag")
-    enable_threshold_snmp_warnings: Optional[bool] = Field(None,
-                                                           description="Enable SNMP warnings flag")
+    enable_threshold_email_warnings: Optional[bool] = Field(
+        None, description="Enable email warnings flag"
+    )
+    enable_threshold_snmp_warnings: Optional[bool] = Field(
+        None, description="Enable SNMP warnings flag"
+    )
     range_high_water_mark: Optional[int] = Field(None, description="Range high water mark option")
-    ignore_client_requested_options: Optional[bool] = Field(None,
-                                                            description="Ignore client requested options flag")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options flag"
+    )
     range_low_water_mark: Optional[int] = Field(None, description="Range low water mark option")
     next_server: Optional[str] = Field(None, description="Next server option")
     lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
     enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
     pxe_lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
     recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
-    threshold_email_addresses: Optional[list[str]] = Field(None,
-                                                           description="Email addresses to send warnings")
+    threshold_email_addresses: Optional[list[str]] = Field(
+        None, description="Email addresses to send warnings"
+    )
     dhcp_members: Optional[str] = Field(None, description="DHCP members")
     routers: Optional[str] = Field(None, description="DHCP routers option")
     domain_name: Optional[str] = Field(None, description="DHCP option domain-name")
     domain_name_servers: Optional[str] = Field(None, description="DHCP option domain-name-servers")
-    zone_associations: Optional[List[str]] = Field(None,
-                                                   description="List of DNS zone associations")
+    zone_associations: Optional[List[str]] = Field(
+        None, description="List of DNS zone associations"
+    )
     vlans: Optional[str] = Field(None, description="VLAN assignments - Example: default/1/4094/1")
 
     # OPTION-# string where the name implies DHCP vendor class
@@ -332,7 +364,10 @@ class IPv6NetworkContainer(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     ipv6networkcontainer: str = Field(
-        alias="header-ipv6networkcontainer", default="ipv6networkcontainer", frozen=True
+        "ipv6networkcontainer",
+        frozen=True,
+        alias="header-ipv6networkcontainer",
+        description="Default header for IPv6 network container"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     address: IPv6Address
@@ -375,7 +410,10 @@ class IPv6Network(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     ipv6network: str = Field(
-        alias="header-ipv6network", default="ipv6network"
+        "ipv6network",
+        frozen=True,
+        alias="header-ipv6network",
+        description="Default header for IPv6 network"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     address: IPv6Address
@@ -419,7 +457,12 @@ class IPv6Network(BaseModel):
 class IPv4SharedNetwork(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    sharednetwork: str = Field(alias="header-sharednetwork", default="sharednetwork")
+    sharednetwork: str = Field(
+        "sharednetwork",
+        frozen=True,
+        alias="header-sharednetwork",
+        description="Default header for sharednetwork"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -462,7 +505,12 @@ class IPv4SharedNetwork(BaseModel):
 class IPv6SharedNetwork(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    ipv6sharednetwork: str = Field(alias="header-ipv6sharednetwork", default="ipv6sharednetwork")
+    ipv6sharednetwork: str = Field(
+        "ipv6sharednetwork",
+        frozen=True,
+        alias="header-ipv6sharednetwork",
+        description="Default header for IPv6 shared network"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -495,7 +543,12 @@ class IPv6SharedNetwork(BaseModel):
 class IPv4DhcpRange(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    dhcprange: str = Field(alias="header-dhcprange", default="dhcprange")
+    dhcprange: str = Field(
+        "dhcprange",
+        frozen=True,
+        alias="header-dhcprange",
+        description="Default header for dhcprange"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     start_address: IPv4Address
     new_start_address: IPv4Address | None = Field(
@@ -557,7 +610,12 @@ class IPv4DhcpRange(BaseModel):
 class IPv6DhcpRange(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    ipv6dhcprange: str = Field(alias="header-ipv6dhcprange", default="ipv6dhcprange")
+    ipv6dhcprange: str = Field(
+        "ipv6dhcprange",
+        frozen=True,
+        alias="header-ipv6dhcprange",
+        description="Default header for IPv6 dhcprange"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     address_type: IPv6AddressTypeEnum | None = None
     parent: str | None = None  # Required when address_type = PREFIX
@@ -595,7 +653,12 @@ class IPv6DhcpRange(BaseModel):
 class IPv4FixedAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    header_fixedaddress: str = Field(alias="header-fixedaddress", default="fixedaddress")
+    header_fixedaddress: str = Field(
+        "fixedaddress",
+        frozen=True,
+        alias="header-fixedaddress",
+        description="Default header for IPv4 fixed address"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     ip_address: IPv4Address
     ms_server: IPv4Address | None = None
@@ -642,7 +705,12 @@ class IPv4FixedAddress(BaseModel):
 class IPv6FixedAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    ipv6fixedaddress: str = Field(alias="header-ipv6fixedaddress", default="ipv6fixedaddress")
+    ipv6fixedaddress: str = Field(
+        "ipv6fixedaddress",
+        frozen=True,
+        alias="header-ipv6fixedaddress",
+        description="Default header for IPv6 fixed address"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     address_type: IPv6AddressTypeEnum | None = None
     parent: str | None = None
@@ -678,7 +746,12 @@ class IPv6FixedAddress(BaseModel):
 class DhcpFingerprint(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    dhcpfingerprint: str = Field(alias="header-dhcpfingerprint", default="dhcpfingerprint")
+    dhcpfingerprint: str = Field(
+        "dhcpfingerprint",
+        frozen=True,
+        alias="header-dhcpfingerprint",
+        description="Default header for DHCP fingerprint"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -700,7 +773,12 @@ class DhcpFingerprint(BaseModel):
 class DhcpMacFilter(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    dhcpmacfilter: str = Field(alias="header-dhcpmacfilter", default="dhcpmacfilter")
+    dhcpmacfilter: str = Field(
+        "dhcpmacfilter",
+        frozen=True,
+        alias="header-dhcpmacfilter",
+        description="Default header for dhcpmacfilter"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -720,7 +798,10 @@ class MacFilterAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     macfilteraddress: str = Field(
-        alias="header-macfilteraddress", default="macfilteraddress"
+        "macfilteraddress",
+        frozen=True,
+        alias="header-macfilteraddress",
+        description="Default header for macfilteraddress"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     parent: str
@@ -751,7 +832,12 @@ class MacFilterAddress(BaseModel):
 class OptionFilter(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    optionfilter: str = Field(alias="header-optionfilter", default="optionfilter")
+    optionfilter: str = Field(
+        "optionfilter",
+        frozen=True,
+        alias="header-optionfilter",
+        description="Default header for optionfilter"
+    )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     name: str
     new_name: str | None = Field(alias="_new_name", default=None)
@@ -775,33 +861,54 @@ class OptionFilterMatchRule(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     optionfiltermatchrule: str = Field(
-        alias="header-optionfiltermatchrule", default="optionfiltermatchrule"
+        "optionfiltermatchrule",
+        frozen=True,
+        alias="header-optionfiltermatchrule",
+        description="CSV Header for optionfiltermatchrule",
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    parent: str
-    match_option: str | None = None
-    match_value: str | None = None
-    new_match_value: str | None = Field(alias="_new_match_value", default=None)
-    comment: str | None = None
-    is_substring: bool | None = None
-    substring_offset: int | None = None
-    substring_length: int | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="Custom CSV Import action"
+    )
+    parent: str = Field(..., description="Parent option filter")
+    match_option: Optional[str] = Field(None, description="Option filter match option")
+    match_value: Optional[str] = Field(None, description="Option filter match value")
+    new_match_value: Optional[str] = Field(
+        None, alias="_new_match_value", description="New option filter match value"
+    )
+    comment: Optional[str] = Field(None, description="Option filter match comment")
+    is_substring: Optional[bool] = Field(
+        None, description="Is option filter match substring"
+    )
+    substring_offset: Optional[int] = Field(None, description="Substring offset")
+    substring_length: Optional[int] = Field(None, description="Substring length")
 
 
 class RelayAgentFilter(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     relayagentfilter: str = Field(
-        alias="header-relayagentfilter", default="relayagentfilter"
+        "relayagentfilter",
+        frozen=True,
+        alias="header-relayagentfilter",
+        description="The header of the relayagentfilter",
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    comment: str | None = None
-    circuit_id_rule: str | None = None
-    circuit_id: str | None = None
-    remote_id_rule: str | None = None
-    remote_id: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="Custom CSV import action"
+    )
+    name: str = Field(..., description="The name of the relay agent filter")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="The new name of the relay agent filter"
+    )
+    comment: Optional[str] = Field(None, description="The comment of the relay agent filter")
+    circuit_id_rule: Optional[str] = Field(
+        None, description="The circuit id rule of the relay agent filter"
+    )
+    circuit_id: Optional[str] = Field(None, description="The circuit id of the relay agent filter")
+    remote_id_rule: Optional[str] = Field(
+        None,
+        description="The remote id rule of the relay agent filter"
+    )
+    remote_id: Optional[str] = Field(None, description="The remote id of the relay agent filter")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
@@ -814,14 +921,21 @@ class DhcpFingerprintFilter(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     dhcpfingerprintfilter: str = Field(
-        alias="header-dhcpfingerprintfilter", default="dhcpfingerprintfilter"
+        "dhcpfingerprintfilter",
+        frozen=True,
+        alias="header-dhcpfingerprintfilter",
+        description="Header for dhcpfingerprintfilter",
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    fingerprint: str | None = None
-    new_fingerprint: str | None = Field(alias="_new_fingerprint", default=None)
-    comment: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="Custom CSV import action"
+    )
+    name: str = Field(..., description="DHCP Fingerprint Filter name")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="New DHCP Fingerprint Filter name"
+    )
+    fingerprint: Optional[str] = Field(None, description="DHCP Fingerprint")
+    new_fingerprint: Optional[str] = Field(None, alias="_new_fingerprint")
+    comment: Optional[str] = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-"):
@@ -834,7 +948,9 @@ class IPv4OptionSpace(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
     optionspace: str = Field(
-        alias="header-optionspace", frozen=True, default="optionspace",
+        "optionspace",
+        alias="header-optionspace",
+        frozen=True,
         description="Header for optionspace"
     )
     import_action: Optional[ImportActionEnum] = Field(
@@ -857,7 +973,9 @@ class IPv4OptionDefinition(BaseModel):
     model_config = ConfigDict(use_enum_values=True)
 
     optiondefinition: str = Field(
-        alias="header-optiondefinition", default="optiondefinition", frozen=True,
+        "optiondefinition",
+        frozen=True,
+        alias="header-optiondefinition",
         description="Header for optiondefinition"
     )
     import_action: Optional[ImportActionEnum] = Field(
@@ -876,32 +994,56 @@ class IPv4OptionDefinition(BaseModel):
 
 
 class IPv6Optionspace(BaseModel):
-    ipv6optionspace: str = Field(alias="header-ipv6optionspace", default="ipv6optionspace")
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    comment: str | None = None
-    ipv6_enterprise_number: str | None = None
+    model_config = ConfigDict(use_enum_values=True)
+
+    ipv6optionspace: str = Field(
+        'ipv6optionspace',
+        frozen=True,
+        alias="header-ipv6optionspace",
+        description="Header for ipv6optionspace"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV Custom import action"
+    )
+    name: str = Field(..., description="Name of the IPv6 optionspace")
+    new_name: Optional[str] = Field(
+        None, alias="_new_name", description="New name of the optionspace"
+    )
+    comment: Optional[str] = Field(None, description="Comment for the optionspace")
+    ipv6_enterprise_number: Optional[PositiveInt] = Field(
+        None, description="Enterprise number for IPv6 options"
+    )
 
 
 class IPv6OptionDefinition(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+
     ipv6optiondefinition: str = Field(
-        alias="header-ipv6optiondefinition", default="ipv6optiondefinition"
+        'ipv6optiondefinition',
+        frozen=True,
+        alias="header-ipv6optiondefinition",
+        description="Header for ipv6optiondefinition"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    space: str
-    new_space: str | None = Field(alias="_new_space", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    code: str
-    type: DhcpTypeEnum
+    import_action: Optional[ImportActionEnum] = Field(
+        None, alias="import-action", description="CSV Custom import action"
+    )
+    space: str = Field(..., description="IPv6 DHCP Option Space")
+    new_space: Optional[str] = Field(
+        None, alias="_new_space", description="New name of the optionspace"
+    )
+    name: str = Field(..., description="IPv6 DHCP Option name")
+    new_name: Optional[str] = Field(None, alias="_new_name")
+    code: str = Field(..., description="IPv6 DHCP option code number")
+    type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
 
 class DhcpFailoverAssociation(BaseModel):
     model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     dhcpfailoverassociation: str = Field(
-        alias="header-dhcpfailoverassociation", frozen=True, default="dhcpfailoverassociation",
+        'dhcpfailoverassociation',
+        frozen=True,
+        alias="header-dhcpfailoverassociation",
         description="Header for dhcpfailoverassociation object"
     )
     import_action: Optional[ImportActionEnum] = Field(
