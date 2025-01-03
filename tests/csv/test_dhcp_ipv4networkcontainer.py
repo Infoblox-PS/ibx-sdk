@@ -2,6 +2,7 @@
 
 from logging import getLogger
 from ipaddress import IPv4Address
+from pydantic import ValidationError
 
 import pytest
 from src.ibx_sdk.nios.csv.dhcp import IPv4NetworkContainer
@@ -19,6 +20,15 @@ def test_ipv4networkcontainer_mandatory_fields():
     assert container.netmask == IPv4Address("255.255.255.0")
     assert container.networkcontainer == "networkcontainer"
 
+
+def test_ipv4networkcontainer_missing_required_fields():
+    with pytest.raises(ValidationError):
+        IPv4NetworkContainer(
+            comment="this is an optional field",
+            lease_time=3600,
+            domain_name="example.com",
+            enable_ddns=True
+        )
 
 def test_ipv4networkcontainer_optional_fields():
     # Test object creation with all fields specified

@@ -121,7 +121,8 @@ class GridDhcp(BaseModel):
         None, description="IPv6 leases scavenging grace period option"
     )
 
-    def add_property(self, code: str, value: str):
+    def add_property(self, code: str, value: str) -> None:
+
         if code.startswith("OPTION-"):
             self.__setattr__(code, value)
         else:
