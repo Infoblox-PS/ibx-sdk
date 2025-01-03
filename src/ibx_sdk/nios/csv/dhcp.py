@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address
-from typing import List
+from typing import List, Optional
 from typing_extensions import Self
 
 from pydantic import BaseModel, Field, ConfigDict, model_validator, PositiveInt
@@ -174,49 +174,49 @@ class NetworkView(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
 
-class NetworkContainer(BaseModel):
+class IPv4NetworkContainer(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    networkcontainer: str = Field(alias="header-networkcontainer", default="networkcontainer")
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    address: IPv4Address
-    netmask: IPv4Address
-    comment: str | None = None
-    lease_time: int | None = None
-    routers: str | None = None
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
-    broadcast_address: IPv4Address | None = None
-    enable_ddns: bool | None = None
-    ddns_domainname: str | None = None
-    ddns_ttl: int | None = None
-    ddns_generate_hostname: bool | None = None
-    update_static_leases: bool | None = None
-    enable_option81: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
-    enable_dhcp_thresholds: bool | None = None
-    enable_email_warnings: bool | None = None
-    enable_snmp_warnings: bool | None = None
-    threshold_email_addresses: List[str] | None = None
-    pxe_lease_time: int | None = None
-    deny_bootp: bool | None = None
-    boot_file: str | None = None
-    boot_server: str | None = None
-    next_server: str | None = None
-    option_logic_filters: str | None
-    lease_scavenge_time: PositiveInt | None = None
-    is_authoritative: bool | None = None
-    recycle_leases: bool | None = None
-    ignore_client_requested_options: bool | None = None
-    network_view: str | None = None
-    rir_organization: str | None = None
-    rir_registration_status: str | None = None
+    networkcontainer: str = Field(alias="header-networkcontainer", default="networkcontainer", description="Mandatory default header for networkcontainer")
+    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action")
+    address: IPv4Address = Field(..., description="IP Address of the network container")
+    netmask: IPv4Address = Field(..., description="Subnet mask address of the network container")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
+    routers: Optional[str] = Field(None, description="List of routers option")
+    domain_name: Optional[str] = Field(None, description="domain-name option")
+    domain_name_servers: Optional[str] = Field(None, description="domain-name-servers option")
+    broadcast_address: Optional[IPv4Address] = Field(None, description="Broadcast address option")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS Updates flag")
+    ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
+    ddns_ttl: Optional[int] = Field(None, description="DDNS TTL option")
+    ddns_generate_hostname: Optional[bool] = Field(None, description="DDNS generate hostname flag")
+    update_static_leases: Optional[bool] = Field(None, description="DDNS Update static leases flag")
+    enable_option81: Optional[bool] = Field(None, description="Enable option81 flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(None, description="Enable option81 flag")
+    enable_dhcp_thresholds: Optional[bool] = Field(None, description="Enable DHCP thresholds flag")
+    enable_email_warnings: Optional[bool] = Field(None, description="Enable email warnings flag")
+    enable_snmp_warnings: Optional[bool] = Field(None, description="Enable SNMP warnings flag")
+    threshold_email_addresses: Optional[List[str]] = Field(None, description="List of email addresses to send warnings")
+    pxe_lease_time: Optional[int] = Field(None, description="PXE DHCP lease time option in seconds")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    boot_file: Optional[str] = Field(None, description="Legacy boot-file option")
+    boot_server: Optional[str] = Field(None, description="Legacy boot-server option")
+    next_server: Optional[str] = Field(None, description="Legacy next-server option")
+    option_logic_filters: Optional[list[str]] = Field(None, description="List of option logic filters")
+    lease_scavenge_time: Optional[PositiveInt] = Field(None, description="DHCP lease scavenge time option in seconds")
+    is_authoritative: Optional[bool] = Field(None, description="DHCP authoritative flag")
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    ignore_client_requested_options: Optional[bool] = Field(None, description="Ignore client requested options flag")
+    network_view: Optional[str] = Field(None, description="Network view")
+    rir_organization: Optional[str] = Field(None, description="RIR organization")
+    rir_registration_status: Optional[str] = Field(None, description="RIR registration status")
     # last_rir_registration_update_sent: str | None = None # Read-only
     # last_rir_registration_update_status: str | None = None # Read-only
-    enable_discovery: bool | None = False
-    discovery_member: str | None = None
-    discovery_exclusion_range: List[IPv4Address] | None = None
-    remove_subnets: bool | None = None
+    enable_discovery: Optional[bool] = Field(None, description="Enable discovery flag")
+    discovery_member: Optional[str] = Field(None, description="Discovery member name if discovery is enabled")
+    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(None, description="List of IP Ranges to be excluded from discovery")
+    remove_subnets: Optional[bool] = Field(None, description="Remove subnets flag, specify False to keep subnets or True to remove them.")
 
     def add_property(self, code: str, value: str):
         if (
@@ -800,10 +800,10 @@ class DhcpFingerprintFilter(BaseModel):
 
 class IPv4OptionSpace(BaseModel):
     optionspace: str = Field(alias="header-optionspace", default="optionspace", description="Header for optionspace")
-    import_action: ImportActionEnum | None = Field(None, alias="import-action", description="CSV Custom import action")
+    import_action: Optional[ImportActionEnum] = Field(None, alias="import-action", description="CSV Custom import action")
     name: str = Field(..., description="Name of the IPv4 optionspace")
-    new_name: str | None = Field(None, alias="_new_name", description="New name of the optionspace")
-    comment: str | None = Field(None, description="Comment for the optionspace")
+    new_name: Optional[str] = Field(None, alias="_new_name", description="New name of the optionspace")
+    comment: Optional[str] = Field(None, description="Comment for the optionspace")
 
     class Config:
         schema_extra = {
@@ -824,9 +824,9 @@ class IPv4OptionDefinition(BaseModel):
     optiondefinition: str = Field(alias="header-optiondefinition", default="optiondefinition", description="Header for optiondefinition")
     import_action: ImportActionEnum | None = Field(None, alias="import-action", description="CSV Custom import action")
     space: str = Field(alias="optionspace", default="optionspace", description="IPv4 DHCP Option Space")
-    new_space: str | None = Field(None, alias="_new_space", description="New name of the optionspace")
+    new_space: Optional[str] = Field(None, alias="_new_space", description="New name of the optionspace")
     name: str = Field(..., description="IPv4 DHCP Option name")
-    new_name: str | None = Field(None, alias="_new_name", description="New IPv4 DHCP Option name")
+    new_name: Optional[str] = Field(None, alias="_new_name", description="New IPv4 DHCP Option name")
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
