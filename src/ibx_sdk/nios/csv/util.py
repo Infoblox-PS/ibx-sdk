@@ -2,7 +2,7 @@ import csv
 import os
 from logging import getLogger
 
-from ibx_nios.csv.enums import ImportActionEnum
+from ibx_sdk.nios.csv.enums import ImportActionEnum
 
 LOG = getLogger(__name__)
 
