@@ -28,63 +28,98 @@ class GridDhcp(BaseModel):
         alias="header-griddhcp",
         description="Default header for griddhcp"
     )
-    authority: bool | None = None
-    domain_name: str | None = None
-    recycle_leases: bool | None = None
-    ignore_dhcp_option_list_request: bool | None = None
-    enable_pxe_lease_time: bool | None = None
-    pxe_lease_time: PositiveInt | None = None
-    bootfile: str | None = None
-    bootserver: str | None = None
-    nextserver: str | None = None
-    deny_bootp: bool | None = None
-    enable_ddns: bool | None = None
-    ddns_use_option81: bool | None = None
-    ddns_server_always_updates: bool | None = None
-    ddns_generate_hostname: bool | None = None
-    ddns_ttl: PositiveInt | None = None
-    retry_ddns_updates: bool | None = None
-    ddns_retry_interval: PositiveInt | None = None  # you must set retry_ddns_updates to True to modify this
-    enable_dhcp_thresholds: bool | None = None
-    high_water_mark: PositiveInt | None = None
-    high_water_mark_reset: PositiveInt | None = None
-    low_water_mark: PositiveInt | None = None
-    low_water_mark_reset: PositiveInt | None = None
-    enable_email_warnings: bool | None = None
-    enable_snmp_warnings: bool | None = None
-    email_list: str | None = None
-    ipv6_domain_name_servers: str | None = None
-    ping_count: PositiveInt | None = None
-    ping_timeout: PositiveInt | None = None
-    capture_hostname: bool | None = None
-    enable_leasequery: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
-    ipv6_update_dns_on_lease_renewal: bool | None = None
-    txt_record_handling: str | None = None
-    lease_scavenge_time: PositiveInt | None = None
-    failover_port: PositiveInt | None = None
-    enable_fingerprint: bool | None = None
-    ipv6_enable_ddns: bool | None = None
-    ipv6_enable_option_fqdn: bool | None = None
-    ipv6_ddns_server_always_updates: bool | None = None
-    ipv6_generate_hostname: bool | None = None
-    ipv6_ddns_domainname: str | None = None
-    ipv6_ddns_ttl: PositiveInt | None = None
-    preferred_lifetime: PositiveInt | None = None
-    valid_lifetime: PositiveInt | None = None
-    ipv6_domain_name: str | None = None
-    ipv6_txt_record_handling: str | None = None
-    ipv6_capture_hostname: bool | None = None
-    ipv6_recycle_leases: bool | None = None
-    ipv6_enable_retry_updates: bool | None = None
-    ipv6_retry_updates_interval: PositiveInt | None = None
-    ddns_domainname: str | None = None
-    leases_per_client_settings: LeasePerClientSettingsEnum | None = None
-    ignore_client_identifier: bool | None = None
-    disable_all_nac_filters: bool | None = None
-    format_log_option_82: str | None = None
-    v6_leases_scavenging_enabled: bool | None = None
-    v6_leases_scavenging_grace_period: PositiveInt | None = None
+    authority: Optional[bool] = Field(None, description="DHCP Authority flag")
+    domain_name: Optional[str] = Field(None, description="Option domain-name option")
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    ignore_dhcp_option_list_request: Optional[bool] = Field(
+        None, description="Ignore DHCP option list request flag"
+    )
+    enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
+    pxe_lease_time: Optional[PositiveInt] = Field(
+        None, description="PXE lease time option in seconds"
+    )
+    bootfile: Optional[str] = Field(None, description="Legacy boot-file option")
+    bootserver: Optional[str] = Field(None, description="Legacy boot-server option")
+    nextserver: Optional[str] = Field(None, description="Legacy next-server option")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    ddns_use_option81: Optional[bool] = Field(None, description="Enable option81 flag")
+    ddns_server_always_updates: Optional[bool] = Field(
+        None, description="DNS server always updates flag"
+    )
+    ddns_generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    retry_ddns_updates: Optional[bool] = Field(None, description="Retry DDNS updates flag")
+    ddns_retry_interval: Optional[PositiveInt] = Field(
+        None, description="Retry DDNS updates interval in seconds"
+    )
+    enable_dhcp_thresholds: Optional[bool] = Field(None, description="Enable DHCP thresholds flag")
+    high_water_mark: Optional[PositiveInt] = Field(None, description="High water mark option")
+    high_water_mark_reset: Optional[PositiveInt] = Field(
+        None,
+        description="High water mark reset option"
+    )
+    low_water_mark: Optional[PositiveInt] = Field(None, description="Low water mark option")
+    low_water_mark_reset: Optional[PositiveInt] = Field(
+        None, description="Low water mark reset option"
+    )
+    enable_email_warnings: Optional[bool] = Field(None, description="Enable email warnings flag")
+    enable_snmp_warnings: Optional[bool] = Field(None, description="Enable SNMP warnings flag")
+    email_list: Optional[str] = Field(None, description="Email addresses to send warnings")
+    ipv6_domain_name_servers: Optional[str] = Field(
+        None, description="IPv6 domain name servers option"
+    )
+    ping_count: Optional[PositiveInt] = Field(None, description="Ping count option")
+    ping_timeout: Optional[PositiveInt] = Field(None, description="Ping timeout option in seconds")
+    capture_hostname: Optional[bool] = Field(None, description="Capture hostname flag")
+    enable_leasequery: Optional[bool] = Field(None, description="Enable leasequery flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal flag"
+    )
+    ipv6_update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal flag"
+    )
+    txt_record_handling: Optional[str] = Field(None, description="TXT record handling option")
+    lease_scavenge_time: Optional[PositiveInt] = Field(None, description="DHCP lease scavenge time")
+    failover_port: Optional[PositiveInt] = Field(None, description="Failover port option")
+    enable_fingerprint: Optional[bool] = Field(None, description="enable DHCP fingerprint flag")
+    ipv6_enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    ipv6_enable_option_fqdn: Optional[bool] = Field(None, description="Enable option fqdn flag")
+    ipv6_ddns_server_always_updates: Optional[bool] = Field(
+        None, description="Enable DDNS server always updates flag"
+    )
+    ipv6_generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    ipv6_ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
+    ipv6_ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    preferred_lifetime: Optional[PositiveInt] = Field(None, description="Preferred lifetime option")
+    valid_lifetime: Optional[PositiveInt] = Field(None, description="Valid lifetime option")
+    ipv6_domain_name: Optional[str] = Field(None, description="IPv6 domain name option")
+    ipv6_txt_record_handling: Optional[str] = Field(
+        None, description="IPv6 TXT record handling option"
+    )
+    ipv6_capture_hostname: Optional[bool] = Field(None, description="Capture hostname flag")
+    ipv6_recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    ipv6_enable_retry_updates: Optional[bool] = Field(None, description="Enable retry updates flag")
+    ipv6_retry_updates_interval: Optional[PositiveInt] = Field(
+        None, description="Retry updates interval"
+    )
+    ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
+    leases_per_client_settings: Optional[LeasePerClientSettingsEnum] = Field(
+        None, description="DHCP Leases per client settings"
+    )
+    ignore_client_identifier: Optional[bool] = Field(
+        None, description="Ignore client identifier flag"
+    )
+    disable_all_nac_filters: Optional[bool] = Field(
+        None, description="Disable all NAC filters flag"
+    )
+    format_log_option_82: Optional[bool] = Field(None, description="Format log option 82 flag")
+    v6_leases_scavenging_enabled: Optional[bool] = Field(
+        None, description="Enable IPv6 leases scavenging flag"
+    )
+    v6_leases_scavenging_grace_period: Optional[PositiveInt] = Field(
+        None, description="IPv6 leases scavenging grace period option"
+    )
 
     def add_property(self, code: str, value: str):
         if code.startswith("OPTION-"):
