@@ -268,10 +268,14 @@ class NetworkView(BaseModel):
         serialization_alias="header-networkview",
         description="Default header for networkview",
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
-    comment: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    name: str = Field(..., description="Network view name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New network view name"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
