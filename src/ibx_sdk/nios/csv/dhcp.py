@@ -25,7 +25,7 @@ class GridDhcp(BaseModel):
     griddhcp: str = Field(
         "griddhcp",
         frozen=True,
-        alias="header-griddhcp",
+        serialization_alias="header-griddhcp",
         description="Default header for griddhcp"
     )
     authority: Optional[bool] = Field(None, description="DHCP Authority flag")
@@ -130,72 +130,124 @@ class GridDhcp(BaseModel):
 
 
 class MemberDhcp(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     memberdhcp: str = Field(
         "memberdhcp",
         frozen=True,
-        alias="header-memberdhcp",
+        serialization_alias="header-memberdhcp",
         description="Default header for memberdhcp",
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
-    broadcast_address: IPv4Address | None
-    domain_name_servers: str | None
-    ignore_client_requested_options: bool | None
-    pxe_lease_time: PositiveInt | None
-    lease_time: PositiveInt | None
-    domain_name: str | None
-    routers: str | None
-    option_logic_filters: str | None
-    enable_pxe_lease_time: bool | None
-    deny_bootp: bool | None
-    bootfile: str | None
-    bootserver: str | None
-    nextserver: str | None
-    enable_thresholds: bool | None
-    range_high_water_mark: PositiveInt | None
-    range_high_water_mark_reset: PositiveInt | None
-    range_low_water_mark: PositiveInt | None
-    range_low_water_mark_reset: PositiveInt | None
-    enable_threshold_email_warnings: bool | None
-    enable_threshold_snmp_warnings: bool | None
-    threshold_email_addresses: str | None
-    enable_ddns: bool | None
-    ddns_use_option81: bool | None
-    always_update_dns: bool | None
-    generate_hostname: bool | None
-    update_static_leases: bool | None
-    ddns_ttl: PositiveInt | None
-    update_dns_on_lease_renewal: bool | None
-    preferred_lifetime: PositiveInt | None
-    valid_lifetime: PositiveInt | None
-    name: str
-    is_authoritative: bool | None
-    recycle_leases: bool | None
-    ping_count: PositiveInt | None
-    ping_timeout: PositiveInt | None
-    enable_leasequery: bool | None
-    retry_ddns_updates: bool | None
-    ddns_retry_interval: PositiveInt | None  # you must set retry_ddns_updates to True to modify this
-    lease_scavenge_time: PositiveInt | None
-    enable_fingerprint: bool | None
-    ipv6_enable_ddns: bool | None
-    ipv6_ddns_enable_option_fqdn: bool | None
-    ipv6_generate_hostname: bool | None
-    ipv6_ddns_domainname: str | None
-    ipv6_ddns_ttl: PositiveInt | None
-    ipv6_domain_name_servers: str | None
-    ipv6_domain_name: str | None
-    ipv6_recycle_leases: bool | None
-    ipv6_server_duid: str | None
-    ipv6_enable_retry_updates: bool | None
-    ipv6_retry_updates_interval: PositiveInt | None
-    ipv6_update_dns_on_lease_renewal: bool | None
-    ddns_domainname: str | None
-    leases_per_client_settings: LeasePerClientSettingsEnum | None
-    ignore_client_identifier: bool | None
-    v6_leases_scavenging_enabled: bool | None
-    v6_leases_scavenging_grace_period: PositiveInt | None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    broadcast_address: Optional[IPv4Address] = Field(None, description="Broadcast address option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options"
+    )
+    pxe_lease_time: Optional[PositiveInt] = Field(None, description="PXE lease time option")
+    lease_time: Optional[PositiveInt] = Field(None, description="DHCP lease time option")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    routers: Optional[str] = Field(None, description="Routers option")
+    option_logic_filters: Optional[list[str]] = Field(
+        None, description="List of option logic filters"
+    )
+    enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    bootfile: Optional[str] = Field(None, description="Legacy bootfile option")
+    bootserver: Optional[str] = Field(None, description="Legacy bootserver option")
+    nextserver: Optional[str] = Field(None, description="Next server option")
+    enable_thresholds: Optional[bool] = Field(None, description="Enable thresholds flag")
+    range_high_water_mark: Optional[PositiveInt] = Field(
+        None, description="Range high water mark option"
+    )
+    range_high_water_mark_reset: Optional[PositiveInt] = Field(
+        None, description="Range high water mark reset option"
+    )
+    range_low_water_mark: Optional[PositiveInt] = Field(
+        None, description="Range low water mark option"
+    )
+    range_low_water_mark_reset: Optional[PositiveInt] = Field(
+        None, description="Range low water mark reset option"
+    )
+    enable_threshold_email_warnings: Optional[bool] = Field(
+        None, description="Enable email warnings flag"
+    )
+    enable_threshold_snmp_warnings: Optional[bool] = Field(
+        None, description="Enable SNMP warnings flag"
+    )
+    threshold_email_addresses: Optional[list[str]] = Field(
+        None, description="Email addresses to send warnings"
+    )
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    ddns_use_option81: Optional[bool] = Field(None, description="Use option81 flag")
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    update_static_leases: Optional[bool] = Field(None, description="Update static leases flag")
+    ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal flag"
+    )
+    preferred_lifetime: Optional[PositiveInt] = Field(
+        None, description="Preferred lifetime option in seconds"
+    )
+    valid_lifetime: Optional[PositiveInt] = Field(
+        None, description="Valid lifetime option in seconds"
+    )
+    name: str = Field(..., description="DHCP member name")
+    is_authoritative: Optional[bool] = Field(None, description="DHCP authoritative flag")
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    ping_count: Optional[int] = Field(None, description="Ping count")
+    ping_timeout: Optional[int] = Field(None, description="Ping timeout")
+    enable_leasequery: Optional[bool] = Field(None, description="Enable lease query flag")
+    retry_ddns_updates: Optional[bool] = Field(None, description="Enable DDNS updates flag")
+    ddns_retry_interval: Optional[int] = Field(
+        None, description="DDNS retry interval option in seconds"
+    )
+    lease_scavenge_time: Optional[PositiveInt] = Field(
+        None, description="DHCP lease scavenge time option in seconds"
+    )
+    enable_fingerprint: Optional[bool] = Field(
+        None, description="Enable fingerprint detection flag"
+    )
+    ipv6_enable_ddns: Optional[bool] = Field(None, description="Enable IPv6 DDNS flag")
+    ipv6_ddns_enable_option_fqdn: Optional[bool] = Field(
+        None, description="Enable IPv6 DDNS FQDN flag"
+    )
+    ipv6_generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    ipv6_ddns_domainname: Optional[str] = Field(None, description="IPv6 DDNS domain name option")
+    ipv6_ddns_ttl: Optional[PositiveInt] = Field(
+        None, description="IPv6 DDNS TTL option in seconds"
+    )
+    ipv6_domain_name_servers: Optional[str] = Field(
+        None, description="IPv6 domain name servers option"
+    )
+    ipv6_domain_name: Optional[str] = Field(None, description="IPv6 domain name option")
+    ipv6_recycle_leases: Optional[bool] = Field(None, description="Recycle IPv6 leases flag")
+    ipv6_server_duid: Optional[str] = Field(None, description="IPv6 server DUID option")
+    ipv6_enable_retry_updates: Optional[bool] = Field(
+        None, description="Enable IPv6 retry updates flag"
+    )
+    ipv6_retry_updates_interval: Optional[int] = Field(
+        None, description="IPv6 retry updates interval option in seconds"
+    )
+    ipv6_update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="IPv6 update DNS on lease renewal flag"
+    )
+    ddns_domainname: Optional[str] = Field(None, description="DDNS domain name option")
+    leases_per_client_settings: Optional[LeasePerClientSettingsEnum] = Field(
+        None, description="Leases per client settings"
+    )
+    ignore_client_identifier: Optional[bool] = Field(
+        None, description="Ignore client identifier flag"
+    )
+    v6_leases_scavenging_enabled: Optional[bool] = Field(
+        None, description="IPv6 lease scavenging enabled flag"
+    )
+    v6_leases_scavenging_grace_period: Optional[int] = Field(
+        None, description="IPv6 lease scavenging grace period option in seconds"
+    )
 
     def add_property(self, code: str, value: str):
         if code.startswith("OPTION-") or code.startswith("ADMGRP-"):
@@ -210,7 +262,7 @@ class NetworkView(BaseModel):
     networkview: str = Field(
         "networkview",
         frozen=True,
-        alias="header-networkview",
+        serialization_alias="header-networkview",
         description="Default header for networkview",
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -231,11 +283,11 @@ class IPv4NetworkContainer(BaseModel):
     networkcontainer: str = Field(
         "networkcontainer",
         frozen=True,
-        alias="header-networkcontainer",
+        serialization_alias="header-networkcontainer",
         description="Default header for networkcontainer",
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV custom import action "
+        None, serialization_alias="import-action", description="CSV custom import action "
     )
     address: IPv4Address = Field(..., description="IP Address of the network container")
     netmask: IPv4Address = Field(..., description="Subnet mask address of the network container")
@@ -308,11 +360,11 @@ class IPv4Network(BaseModel):
     network: str = Field(
         "network",
         frozen=True,
-        alias="header-network",
+        serialization_alias="header-network",
         description="Default header for network"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV custom import action"
+        None, serialization_alias="import-action", description="CSV custom import action"
     )
     address: IPv4Address = Field(..., description="IP Address of the network")
     netmask: IPv4Address = Field(..., description="Subnet mask address of the network")
@@ -402,7 +454,7 @@ class IPv6NetworkContainer(BaseModel):
     ipv6networkcontainer: str = Field(
         "ipv6networkcontainer",
         frozen=True,
-        alias="header-ipv6networkcontainer",
+        serialization_alias="header-ipv6networkcontainer",
         description="Default header for IPv6 network container"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -448,7 +500,7 @@ class IPv6Network(BaseModel):
     ipv6network: str = Field(
         "ipv6network",
         frozen=True,
-        alias="header-ipv6network",
+        serialization_alias="header-ipv6network",
         description="Default header for IPv6 network"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -496,7 +548,7 @@ class IPv4SharedNetwork(BaseModel):
     sharednetwork: str = Field(
         "sharednetwork",
         frozen=True,
-        alias="header-sharednetwork",
+        serialization_alias="header-sharednetwork",
         description="Default header for sharednetwork"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -544,7 +596,7 @@ class IPv6SharedNetwork(BaseModel):
     ipv6sharednetwork: str = Field(
         "ipv6sharednetwork",
         frozen=True,
-        alias="header-ipv6sharednetwork",
+        serialization_alias="header-ipv6sharednetwork",
         description="Default header for IPv6 shared network"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -582,13 +634,13 @@ class IPv4DhcpRange(BaseModel):
     dhcprange: str = Field(
         "dhcprange",
         frozen=True,
-        alias="header-dhcprange",
+        serialization_alias="header-dhcprange",
         description="Default header for dhcprange"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
     start_address: IPv4Address
     new_start_address: IPv4Address | None = Field(
-        alias="_new_start_address", default=None
+        serialization_alias="_new_start_address", default=None
     )
     end_address: IPv4Address
     new_end_address: IPv4Address | None = Field(alias="_new_end_address", default=None)
@@ -649,7 +701,7 @@ class IPv6DhcpRange(BaseModel):
     ipv6dhcprange: str = Field(
         "ipv6dhcprange",
         frozen=True,
-        alias="header-ipv6dhcprange",
+        serialization_alias="header-ipv6dhcprange",
         description="Default header for IPv6 dhcprange"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -692,7 +744,7 @@ class IPv4FixedAddress(BaseModel):
     header_fixedaddress: str = Field(
         "fixedaddress",
         frozen=True,
-        alias="header-fixedaddress",
+        serialization_alias="header-fixedaddress",
         description="Default header for IPv4 fixed address"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -744,7 +796,7 @@ class IPv6FixedAddress(BaseModel):
     ipv6fixedaddress: str = Field(
         "ipv6fixedaddress",
         frozen=True,
-        alias="header-ipv6fixedaddress",
+        serialization_alias="header-ipv6fixedaddress",
         description="Default header for IPv6 fixed address"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -785,7 +837,7 @@ class DhcpFingerprint(BaseModel):
     dhcpfingerprint: str = Field(
         "dhcpfingerprint",
         frozen=True,
-        alias="header-dhcpfingerprint",
+        serialization_alias="header-dhcpfingerprint",
         description="Default header for DHCP fingerprint"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -812,7 +864,7 @@ class DhcpMacFilter(BaseModel):
     dhcpmacfilter: str = Field(
         "dhcpmacfilter",
         frozen=True,
-        alias="header-dhcpmacfilter",
+        serialization_alias="header-dhcpmacfilter",
         description="Default header for dhcpmacfilter"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -836,7 +888,7 @@ class MacFilterAddress(BaseModel):
     macfilteraddress: str = Field(
         "macfilteraddress",
         frozen=True,
-        alias="header-macfilteraddress",
+        serialization_alias="header-macfilteraddress",
         description="Default header for macfilteraddress"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -871,7 +923,7 @@ class OptionFilter(BaseModel):
     optionfilter: str = Field(
         "optionfilter",
         frozen=True,
-        alias="header-optionfilter",
+        serialization_alias="header-optionfilter",
         description="Default header for optionfilter"
     )
     import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
@@ -899,17 +951,17 @@ class OptionFilterMatchRule(BaseModel):
     optionfiltermatchrule: str = Field(
         "optionfiltermatchrule",
         frozen=True,
-        alias="header-optionfiltermatchrule",
+        serialization_alias="header-optionfiltermatchrule",
         description="CSV Header for optionfiltermatchrule",
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="Custom CSV Import action"
+        None, serialization_alias="import-action", description="Custom CSV Import action"
     )
     parent: str = Field(..., description="Parent option filter")
     match_option: Optional[str] = Field(None, description="Option filter match option")
     match_value: Optional[str] = Field(None, description="Option filter match value")
     new_match_value: Optional[str] = Field(
-        None, alias="_new_match_value", description="New option filter match value"
+        None, serialization_alias="_new_match_value", description="New option filter match value"
     )
     comment: Optional[str] = Field(None, description="Option filter match comment")
     is_substring: Optional[bool] = Field(
@@ -925,15 +977,15 @@ class RelayAgentFilter(BaseModel):
     relayagentfilter: str = Field(
         "relayagentfilter",
         frozen=True,
-        alias="header-relayagentfilter",
+        serialization_alias="header-relayagentfilter",
         description="The header of the relayagentfilter",
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="Custom CSV import action"
+        None, serialization_alias="import-action", description="Custom CSV import action"
     )
     name: str = Field(..., description="The name of the relay agent filter")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="The new name of the relay agent filter"
+        None, serialization_alias="_new_name", description="The new name of the relay agent filter"
     )
     comment: Optional[str] = Field(None, description="The comment of the relay agent filter")
     circuit_id_rule: Optional[str] = Field(
@@ -959,18 +1011,18 @@ class DhcpFingerprintFilter(BaseModel):
     dhcpfingerprintfilter: str = Field(
         "dhcpfingerprintfilter",
         frozen=True,
-        alias="header-dhcpfingerprintfilter",
+        serialization_alias="header-dhcpfingerprintfilter",
         description="Header for dhcpfingerprintfilter",
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="Custom CSV import action"
+        None, serialization_alias="import-action", description="Custom CSV import action"
     )
     name: str = Field(..., description="DHCP Fingerprint Filter name")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="New DHCP Fingerprint Filter name"
+        None, serialization_alias="_new_name", description="New DHCP Fingerprint Filter name"
     )
     fingerprint: Optional[str] = Field(None, description="DHCP Fingerprint")
-    new_fingerprint: Optional[str] = Field(None, alias="_new_fingerprint")
+    new_fingerprint: Optional[str] = Field(None, serialization_alias="_new_fingerprint")
     comment: Optional[str] = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
@@ -985,16 +1037,16 @@ class IPv4OptionSpace(BaseModel):
 
     optionspace: str = Field(
         "optionspace",
-        alias="header-optionspace",
+        serialization_alias="header-optionspace",
         frozen=True,
         description="Header for optionspace"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV Custom import action"
+        None, serialization_alias="import-action", description="CSV Custom import action"
     )
     name: str = Field(..., description="Name of the IPv4 optionspace")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="New name of the optionspace"
+        None, serialization_alias="_new_name", description="New name of the optionspace"
     )
     comment: Optional[str] = Field(None, description="Comment for the optionspace")
 
@@ -1011,19 +1063,19 @@ class IPv4OptionDefinition(BaseModel):
     optiondefinition: str = Field(
         "optiondefinition",
         frozen=True,
-        alias="header-optiondefinition",
+        serialization_alias="header-optiondefinition",
         description="Header for optiondefinition"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV Custom import action"
+        None, serialization_alias="import-action", description="CSV Custom import action"
     )
     space: str = Field(..., description="IPv4 DHCP Option Space")
     new_space: Optional[str] = Field(
-        None, alias="_new_space", description="New name of the optionspace"
+        None, serialization_alias="_new_space", description="New name of the optionspace"
     )
     name: str = Field(..., description="IPv4 DHCP Option name")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="New IPv4 DHCP Option name"
+        None, serialization_alias="_new_name", description="New IPv4 DHCP Option name"
     )
     code: str = Field(..., description="IPv4 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
@@ -1035,15 +1087,15 @@ class IPv6Optionspace(BaseModel):
     ipv6optionspace: str = Field(
         'ipv6optionspace',
         frozen=True,
-        alias="header-ipv6optionspace",
+        serialization_alias="header-ipv6optionspace",
         description="Header for ipv6optionspace"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV Custom import action"
+        None, serialization_alias="import-action", description="CSV Custom import action"
     )
     name: str = Field(..., description="Name of the IPv6 optionspace")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="New name of the optionspace"
+        None, serialization_alias="_new_name", description="New name of the optionspace"
     )
     comment: Optional[str] = Field(None, description="Comment for the optionspace")
     ipv6_enterprise_number: Optional[PositiveInt] = Field(
@@ -1057,18 +1109,18 @@ class IPv6OptionDefinition(BaseModel):
     ipv6optiondefinition: str = Field(
         'ipv6optiondefinition',
         frozen=True,
-        alias="header-ipv6optiondefinition",
+        serialization_alias="header-ipv6optiondefinition",
         description="Header for ipv6optiondefinition"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV Custom import action"
+        None, serialization_alias="import-action", description="CSV Custom import action"
     )
     space: str = Field(..., description="IPv6 DHCP Option Space")
     new_space: Optional[str] = Field(
-        None, alias="_new_space", description="New name of the optionspace"
+        None, serialization_alias="_new_space", description="New name of the optionspace"
     )
     name: str = Field(..., description="IPv6 DHCP Option name")
-    new_name: Optional[str] = Field(None, alias="_new_name")
+    new_name: Optional[str] = Field(None, serialization_alias="_new_name")
     code: str = Field(..., description="IPv6 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
@@ -1079,15 +1131,16 @@ class DhcpFailoverAssociation(BaseModel):
     dhcpfailoverassociation: str = Field(
         'dhcpfailoverassociation',
         frozen=True,
-        alias="header-dhcpfailoverassociation",
+        serialization_alias="header-dhcpfailoverassociation",
         description="Header for dhcpfailoverassociation object"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        None, alias="import-action", description="CSV Custom import action"
+        None, serialization_alias="import-action", description="CSV Custom import action"
     )
     name: str = Field(..., description="Name of the DHCP failover association")
     new_name: Optional[str] = Field(
-        None, alias="_new_name", description="New name of the DHCP failover association"
+        None, serialization_alias="_new_name",
+        description="New name of the DHCP failover association"
     )
     comment: Optional[str] = Field(None, description="Optional comment")
     primary_server_type: FailoverServerType = Field(..., description="Primary server type")

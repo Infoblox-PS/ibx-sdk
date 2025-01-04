@@ -1,22 +1,25 @@
 # File: tests/test_dhcp.py
 
 from ipaddress import IPv4Address
+from logging import getLogger
 
 import pytest
+
 from src.ibx_sdk.nios.csv.dhcp import IPv4Network
 from src.ibx_sdk.nios.csv.enums import ImportActionEnum
+
+LOG = getLogger(__name__)
 
 
 def test_ipv4network_creation_with_valid_data():
     data = {
-        "header-network": "test-network",
         "import-action": ImportActionEnum.INSERT_OVERRIDE,
         "address": IPv4Address("192.168.1.0"),
         "netmask": IPv4Address("255.255.255.0"),
     }
     ipv4_network = IPv4Network(**data)
 
-    assert ipv4_network.network == "test-network"
+    LOG.info(ipv4_network.model_dump(exclude_none=True, exclude_unset=False, by_alias=False))
     assert ipv4_network.import_action == ImportActionEnum.INSERT_OVERRIDE
     assert ipv4_network.address == IPv4Address("192.168.1.0")
     assert ipv4_network.netmask == IPv4Address("255.255.255.0")
