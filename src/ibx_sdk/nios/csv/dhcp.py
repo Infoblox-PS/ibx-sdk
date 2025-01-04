@@ -464,7 +464,7 @@ class IPv6NetworkContainer(BaseModel):
         serialization_alias="header-ipv6networkcontainer",
         description="Default header for IPv6 network container"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     address: IPv6Address
     cidr: PositiveInt = Field(ge=0, le=128, default=64)
     network_view: str | None = None
@@ -510,7 +510,7 @@ class IPv6Network(BaseModel):
         serialization_alias="header-ipv6network",
         description="Default header for IPv6 network"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     address: IPv6Address
     cidr: PositiveInt = Field(ge=0, le=128, default=64)
     comment: str | None = None
@@ -558,9 +558,9 @@ class IPv4SharedNetwork(BaseModel):
         serialization_alias="header-sharednetwork",
         description="Default header for sharednetwork"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
+    new_name: str | None = Field(serialization_alias="_new_name", default=None)
     networks: str
     network_view: str | None = None
     is_authoritative: bool | None = None
@@ -606,9 +606,9 @@ class IPv6SharedNetwork(BaseModel):
         serialization_alias="header-ipv6sharednetwork",
         description="Default header for IPv6 shared network"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
+    new_name: str | None = Field(serialization_alias="_new_name", default=None)
     networks: str
     network_view: str | None = None
     comment: str | None = None
@@ -644,13 +644,13 @@ class IPv4DhcpRange(BaseModel):
         serialization_alias="header-dhcprange",
         description="Default header for dhcprange"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     start_address: IPv4Address
     new_start_address: IPv4Address | None = Field(
         serialization_alias="_new_start_address", default=None
     )
     end_address: IPv4Address
-    new_end_address: IPv4Address | None = Field(alias="_new_end_address", default=None)
+    new_end_address: IPv4Address | None = Field(serialization_alias="_new_end_address", default=None)
     network_view: str | None = None
     name: str | None = None
     comment: str | None = None
@@ -711,19 +711,19 @@ class IPv6DhcpRange(BaseModel):
         serialization_alias="header-ipv6dhcprange",
         description="Default header for IPv6 dhcprange"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     address_type: IPv6AddressTypeEnum | None = None
     parent: str | None = None  # Required when address_type = PREFIX
     start_address: IPv6Address
-    new_start_address: IPv6Address | None = Field(alias="_new_start_address", default=None)
+    new_start_address: IPv6Address | None = Field(serialization_alias="_new_start_address", default=None)
     end_address: IPv6Address
-    new_end_address: IPv6Address | None = Field(alias="_new_end_address", default=None)
+    new_end_address: IPv6Address | None = Field(serialization_alias="_new_end_address", default=None)
     ipv6_start_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_start_prefix: PositiveInt | None = Field(alias="_new_ipv6_start_prefix", default=None)
+    new_ipv6_start_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_start_prefix", default=None)
     ipv6_end_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_end_prefix: PositiveInt | None = Field(alias="_new_ipv6_end_prefix", default=None)
+    new_ipv6_end_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_end_prefix", default=None)
     ipv6_prefix_bits: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix_bits: PositiveInt | None = Field(alias="_new_ipv6_prefix_bits", default=None)
+    new_ipv6_prefix_bits: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix_bits", default=None)
     network_view: str | None = None
     name: str | None = None
     comment: str | None = None
@@ -754,10 +754,10 @@ class IPv4FixedAddress(BaseModel):
         serialization_alias="header-fixedaddress",
         description="Default header for IPv4 fixed address"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     ip_address: IPv4Address
     ms_server: IPv4Address | None = None
-    new_ip_address: IPv4Address | None = Field(alias="_new_ip_address", default=None)
+    new_ip_address: IPv4Address | None = Field(serialization_alias="_new_ip_address", default=None)
     network_view: str | None = None
     name: str | None = None
     always_update_dns: bool | None = None
@@ -806,15 +806,15 @@ class IPv6FixedAddress(BaseModel):
         serialization_alias="header-ipv6fixedaddress",
         description="Default header for IPv6 fixed address"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     address_type: IPv6AddressTypeEnum | None = None
     parent: str | None = None
     ip_address: IPv6Address
-    new_ip_address: IPv6Address | None = Field(alias="_new_ip_address", default=None)
+    new_ip_address: IPv6Address | None = Field(serialization_alias="_new_ip_address", default=None)
     ipv6_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix: PositiveInt | None = Field(alias="_new_ipv6_prefix", default=None)
+    new_ipv6_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix", default=None)
     ipv6_prefix_bits: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix_bits: PositiveInt | None = Field(alias="_new_ipv6_prefix_bits", default=None)
+    new_ipv6_prefix_bits: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix_bits", default=None)
     network_view: str | None = None
     name: str | None = None
     comment: str | None = None
@@ -847,9 +847,9 @@ class DhcpFingerprint(BaseModel):
         serialization_alias="header-dhcpfingerprint",
         description="Default header for DHCP fingerprint"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
+    new_name: str | None = Field(serialization_alias="_new_name", default=None)
     type: FingerprintTypeEnum | None = Field(default=FingerprintTypeEnum.CUSTOM)
     comment: str | None = None
     disable: bool | None = None
@@ -874,9 +874,9 @@ class DhcpMacFilter(BaseModel):
         serialization_alias="header-dhcpmacfilter",
         description="Default header for dhcpmacfilter"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
+    new_name: str | None = Field(serialization_alias="_new_name", default=None)
     never_expires: bool | None = None
     expiration_interval: PositiveInt | None = None
     enforce_expiration_time: bool | None = None
@@ -898,10 +898,10 @@ class MacFilterAddress(BaseModel):
         serialization_alias="header-macfilteraddress",
         description="Default header for macfilteraddress"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     parent: str
     mac_address: str
-    new_mac_address: str | None = Field(alias="_new_mac_address", default=None)
+    new_mac_address: str | None = Field(serialization_alias="_new_mac_address", default=None)
     is_registered_user: bool | None = None
     registered_user: str | None = None
     guest_first_name: str | None = None
@@ -933,9 +933,9 @@ class OptionFilter(BaseModel):
         serialization_alias="header-optionfilter",
         description="Default header for optionfilter"
     )
-    import_action: ImportActionEnum | None = Field(alias="import-action", default=None)
+    import_action: ImportActionEnum | None = Field(serialization_alias="import-action", default=None)
     name: str
-    new_name: str | None = Field(alias="_new_name", default=None)
+    new_name: str | None = Field(serialization_alias="_new_name", default=None)
     comment: str | None = None
     expression: str | None = None
     boot_file: str | None = None
