@@ -13,13 +13,12 @@ LOG = getLogger(__name__)
 
 def test_ipv4network_creation_with_valid_data():
     data = {
-        "import-action": ImportActionEnum.INSERT_OVERRIDE,
+        "import_action": ImportActionEnum.INSERT_OVERRIDE,
         "address": IPv4Address("192.168.1.0"),
         "netmask": IPv4Address("255.255.255.0"),
     }
     ipv4_network = IPv4Network(**data)
 
-    LOG.info(ipv4_network.model_dump(exclude_none=True, exclude_unset=False, by_alias=False))
     assert ipv4_network.import_action == ImportActionEnum.INSERT_OVERRIDE
     assert ipv4_network.address == IPv4Address("192.168.1.0")
     assert ipv4_network.netmask == IPv4Address("255.255.255.0")
@@ -27,7 +26,6 @@ def test_ipv4network_creation_with_valid_data():
 
 def test_ipv4network_creation_with_optional_fields():
     data = {
-        "header-network": "optional-network",
         "address": IPv4Address("10.0.0.0"),
         "netmask": IPv4Address("255.0.0.0"),
         "rir_organization": "RIR Org",
@@ -43,7 +41,6 @@ def test_ipv4network_creation_with_optional_fields():
 
 def test_ipv4network_invalid_address():
     data = {
-        "header-network": "invalid-address-network",
         "address": "invalid_ip",
         "netmask": IPv4Address("255.255.255.0"),
     }
@@ -53,7 +50,6 @@ def test_ipv4network_invalid_address():
 
 def test_ipv4network_add_property_valid_code():
     data = {
-        "header-network": "test-network",
         "address": IPv4Address("192.168.1.0"),
         "netmask": IPv4Address("255.255.255.0"),
     }
@@ -65,7 +61,6 @@ def test_ipv4network_add_property_valid_code():
 
 def test_ipv4network_add_property_invalid_code():
     data = {
-        "header-network": "test-network",
         "address": IPv4Address("192.168.1.0"),
         "netmask": IPv4Address("255.255.255.0"),
     }

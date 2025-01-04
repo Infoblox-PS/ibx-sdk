@@ -28,6 +28,9 @@ class GridDhcp(BaseModel):
         serialization_alias="header-griddhcp",
         description="Default header for griddhcp"
     )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
     authority: Optional[bool] = Field(None, description="DHCP Authority flag")
     domain_name: Optional[str] = Field(None, description="Option domain-name option")
     recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")

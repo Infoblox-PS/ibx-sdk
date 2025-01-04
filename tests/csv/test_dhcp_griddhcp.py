@@ -1,9 +1,8 @@
-from datetime import datetime
-from ipaddress import IPv4Address
-
 import pytest
 from pydantic import ValidationError
+
 from src.ibx_sdk.nios.csv.dhcp import GridDhcp
+from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_griddhcp_default_values():
@@ -15,18 +14,31 @@ def test_griddhcp_default_values():
 
 def test_griddhcp_create_with_valid_values():
     data = {
-        "header-griddhcp": "custom-griddhcp",
         "authority": True,
         "domain_name": "example.com",
         "recycle_leases": False,
         "pxe_lease_time": 300,
     }
     griddhcp = GridDhcp(**data)
-    assert griddhcp.griddhcp == "custom-griddhcp"
     assert griddhcp.authority is True
     assert griddhcp.domain_name == "example.com"
     assert griddhcp.recycle_leases is False
     assert griddhcp.pxe_lease_time == 300
+
+
+def test_griddhcp_override_values():
+    griddhcp = GridDhcp(
+        authority=False,
+        domain_name="other.com",
+        recycle_leases=True,
+        pxe_lease_time=600,
+        import_action=ImportActionEnum.OVERRIDE
+    )
+    assert griddhcp.authority is False
+    assert griddhcp.domain_name == "other.com"
+    assert griddhcp.recycle_leases is True
+    assert griddhcp.pxe_lease_time == 600
+    assert griddhcp.import_action == ImportActionEnum.OVERRIDE
 
 
 def test_griddhcp_invalid_pxe_lease_time():
@@ -36,7 +48,6 @@ def test_griddhcp_invalid_pxe_lease_time():
 
 def test_griddhcp_optional_fields():
     data = {
-        "header-griddhcp": "test-griddhcp",
         "domain_name": "test.com",
         "ddns_ttl": 600,
         "email_list": "admin@test.com",
@@ -44,7 +55,6 @@ def test_griddhcp_optional_fields():
         "ignore_client_identifier": True,
     }
     griddhcp = GridDhcp(**data)
-    assert griddhcp.griddhcp == "test-griddhcp"
     assert griddhcp.domain_name == "test.com"
     assert griddhcp.ddns_ttl == 600
     assert griddhcp.email_list == "admin@test.com"
