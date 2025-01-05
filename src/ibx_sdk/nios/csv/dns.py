@@ -1,7 +1,6 @@
 from typing import Optional, List
 
-from netaddr.ip import IPAddress
-from pydantic import BaseModel, Field, ConfigDict, PositiveInt
+from pydantic import BaseModel, Field, ConfigDict, PositiveInt, field_serializer, IPvAnyAddress
 
 from .enums import ZoneFormatTypeEnum, ImportActionEnum
 
@@ -12,7 +11,8 @@ class MemberDns(BaseModel):
     memberdns: str = Field(
         "memberdns",
         frozen=True,
-        serialization_alias="header-memberdns", description="CSV header for memberdns"
+        serialization_alias="header-memberdns",
+        description="CSV header for memberdns"
     )
     import_action: Optional[ImportActionEnum] = Field(
         serialization_alias="import-action", default=None, description="CSV custom import action"
@@ -22,7 +22,7 @@ class MemberDns(BaseModel):
     dns_over_lan2: Optional[bool] = Field(None, description="DNS over LAN2 interface")
     minimal_response: Optional[bool] = Field(None, description="Minimal response flag")
     forwarders_only: Optional[bool] = Field(None, description="Forwarders only flag")
-    allow_forwarder: Optional[List[IPAddress]] = Field(None, description="List of forwarders")
+    allow_forwarder: Optional[List[str]] = Field(None, description="List of forwarders")
     member_view_nats: Optional[List[str]] = Field(
         None, description="List of member view NATs VIEW/INTERFACE/IP"
     )
@@ -30,13 +30,15 @@ class MemberDns(BaseModel):
     notify_source_port: Optional[PositiveInt] = Field(None, description="Notify source port")
     enable_query_source_port: Optional[bool] = Field(None, description="Enable query source port")
     query_source_port: Optional[PositiveInt] = Field(None, description="Query source port")
-    lame_ttl: Optional[PositiveInt] = Field(None, description="Lame TTL")
+    lame_ttl: Optional[PositiveInt] = Field(
+        600, gt=0, lt=1800, description="Lame TTL"
+    )
     auto_sort_views: Optional[bool] = Field(None, description="Auto sort views flag")
     member_views: Optional[List[str]] = Field(None, description="Member views")
     allow_transfer: Optional[List[str]] = Field(
         None, description="List of allowed transfer servers ITEM/Allow or ITEM/Deny"
     )
-    excluded_servers: Optional[List[IPAddress]] = Field(
+    excluded_servers: Optional[List[IPvAnyAddress]] = Field(
         None, description="List of excluded transfer servers"
     )
     zone_transfer_format_option: Optional[str] = Field(
@@ -50,51 +52,131 @@ class MemberDns(BaseModel):
     limit_concurrent_recursive_clients: Optional[bool] = Field(
         None, description="Limit concurrent recursive clients flag"
     )
-    concurrent_recursive_clients: PositiveInt | None = Field(default=1000)
-    allow_update: str | None = None
-    allow_gss_tsig_zone_updates: bool | None = None
-    allow_update_forwarding: bool | None = None
-    enable_custom_root_server: bool | None = None
-    root_name_servers: str | None = None
-    enable_blackhole: bool | None = None
-    blackhole: str | None = None  # ACL
-    notify_delay: PositiveInt | None = Field(ge=5, le=86400)
-    enable_nxdomain_redirect: bool | None = None
-    nxdomain_redirect_addresses: str | None = None
-    nxdomain_redirect_ttl: PositiveInt | None = None
-    nxdomain_log_query: bool | None = None
-    nxdomain_rulesets: str | None = None
-    enable_blacklist: bool | None = None
-    blacklist_redirect_addresses: str | None = None
-    blacklist_action: str | None = None
-    blacklist_redirect_ttl: PositiveInt | None = None
-    blacklist_log_query: bool | None = None
-    blacklist_rulesets: str | None = None
-    enable_dns64: bool | None = None
-    dns64_groups: str | None = None
-    max_cached_lifetime: PositiveInt | None = Field(ge=60, le=86400, default=86400)
-    dns_over_v6_mgmt: bool | None = None
-    dns_over_v6_lan2: bool | None = None
-    filter_aaaa: str | None = None
-    filter_aaaa_list: str | None = None
-    dns_over_v6_lan: bool | None = None
-    copy_xfer_to_notify: bool | None = None
-    transfers_in: PositiveInt | None = Field(ge=10, le=100, default=10)
-    transfers_out: PositiveInt | None = Field(ge=10, le=100, default=10)
-    transfers_per_ns: PositiveInt | None = Field(ge=2, le=100)
-    serial_query_rate: PositiveInt | None = Field(ge=20, le=100, default=20)
-    max_cache_ttl: PositiveInt | None = Field(default=86400)
-    max_ncache_ttl: PositiveInt | None = Field(le=604800, default=10800)
-    disable_edns: bool | None = None
-    query_rewrite_enabled: bool | None = None
-    rpz_drop_ip_rule_enabled: bool | None = None
-    rpz_drop_ip_rule_min_prefix_length_ipv4: PositiveInt | None = Field(ge=0, le=32, default=29)
-    rpz_drop_ip_rule_min_prefix_length_ipv6: PositiveInt | None = Field(ge=0, le=128, default=112)
-    atc_forwarding_enable: bool | None = None
-    atc_forwarding_access_key: str | None = None
-    atc_forwarding_resolver_address: str | None = None
-    atc_forwarding_forward_first: bool | None = None
+    concurrent_recursive_clients: Optional[PositiveInt] = Field(
+        1000, description="Concurrent recursive clients"
+    )
+    allow_update: Optional[List[str]] = Field(None, description="List of allowed update servers")
+    allow_gss_tsig_zone_updates: Optional[bool] = Field(
+        None, description="Allow GSS TSIG zone updates flag"
+    )
+    allow_update_forwarding: Optional[bool] = Field(
+        None, description="Allow update forwarding flag"
+    )
+    enable_custom_root_server: Optional[bool] = Field(None, description="Enable custom root server")
+    root_name_servers: Optional[List[str]] = Field(
+        None, description="List of custom root name servers"
+    )
+    enable_blackhole: Optional[bool] = Field(None, description="Enable blackhole flag")
+    blackhole: Optional[List[str]] = Field(None, description="List of blackhole servers")
+    notify_delay: Optional[PositiveInt] = Field(
+        None, ge=5, le=86400, description="Notify delay in seconds"
+    )
+    enable_nxdomain_redirect: Optional[bool] = Field(
+        None, description="Enable nxdomain redirect flag"
+    )
+    nxdomain_redirect_addresses: Optional[List[str]] = Field(
+        None, description="List of nxdomain redirect addresses"
+    )
+    nxdomain_redirect_ttl: Optional[PositiveInt] = Field(
+        None, description="TTL for nxdomain redirect"
+    )
+    nxdomain_log_query: Optional[bool] = Field(None, description="Enable nxdomain log query flag")
+    nxdomain_rulesets: Optional[List[str]] = Field(None, description="List of nxdomain rulesets")
+    enable_blacklist: Optional[bool] = Field(None, description="Enable blacklist flag")
+    blacklist_redirect_addresses: Optional[List[str]] = Field(
+        None, description="List of blacklist redirect addresses"
+    )
+    blacklist_action: Optional[str] = Field(None, description="Blacklist action i.e. Refuse")
+    blacklist_redirect_ttl: Optional[PositiveInt] = Field(
+        None, description="TTL for blacklist redirect"
+    )
+    blacklist_log_query: Optional[bool] = Field(None, description="Enable blacklist log query flag")
+    blacklist_rulesets: Optional[List[str]] = Field(None, description="List of blacklist rulesets")
+    enable_dns64: Optional[bool] = Field(None, description="Enable DNS64 flag")
+    dns64_groups: Optional[List[str]] = Field(None, description="List of DNS64 groups")
+    max_cached_lifetime: Optional[PositiveInt] = Field(
+        86400, ge=60, le=86400, description="Max cached lifetime in seconds")
+    dns_over_v6_mgmt: Optional[bool] = Field(None, description="DNS over v6 management interface")
+    dns_over_v6_lan2: Optional[bool] = Field(None, description="DNS over v6 LAN2 interface")
+    filter_aaaa: Optional[bool] = Field(None, description="Enable filter AAAA flag")
+    filter_aaaa_list: Optional[List[str]] = Field(
+        None,
+        description="List of filter AAAA addresses '12.0.0.12/Deny,10.0.0.0/8/Allow,NACL/Allow'"
+    )
+    dns_over_v6_lan: Optional[bool] = Field(None, description="DNS over v6 LAN interface")
+    copy_xfer_to_notify: Optional[bool] = Field(
+        None, description="Enable copy transfer to notify flag"
+    )
+    transfers_in: Optional[PositiveInt] = Field(
+        10, ge=10, le=100, description="Max transfers in"
+    )
+    transfers_out: Optional[PositiveInt] = Field(
+        10, ge=10, le=100, description="Max transfers out"
+    )
+    transfers_per_ns: Optional[PositiveInt] = Field(
+        None, ge=2, le=100, description="Max transfers per NS"
+    )
+    serial_query_rate: Optional[PositiveInt] = Field(
+        20, ge=20, le=100, description="Serial query rate"
+    )
+    max_cache_ttl: Optional[PositiveInt] = Field(
+        86400, description="Max cache TTL in seconds"
+    )
+    max_ncache_ttl: Optional[PositiveInt] = Field(
+        10800, le=604800, description="Max ncache TTL in seconds"
+    )
+    disable_edns: Optional[bool] = Field(None, description="Disable EDNS flag")
+    query_rewrite_enabled: Optional[bool] = Field(None, description="Enable query rewrite flag")
+    rpz_drop_ip_rule_enabled: Optional[bool] = Field(
+        None, description="Enable RPZ drop IP rule flag"
+    )
+    rpz_drop_ip_rule_min_prefix_length_ipv4: Optional[PositiveInt] = Field(
+        29, ge=0, le=32, description="RPZ drop IP rule min prefix length IPv4"
+    )
+    rpz_drop_ip_rule_min_prefix_length_ipv6: Optional[PositiveInt] = Field(
+        112, ge=0, le=128, description="RPZ drop IP rule min prefix length IPv6"
+    )
+    atc_forwarding_enable: Optional[bool] = Field(
+        None,
+        description="Enable recursive queries forwarding to Advanced DNS Threat Defense Cloud flag"
+    )
+    atc_forwarding_access_key: Optional[str] = Field(
+        None, description="Advanced DNS Threat Defense Cloud access key"
+    )
+    atc_forwarding_resolver_address: Optional[IPvAnyAddress] = Field(
+        None, description="Advanced DNS Threat Defense Cloud resolver address"
+    )
+    atc_forwarding_forward_first: Optional[bool] = Field(
+        None, description="Fallback to Advanced DNS Threat Defense Cloud forward first flag"
+    )
 
+    @staticmethod
+    def list_to_csv(items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
+
+    @field_serializer(
+        'allow_forwarder',
+        'member_view_nats',
+        'member_views',
+        'allow_transfer',
+        'excluded_servers',
+        'allow_query',
+        'allow_recursive_query',
+        'allow_update',
+        'root_name_servers',
+        'blackhole',
+        'nxdomain_redirect_addresses',
+        'nxdomain_rulesets',
+        'blacklist_redirect_addresses',
+        'blacklist_rulesets',
+        'dns64_groups',
+        'filter_aaaa_list',
+        when_used="always"
+    )
+    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+        return self.list_to_csv(values)
 
 class AuthZone(BaseModel):
     model_config = ConfigDict(extra="allow")
