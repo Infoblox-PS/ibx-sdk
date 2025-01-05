@@ -286,21 +286,35 @@ class AuthZone(BaseModel):
 class ForwardZone(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    forwardzone: str = Field(serialization_alias="header-forwardzone", default="forwardzone")
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    fqdn: str
-    view: str | None = None
-    zone_format: ZoneFormatTypeEnum
-    prefix: str | None = None
-    disabled: bool | None = None
-    comment: str | None = None
-    forward_to: str | None = None  # list of forwarders "fqdn/ip,fqdn2/ip"
-    forwarding_servers: str | None = None  # list of fqdns of Grid Members
-    forwarders_only: bool | None = Field(default=True)
-    ns_group: str | None = None
-    ns_group_external: str | None = None
-    disable_ns_generation: bool | None = Field(default=True)
+    forwardzone: str = Field(
+        "forwardzone",
+        frozen=True,
+        serialization_alias="header-forwardzone",
+        description="Header for forwardzone object"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action")
+    fqdn: str = Field(..., description="FQDN zone name")
+    view: Optional[str] = Field(None, description="View name")
+    zone_format: ZoneFormatTypeEnum = Field(..., description="Zone format")
+    prefix: Optional[str] = Field(None, description="RFC2317 classless reverse zone Prefix")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    forward_to: Optional[List[str]] = Field(
+        None, description="List of forwarders [FQDN/IP,...]"
+    )
+    forwarding_servers: Optional[List[str]] = Field(
+        None, description="List of forwarding servers [FQDN,...]"
+    )
+    forwarders_only: Optional[bool] = Field(
+        True, description="Forwarders only flag"
+    )
+    ns_group: Optional[str] = Field(None, description="Forwarding Members NS Group")
+    ns_group_external: Optional[str] = Field(None, description="Forward-to NS group name")
+    disable_ns_generation: Optional[bool] = Field(
+        True,
+        description="Disable NS generation flag"
+    )
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
