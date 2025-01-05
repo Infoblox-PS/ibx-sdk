@@ -546,14 +546,27 @@ class ForwardStubServerNsGroup(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     forwardstubservernsgroup: str = Field(
-        serialization_alias="header-forwardstubservernsgroup", default="forwardstubservernsgroup"
+        "forwardstubservernsgroup",
+        frozen=True,
+        serialization_alias="header-forwardstubservernsgroup",
+        description="Header for forwardstubservernsgroup object"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    group_name: str
-    new_group_name: str | None = Field(serialization_alias="_new_group_name", default=None)
-    comment: str | None = None
-    external_servers: str  # list of external servers
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action"
+    )
+    group_name: str = Field(..., description="NS group name")
+    new_group_name: Optional[str] = Field(
+        None, serialization_alias="_new_group_name", description="New NS group name")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    external_servers: Optional[List[str]] = Field(
+        None, description="List of external servers [FQDN/IP,...]"
+    )
+
+    @field_serializer("external_servers", when_used="always")
+    def serialize_external_servers(self, items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-"):
