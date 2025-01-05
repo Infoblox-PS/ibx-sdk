@@ -2,7 +2,6 @@ from datetime import datetime
 
 import pytest
 from src.ibx_sdk.nios.csv.dhcp import MacFilterAddress
-from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_macfilteraddress_default_values():

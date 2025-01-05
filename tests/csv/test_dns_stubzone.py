@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 from src.ibx_sdk.nios.csv.dns import StubZone
-from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum, ImportActionEnum
+from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum
 
 
 def test_stubzone_default_values():

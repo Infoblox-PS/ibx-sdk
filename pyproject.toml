@@ -23,9 +23,9 @@ syslog-rfc5424-formatter = "^1.2.3"
 pydantic = "^2.10.4"
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.7.3"
 mkdocstrings-python = "^1.12.2"
 mkdocs-material = "^9.5.44"
+ruff = "^0.8.6"
 
 [tool.poetry.group.test.dependencies]
 coverage = "^7.6.4"

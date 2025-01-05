@@ -1,7 +1,6 @@
 import pytest
 from pydantic import ValidationError
 from src.ibx_sdk.nios.csv.dhcp import IPv6SharedNetwork
-from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_ipv6sharednetwork_default_values():

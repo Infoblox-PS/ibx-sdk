@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 from src.ibx_sdk.nios.csv.dns import AuthZone
-from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum, ImportActionEnum
+from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum
 
 
 def test_authzone_default_values():

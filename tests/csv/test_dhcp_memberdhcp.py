@@ -3,7 +3,7 @@ from logging import getLogger
 import pytest
 from pydantic import PositiveInt, ValidationError
 from src.ibx_sdk.nios.csv.dhcp import MemberDhcp
-from src.ibx_sdk.nios.csv.enums import ImportActionEnum, LeasePerClientSettingsEnum
+from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 LOG = getLogger(__name__)
 
