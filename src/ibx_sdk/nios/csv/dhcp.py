@@ -844,38 +844,45 @@ class IPv4FixedAddress(BaseModel):
         serialization_alias="header-fixedaddress",
         description="Default header for IPv4 fixed address"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    ip_address: IPv4Address
-    ms_server: IPv4Address | None = None
-    new_ip_address: IPv4Address | None = Field(serialization_alias="_new_ip_address", default=None)
-    network_view: str | None = None
-    name: str | None = None
-    always_update_dns: bool | None = None
-    option_logic_filters: str | None = None
-    boot_file: str | None = None
-    boot_server: str | None = None
-    prepared_zero: bool | None = None
-    comment: str | None = None
-    ddns_domainname: str | None = None
-    deny_bootp: bool | None = None
-    broadcast_address: IPv4Address | None = None
-    routers: str | None = None
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
-    dhcp_client_identifier: str | None = None
-    disabled: bool | None = None
-    enable_ddns: bool | None = None
-    ignore_client_requested_options: bool | None = None
-    circuit_id: str | None = None
-    remote_id: str | None = None
-    mac_address: str | None = None
-    match_option: MatchOptionEnum | None = None  # MAC_ADDRESS, CLIENT_ID, CIRCUIT_ID, REMOTE_ID
-    next_server: str | None = None
-    lease_time: int | None = None
-    enable_pxe_lease_time: bool | None = None
-    ddns_hostname: str | None = None
-    pxe_lease_time: int | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action")
+    ip_address: IPv4Address = Field(..., description="IP address")
+    ms_server: Optional[IPv4Address] = Field(None, description="MS server name")
+    new_ip_address: Optional[IPv4Address] = Field(
+        None, serialization_alias="_new_ip_address", description="New IP address of fixed address")
+    network_view: Optional[str] = Field(None, description="Network view")
+    name: Optional[str] = Field(None, description="Fixed address name")
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    option_logic_filters: Optional[List[str]] = Field(
+        None, description="List of option logic filters"
+    )
+    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
+    boot_server: Optional[str] = Field(None, description="Legacy bootserver option")
+    prepared_zero: Optional[bool] = Field(None, description="Prepared zero flag")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    ddns_domainname: Optional[str] = Field(None, description="DDNS Domain name option")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    broadcast_address: Optional[IPv4Address] = Field(None, description="Broadcast address option")
+    routers: Optional[str] = Field(None, description="List of routers")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
+    dhcp_client_identifier: Optional[str] = Field(None, description="DHCP client identifier option")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options"
+    )
+    circuit_id: Optional[str] = Field(None, description="Circuit ID option")
+    remote_id: Optional[str] = Field(None, description="Remote ID option")
+    mac_address: Optional[str] = Field(None, description="MAC address option")
+    match_option: Optional[MatchOptionEnum] = Field(None, description="Match option")
+    next_server: Optional[str] = Field(None, description="Legacy next-server option")
+    lease_time: Optional[PositiveInt] = Field(None, description="DHCP lease time option in seconds")
+    enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
+    ddns_hostname: Optional[str] = Field(None, description="DDNS hostname option")
+    pxe_lease_time: Optional[PositiveInt] = Field(
+        None, description="DHCP lease time option in seconds"
+    )
 
     def add_property(self, code: str, value: str):
         if (
