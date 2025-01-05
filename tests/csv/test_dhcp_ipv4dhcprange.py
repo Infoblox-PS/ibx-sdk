@@ -84,7 +84,7 @@ def test_ipv4dhcprange_exclusion_ranges():
         end_address=IPv4Address("192.168.1.100"),
         exclusion_ranges=["192.168.1.10-192.168.1.20", "192.168.1.30-192.168.1.40"]
     )
-    LOG.info(ipv4_dhcp_range.model_dump(exclude_none=True, exclude_unset=True, by_alias=False))
+    LOG.debug(ipv4_dhcp_range.model_dump(exclude_none=True, exclude_unset=True, by_alias=False))
     assert ipv4_dhcp_range.exclusion_ranges == [
         "192.168.1.10-192.168.1.20",
         "192.168.1.30-192.168.1.40"
