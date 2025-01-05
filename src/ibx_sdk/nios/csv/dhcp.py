@@ -690,54 +690,74 @@ class IPv4DhcpRange(BaseModel):
         serialization_alias="header-dhcprange",
         description="Default header for dhcprange"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    start_address: IPv4Address
-    new_start_address: IPv4Address | None = Field(
-        serialization_alias="_new_start_address", default=None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
     )
-    end_address: IPv4Address
-    new_end_address: IPv4Address | None = Field(serialization_alias="_new_end_address",
-                                                default=None)
-    network_view: str | None = None
-    name: str | None = None
-    comment: str | None = None
-    is_authoritative: bool | None = None
-    boot_file: str | None = None
-    boot_server: str | None = None
-    ddns_domainname: str | None = None
-    generate_hostname: bool | None = None
-    deny_all_clients: bool | None = None
-    deny_bootp: bool | None = None
-    disabled: bool | None = None
-    domain_name_servers: str | None = None
-    enable_ddns: bool | None = None
-    enable_thresholds: bool | None = None
-    enable_threshold_email_warnings: bool | None = None
-    enable_threshold_snmp_warnings: bool | None = None
-    threshold_email_addresses: str | None = None
-    range_high_water_mark: int | None = None
-    ignore_client_requested_options: bool | None = None
-    range_low_water_mark: int | None = None
-    next_server: str | None = None
-    lease_time: int | None = None
-    enable_pxe_lease_time: bool | None = None
-    pxe_lease_time: int | None = None
-    unknown_clients_option: str | None = None  # Example: 'Allow'
-    known_clients_option: str | None = None  # Example: 'Deny'
-    recycle_leases: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
-    always_update_dns: bool | None = None
-    exclusion_ranges: str | None = (
-        None  # Example: “10.1.0.200-10.1.0.254/’The range for printers’,10.2.3.3-10.2.3.30/”
+    start_address: IPv4Address = Field(..., description="DHCP range start address")
+    new_start_address: Optional[IPv4Address] = Field(
+        None, serialization_alias="_new_start_address", description="New DHCP range start address"
     )
-    member: str | None = None
-    server_association_type: ServerAssociationTypeEnum | None = None
-    failover_association: str | None = None
-    broadcast_address: IPv4Address | None = None
-    routers: str | None = None
-    domain_name: str | None = None
-    option_logic_filters: List[str] | None = None
+    end_address: IPv4Address = Field(..., description="DHCP range end address")
+    new_end_address: Optional[IPv4Address] = Field(
+        None, serialization_alias="_new_end_address", description="New DHCP range end address"
+    )
+    network_view: Optional[str] = Field(None, description="Network view")
+    name: Optional[str] = Field(None, description="DHCP range name")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    is_authoritative: Optional[bool] = Field(None, description="Is authoritative flag")
+    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
+    boot_server: Optional[str] = Field(None, description="Legacy bootserver option")
+    ddns_domainname: Optional[str] = Field(None, description="DDNS Domain name option")
+    generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    deny_all_clients: Optional[bool] = Field(None, description="Deny all clients flag")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    enable_thresholds: Optional[bool] = Field(None, description="Enable thresholds flag")
+    enable_threshold_email_warnings: Optional[bool] = Field(
+        None, description="Enable email warnings flag"
+    )
+    enable_threshold_snmp_warnings: Optional[bool] = Field(
+        None, description="Enable SNMP warnings flag"
+    )
+    threshold_email_addresses: Optional[list[str]] = Field(
+        None, description="Email addresses to send warnings"
+    )
+    range_high_water_mark: Optional[int] = Field(None, description="Range high water mark option")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options flag"
+    )
+    range_low_water_mark: Optional[int] = Field(None, description="Range low water mark option")
+    next_server: Optional[str] = Field(None, description="Legacy next-server option")
+    lease_time: Optional[PositiveInt] = Field(None, description="DHCP lease time option in seconds")
+    enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
+    pxe_lease_time: Optional[PositiveInt] = Field(
+        None, description="DHCP lease time option in seconds"
+    )
+    unknown_clients_option: Optional[str] = Field(None, description="Unknown clients option")
+    known_clients_option: Optional[str] = Field(None, description="Known clients option")
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal"
+    )
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    exclusion_ranges: Optional[List[str]] = Field(
+        None, description="List of exclusion ranges in 'start-end/comment' format"
+    )
+    member: Optional[str] = Field(None, description="DHCP member name")
+    server_association_type: Optional[ServerAssociationTypeEnum] = Field(
+        None, description="DHCP server association type MEMBER, FAILOVER, or NONE"
+    )
+    failover_association: Optional[str] = Field(None, description="DHCP failover association name")
+    broadcast_address: Optional[IPv4Address] = Field(
+        None, description="DHCP broadcast address option"
+    )
+    routers: Optional[list] = Field(None, description="List of routers")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    option_logic_filters: Optional[List[str]] = Field(
+        None, description="List of option logic filters"
+    )
 
     def add_property(self, code: str, value: str):
         if (
