@@ -31,6 +31,19 @@ def output_to_file(
         output_dir: str = None,
         file_prefix: str = None,
 ) -> None:
+    """
+    Generate a CSV file from the given data.
+
+    Args:
+        filename: csv filename or object name
+        data: list of objects
+        import_action: optional import-action to be added to the header
+        output_dir: output to a specific directory
+        file_prefix: optional file name prefix
+
+    Returns:
+        None
+    """
     if filename.endswith(".csv"):
         output_file_name = filename
     else:
