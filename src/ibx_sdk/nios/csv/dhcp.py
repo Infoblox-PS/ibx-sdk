@@ -904,28 +904,42 @@ class IPv6FixedAddress(BaseModel):
         serialization_alias="header-ipv6fixedaddress",
         description="Default header for IPv6 fixed address"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    address_type: IPv6AddressTypeEnum | None = None
-    parent: str | None = None
-    ip_address: IPv6Address
-    new_ip_address: IPv6Address | None = Field(serialization_alias="_new_ip_address", default=None)
-    ipv6_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix",
-                                                default=None)
-    ipv6_prefix_bits: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix_bits: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix_bits",
-                                                     default=None)
-    network_view: str | None = None
-    name: str | None = None
-    comment: str | None = None
-    disabled: bool | None = None
-    match_option: str | None = 'DUID'
-    duid: str
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
-    valid_lifetime: PositiveInt | None = None
-    preferred_lifetime: PositiveInt | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    address_type: Optional[IPv6AddressTypeEnum] = Field(
+        None, description="IPv6 address type option"
+    )
+    parent: Optional[IPv6Network] = Field(None, description="Parent v6 block")
+    ip_address: IPv6Address = Field(..., description="IP address")
+    new_ip_address: Optional[IPv6Address] = Field(
+        None, serialization_alias="_new_ip_address", description="New IP address of fixed address"
+    )
+    ipv6_prefix: Optional[PositiveInt] = Field(
+        None, ge=0, le=128, description="IPv6 prefix option")
+    new_ipv6_prefix: Optional[PositiveInt] = Field(
+        None, serialization_alias="_new_ipv6_prefix", description="New IPv6 prefix"
+    )
+    ipv6_prefix_bits: Optional[PositiveInt] = Field(
+        None, ge=0, le=128, description="IPv6 prefix bits option"
+    )
+    new_ipv6_prefix_bits: Optional[PositiveInt] = Field(
+        None, serialization_alias="_new_ipv6_prefix_bits", description="New IPv6 prefix bits"
+    )
+    network_view: Optional[str] = Field(None, description="Network view")
+    name: Optional[str] = Field(None, description="Fixed address name")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    match_option: Optional[str] = Field('DUID', description="Match option")
+    duid: str = Field(..., description="DUID string")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
+    valid_lifetime: Optional[PositiveInt] = Field(
+        None, description="Valid lifetime option in seconds"
+    )
+    preferred_lifetime: Optional[PositiveInt] = Field(
+        None, description="Preferred lifetime option in seconds"
+    )
 
     def add_property(self, code: str, value: str):
         if (
