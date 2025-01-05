@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, ConfigDict, PositiveInt, field_serializer
 
 from .enums import ZoneFormatTypeEnum, ImportActionEnum
 
+
 class MemberDns(BaseModel):
     model_config = ConfigDict(extra="allow")
 
@@ -325,7 +326,7 @@ class ForwardZone(BaseModel):
             return None
         return ",".join(items)
 
-    @field_serializer( "forward_to", "forwarding_servers", when_used="always")
+    @field_serializer("forward_to", "forwarding_servers", when_used="always")
     def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
         return self.list_to_csv(values)
 
@@ -339,20 +340,43 @@ class ForwardZone(BaseModel):
 class StubZone(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    stubzone: str = Field(serialization_alias='header-stubzone', default='stubzone')
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    fqdn: str
-    view: str | None = None
-    zone_format: ZoneFormatTypeEnum
-    prefix: str | None = None
-    disabled: bool | None = None
-    comment: str | None = None
-    disable_forwarding: bool | None = None
-    stub_from: str | None = None  # list of [<fqdn>/<ip>,...]
-    stub_members: str | None = None  # list of Grid members
-    ns_group: str | None = None
-    ns_group_external: str | None = None
+    stubzone: str = Field(
+        "stubzone",
+        frozen=True,
+        serialization_alias='header-stubzone',
+        description='Header for stubzone object'
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action")
+    fqdn: str = Field(
+        ..., min_length=1, description="FQDN zone name"
+    )
+    view: Optional[str] = Field(None, description="View name")
+    zone_format: ZoneFormatTypeEnum = Field(..., description="Zone format")
+    prefix: Optional[PositiveInt] = Field(
+        None, description="RFC2317 classless reverse zone Prefix", ge=24, le=32
+    )
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disable_forwarding: Optional[bool] = Field(None, description="Disable forwarding flag")
+    stub_from: Optional[List[str]] = Field(
+        None, description="List of stub-from servers [FQDN/IP,...]"
+    )
+    stub_members: Optional[List[str]] = Field(
+        None, description="List of stub-members servers [FQDN,...]"
+    )
+    ns_group: Optional[str] = Field(None, description="Stub Members NS Group")
+    ns_group_external: Optional[str] = Field(None, description="Stub-from NS group name")
+
+    @staticmethod
+    def list_to_csv(items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
+
+    @field_serializer("stub_from", "stub_members", when_used="always")
+    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+        return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
