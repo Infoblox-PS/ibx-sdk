@@ -4,7 +4,6 @@ from pydantic import BaseModel, Field, ConfigDict, PositiveInt, field_serializer
 
 from .enums import ZoneFormatTypeEnum, ImportActionEnum
 
-
 class MemberDns(BaseModel):
     model_config = ConfigDict(extra="allow")
 
@@ -294,7 +293,11 @@ class ForwardZone(BaseModel):
     )
     import_action: Optional[ImportActionEnum] = Field(
         None, serialization_alias="import-action", description="CSV Custom import action")
-    fqdn: str = Field(..., description="FQDN zone name")
+    fqdn: str = Field(
+        ...,
+        min_length=1,
+        description="FQDN zone name"
+    )
     view: Optional[str] = Field(None, description="View name")
     zone_format: ZoneFormatTypeEnum = Field(..., description="Zone format")
     prefix: Optional[str] = Field(None, description="RFC2317 classless reverse zone Prefix")
@@ -315,6 +318,16 @@ class ForwardZone(BaseModel):
         True,
         description="Disable NS generation flag"
     )
+
+    @staticmethod
+    def list_to_csv(items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
+
+    @field_serializer( "forward_to", "forwarding_servers", when_used="always")
+    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+        return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
