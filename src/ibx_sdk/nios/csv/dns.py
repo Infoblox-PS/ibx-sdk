@@ -443,21 +443,38 @@ class NsGroup(BaseModel):
 class DelegatedZone(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    delegatedzone: str = Field(serialization_alias="header-delegatedzone", default="delegatedzone")
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    fqdn: str
-    view: str | None = None
-    zone_format: ZoneFormatTypeEnum
-    prefix: str | None = None
-    disabled: bool | None = None
-    comment: str | None = None
-    delegate_to: str | None = None  # list of <fqdn>/<ip>
-    delegated_ttl: PositiveInt | None = None
-    ns_group: str | None = None
-    new_prefix: str | None = Field(serialization_alias="_new_prefix", default=None)
-    ddns_protected: bool | None = None
-    ddns_principal: str | None = None
+    delegatedzone: str = Field(
+        "delegatedzone",
+        frozen=True,
+        serialization_alias="header-delegatedzone",
+        description="CSV Header for delegatedzone object"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action")
+    fqdn: str = Field(..., description="FQDN zone name")
+    view: Optional[str] = Field(None, description="View name")
+    zone_format: ZoneFormatTypeEnum = Field(..., description="Zone format")
+    prefix: Optional[PositiveInt] = Field(None, description="RFC2317 classless reverse zone Prefix")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    delegate_to: Optional[List[str]] = Field(
+        None, description="List of delegated servers [FQDN/IP,...]"
+    )
+    delegated_ttl: Optional[PositiveInt] = Field(None, description="Delegated TTL")
+    ns_group: Optional[str] = Field(None, description="Delegated Members NS Group")
+    new_prefix: Optional[PositiveInt] = Field(
+        None,
+        serialization_alias="_new_prefix",
+        description="New RFC2317 classless reverse zone Prefix"
+    )
+    ddns_protected: Optional[bool] = Field(None, description="DDNS protected flag")
+    ddns_principal: Optional[str] = Field(None, description="DDNS principal")
+
+    @field_serializer("delegate_to", when_used="always")
+    def serialize_delegate_to(self, items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
