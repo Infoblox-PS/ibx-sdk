@@ -635,7 +635,7 @@ class IPv4SharedNetwork(BaseModel):
 
 
 class IPv6SharedNetwork(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     ipv6sharednetwork: str = Field(
         "ipv6sharednetwork",
@@ -643,24 +643,32 @@ class IPv6SharedNetwork(BaseModel):
         serialization_alias="header-ipv6sharednetwork",
         description="Default header for IPv6 shared network"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    name: str
-    new_name: str | None = Field(serialization_alias="_new_name", default=None)
-    networks: str
-    network_view: str | None = None
-    comment: str | None = None
-    disabled: bool | None = None
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
-    valid_lifetime: PositiveInt | None = None
-    preferred_lifetime: PositiveInt | None = None
-    enable_ddns: bool | None = None
-    always_update_dns: bool | None = None
-    ddns_domain_name: str | None = None
-    ddns_ttl: PositiveInt | None = None
-    generate_hostname: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    name: str = Field(..., description="Shared network name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New shared network name")
+    networks: List[str] = Field(..., description="List of networks")
+    network_view: Optional[str] = Field(None, description="Network view")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name option")
+    valid_lifetime: Optional[PositiveInt] = Field(
+        None, description="Valid lifetime option in seconds"
+    )
+    preferred_lifetime: Optional[PositiveInt] = Field(
+        None, description="Preferred lifetime option in seconds"
+    )
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    ddns_domain_name: Optional[str] = Field(None, description="DDNS domain name option")
+    ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal"
+    )
 
     def add_property(self, code: str, value: str):
         if (
