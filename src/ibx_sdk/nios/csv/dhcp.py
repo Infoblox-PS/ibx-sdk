@@ -1025,25 +1025,28 @@ class MacFilterAddress(BaseModel):
         serialization_alias="header-macfilteraddress",
         description="Default header for macfilteraddress"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    parent: str
-    mac_address: str
-    new_mac_address: str | None = Field(serialization_alias="_new_mac_address", default=None)
-    is_registered_user: bool | None = None
-    registered_user: str | None = None
-    guest_first_name: str | None = None
-    guest_middle_name: str | None = None
-    guest_last_name: str | None = None
-    guest_email: str | None = None
-    guest_phone: str | None = None
-    guest_custom_field1: str | None = None
-    guest_custom_field2: str | None = None
-    guest_custom_field3: str | None = None
-    guest_custom_field4: str | None = None
-    never_expires: bool | None = None
-    expire_time: datetime | None = None
-    comment: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    parent: str = Field(..., description="Mac Filter name")
+    mac_address: str = Field(..., description="MAC address")
+    new_mac_address: Optional[str] = Field(
+        None, serialization_alias="_new_mac_address", description="New MAC address"
+    )
+    is_registered_user: Optional[bool] = Field(None, description="Is registered user flag")
+    registered_user: Optional[str] = Field(None, description="Registered user name")
+    guest_first_name: Optional[str] = Field(None, description="Guest first name")
+    guest_middle_name: Optional[str] = Field(None, description="Guest middle name")
+    guest_last_name: Optional[str] = Field(None, description="Guest last name")
+    guest_email: Optional[str] = Field(None, description="Guest email")
+    guest_phone: Optional[str] = Field(None, description="Guest phone")
+    guest_custom_field1: Optional[str] = Field(None, description="Guest custom field 1")
+    guest_custom_field2: Optional[str] = Field(None, description="Guest custom field 2")
+    guest_custom_field3: Optional[str] = Field(None, description="Guest custom field 3")
+    guest_custom_field4: Optional[str] = Field(None, description="Guest custom field 4")
+    never_expires: Optional[bool] = Field(None, description="Never expires flag")
+    expire_time: Optional[datetime] = Field(None, description="Expiration time option")
+    comment: Optional[str] = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
