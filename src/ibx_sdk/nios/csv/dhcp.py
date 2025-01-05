@@ -779,33 +779,49 @@ class IPv6DhcpRange(BaseModel):
         serialization_alias="header-ipv6dhcprange",
         description="Default header for IPv6 dhcprange"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    address_type: IPv6AddressTypeEnum | None = None
-    parent: str | None = None  # Required when address_type = PREFIX
-    start_address: IPv6Address
-    new_start_address: IPv6Address | None = Field(serialization_alias="_new_start_address",
-                                                  default=None)
-    end_address: IPv6Address
-    new_end_address: IPv6Address | None = Field(serialization_alias="_new_end_address",
-                                                default=None)
-    ipv6_start_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_start_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_start_prefix",
-                                                      default=None)
-    ipv6_end_prefix: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_end_prefix: PositiveInt | None = Field(serialization_alias="_new_ipv6_end_prefix",
-                                                    default=None)
-    ipv6_prefix_bits: PositiveInt | None = Field(ge=0, le=128, default=None)
-    new_ipv6_prefix_bits: PositiveInt | None = Field(serialization_alias="_new_ipv6_prefix_bits",
-                                                     default=None)
-    network_view: str | None = None
-    name: str | None = None
-    comment: str | None = None
-    disabled: bool | None = None
-    member: str | None = None
-    server_association_type: ServerAssociationTypeEnum | None = None
-    exclusion_ranges: str | None = None
-    recycle_leases: bool | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action")
+    address_type: Optional[IPv6AddressTypeEnum] = Field(
+        None, description="IPv6 address type option"
+    )
+    parent: Optional[str] = Field(None, description="Parent v6 block")
+    start_address: IPv6Address = Field(..., description="DHCP range start address")
+    new_start_address: Optional[IPv6Address] = Field(
+        None, serialization_alias="_new_start_address", description="New DHCP range start address"
+    )
+    end_address: IPv6Address = Field(..., description="DHCP range end address")
+    new_end_address: Optional[IPv6Address] = Field(
+        None, serialization_alias="_new_end_address", description="New DHCP range end address"
+    )
+    ipv6_start_prefix: Optional[PositiveInt] = Field(
+        None, ge=0, le=128, description="IPv6 start prefix option")
+    new_ipv6_start_prefix: Optional[PositiveInt] = Field(
+        None, serialization_alias="_new_ipv6_start_prefix", description="New IPv6 start prefix"
+    )
+    ipv6_end_prefix: Optional[PositiveInt] = Field(
+        None, ge=0, le=128, description="IPv6 end prefix option"
+    )
+    new_ipv6_end_prefix: Optional[PositiveInt] = Field(
+        None, serialization_alias="_new_ipv6_end_prefix", description="New IPv6 end prefix"
+    )
+    ipv6_prefix_bits: Optional[PositiveInt] = Field(
+        None, ge=0, le=128, description="IPv6 prefix bits option"
+    )
+    new_ipv6_prefix_bits: Optional[PositiveInt] = Field(
+        None, serialization_alias="_new_ipv6_prefix_bits", description="New IPv6 prefix bits"
+    )
+    network_view: Optional[str] = Field(None, description="Network view")
+    name: Optional[str] = Field(None, description="DHCP range name")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    member: Optional[str] = Field(None, description="DHCP member name")
+    server_association_type: Optional[ServerAssociationTypeEnum] = Field(
+        None, description="DHCP server association type MEMBER, or NONE"
+    )
+    exclusion_ranges: Optional[List[str]] = Field(
+        None, description="List of exclusion ranges in 'start-end/comment' format"
+    )
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
 
     def add_property(self, code: str, value: str):
         if (
