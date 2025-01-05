@@ -1064,18 +1064,20 @@ class OptionFilter(BaseModel):
         serialization_alias="header-optionfilter",
         description="Default header for optionfilter"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    name: str
-    new_name: str | None = Field(serialization_alias="_new_name", default=None)
-    comment: str | None = None
-    expression: str | None = None
-    boot_file: str | None = None
-    boot_server: str | None = None
-    lease_time: int | None = None
-    pxe_lease_time: int | None = None
-    next_server: str | None = None
-    option_space: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    name: str = Field(..., description="Option filter name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New name for Option filter")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    expression: Optional[str] = Field(None, description="Expression")
+    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
+    boot_server: Optional[str] = Field(None, description="Legacy bootserver option")
+    lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
+    pxe_lease_time: Optional[int] = Field(None, description="DHCP lease time option in seconds")
+    next_server: Optional[str] = Field(None, description="Legacy next-server option")
+    option_space: Optional[str] = Field(None, description="Option space")
 
     def add_property(self, code: str, value: str):
         if code.startswith("OPTION-") or code.startswith("EA-"):
