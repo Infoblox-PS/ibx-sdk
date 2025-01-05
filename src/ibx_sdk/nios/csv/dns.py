@@ -388,17 +388,50 @@ class StubZone(BaseModel):
 class NsGroup(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    nsgroup: str = Field(serialization_alias="header-nsgroup", default="nsgroup")
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    group_name: str
-    new_group_name: str | None = Field(serialization_alias="_new_group_name", default=None)
-    grid_primaries: str | None = None  # list of <fqdn>/<stealth_flag>
-    external_primaries: str | None = None  # list of <fqdn>/<ip>/<use_2x_tsig>/<use_tsig>/<name>/<key>
-    external_secondaries: str | None = None  # list of name/ip/use_2x_tsig/use_tsig/name/key
-    grid_secondaries: str | None = None  # list of fqdn/stealth/lead/grid_sync
-    is_grid_default: bool | None = None
-    comment: str | None = None
+    nsgroup: str = Field(
+        "nsgroup",
+        frozen=True,
+        serialization_alias="header-nsgroup",
+        description="CSV header for nsgroup object"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action")
+    group_name: str = Field(..., description="NS group name")
+    new_group_name: Optional[str] = Field(
+        None, serialization_alias="_new_group_name", description="New NS group name")
+    grid_primaries: Optional[List[str]] = Field(
+        None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
+    )
+    external_primaries: Optional[List[str]] = Field(
+        None,
+        description="External primary servers [FQDN/IP/STEALTH/USE_2X_TSIG/USE_TSIG/NAME/KEY,...]"
+    )
+    external_secondaries: Optional[List[str]] = Field(
+        None,
+        description="External secondary servers [FQDN/IP/STEALTH/USE_2X_TSIG/USE_TSIG/NAME/KEY,...]"
+    )
+    grid_secondaries: Optional[List[str]] = Field(
+        None,
+        description="Grid secondary servers [FQDN/IS_STEALTH/LEAD/GRID_SYNC,...] "
+    )
+    is_grid_default: Optional[bool] = Field(None, description="Is grid default flag")
+    comment: Optional[str] = Field(None, description="Optional comment")
+
+    @staticmethod
+    def list_to_csv(items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
+
+    @field_serializer(
+        'grid_primaries',
+        'external_primaries',
+        'external_secondaries',
+        'grid_secondaries',
+        when_used="always"
+    )
+    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+        return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-"):
