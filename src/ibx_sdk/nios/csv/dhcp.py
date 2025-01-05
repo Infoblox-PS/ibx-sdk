@@ -584,34 +584,44 @@ class IPv4SharedNetwork(BaseModel):
         serialization_alias="header-sharednetwork",
         description="Default header for sharednetwork"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    name: str
-    new_name: str | None = Field(serialization_alias="_new_name", default=None)
-    networks: str
-    network_view: str | None = None
-    is_authoritative: bool | None = None
-    option_logic_filters: str | None = None
-    boot_file: str | None = None
-    boot_server: str | None = None
-    comment: str | None = None
-    generate_hostname: bool | None = None
-    always_update_dns: bool | None = None
-    update_static_leases: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
-    ddns_ttl: PositiveInt | None = None
-    enable_option81: bool | None = None
-    deny_bootp: bool | None = None
-    disabled: bool | None = None
-    enable_ddns: bool | None = None
-    ignore_client_requested_options: bool | None = None
-    next_server: str | None = None
-    lease_time: PositiveInt | None = None
-    enable_pxe_lease_time: bool | None = None
-    pxe_lease_time: PositiveInt | None = None
-    routers: str | None = None
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    name: str = Field(..., description="Shared network name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New shared network name")
+    networks: str = Field(..., description="List of networks")
+    network_view: Optional[str] = Field(None, description="Network view")
+    is_authoritative: Optional[bool] = Field(None, description="Is authoritative flag")
+    option_logic_filters: Optional[List[str]] = Field(
+        None, description="List of option logic filters"
+    )
+    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
+    boot_server: Optional[str] = Field(None, description="Legacy bootserver option")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    update_static_leases: Optional[bool] = Field(None, description="Update static leases flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal flag"
+    )
+    ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    enable_option81: Optional[bool] = Field(None, description="Enable option81")
+    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    ignore_client_requested_options: Optional[bool] = Field(
+        None, description="Ignore client requested options"
+    )
+    next_server: Optional[str] = Field(None, description="Legacy next-server option")
+    lease_time: Optional[PositiveInt] = Field(None, description="DHCP lease time option in seconds")
+    enable_pxe_lease_time: Optional[bool] = Field(None, description="Enable PXE lease time flag")
+    pxe_lease_time: Optional[PositiveInt] = Field(
+        None, description="DHCP lease time option in seconds"
+    )
+    routers: Optional[str] = Field(None, description="DHCP routers option")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
 
     def add_property(self, code: str, value: str):
         if (
