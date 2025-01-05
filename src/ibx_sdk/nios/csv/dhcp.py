@@ -468,9 +468,7 @@ class IPv6NetworkContainer(BaseModel):
         None, serialization_alias="import-action", description="CSV custom import action"
     )
     address: IPv6Address = Field(..., description="IP Address of the network")
-    cidr: Optional[PositiveInt] = Field(
-        64, ge=0, le=128, description="CIDR mask address of the network"
-    )
+    cidr: PositiveInt = Field(..., ge=0, le=128, description="CIDR mask address of the network")
     network_view: Optional[str] = Field(None, description="Network view")
     comment: Optional[str] = Field(None, description="Optional comment")
     zone_associations: Optional[str] = Field(None, description="List of DNS zone associations")
@@ -522,9 +520,10 @@ class IPv6Network(BaseModel):
         serialization_alias="header-ipv6network",
         description="Default header for IPv6 network"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    address: IPv6Address
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    address: IPv6Address = Field(..., description="IPv Address of the network")
     cidr: PositiveInt = Field(ge=0, le=128, default=64)
     comment: str | None = None
     network_view: str | None = None

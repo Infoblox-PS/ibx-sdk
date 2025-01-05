@@ -7,10 +7,9 @@ from src.ibx_sdk.nios.csv.dhcp import IPv6NetworkContainer
 
 
 def test_ipv6networkcontainer_default_values():
-    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"))
+    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"), cidr=48)
     assert container.import_action is None
     assert container.address == IPv6Address("2001:db8::1")
-    assert container.cidr == 64
     assert container.network_view is None
     assert container.comment is None
     assert container.zone_associations is None
@@ -64,14 +63,14 @@ def test_ipv6networkcontainer_invalid_cidr():
 
 
 def test_ipv6networkcontainer_add_property_valid():
-    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"))
+    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"), cidr=64)
     container.add_property("OPTION-Test", "Value")
     assert hasattr(container, "OPTION-Test")
     assert getattr(container, "OPTION-Test") == "Value"
 
 
 def test_ipv6networkcontainer_add_property_invalid():
-    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"))
+    container = IPv6NetworkContainer(address=IPv6Address("2001:db8::1"), cidr=64)
     with pytest.raises(Exception, match="Invalid field name: INVALID-Test"):
         container.add_property("INVALID-Test", "Value")
 
@@ -79,6 +78,7 @@ def test_ipv6networkcontainer_add_property_invalid():
 def test_ipv6networkcontainer_discovery_exclusion_range():
     container = IPv6NetworkContainer(
         address=IPv6Address("2001:db8::1"),
+        cidr=64,
         discovery_exclusion_range=[IPv4Address("192.168.0.1"), IPv4Address("192.168.0.2")]
     )
     assert container.discovery_exclusion_range == [
