@@ -3,7 +3,7 @@ from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address
 from typing import List, Optional
 
-from pydantic import BaseModel, Field, ConfigDict, model_validator, PositiveInt
+from pydantic import BaseModel, Field, ConfigDict, model_validator, PositiveInt, field_serializer
 from typing_extensions import Self
 
 from .enums import (
@@ -742,7 +742,7 @@ class IPv4DhcpRange(BaseModel):
         None, description="Update DNS on lease renewal"
     )
     always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
-    exclusion_ranges: Optional[str] = Field(
+    exclusion_ranges: Optional[List[str]] = Field(
         None, description="List of exclusion ranges in 'start-end/comment' format"
     )
     member: Optional[str] = Field(None, description="DHCP member name")
@@ -758,6 +758,12 @@ class IPv4DhcpRange(BaseModel):
     option_logic_filters: Optional[List[str]] = Field(
         None, description="List of option logic filters"
     )
+
+    @field_serializer("exclusion_ranges", when_used="always")
+    def serialize_exclusion_ranges(self, exclusion_ranges: str):
+        if self.exclusion_ranges is None:
+            return None
+        return ",".join(self.exclusion_ranges)
 
     def add_property(self, code: str, value: str):
         if (
