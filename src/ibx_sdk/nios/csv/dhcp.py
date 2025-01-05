@@ -969,7 +969,7 @@ class DhcpFingerprint(BaseModel):
     new_name: Optional[str] = Field(
         None, serialization_alias="_new_name", description="New name for DHCP Fingerprint"
     )
-    type: Optional[FingerprintTypeEnum]= Field(
+    type: Optional[FingerprintTypeEnum] = Field(
         FingerprintTypeEnum.CUSTOM, description="DHCP Fingerprint type"
     )
     comment: Optional[str] = Field(None, description="Optional comment")
@@ -995,14 +995,19 @@ class DhcpMacFilter(BaseModel):
         serialization_alias="header-dhcpmacfilter",
         description="Default header for dhcpmacfilter"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    name: str
-    new_name: str | None = Field(serialization_alias="_new_name", default=None)
-    never_expires: bool | None = None
-    expiration_interval: PositiveInt | None = None
-    enforce_expiration_time: bool | None = None
-    comment: str | None = None
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action")
+    name: str = Field(..., description="DHCP Mac filter name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New name for DHCP Mac filter")
+    never_expires: Optional[bool] = Field(None, description="Never expires flag")
+    expiration_interval: Optional[PositiveInt] = Field(
+        None, description="Expiration interval option"
+    )
+    enforce_expiration_time: Optional[bool] = Field(
+        None, description="Enforce expiration time flag"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
