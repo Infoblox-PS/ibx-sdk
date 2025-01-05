@@ -962,17 +962,22 @@ class DhcpFingerprint(BaseModel):
         serialization_alias="header-dhcpfingerprint",
         description="Default header for DHCP fingerprint"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    name: str
-    new_name: str | None = Field(serialization_alias="_new_name", default=None)
-    type: FingerprintTypeEnum | None = Field(default=FingerprintTypeEnum.CUSTOM)
-    comment: str | None = None
-    disable: bool | None = None
-    vendor_id: str | None = None
-    option_sequence: str | None = None  # Example: "['1,3,6,7,12,15,28,40,41,42,225,226,227,22/ipv4']"
-    device_class: str | None = None
-    protocol: ProtocolTypeEnum
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV custom import action"
+    )
+    name: str = Field(..., description="DHCP Fingerprint name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New name for DHCP Fingerprint"
+    )
+    type: Optional[FingerprintTypeEnum]= Field(
+        FingerprintTypeEnum.CUSTOM, description="DHCP Fingerprint type"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disable: Optional[bool] = Field(None, description="Disabled flag")
+    vendor_id: Optional[str] = Field(None, description="Vendor ID string")
+    option_sequence: Optional[str] = Field(None, description="Option sequence ['1,2,3/ipv4']")
+    device_class: Optional[str] = Field(None, description="DHCP Device class used for filtering")
+    protocol: ProtocolTypeEnum = Field(..., description="protocol can be IPV4 or IPV6")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-"):
