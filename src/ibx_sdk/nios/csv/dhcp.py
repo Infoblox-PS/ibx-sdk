@@ -524,30 +524,44 @@ class IPv6Network(BaseModel):
         None, serialization_alias="import-action", description="CSV custom import action"
     )
     address: IPv6Address = Field(..., description="IPv Address of the network")
-    cidr: PositiveInt = Field(ge=0, le=128, default=64)
-    comment: str | None = None
-    network_view: str | None = None
-    enable_discovery: bool | None = False
-    discovery_member: str | None = None
-    discovery_exclusion_range: List[IPv4Address] | None = None
-    disabled: bool | None = None
-    auto_create_reversezone: bool | None = False
-    zone_associations: str | None = None
-    dhcp_members: str | None = None
-    domain_name: str | None = None
-    domain_name_servers: str | None = None
-    valid_lifetime: PositiveInt | None = None
-    preferred_lifetime: PositiveInt | None = None
-    recycle_leases: bool | None = None
-    enable_ddns: bool | None = None
-    always_update_dns: bool | None = None
-    ddns_domainname: str | None = None
-    ddns_ttl: PositiveInt | None = None
-    generate_hostname: bool | None = None
-    update_dns_on_lease_renewal: bool | None = None
-    vlans: str | None = None  # Example: default/1/4094/1
-    rir_organization: str | None = None
-    rir_registration_status: str | None = None
+    cidr: PositiveInt = Field(..., ge=0, le=128, description="CIDR mask address of the network")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    network_view: Optional[str] = Field(None, description="Network view")
+    enable_discovery: Optional[bool] = Field(None, description="Enable discovery flag")
+    discovery_member: Optional[str] = Field(
+        None, description="Discovery member name if discovery is enabled"
+    )
+    discovery_exclusion_range: Optional[List[IPv6Address]] = Field(
+        None, description="List of IP Ranges to be excluded from discovery"
+    )
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    auto_create_reversezone: Optional[bool] = Field(
+        None, description="Auto create reverse zone flag"
+    )
+    zone_associations: Optional[List[str]] = Field(
+        None, description="List of DNS zone associations"
+    )
+    dhcp_members: Optional[str] = Field(None, description="DHCP members")
+    domain_name: Optional[str] = Field(None, description="Domain name option")
+    domain_name_servers: Optional[str] = Field(None, description="Domain name servers option")
+    valid_lifetime: Optional[PositiveInt] = Field(
+        None, description="Valid lifetime option in seconds"
+    )
+    preferred_lifetime: Optional[PositiveInt] = Field(
+        None, description="Preferred lifetime option in seconds"
+    )
+    recycle_leases: Optional[bool] = Field(None, description="Recycle leases flag")
+    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
+    always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
+    ddns_domainname: Optional[str] = Field(None, description="Domain name option")
+    ddns_ttl: Optional[PositiveInt] = Field(None, description="DDNS TTL option in seconds")
+    generate_hostname: Optional[bool] = Field(None, description="Generate hostname flag")
+    update_dns_on_lease_renewal: Optional[bool] = Field(
+        None, description="Update DNS on lease renewal"
+    )
+    vlans: Optional[str] = Field(None, description="VLAN assignments - Example: default/1/4094/1")
+    rir_organization: Optional[str] = Field(None, description="RIR Organization name")
+    rir_registration_status: Optional[str] = Field(None, description="RIR Registration status")
 
     def add_property(self, code: str, value: str):
         if (
