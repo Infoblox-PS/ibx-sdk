@@ -178,42 +178,103 @@ class MemberDns(BaseModel):
     def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
         return self.list_to_csv(values)
 
+
 class AuthZone(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    authzone: str = Field(serialization_alias="header-authzone", default="authzone")
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    fqdn: str
-    zone_format: ZoneFormatTypeEnum
-    view: str | None = None
-    prefix: str | None = None
-    new_prefix: str | None = Field(serialization_alias="_new_prefix", default=None)
-    is_multimaster: bool | None = None
-    grid_primaries: str | None = None  # list of FQDN/IS_STEALTH flag
-    external_primaries: str | None = None  # Example: "ext1.test.com/1.1.1.1/FALSE"
-    grid_secondaries: str | None = None  # Data must be in the following format: "hostname/stealth/lead/grid_ replicate"
-    external_secondaries: str | None = None
-    ns_group: str | None = None
-    comment: str | None = None
-    disabled: bool | None = None
-    create_underscore_zones: bool | None = None
-    allow_active_dir: str | None = None  # List of allowed IPs of DCs
-    soa_refresh: PositiveInt | None = None
-    soa_retry: PositiveInt | None = None
-    soa_expire: PositiveInt | None = None
-    soa_default_ttl: PositiveInt | None = None
-    soa_negative_ttl: PositiveInt | None = None
-    soa_mnames: str | None = None
-    soa_email: str | None = None
-    soa_serial_number: PositiveInt | None = None
-    disable_forwarding: bool | None = None  # Do not use forwarders
-    allow_update_forwarding: bool | None = None
-    update_forwarding: str | None = None  # ACL
-    allow_transfer: str | None = None  # ACL
-    allow_update: str | None = None  # ACL
-    allow_query: str | None = None  # ACL
-    notify_delay: PositiveInt | None = Field(ge=5, le=86400)
+    authzone: str = Field(
+        "authzone",
+        frozen=True,
+        serialization_alias="header-authzone",
+        description="CSV header for authzone object"
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action")
+    fqdn: str = Field(..., description="FQDN zone name")
+    zone_format: ZoneFormatTypeEnum = Field(..., description="Zone format")
+    view: Optional[str] = Field(None, description="View name")
+    prefix: Optional[str] = Field(None, description="RFC2317 classless reverse zone Prefix")
+    new_prefix: Optional[str] = Field(
+        None, serialization_alias="_new_prefix",
+        description="New RFC2317 classless reverse zone Prefix"
+    )
+    is_multimaster: Optional[bool] = Field(None, description="Is multimaster flag")
+    grid_primaries: Optional[List[str]] = Field(
+        None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
+    )
+    external_primaries: Optional[List[str]] = Field(
+        None,
+        description="External primary servers [FQDN/IP/USE_2X_TSIG/USE_TSIG/NAME/KEY/ALGO,...]"
+    )
+    grid_secondaries: Optional[List[str]] = Field(
+        None,
+        description="Grid secondary servers [FQDN/STEALTH/LEAD/GRID_SYNC,...] "
+    )
+    external_secondaries: Optional[List[str]] = Field(
+        None,
+        description="External secondary servers [FQDN/IP/USE_2X_TSIG/USE_TSIG/NAME/KEY/ALGO,...]"
+    )
+    ns_group: Optional[str] = Field(None, description="NS group name")
+    comment: Optional[str] = Field(None, description="Optional comment")
+    disabled: Optional[bool] = Field(None, description="Disabled flag")
+    create_underscore_zones: Optional[bool] = Field(
+        None, description="Create underscore zones flag"
+    )
+    allow_active_dir: Optional[List[str]] = Field(
+        None, description="List of allowed Active Directory servers"
+    )
+    soa_refresh: Optional[PositiveInt] = Field(None, description="SOA refresh value")
+    soa_retry: Optional[PositiveInt] = Field(None, description="SOA retry value")
+    soa_expire: Optional[PositiveInt] = Field(None, description="SOA expire value")
+    soa_default_ttl: Optional[PositiveInt] = Field(None, description="SOA default TTL value")
+    soa_negative_ttl: Optional[PositiveInt] = Field(None, description="SOA negative TTL value")
+    soa_mnames: Optional[List[str]] = Field(
+        None,
+        description="List of SOA mnames [ZONE/FQDN,...]"
+    )
+    soa_email: Optional[str] = Field(None, description="SOA email address")
+    soa_serial_number: Optional[PositiveInt] = Field(None, description="SOA serial number")
+    disable_forwarding: Optional[bool] = Field(
+        None, description="Disable forwarding or empty forwarders flag"
+    )
+    allow_update_forwarding: Optional[bool] = Field(
+        None, description="Allow update forwarding flag"
+    )
+    update_forwarding: Optional[List[str]] = Field(
+        None, description="List of update forwarding servers [ITEM/PERMISSION,...]"
+    )
+    allow_transfer: Optional[List[str]] = Field(
+        None, description="List of allowed transfer servers [ITEM/PERMISSION,...]"
+    )
+    allow_update: Optional[List[str]] = Field(
+        None, description="List of allowed update servers [ITEM/PERMISSION,...]"
+    )
+    allow_query: Optional[List[str]] = Field(
+        None, description="List of allowed query servers [ITEM/PERMISSION,...]"
+    )
+    notify_delay: Optional[PositiveInt] = Field(
+        None, ge=5, le=86400, description="Notify delay in seconds")
+
+    @staticmethod
+    def list_to_csv(items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
+
+    @field_serializer(
+        'grid_primaries',
+        'external_primaries',
+        'grid_secondaries',
+        'external_secondaries',
+        'allow_active_dir',
+        'soa_mnames',
+        'update_forwarding',
+        'allow_transfer',
+        'allow_update',
+        'allow_query',
+    )
+    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+        return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
