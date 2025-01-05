@@ -486,14 +486,28 @@ class DelegatedZone(BaseModel):
 class DelegationNsGroup(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    delegationnsgroup: str = Field(serialization_alias="header-delegationnsgroup",
-                                   default="delegationnsgroup")
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    group_name: str
-    new_group_name: str | None = Field(serialization_alias="_new_group_name", default=None)
-    delegate_to: str  # list of <fqdn>/<ip> servers
-    comment: str | None = None
+    delegationnsgroup: str = Field(
+        "delegationnsgroup",
+        frozen=True,
+        serialization_alias="header-delegationnsgroup",
+        description="Header for delegationnsgroup object")
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action"
+    )
+    group_name: str = Field(..., description="NS group name")
+    new_group_name: Optional[str] = Field(
+        None, serialization_alias="_new_group_name", description="New NS group name"
+    )
+    delegate_to: Optional[List[str]] = Field(
+        None, description="List of delegated servers [FQDN/IP,...]"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
+
+    @field_serializer("delegate_to", when_used="always")
+    def serialize_delegate_to(self, items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
 
 
 class ForwardingMemberNsGroup(BaseModel):
