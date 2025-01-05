@@ -742,7 +742,7 @@ class IPv4DhcpRange(BaseModel):
         None, description="Update DNS on lease renewal"
     )
     always_update_dns: Optional[bool] = Field(None, description="Always update DNS flag")
-    exclusion_ranges: Optional[List[str]] = Field(
+    exclusion_ranges: Optional[str] = Field(
         None, description="List of exclusion ranges in 'start-end/comment' format"
     )
     member: Optional[str] = Field(None, description="DHCP member name")
