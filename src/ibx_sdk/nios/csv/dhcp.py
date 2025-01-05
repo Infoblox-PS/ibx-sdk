@@ -590,7 +590,7 @@ class IPv4SharedNetwork(BaseModel):
     name: str = Field(..., description="Shared network name")
     new_name: Optional[str] = Field(
         None, serialization_alias="_new_name", description="New shared network name")
-    networks: str = Field(..., description="List of networks")
+    networks: List[str] = Field(..., description="List of networks")
     network_view: Optional[str] = Field(None, description="Network view")
     is_authoritative: Optional[bool] = Field(None, description="Is authoritative flag")
     option_logic_filters: Optional[List[str]] = Field(
