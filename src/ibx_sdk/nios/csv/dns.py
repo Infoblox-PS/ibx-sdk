@@ -579,14 +579,28 @@ class StubMemberNsGroup(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     stubmembernsgroup: str = Field(
-        serialization_alias="header-stubmembernsgroup", default="stubmembernsgroup"
+        "stubmembernsgroup",
+        frozen=True,
+        serialization_alias="header-stubmembernsgroup",
+        description="CSV Header for stubmembernsgroup objects"
     )
-    import_action: ImportActionEnum | None = Field(serialization_alias="import-action",
-                                                   default=None)
-    group_name: str
-    new_group_name: str | None = Field(serialization_alias="_new_group_name", default=None)
-    comment: str | None = None
-    stub_members: str  # list of grid members
+    import_action: Optional[ImportActionEnum] = Field(
+        None, serialization_alias="import-action", description="CSV Custom import action"
+    )
+    group_name: str = Field(..., description="NS group name", min_length=1)
+    new_group_name: Optional[str] = Field(
+        None, serialization_alias="_new_group_name", description="New NS group name"
+    )
+    comment: Optional[str] = Field(None, description="Optional comment")
+    stub_members: Optional[List[str]] = Field(
+        None, description="List of stub-members servers [FQDN,...]"
+    )
+
+    @field_serializer("stub_members", when_used="always")
+    def serialize_stub_members(self, items: Optional[List[str]]) -> str | None:
+        if not items:
+            return None
+        return ",".join(items)
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-"):
