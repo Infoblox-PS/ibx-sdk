@@ -179,6 +179,86 @@ class MemberDns(BaseModel):
         return self.list_to_csv(values)
 
 
+class DnsView(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    view: str = Field(
+        'view',
+        frozen=True,
+        serialization_alias="header-view",
+        description="CSV header for view object"
+    )
+    name: str = Field(..., description="View name")
+    new_name: Optional[str] = Field(
+        None, serialization_alias="_new_name", description="New view name"
+    )
+    comment: Optional[str] = Field(None, description="Optional view comment field")
+    network_view: Optional[str] = Field(None, description="Network view name")
+    disable: Optional[bool] = Field(None, description="Disable view flag")
+    recursion: Optional[bool] = Field(None, description="Enable recursion flag")
+    root_name_server_type: Optional[str] = Field(
+        None, description="Root name server type, i.e. Custom"
+    )
+    match_clients: Optional[List[str]] = Field(
+        None, description="List of clients to match [IP|NET|ACL,...]"
+    )
+    match_destinations: Optional[List[str]] = Field(
+        None, description="List of destinations to match [IP|NET|ACL,...]"
+    )
+    custom_root_name_servers: Optional[List[str]] = Field(
+        None, description="List of custom root name servers [FQDN/IP,...]"
+    )
+    lame_ttl: Optional[PositiveInt] = Field(None, description="Lame TTL value")
+    nxdomain_redirect: Optional[bool] = Field(None, description="Enable NXDOMAIN redirect flag")
+    nxdomain_redirect_addresses: Optional[List[str]] = Field(
+        None, description="List of NXDOMAIN redirect addresses [IP,...]"
+    )
+    nxdomain_redirect_ttl: Optional[PositiveInt] = Field(
+        None, description="NXDOMAIN redirect TTL value"
+    )
+    nxdomain_log_query: Optional[bool] = Field(None, description="Enable NXDOMAIN log query flag")
+    nxdomain_rulesets: Optional[List[str]] = Field(
+        None, description="List of NXDOMAIN rulesets [FQDNs,...]"
+    )
+    enable_blacklist: Optional[bool] = Field(None, description="Enable blacklist flag")
+    blacklist_redirect_addresses: Optional[List[str]] = Field(
+        None, description="List of blacklist redirect addresses [IP,...]"
+    )
+    blacklist_action: Optional[str] = Field(None, description="Blacklist action, i.e. Redirect")
+    blacklist_redirect_ttl: Optional[PositiveInt] = Field(
+        None, description="Blacklist redirect TTL value"
+    )
+    blacklist_log_query: Optional[bool] = Field(None, description="Enable blacklist log query flag")
+    blacklist_rulesets: Optional[List[str]] = Field(
+        None, description="List of blacklist rulesets [FQDNs,...]"
+    )
+    enable_dns64: Optional[bool] = Field(None, description="Enable DNS64 flag")
+    dns64_groups: Optional[List[str]] = Field(None, description="List of DNS64 groups [GROUP,...]")
+    forwarders_only: Optional[bool] = Field(None, description="Forwarders only flag")
+    forwarders: Optional[List[str]] = Field(None, description="List of forwarders [IP,...]")
+    filter_aaaa: Optional[str] = Field(None, description="Enable filter AAAA flag, i.e. Yes or No")
+    filter_aaaa_list: Optional[List[str]] = Field(
+        None, description="List of filter AAAA addresses [IP/Deny|Allow,...]"
+    )
+    max_cache_ttl: Optional[PositiveInt] = Field(None, description="Max cache TTL in seconds")
+    max_ncache_ttl: Optional[PositiveInt] = Field(None, description="Max ncache TTL in seconds")
+    rpz_drop_ip_rule_enabled: Optional[bool] = Field(
+        None, description="Enable RPZ drop IP rule flag"
+    )
+    rpz_drop_ip_rule_min_prefix_length_ipv4: Optional[PositiveInt] = Field(
+        None, description="RPZ drop IP rule min prefix length IPv4"
+    )
+    rpz_drop_ip_rule_min_prefix_length_ipv6: Optional[PositiveInt] = Field(
+        None, description="RPZ drop IP rule min prefix length IPv6"
+    )
+
+    def add_property(self, prop: str, value: str):
+        if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
+            self.__setattr__(prop, value)
+        else:
+            raise Exception(f"Invalid field name: {prop}")
+
+
 class AuthZone(BaseModel):
     model_config = ConfigDict(extra="allow")
 
@@ -519,7 +599,7 @@ class ForwardingMemberNsGroup(BaseModel):
         serialization_alias="header-forwardingmembernsgroup",
         description="Header for forwardingmembernsgroup object"
     )
-    import_action: Optional[ImportActionEnum]= Field(
+    import_action: Optional[ImportActionEnum] = Field(
         None, serialization_alias="import-action", description="CSV Custom import action")
     group_name: str = Field(..., description="NS group name")
     new_group_name: Optional[str] = Field(
