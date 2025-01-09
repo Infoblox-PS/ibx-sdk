@@ -4,6 +4,15 @@ from pydantic import BaseModel, Field, ConfigDict, PositiveInt, field_serializer
 
 from .enums import ZoneFormatTypeEnum, ImportActionEnum
 
+def get_zone_format(zone_name: str) -> ZoneFormatTypeEnum:
+    if "in-addr.arpa" in zone_name.lower():
+        zone_format = ZoneFormatTypeEnum.IPV4
+    elif "ip6.arpa" in zone_name.lower():
+        zone_format = ZoneFormatTypeEnum.IPV6
+    else:
+        zone_format = ZoneFormatTypeEnum.FORWARD
+    return zone_format
+
 
 class MemberDns(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -362,6 +371,9 @@ class AuthZone(BaseModel):
         else:
             raise Exception(f"Invalid field name: {prop}")
 
+    def get_zone_format(self):
+        return get_zone_format(zone_name=self.fqdn)
+
 
 class ForwardZone(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -416,6 +428,9 @@ class ForwardZone(BaseModel):
         else:
             raise Exception(f"Invalid field name: {prop}")
 
+    def get_zone_format(self):
+        return get_zone_format(zone_name=self.fqdn)
+
 
 class StubZone(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -463,6 +478,9 @@ class StubZone(BaseModel):
             self.__setattr__(prop, value)
         else:
             raise Exception(f"Invalid field name: {prop}")
+
+    def get_zone_format(self):
+        return get_zone_format(zone_name=self.fqdn)
 
 
 class NsGroup(BaseModel):
@@ -561,6 +579,9 @@ class DelegatedZone(BaseModel):
             self.__setattr__(prop, value)
         else:
             raise Exception(f"Invalid field name: {prop}")
+
+    def get_zone_format(self):
+        return get_zone_format(zone_name=self.fqdn)
 
 
 class DelegationNsGroup(BaseModel):
