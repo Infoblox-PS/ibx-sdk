@@ -269,6 +269,64 @@ class DnsView(BaseModel):
 
 
 class AuthZone(BaseModel):
+    """
+    Represents an AuthZone with configurations and settings for managing DNS zones.
+
+    This class models an AuthZone, providing attributes for various DNS zone
+    settings like FQDN, zone format, views, primary and secondary servers,
+    SOA configuration, query, update, transfer permissions, and more. It also
+    allows for handling custom properties and field serialization. Suitable
+    for managing detailed DNS zone data and related configurations.
+
+    Attributes:
+        model_config (ConfigDict): Model configuration allowing extra fields.
+        authzone (str): CSV header for authzone object (immutable).
+        import_action (Optional[ImportActionEnum]): CSV Custom import action.
+        fqdn (str): Fully Qualified Domain Name of the zone.
+        zone_format (ZoneFormatTypeEnum): Zone format enumeration.
+        view (Optional[str]): View name associated with the zone.
+        prefix (Optional[str]): RFC2317 classless reverse zone Prefix.
+        new_prefix (Optional[str]): New RFC2317 classless reverse zone Prefix.
+        is_multimaster (Optional[bool]): Flag indicating multimaster setup.
+        grid_primaries (Optional[List[str]]): List of grid primary servers.
+        external_primaries (Optional[List[str]]): List of external primary servers.
+        grid_secondaries (Optional[List[str]]): List of grid secondary servers.
+        external_secondaries (Optional[List[str]]): List of external secondary servers.
+        ns_group (Optional[str]): Name of the NS group.
+        comment (Optional[str]): Optional comment on the DNS zone.
+        disabled (Optional[bool]): Flag indicating whether the zone is disabled.
+        create_underscore_zones (Optional[bool]): Flag to create underscore zones.
+        allow_active_dir (Optional[List[str]]): List of allowed Active Directory servers.
+        soa_refresh (Optional[PositiveInt]): SOA refresh value in seconds.
+        soa_retry (Optional[PositiveInt]): SOA retry value in seconds.
+        soa_expire (Optional[PositiveInt]): SOA expire value in seconds.
+        soa_default_ttl (Optional[PositiveInt]): Default TTL value for SOA.
+        soa_negative_ttl (Optional[PositiveInt]): Negative TTL value for SOA.
+        soa_mnames (Optional[List[str]]): List of SOA master names.
+        soa_email (Optional[str]): Email address for the SOA records.
+        soa_serial_number (Optional[PositiveInt]): Serial number of the SOA.
+        disable_forwarding (Optional[bool]): Flag to disable forwarding.
+        allow_update_forwarding (Optional[bool]): Flag to permit update forwarding.
+        update_forwarding (Optional[List[str]]): Update forwarding server list.
+        allow_transfer (Optional[List[str]]): List of allowed transfer servers.
+        allow_update (Optional[List[str]]): List of allowed update servers.
+        allow_query (Optional[List[str]]): List of allowed query servers.
+        notify_delay (Optional[PositiveInt]): Notify delay in seconds (5-86400).
+
+    Methods:
+        list_to_csv(items: Optional[List[str]]) -> str | None:
+            Converts a list of strings to a CSV-formatted string.
+            Returns None if the list is empty or None.
+
+        serialize_list_fields(values: Optional[List[str]]) -> Optional[str]:
+            Serializes specific list fields to a CSV format using list_to_csv.
+            Applicable on attributes such as `grid_primaries`, `external_primaries`,
+            `grid_secondaries`, and others explicitly defined in the decorator.
+
+        add_property(prop: str, value: str):
+            Adds a custom property to the instance if the property name
+            starts with "EA-" or "ADMGRP-". Raises an exception for invalid names.
+    """
     model_config = ConfigDict(extra="allow")
 
     authzone: str = Field(
@@ -373,6 +431,32 @@ class AuthZone(BaseModel):
 
 
 class ForwardZone(BaseModel):
+    """
+    Represents a ForwardZone that defines the configuration and properties
+    related to DNS forward zones.
+
+    This class models the configurations and data for a DNS forward zone. It
+    stores various metadata attributes such as forwarders, disabled flags,
+    comments, zone format, and more. It provides mechanisms for serialization
+    and utility methods to handle specific data transformations. It also
+    includes validation checks for certain property names during data addition.
+
+    Attributes:
+        forwardzone (str): Header for the forwardzone object.
+        import_action (Optional[ImportActionEnum]): Custom import action for CSV files.
+        fqdn (str): Fully Qualified Domain Name (FQDN) of the zone.
+        view (Optional[str]): View name associated with the zone.
+        zone_format (ZoneFormatTypeEnum): Defines the format of the zone.
+        prefix (Optional[str]): RFC2317 classless reverse zone prefix.
+        disabled (Optional[bool]): Indicates whether the zone is disabled.
+        comment (Optional[str]): Optional comment or description for the zone.
+        forward_to (Optional[List[str]]): List of forwarders in FQDN or IP format.
+        forwarding_servers (Optional[List[str]]): List of forwarding servers in FQDN format.
+        forwarders_only (Optional[bool]): Indicates if only forwarders are used.
+        ns_group (Optional[str]): Group of nameservers for forwarding members.
+        ns_group_external (Optional[str]): External group name for forward-to nameservers.
+        disable_ns_generation (Optional[bool]): Indicates if the NS generation is disabled.
+    """
     model_config = ConfigDict(extra="allow")
 
     forwardzone: str = Field(
@@ -427,6 +511,47 @@ class ForwardZone(BaseModel):
 
 
 class StubZone(BaseModel):
+    """
+    StubZone class used for representing and managing stub zone configurations. It extends
+    the BaseModel class and uses Pydantic for data validation and serialization. The class
+    primarily focuses on configurations related to DNS stub zones, such as FQDN, zone format,
+    view, forwarding rules, and related settings.
+
+    Attributes:
+        stubzone (str): Header for stubzone object. Frozen and aliased for serialization.
+        import_action (Optional[ImportActionEnum]): CSV custom import action. Aliased
+            for serialization.
+        fqdn (str): Fully Qualified Domain Name (FQDN) of the zone. Must meet a
+            minimum length requirement of 1.
+        view (Optional[str]): Name of the DNS view.
+        zone_format (ZoneFormatTypeEnum): Format of the DNS zone.
+        prefix (Optional[PositiveInt]): RFC2317 classless reverse zone prefix. Must
+            have a value between 24 and 32.
+        disabled (Optional[bool]): Indicates whether the stub zone is disabled.
+        comment (Optional[str]): Optional comment for additional information.
+        disable_forwarding (Optional[bool]): Indicates if forwarding is disabled.
+        stub_from (Optional[List[str]]): List of stub-from servers represented as
+            FQDN or IP addresses.
+        stub_members (Optional[List[str]]): List of stub-members servers represented
+            as FQDN values.
+        ns_group (Optional[str]): Specifies the Stub Members NS Group.
+        ns_group_external (Optional[str]): Specifies the NS group name for stub-from
+            servers.
+
+    Methods:
+        list_to_csv(items: Optional[List[str]]) -> str | None
+            Converts a list of strings to a single CSV string. Returns None if the
+            input is empty or None.
+
+        serialize_list_fields(values: Optional[List[str]]) -> Optional[str]
+            Field serializer for stub_from and stub_members attributes. Serializes
+            lists into CSV strings for consistent representation during serialization.
+
+        add_property(prop: str, value: str)
+            Dynamically adds a property to the instance if its name starts with
+            a valid prefix ("EA-" or "ADMGRP-"). Raises an Exception for invalid
+            property names.
+    """
     model_config = ConfigDict(extra="allow")
 
     stubzone: str = Field(
@@ -530,6 +655,40 @@ class NsGroup(BaseModel):
 
 
 class DelegatedZone(BaseModel):
+    """
+    Represents a Delegated Zone model with configuration and related properties.
+
+    The DelegatedZone class is designed to represent the structure and behaviors
+    associated with configuration data for delegated zones in a DNS system. It uses
+    strict configuration enforcement via field definitions and type hints, allowing
+    extra fields through a flexible model configuration. The class includes features
+    such as property-based serialization and validation for dynamically added attributes.
+
+    Attributes:
+        model_config: Configuration that allows additional fields beyond those explicitly
+            defined in the model.
+        delegatedzone: CSV Header for delegatedzone object.
+        import_action: Custom import action for the zone, optional.
+        fqdn: Fully Qualified Domain Name (FQDN) for the zone.
+        view: Name of the view associated with the zone, optional.
+        zone_format: Format of the zone (e.g., forward, reverse).
+        prefix: Prefix value for RFC2317 classless reverse zones, optional.
+        disabled: Flag indicating whether the zone is disabled, optional.
+        comment: Optional comment for the zone, optional.
+        delegate_to: A list of delegated servers expressed in FQDN or IP format, optional.
+        delegated_ttl: Time To Live (TTL) value for the delegation, optional.
+        ns_group: Name of the NS Group for delegated members, optional.
+        new_prefix: New prefix for RFC2317 classless reverse zones, optional.
+        ddns_protected: Indicates whether the record is protected by DDNS, optional.
+        ddns_principal: The principal used for DDNS operations, optional.
+
+    Methods:
+        serialize_delegate_to: Serializes the list of delegated servers into a string format
+            separated by commas if the list exists; otherwise, returns None.
+        add_property: Adds a dynamic property to the instance if it follows defined naming
+            conventions (e.g., starts with 'EA-' or 'ADMGRP-'). Raises an exception if the
+            naming convention is not followed.
+    """
     model_config = ConfigDict(extra="allow")
 
     delegatedzone: str = Field(
