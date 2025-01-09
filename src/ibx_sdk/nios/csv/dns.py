@@ -371,9 +371,6 @@ class AuthZone(BaseModel):
         else:
             raise Exception(f"Invalid field name: {prop}")
 
-    def get_zone_format(self):
-        return get_zone_format(zone_name=self.fqdn)
-
 
 class ForwardZone(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -428,9 +425,6 @@ class ForwardZone(BaseModel):
         else:
             raise Exception(f"Invalid field name: {prop}")
 
-    def get_zone_format(self):
-        return get_zone_format(zone_name=self.fqdn)
-
 
 class StubZone(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -478,9 +472,6 @@ class StubZone(BaseModel):
             self.__setattr__(prop, value)
         else:
             raise Exception(f"Invalid field name: {prop}")
-
-    def get_zone_format(self):
-        return get_zone_format(zone_name=self.fqdn)
 
 
 class NsGroup(BaseModel):
@@ -579,9 +570,6 @@ class DelegatedZone(BaseModel):
             self.__setattr__(prop, value)
         else:
             raise Exception(f"Invalid field name: {prop}")
-
-    def get_zone_format(self):
-        return get_zone_format(zone_name=self.fqdn)
 
 
 class DelegationNsGroup(BaseModel):
