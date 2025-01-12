@@ -186,7 +186,7 @@ class PTRRecord(BaseModel):
     fqdn: str
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     view: Optional[str] = None
-    address: IPvAnyAddress
+    address: Optional[IPvAnyAddress] = Field(default=None)
     new_address: Optional[str] = Field(alias="_new_address", default=None)
     dname: str
     new_dname: Optional[str] = Field(alias="_new_ptrdname", default=None)
@@ -276,7 +276,7 @@ class CAARecord(BaseModel):
     import_action: Optional[ImportActionEnum] = Field(alias="import-action", default=None)
     flag: PositiveInt
     type: str
-    CA: Optional[str] = None
+    ca: Optional[str] = None
     ca_details: Optional[str] = None
     comment: Optional[str] = None
     ttl: Optional[PositiveInt] = None
