@@ -7,16 +7,22 @@ from ibx_sdk.nios.csv.enums import ImportActionEnum
 LOG = getLogger(__name__)
 
 
+def extract_columns(item) -> list:
+    """Extract column names from a single item."""
+    return item.model_dump(by_alias=True, exclude_defaults=False, exclude_none=True).keys()
+
+
 def get_header(*, data: list) -> list:
-    header = []
-    for a in data:
-        for col in a.model_dump(
-                by_alias=True, exclude_defaults=False, exclude_none=True
-        ).keys():
-            if col not in header:
-                header.append(col)
-    LOG.debug(header)
-    return header
+    """Generate a unique header from the given data."""
+    header_columns = []
+    for item in data:
+        cols = extract_columns(item)
+        for col in cols:
+            if col not in header_columns:
+                header_columns.append(col)
+
+    LOG.debug(header_columns)
+    return header_columns
 
 
 def output_to_file(
@@ -27,6 +33,19 @@ def output_to_file(
         output_dir: str = None,
         file_prefix: str = None,
 ) -> None:
+    """
+    Generate a CSV file from the given data.
+
+    Args:
+        filename: csv filename or object name
+        data: list of objects
+        import_action: optional import-action to be added to the header
+        output_dir: output to a specific directory
+        file_prefix: optional file name prefix
+
+    Returns:
+        None
+    """
     if filename.endswith(".csv"):
         output_file_name = filename
     else:
