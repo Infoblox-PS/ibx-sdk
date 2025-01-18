@@ -35,7 +35,9 @@ log = init_logger(
 )
 ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
 USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"])
-ALL_USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"])
+ALL_USAGES = click.Choice(
+    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"]
+)
 wapi = Gift()
 help_text = """
 NIOS SSL Certificate Tools
@@ -44,7 +46,9 @@ NIOS SSL Certificate Tools
 
 @click.group(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"], show_default=True),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"], show_default=True
+    ),
 )
 def cli():
     pass
@@ -54,20 +58,31 @@ def cli():
 @optgroup.group("Required Parameters")
 @optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option("-m", "--member", required=True, help="Member for the certificate")
-@optgroup.option("-f", "--filename", required=True, help="Upload filename for the certificate")
+@optgroup.option(
+    "-f", "--filename", required=True, help="Upload filename for the certificate"
+)
 @optgroup.group("Optional Parameters")
-@optgroup.option("--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage")
-@optgroup.option("-u", "--username", default="admin", help="Infoblox admin username", )
-@optgroup.option("-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version")
+@optgroup.option(
+    "--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage"
+)
+@optgroup.option(
+    "-u",
+    "--username",
+    default="admin",
+    help="Infoblox admin username",
+)
+@optgroup.option(
+    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+)
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def upload(
-        grid_mgr: str,
-        member: str,
-        filename: str,
-        username: str,
-        wapi_ver: str,
-        certificate_usage: str,
-        debug: bool,
+    grid_mgr: str,
+    member: str,
+    filename: str,
+    username: str,
+    wapi_ver: str,
+    certificate_usage: str,
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -84,7 +99,9 @@ def upload(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
     try:
-        wapi.upload_certificate(member=member, filename=filename, certificate_usage=certificate_usage)
+        wapi.upload_certificate(
+            member=member, filename=filename, certificate_usage=certificate_usage
+        )
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
@@ -98,17 +115,26 @@ def upload(
 @optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
-@optgroup.option("--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage")
-@optgroup.option("-u", "--username", default="admin", help="Infoblox admin username", )
-@optgroup.option("-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version")
+@optgroup.option(
+    "--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage"
+)
+@optgroup.option(
+    "-u",
+    "--username",
+    default="admin",
+    help="Infoblox admin username",
+)
+@optgroup.option(
+    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+)
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def download(
-        grid_mgr: str,
-        member: str,
-        username: str,
-        wapi_ver: str,
-        certificate_usage: str,
-        debug: bool,
+    grid_mgr: str,
+    member: str,
+    username: str,
+    wapi_ver: str,
+    certificate_usage: str,
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -137,15 +163,33 @@ def download(
 @cli.command()
 @optgroup.group("Required Parameters")
 @optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-n", "--common-name", required=True, help="Common Name for the certificate")
+@optgroup.option(
+    "-n", "--common-name", required=True, help="Common Name for the certificate"
+)
 @optgroup.option("-m", "--member", required=True, help="Member for the certificate")
-@optgroup.option("-d", "--days-valid", default=365, help="Number of days the certificate is valid for")
+@optgroup.option(
+    "-d",
+    "--days-valid",
+    default=365,
+    help="Number of days the certificate is valid for",
+)
 @optgroup.group("Optional Parameters")
-@optgroup.option("-u", "--username", default="admin", help="Infoblox admin username", )
-@optgroup.option("-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version")
+@optgroup.option(
+    "-u",
+    "--username",
+    default="admin",
+    help="Infoblox admin username",
+)
+@optgroup.option(
+    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+)
 @optgroup.group("Optional Certificate Parameters")
-@optgroup.option("-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm")
-@optgroup.option("--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage")
+@optgroup.option(
+    "-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm"
+)
+@optgroup.option(
+    "--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage"
+)
 @optgroup.option("-c", "--comment", help="Certificate comment")
 @optgroup.option("--country", default="US", help="Certificate country")
 @optgroup.option("-e", "--email", help="Certificate email address")
@@ -154,28 +198,30 @@ def download(
 @optgroup.option("-o", "--organization", help="Certificate organization")
 @optgroup.option("--ou", help="Certificate organizational unit")
 @optgroup.option("-s", "--state", help="Certificate state")
-@optgroup.option("--san", help="Certificate subject alternative name(s) as [TYPE/VALUE,...]")
+@optgroup.option(
+    "--san", help="Certificate subject alternative name(s) as [TYPE/VALUE,...]"
+)
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def selfsign(
-        grid_mgr: str,
-        common_name: str,
-        member: str,
-        days_valid: int,
-        username: str,
-        wapi_ver: str,
-        algorithm: str,
-        certificate_usage: str,
-        comment: str,
-        country: str,
-        email: str,
-        key_size: int,
-        locality: str,
-        organization: str,
-        ou: str,
-        state: str,
-        san: str,
-        debug: bool,
+    grid_mgr: str,
+    common_name: str,
+    member: str,
+    days_valid: int,
+    username: str,
+    wapi_ver: str,
+    algorithm: str,
+    certificate_usage: str,
+    comment: str,
+    country: str,
+    email: str,
+    key_size: int,
+    locality: str,
+    organization: str,
+    ou: str,
+    state: str,
+    san: str,
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -231,14 +277,27 @@ def selfsign(
 @cli.command()
 @optgroup.group("Required Parameters")
 @optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-n", "--common-name", required=True, help="Common Name for the certificate")
+@optgroup.option(
+    "-n", "--common-name", required=True, help="Common Name for the certificate"
+)
 @optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
-@optgroup.option("-u", "--username", default="admin", help="Infoblox admin username", )
-@optgroup.option("-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version")
+@optgroup.option(
+    "-u",
+    "--username",
+    default="admin",
+    help="Infoblox admin username",
+)
+@optgroup.option(
+    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+)
 @optgroup.group("Optional Certificate Parameters")
-@optgroup.option("-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm")
-@optgroup.option("--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage")
+@optgroup.option(
+    "-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm"
+)
+@optgroup.option(
+    "--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage"
+)
 @optgroup.option("-c", "--comment", help="Certificate comment")
 @optgroup.option("--country", default="US", help="Certificate country")
 @optgroup.option("-e", "--email", help="Certificate email address")
@@ -247,27 +306,29 @@ def selfsign(
 @optgroup.option("-o", "--organization", help="Certificate organization")
 @optgroup.option("--ou", help="Certificate organizational unit")
 @optgroup.option("-s", "--state", help="Certificate state")
-@optgroup.option("--san", help="Certificate subject alternative name(s) as [TYPE/VALUE,...]")
+@optgroup.option(
+    "--san", help="Certificate subject alternative name(s) as [TYPE/VALUE,...]"
+)
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def gencsr(
-        grid_mgr: str,
-        common_name: str,
-        member: str,
-        username: str,
-        wapi_ver: str,
-        algorithm: str,
-        certificate_usage: str,
-        comment: str,
-        country: str,
-        email: str,
-        key_size: int,
-        locality: str,
-        organization: str,
-        ou: str,
-        state: str,
-        san: str,
-        debug: bool,
+    grid_mgr: str,
+    common_name: str,
+    member: str,
+    username: str,
+    wapi_ver: str,
+    algorithm: str,
+    certificate_usage: str,
+    comment: str,
+    country: str,
+    email: str,
+    key_size: int,
+    locality: str,
+    organization: str,
+    ou: str,
+    state: str,
+    san: str,
+    debug: bool,
 ) -> None:
     if debug:
         increase_log_level()

@@ -30,8 +30,12 @@ CsvOperation = Literal[
 GridRestoreMode = Literal["NORMAL", "FORCED", "CLONE"]
 SupportedAlgorithms = Literal["SHA-1", "SHA-256", "SHA-384", "SHA-512"]
 SupportedKeySizes = Literal[1024, 2048, 4096]
-SupportedCertUsages = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
-SupportedCertTypes = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"]
+SupportedCertUsages = Literal[
+    "ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"
+]
+SupportedCertTypes = Literal[
+    "ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"
+]
 LogType = Literal[
     "SYSLOG",
     "AUDITLOG",
@@ -106,10 +110,10 @@ class NiosFileopMixin:
         self.__download_complete(download_token, filename, self.__get_cookies())
 
     def file_download(
-            self,
-            token: str,
-            url: str,
-            filename: str = None,
+        self,
+        token: str,
+        url: str,
+        filename: str = None,
     ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
@@ -184,10 +188,10 @@ class NiosFileopMixin:
                 return token
 
     def upload_certificate(
-            self,
-            member: str,
-            filename: str,
-            certificate_usage: SupportedCertTypes = "ADMIN",
+        self,
+        member: str,
+        filename: str,
+        certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Upload an SSL Certificate file to the Grid
@@ -204,7 +208,11 @@ class NiosFileopMixin:
 
         # submit task to CSV Job Manager
         logging.info("step 3 - upload %s certificate on %s", certificate_usage, member)
-        payload = {"certificate_usage": certificate_usage, "member": member, "token": token}
+        payload = {
+            "certificate_usage": certificate_usage,
+            "member": member,
+            "token": token,
+        }
         try:
             res = self.post(
                 "fileop",
@@ -219,10 +227,10 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def csv_import(
-            self,
-            task_operation: CsvOperation,
-            csv_import_file: str,
-            exit_on_error: bool = False,
+        self,
+        task_operation: CsvOperation,
+        csv_import_file: str,
+        exit_on_error: bool = False,
     ) -> dict:
         """
         Perform a CSV import task using the NIOS CSV Task Manager
@@ -368,9 +376,9 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
 
     def download_certificate(
-            self,
-            member: str,
-            certificate_usage: SupportedCertTypes = "ADMIN",
+        self,
+        member: str,
+        certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Download SSL certificate from the Grid.
@@ -384,7 +392,9 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post("fileop", params={"_function": "downloadcertificate"}, json=payload)
+            res = self.post(
+                "fileop", params={"_function": "downloadcertificate"}, json=payload
+            )
             logging.debug(res.text)
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
@@ -398,21 +408,21 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_selfsigned_cert(
-            self,
-            cn: str,
-            member: str,
-            days_valid: int = 365,
-            algorithm: SupportedAlgorithms = "SHA-256",
-            certificate_usage: SupportedCertUsages = "ADMIN",
-            comment: Optional[str] = None,
-            country: Optional[str] = None,
-            email: Optional[str] = None,
-            key_size: Optional[SupportedKeySizes] = 2048,
-            locality: Optional[str] = None,
-            org: Optional[str] = None,
-            org_unit: Optional[str] = None,
-            state: Optional[str] = None,
-            subject_alternative_names: Optional[list[dict]] = None
+        self,
+        cn: str,
+        member: str,
+        days_valid: int = 365,
+        algorithm: SupportedAlgorithms = "SHA-256",
+        certificate_usage: SupportedCertUsages = "ADMIN",
+        comment: Optional[str] = None,
+        country: Optional[str] = None,
+        email: Optional[str] = None,
+        key_size: Optional[SupportedKeySizes] = 2048,
+        locality: Optional[str] = None,
+        org: Optional[str] = None,
+        org_unit: Optional[str] = None,
+        state: Optional[str] = None,
+        subject_alternative_names: Optional[list[dict]] = None,
     ):
         """
         Generate a Self-Signed Certificate on the Grid.
@@ -479,20 +489,20 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_csr(
-            self,
-            cn: str,
-            member: str,
-            algorithm: SupportedAlgorithms = "SHA-256",
-            certificate_usage: SupportedCertUsages = "ADMIN",
-            comment: Optional[str] = None,
-            country: Optional[str] = None,
-            email: Optional[str] = None,
-            key_size: Optional[SupportedKeySizes] = 2048,
-            locality: Optional[str] = None,
-            org: Optional[str] = None,
-            org_unit: Optional[str] = None,
-            state: Optional[str] = None,
-            subject_alternative_names: Optional[list[dict]] = None
+        self,
+        cn: str,
+        member: str,
+        algorithm: SupportedAlgorithms = "SHA-256",
+        certificate_usage: SupportedCertUsages = "ADMIN",
+        comment: Optional[str] = None,
+        country: Optional[str] = None,
+        email: Optional[str] = None,
+        key_size: Optional[SupportedKeySizes] = 2048,
+        locality: Optional[str] = None,
+        org: Optional[str] = None,
+        org_unit: Optional[str] = None,
+        state: Optional[str] = None,
+        subject_alternative_names: Optional[list[dict]] = None,
     ) -> None:
         """
         Generate a Certificate Signing Request
@@ -546,9 +556,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
-                "fileop", params={"_function": "generatecsr"}, json=payload
-            )
+            res = self.post("fileop", params={"_function": "generatecsr"}, json=payload)
             logging.debug(res.text)
             res.raise_for_status()
         except requests.exceptions.RequestException as err:
@@ -562,14 +570,14 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def get_log_files(
-            self,
-            log_type: LogType,
-            filename: Optional[str] = None,
-            endpoint: Optional[str] = None,
-            include_rotated: bool = False,
-            member: Optional[str] = None,
-            msserver: Optional[str] = None,
-            node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
+        self,
+        log_type: LogType,
+        filename: Optional[str] = None,
+        endpoint: Optional[str] = None,
+        include_rotated: bool = False,
+        member: Optional[str] = None,
+        msserver: Optional[str] = None,
+        node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
     ):
         """
         Fetch the log files for the provided member or msserver
@@ -615,16 +623,16 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_support_bundle(
-            self,
-            member: str,
-            filename: Optional[str] = None,
-            cached_zone_data: bool = False,
-            core_files: bool = False,
-            log_files: bool = False,
-            nm_snmp_logs: bool = False,
-            recursive_cache_file: bool = False,
-            remote_url: Optional[str] = None,
-            rotate_log_files: bool = False,
+        self,
+        member: str,
+        filename: Optional[str] = None,
+        cached_zone_data: bool = False,
+        core_files: bool = False,
+        log_files: bool = False,
+        nm_snmp_logs: bool = False,
+        recursive_cache_file: bool = False,
+        remote_url: Optional[str] = None,
+        rotate_log_files: bool = False,
     ):
         """
         Get the support bundle for a member.
@@ -709,10 +717,10 @@ class NiosFileopMixin:
         self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
-            self,
-            filename: str = "database.bak",
-            mode: GridRestoreMode = "NORMAL",
-            keep_grid_ip: bool = False,
+        self,
+        filename: str = "database.bak",
+        mode: GridRestoreMode = "NORMAL",
+        keep_grid_ip: bool = False,
     ):
         """
         Perform a NIOS Grid restore of a database using a given file.
@@ -736,11 +744,11 @@ class NiosFileopMixin:
         logging.info("Grid restore successful!")
 
     def member_config(
-            self,
-            member: str,
-            conf_type: MemberDataType,
-            filename: Optional[str] = None,
-            remote_url: str = None,
+        self,
+        member: str,
+        conf_type: MemberDataType,
+        filename: Optional[str] = None,
+        remote_url: str = None,
     ) -> None:
         """
         Fetch member configuration file for given service type.
@@ -777,11 +785,11 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_lease_history(
-            self,
-            member: str,
-            start_time: int = None,
-            end_time: int = None,
-            remove_url: str = None
+        self,
+        member: str,
+        start_time: int = None,
+        end_time: int = None,
+        remove_url: str = None,
     ) -> None:
         """
         fetch DHCP lease history files from a NIOS Grid Member
@@ -824,11 +832,11 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def __csv_import(
-            self,
-            task_operation: str,
-            upload_token: str,
-            req_cookies: dict,
-            exit_on_error: bool = False,
+        self,
+        task_operation: str,
+        upload_token: str,
+        req_cookies: dict,
+        exit_on_error: bool = False,
     ) -> dict:
         headers = {"content-type": "application/json"}
 
@@ -919,7 +927,7 @@ class NiosFileopMixin:
         return res.json()
 
     def __restore_database(
-            self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
+        self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
     ) -> dict:
         # set content type back to JSON
         headers = {"content-type": "application/json"}
@@ -944,7 +952,7 @@ class NiosFileopMixin:
         return res
 
     def __upload_file(
-            self, upload_url: str, upload_file: dict, req_cookies: dict
+        self, upload_url: str, upload_file: dict, req_cookies: dict
     ) -> None:
         logging.debug(upload_url)
         try:

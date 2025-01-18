@@ -44,13 +44,13 @@ log_levels = {
 
 
 def init_logger(
-        logfile_name: str,
-        logfile_mode: Optional[str] = "w",
-        console_log: Optional[bool] = None,
-        log_format: Optional[str] = None,
-        max_size: Optional[int] = None,
-        num_logs: Optional[int] = None,
-        level: Optional[str] = None,
+    logfile_name: str,
+    logfile_mode: Optional[str] = "w",
+    console_log: Optional[bool] = None,
+    log_format: Optional[str] = None,
+    max_size: Optional[int] = None,
+    num_logs: Optional[int] = None,
+    level: Optional[str] = None,
 ) -> logging.Logger:
     """
     Create and return a custom file/console logger.
@@ -141,10 +141,10 @@ def init_logger(
 
 
 def init_remote_logger(
-        address: tuple[str, int] = ("localhost", 5140),
-        facility: str = "local0",
-        protocol: str = "TCP",
-        level: Optional[str] = None,
+    address: tuple[str, int] = ("localhost", 5140),
+    facility: str = "local0",
+    protocol: str = "TCP",
+    level: Optional[str] = None,
 ) -> logging.Logger:
     if level:
         log_level = log_levels.get(level.upper())
@@ -244,9 +244,9 @@ def increase_log_level(handler_type: str = "both") -> None:
             selected_index = max(0, current_index - 1)
             coloredlogs.set_level(defined_levels[selected_index])
         elif (
-                isinstance(handle, logging.FileHandler)
-                or isinstance(handle, logging.handlers.RotatingFileHandler)
-                and handler_type in ["both", "file"]
+            isinstance(handle, logging.FileHandler)
+            or isinstance(handle, logging.handlers.RotatingFileHandler)
+            and handler_type in ["both", "file"]
         ):
             current_index = defined_levels.index(handle.level)
             selected_index = max(0, current_index - 1)
@@ -295,9 +295,9 @@ def set_log_level(level: str, handler_type: str = "both") -> None:
         ]:
             coloredlogs.set_level(log_level)
         elif (
-                isinstance(handle, logging.FileHandler)
-                or isinstance(handle, logging.handlers.RotatingFileHandler)
-                and handler_type in ["both", "file"]
+            isinstance(handle, logging.FileHandler)
+            or isinstance(handle, logging.handlers.RotatingFileHandler)
+            and handler_type in ["both", "file"]
         ):
             handle.setLevel(log_level)
 

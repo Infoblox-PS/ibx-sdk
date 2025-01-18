@@ -9,7 +9,9 @@ LOG = getLogger(__name__)
 
 def extract_columns(item) -> list:
     """Extract column names from a single item."""
-    return item.model_dump(by_alias=True, exclude_defaults=False, exclude_none=True).keys()
+    return item.model_dump(
+        by_alias=True, exclude_defaults=False, exclude_none=True
+    ).keys()
 
 
 def get_header(*, data: list) -> list:
@@ -26,12 +28,12 @@ def get_header(*, data: list) -> list:
 
 
 def output_to_file(
-        *,
-        filename: str,
-        data: list,
-        import_action: str = None,
-        output_dir: str = None,
-        file_prefix: str = None,
+    *,
+    filename: str,
+    data: list,
+    import_action: str = None,
+    output_dir: str = None,
+    file_prefix: str = None,
 ) -> None:
     """
     Generate a CSV file from the given data.
