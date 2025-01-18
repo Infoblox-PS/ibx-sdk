@@ -17,50 +17,21 @@ limitations under the License.
 import logging
 import os
 import socket
+from collections import Counter
 from logging.handlers import RotatingFileHandler
-from typing import Optional, Any
-from syslog_rfc5424_formatter import RFC5424Formatter
+from typing import Optional
 
 import coloredlogs
+from syslog_rfc5424_formatter import RFC5424Formatter
 
 
-class CallCounted:
-    """
-    Decorator to determine the number of calls for a method.
+class CountingHandler(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.counts = Counter()
 
-    This decorator can be used to wrap a method, and each time the method is called,
-    it increments a counter to keep track of the number of times the method has been
-    called.
-
-    Args:
-        method (callable): The method to be decorated.
-
-    """
-
-    def __init__(self, method):
-        """
-        Initialize the CallCounted decorator.
-
-        Args:
-            method (callable): The method to be decorated.
-        """
-        self.method = method
-        self.counter = 0
-
-    def __call__(self, *args: Any, **kwargs: Any) -> Any:
-        """
-        Call the decorated method and increment the call count.
-
-        Args:
-            *args: Positional arguments to pass to the decorated method.
-            **kwargs: Keyword arguments to pass to the decorated method.
-
-        Returns:
-            The result of the decorated method.
-
-        """
-        self.counter += 1
-        return self.method(*args, **kwargs)
+    def emit(self, record: logging.LogRecord) -> None:
+        self.counts[record.levelname] += 1
 
 
 log_levels = {
@@ -73,13 +44,13 @@ log_levels = {
 
 
 def init_logger(
-    logfile_name: str,
-    logfile_mode: Optional[str] = "w",
-    console_log: Optional[bool] = None,
-    log_format: Optional[str] = None,
-    max_size: Optional[int] = None,
-    num_logs: Optional[int] = None,
-    level: Optional[str] = None,
+        logfile_name: str,
+        logfile_mode: Optional[str] = "w",
+        console_log: Optional[bool] = None,
+        log_format: Optional[str] = None,
+        max_size: Optional[int] = None,
+        num_logs: Optional[int] = None,
+        level: Optional[str] = None,
 ) -> logging.Logger:
     """
     Create and return a custom file/console logger.
@@ -273,9 +244,9 @@ def increase_log_level(handler_type: str = "both") -> None:
             selected_index = max(0, current_index - 1)
             coloredlogs.set_level(defined_levels[selected_index])
         elif (
-            isinstance(handle, logging.FileHandler)
-            or isinstance(handle, logging.handlers.RotatingFileHandler)
-            and handler_type in ["both", "file"]
+                isinstance(handle, logging.FileHandler)
+                or isinstance(handle, logging.handlers.RotatingFileHandler)
+                and handler_type in ["both", "file"]
         ):
             current_index = defined_levels.index(handle.level)
             selected_index = max(0, current_index - 1)
@@ -324,9 +295,9 @@ def set_log_level(level: str, handler_type: str = "both") -> None:
         ]:
             coloredlogs.set_level(log_level)
         elif (
-            isinstance(handle, logging.FileHandler)
-            or isinstance(handle, logging.handlers.RotatingFileHandler)
-            and handler_type in ["both", "file"]
+                isinstance(handle, logging.FileHandler)
+                or isinstance(handle, logging.handlers.RotatingFileHandler)
+                and handler_type in ["both", "file"]
         ):
             handle.setLevel(log_level)
 
