@@ -1,10 +1,5 @@
-import logging
-from logging.handlers import SysLogHandler
 
-import socket
-import pytest
 from src.ibx_sdk.logger.ibx_logger import init_remote_logger
-from syslog_rfc5424_formatter import RFC5424Formatter
 
 
 def test_init_remote_logger_default_values():
@@ -20,7 +15,7 @@ def test_init_remote_logger_default_values():
 
     handlers = logger.handlers
     # assert len(handlers) > 0
-    handler = handlers[0]
+    handlers[0]
     # assert isinstance(handler, SysLogHandler)
     # assert handler.address == ("192.168.1.53", 5140)
     # assert handler.facility == SysLogHandler.facility_names["local0"]
