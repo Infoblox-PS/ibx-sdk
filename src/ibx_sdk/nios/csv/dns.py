@@ -528,7 +528,7 @@ class ForwardZone(BaseModel):
         prefix (Optional[str]): RFC2317 classless reverse zone prefix.
         disabled (Optional[bool]): Indicates whether the zone is disabled.
         comment (Optional[str]): Optional comment or description for the zone.
-        forward_to (Optional[List[str]]): List of forwarders in FQDN or IP format.
+        forward_to (Optional[List[str]]): List of forwarders in FQDN/IP format.
         forwarding_servers (Optional[List[str]]): List of forwarding servers in FQDN format.
         forwarders_only (Optional[bool]): Indicates if only forwarders are used.
         ns_group (Optional[str]): Group of nameservers for forwarding members.
