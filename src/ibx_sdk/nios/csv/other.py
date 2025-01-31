@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class NamedACL(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
 
     namedacl: str = Field(
         "namedacl",
@@ -21,7 +21,7 @@ class NamedACL(BaseModel):
 
 
 class NamedACLItem(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="allow")
     namedaclitem: str = Field(
         "namedaclitem",
         frozen=True,
