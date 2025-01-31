@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, ConfigDict
 
+from ibx_sdk.nios.csv import ImportActionEnum
+
 
 class NamedACL(BaseModel):
     model_config = ConfigDict(extra="allow")
@@ -11,6 +13,11 @@ class NamedACL(BaseModel):
         frozen=True,
         serialization_alias="header-namedacl",
         description="CSV header for namedacl object",
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        serialization_alias="import-action",
+        default=None,
+        description="CSV custom import action",
     )
     name: str = Field(..., description="Name of ACL")
     new_name: Optional[str] = Field(
@@ -22,11 +29,17 @@ class NamedACL(BaseModel):
 
 class NamedACLItem(BaseModel):
     model_config = ConfigDict(extra="allow")
+
     namedaclitem: str = Field(
         "namedaclitem",
         frozen=True,
         serialization_alias="header-namedaclitem",
         description="CSV header for namedaclitem object",
+    )
+    import_action: Optional[ImportActionEnum] = Field(
+        serialization_alias="import-action",
+        default=None,
+        description="CSV custom import action",
     )
     parent: str = Field(..., description="Parent ACL name")
     address: str = Field(..., description="IP address or network example 192.168.1.0/24/Allow|Deny")
