@@ -1,6 +1,12 @@
 from enum import Enum
 
 
+class CreatorEnum(str, Enum):
+    SYSTEM = "SYSTEM"
+    STATIC = "STATIC"
+    DYNAMIC = "DYNAMIC"
+
+
 class TargetRecordTypeEnum(str, Enum):
     A = "A"
     AAAA = "AAAA"
