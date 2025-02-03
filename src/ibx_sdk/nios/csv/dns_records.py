@@ -4,6 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict, PositiveInt, IPvAnyAddress
 
 from .enums import (
+    CreatorEnum,
     ImportActionEnum,
     TargetRecordTypeEnum,
     HostAddressMatchEnum,
@@ -28,7 +29,7 @@ class ARecord(BaseModel):
     ttl: Optional[PositiveInt] = None
     ddns_protected: Optional[bool] = None
     ddns_principal: Optional[str] = None
-    creator: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -54,7 +55,7 @@ class AAAARecord(BaseModel):
     ttl: Optional[PositiveInt] = None
     ddns_protected: Optional[bool] = None
     ddns_principal: Optional[str] = None
-    creator: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -82,7 +83,7 @@ class AliasRecord(BaseModel):
     ttl: Optional[PositiveInt] = None
     disabled: Optional[bool] = None
     view: Optional[str] = None
-    creator: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
 
 class DNAMERecord(BaseModel):
@@ -99,6 +100,9 @@ class DNAMERecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -121,6 +125,9 @@ class CNAMERecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -146,6 +153,9 @@ class MXRecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -179,6 +189,9 @@ class NAPTRRecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -220,6 +233,9 @@ class PTRRecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -243,6 +259,9 @@ class TXTRecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -272,6 +291,9 @@ class SRVRecord(BaseModel):
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
+    ddns_protected: Optional[bool] = None
+    ddns_principal: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
     def add_property(self, prop: str, value: str):
         if prop.startswith("EA-") or prop.startswith("ADMGRP-"):
@@ -301,7 +323,7 @@ class TLSARecord(BaseModel):
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     view: Optional[str] = None
     disabled: Optional[bool] = None
-    creator: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
 
 class CAARecord(BaseModel):
@@ -321,7 +343,7 @@ class CAARecord(BaseModel):
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     disabled: Optional[bool] = None
     view: Optional[str] = None
-    creator: Optional[str] = None
+    creator: Optional[CreatorEnum] = None
 
 
 class HostRecord(BaseModel):
