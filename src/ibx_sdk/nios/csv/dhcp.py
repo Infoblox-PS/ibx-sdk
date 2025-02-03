@@ -22,7 +22,7 @@ from .enums import (
     FingerprintTypeEnum,
     ProtocolTypeEnum,
     DhcpTypeEnum,
-    FailoverServerType,
+    FailoverServerTypeEnum,
 )
 
 
@@ -1625,14 +1625,14 @@ class DhcpFailoverAssociation(BaseModel):
         description="New name of the DHCP failover association",
     )
     comment: Optional[str] = Field(None, description="Optional comment")
-    primary_server_type: FailoverServerType = Field(
+    primary_server_type: FailoverServerTypeEnum = Field(
         ..., description="Primary server type"
     )
     grid_primary: Optional[str] = Field(None, description="Primary Grid Member FQDN")
     external_primary: Optional[str] = Field(
         None, description="Primary External Server FQDN"
     )
-    secondary_server_type: FailoverServerType = Field(
+    secondary_server_type: FailoverServerTypeEnum = Field(
         ..., description="Secondary server type"
     )
     grid_secondary: Optional[str] = Field(

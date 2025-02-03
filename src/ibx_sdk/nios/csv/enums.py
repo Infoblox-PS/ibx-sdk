@@ -24,7 +24,7 @@ class ZoneFormatTypeEnum(str, Enum):
     IPV6 = "IPV6"
 
 
-class FailoverServerType(str, Enum):
+class FailoverServerTypeEnum(str, Enum):
     GRID = "GRID"
     EXTERNAL = "EXTERNAL"
 
