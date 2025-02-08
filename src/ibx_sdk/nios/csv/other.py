@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, ConfigDict
 
-from ibx_sdk.nios.csv import ImportActionEnum
+from ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 class NamedACL(BaseModel):
