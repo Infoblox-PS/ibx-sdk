@@ -575,7 +575,7 @@ class IPv4Network(BaseModel):
     threshold_email_addresses: Optional[list[str]] = Field(
         None, description="Email addresses to send warnings"
     )
-    dhcp_members: Optional[str] = Field(None, description="DHCP members")
+    dhcp_members: Optional[List[str]] = Field(None, description="DHCP members")
     routers: Optional[str] = Field(None, description="DHCP routers option")
     domain_name: Optional[str] = Field(None, description="DHCP option domain-name")
     domain_name_servers: Optional[str] = Field(
