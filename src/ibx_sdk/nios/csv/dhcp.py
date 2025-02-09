@@ -611,7 +611,7 @@ class IPv4Network(BaseModel):
             return None
         return ",".join(items)
 
-    @field_serializer("option_logic_filters", when_used="always")
+    @field_serializer("option_logic_filters", "dhcp_members", when_used="always")
     def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
         return self.list_to_csv(values)
 
