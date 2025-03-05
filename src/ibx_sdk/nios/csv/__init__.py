@@ -9,7 +9,7 @@ from .dns import DnsView, DelegatedZone, AuthZone, ForwardZone, StubZone
 from .dns_records import (
     HostRecord, ARecord, AAAARecord, CAARecord, CNAMERecord, DNAMERecord,
     MXRecord, PTRRecord, SRVRecord, NSRecord, TLSARecord, TXTRecord,
-    AliasRecord, NAPTRRecord
+    AliasRecord, NAPTRRecord, Ipv6HostAddress, HostAddress
 )
 from .other import NamedACL, NamedACLItem
 from .enums import (
