@@ -6,6 +6,11 @@ from .dhcp import (
     IPv4FixedAddress, IPv6FixedAddress, IPv6OptionDefinition, RelayAgentFilter,
 )
 from .dns import DnsView, DelegatedZone, AuthZone, ForwardZone, StubZone
+from .dns_records import (
+    HostRecord, ARecord, AAAARecord, CAARecord, CNAMERecord, DNAMERecord,
+    MXRecord, PTRRecord, SRVRecord, NSRecord, TLSARecord, TXTRecord,
+    AliasRecord, NAPTRRecord
+)
 from .other import NamedACL, NamedACLItem
 from .enums import (
     ZoneFormatTypeEnum, CreatorEnum, TargetRecordTypeEnum, DhcpTypeEnum, IPv6AddressTypeEnum,
