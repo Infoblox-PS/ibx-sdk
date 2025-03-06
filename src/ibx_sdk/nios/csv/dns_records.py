@@ -441,6 +441,8 @@ class Ipv6HostAddress(BaseModel):
     import_action: Optional[ImportActionEnum] = Field(
         alias="import-action", default=None
     )
+    view: Optional[str] = None
+    network_view: Optional[str] = None
     parent: str
     address_type: Optional[IPv6AddressTypeEnum] = Field(
         default=IPv6AddressTypeEnum.ADDRESS
