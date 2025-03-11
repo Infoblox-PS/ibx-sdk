@@ -16,6 +16,7 @@ limitations under the License.
 
 import logging
 import os
+import re
 import pprint
 from typing import Literal, Optional
 
@@ -892,6 +893,7 @@ class NiosFileopMixin:
             logging.error(err)
 
     def __download_file(self, download_url, req_cookies):
+        download_url = self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
         res = None
         try:
@@ -951,9 +953,20 @@ class NiosFileopMixin:
             raise WapiRequestException(err)
         return res
 
+    def __update_url(self, url: str) -> str:
+        if self.grid_mgr in url:
+            return url
+        elif '[' in url and ']' in url:
+            ipv6_pattern = r'https://(\[[a-zA-Z0-9:]+\])'
+            return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)
+        else:
+            ipv4_pattern = r'https://(\d{1,3}\.){3}\d{1,3}'
+            return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
+
     def __upload_file(
         self, upload_url: str, upload_file: dict, req_cookies: dict
     ) -> None:
+        upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
         try:
             res = self.conn.post(
