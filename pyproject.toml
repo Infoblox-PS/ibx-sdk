@@ -26,6 +26,7 @@ pydantic = "^2.10.4"
 mkdocstrings-python = "^1.12.2"
 mkdocs-material = "^9.5.44"
 ruff = "^0.9.1"
+pip-audit = "^2.8.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "^7.6.4"
