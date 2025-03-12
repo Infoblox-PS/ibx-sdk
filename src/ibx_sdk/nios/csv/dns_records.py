@@ -449,14 +449,14 @@ class Ipv6HostAddress(BaseModel):
     )
     address: IPv6Address
     new_address: Optional[IPv6Address] = Field(alias="_new_address", default=None)
-    ipv6_prefix: Optional[PositiveInt] = Field(ge=0, le=128, default=64)
+    ipv6_prefix: Optional[PositiveInt] = Field(ge=0, le=128, default=None)
     new_ipv6_prefix: Optional[PositiveInt] = Field(
         alias="_new_ipv6_prefix", default=None
     )
-    ipv6_prefix_bits: Optional[PositiveInt] = Field(ge=0, le=128, default=64)
+    ipv6_prefix_bits: Optional[PositiveInt] = Field(ge=0, le=128, default=None)
     configure_for_dhcp: Optional[bool] = None
     configure_for_dns: Optional[bool] = None
-    match_option: Optional[str] = Field(default="DUID")
+    match_option: Optional[str] = None
     duid: Optional[str] = None
     domain_name: Optional[str] = None
     domain_name_servers: Optional[str] = None
