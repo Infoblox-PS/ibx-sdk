@@ -398,9 +398,11 @@ class HostRecord(BaseModel):
 class HostAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
-    hostaddress: str = Field(alias="header-hostaddress", default="hostaddress")
+    hostaddress: str = Field(
+        serialization_alias="header-hostaddress", default="hostaddress"
+    )
     import_action: Optional[ImportActionEnum] = Field(
-        alias="import-action", default=None
+        serialization_alias="import-action", default=None
     )
     parent: str
     view: Optional[str] = None
@@ -436,10 +438,10 @@ class Ipv6HostAddress(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     ipv6hostaddress: str = Field(
-        alias="header-ipv6hostaddress", default="ipv6hostaddress"
+        serialization_alias="header-ipv6hostaddress", default="ipv6hostaddress"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        alias="import-action", default=None
+        serialization_alias="import-action", default=None
     )
     view: Optional[str] = None
     network_view: Optional[str] = None
