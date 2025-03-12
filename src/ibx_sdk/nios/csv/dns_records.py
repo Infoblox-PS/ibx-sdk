@@ -347,7 +347,7 @@ class CAARecord(BaseModel):
 
 
 class HostRecord(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     hostrecord: str = Field(alias="header-hostrecord", default="hostrecord")
     import_action: Optional[ImportActionEnum] = Field(
@@ -396,7 +396,7 @@ class HostRecord(BaseModel):
 
 
 class HostAddress(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     hostaddress: str = Field(
         serialization_alias="header-hostaddress", default="hostaddress"
@@ -435,7 +435,7 @@ class HostAddress(BaseModel):
 
 
 class Ipv6HostAddress(BaseModel):
-    model_config = ConfigDict(extra="allow")
+    model_config = ConfigDict(extra="allow", use_enum_values=True)
 
     ipv6hostaddress: str = Field(
         serialization_alias="header-ipv6hostaddress", default="ipv6hostaddress"
