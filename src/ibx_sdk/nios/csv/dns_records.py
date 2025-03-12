@@ -351,7 +351,7 @@ class HostRecord(BaseModel):
 
     hostrecord: str = Field(alias="header-hostrecord", default="hostrecord")
     import_action: Optional[ImportActionEnum] = Field(
-        alias="import-action", default=None
+        serialization_alias="import-action", default=None
     )
     fqdn: str
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
