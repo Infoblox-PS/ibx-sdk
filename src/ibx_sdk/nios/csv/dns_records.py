@@ -351,7 +351,9 @@ class HostRecord(BaseModel):
 
     hostrecord: str = Field(alias="header-hostrecord", default="hostrecord")
     import_action: Optional[ImportActionEnum] = Field(
-        serialization_alias="import-action", default=None
+        None,
+        serialization_alias="import-action",
+        description="CSV custom import action"
     )
     fqdn: str
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
@@ -386,9 +388,9 @@ class HostRecord(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-            code.startswith("OPTION-")
-            or code.startswith("EA-")
-            or code.startswith("ADMGRP-")
+                code.startswith("OPTION-")
+                or code.startswith("EA-")
+                or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -402,7 +404,9 @@ class HostAddress(BaseModel):
         serialization_alias="header-hostaddress", default="hostaddress"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        serialization_alias="import-action", default=None
+        None,
+        serialization_alias="import-action",
+        description="CSV custom import action"
     )
     parent: str
     view: Optional[str] = None
@@ -441,7 +445,9 @@ class Ipv6HostAddress(BaseModel):
         serialization_alias="header-ipv6hostaddress", default="ipv6hostaddress"
     )
     import_action: Optional[ImportActionEnum] = Field(
-        serialization_alias="import-action", default=None
+        None,
+        serialization_alias="import-action",
+        description="CSV custom import action"
     )
     view: Optional[str] = None
     network_view: Optional[str] = None
