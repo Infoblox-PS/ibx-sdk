@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import logging
+import ssl
 from typing import Union, Any, Optional
 
 import httpx
@@ -173,21 +174,28 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             WapiRequestException: If there is an error with the request to the API.
 
         """
-        with httpx.Client(cert=certificate, verify=self.ssl_verify) as conn:
-            try:
-                res = conn.get(f"{self.url}/grid")
-                res.raise_for_status()
-            except httpx.HTTPStatusError as exc:
-                logging.error(exc)
-                raise WapiRequestException(exc) from exc
-            except httpx.RequestError as exc:
-                logging.error(exc)
-                raise WapiRequestException(exc) from exc
-            else:
-                grid = res.json()
-                setattr(self, "conn", conn)
-                setattr(self, "grid_ref", grid[0].get("_ref"))
-                return grid[0].get("_ref", "")
+        ctx = ssl.create_default_context()
+        ctx.load_cert_chain(certfile=certificate)
+        if self.ssl_verify:
+            ctx.load_verify_locations(cafile=self.ssl_verify)
+        else:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+        try:
+            conn = httpx.Client(verify=ctx)
+            res = conn.get(f"{self.url}/grid")
+            res.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
+        else:
+            grid = res.json()
+            setattr(self, "conn", conn)
+            setattr(self, "grid_ref", grid[0].get("_ref"))
+            return grid[0].get("_ref", "")
 
     def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
         """
@@ -209,21 +217,28 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             WapiRequestException: If an error occurs during the request.
         """
         auth = httpx.BasicAuth(username, password)
-        with httpx.Client(auth=auth, verify=self.ssl_verify) as conn:
-            try:
-                res = conn.get(f"{self.url}/grid")
-                res.raise_for_status()
-            except httpx.HTTPStatusError as exc:
-                logging.error(exc)
-                raise WapiRequestException(exc) from exc
-            except httpx.RequestError as exc:
-                logging.error(exc)
-                raise WapiRequestException(exc) from exc
-            else:
-                grid = res.json()
-                setattr(self, "conn", conn)
-                setattr(self, "grid_ref", grid[0].get("_ref"))
-                return grid[0].get("_ref", "")
+
+        ctx = ssl.create_default_context()
+        if self.ssl_verify:
+            ctx.load_verify_locations(cafile=self.ssl_verify)
+        else:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+        try:
+            conn = httpx.Client(auth=auth, verify=ctx)
+            res = conn.get(f"{self.url}/grid")
+            res.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
+        else:
+            grid = res.json()
+            setattr(self, "conn", conn)
+            setattr(self, "grid_ref", grid[0].get("_ref"))
+            return grid[0].get("_ref", "")
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
         """
@@ -359,6 +374,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         url = f"{self.url}/{wapi_object}"
         try:
             response = self.conn.request("get", url, params=params, **kwargs)
+            response.raise_for_status()
         except httpx.HTTPStatusError as exc:
             logging.error(exc)
             raise WapiRequestException(exc) from exc
@@ -427,9 +443,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         """
         url = f"{self.url}/{wapi_object_ref}"
         try:
-            res = self.conn.request(
-                "put", url, data=data, verify=self.ssl_verify, **kwargs
-            )
+            res = self.conn.request("put", url, data=data, **kwargs)
         except httpx.HTTPStatusError as exc:
             logging.error(exc)
             raise WapiRequestException(exc) from exc

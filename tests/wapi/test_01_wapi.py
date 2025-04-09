@@ -183,7 +183,7 @@ def test_wapi_getone_multiple(get_wapi):
     wapi = get_wapi
     with pytest.raises(WapiRequestException) as err:
         wapi.getone('network')
-        assert err == 'Multiple data records were returned'
+        assert err == "Multiple data records were returned"
 
 
 def test_wapi_getone_no_data(get_wapi):
