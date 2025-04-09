@@ -20,7 +20,9 @@ def test_optionfilter_default_values():
 
 
 def test_optionfilter_import_action():
-    option_filter = OptionFilter(name="test_name", import_action=ImportActionEnum.INSERT)
+    option_filter = OptionFilter(
+        name="test_name", import_action=ImportActionEnum.INSERT
+    )
     assert option_filter.import_action == ImportActionEnum.INSERT
 
 

@@ -6,8 +6,7 @@ from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum, ImportActionEnum
 
 def test_delegatedzone_default_values():
     delegated_zone = DelegatedZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     assert delegated_zone.delegatedzone == "delegatedzone"
     assert delegated_zone.fqdn == "example.com"
@@ -39,7 +38,7 @@ def test_delegatedzone_with_all_fields():
         new_prefix=25,
         ddns_protected=False,
         ddns_principal="principal",
-        import_action=ImportActionEnum.INSERT_OVERRIDE
+        import_action=ImportActionEnum.INSERT_OVERRIDE,
     )
     assert delegated_zone.fqdn == "sub.example.com"
     assert delegated_zone.zone_format == ZoneFormatTypeEnum.FORWARD
@@ -58,8 +57,7 @@ def test_delegatedzone_with_all_fields():
 
 def test_delegatedzone_invalid_field():
     delegated_zone = DelegatedZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     with pytest.raises(Exception) as excinfo:
         delegated_zone.add_property("invalid-field", "value")
@@ -68,8 +66,7 @@ def test_delegatedzone_invalid_field():
 
 def test_delegatedzone_extra_field():
     delegated_zone = DelegatedZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     delegated_zone.add_property("EA-Custom", "custom_value")
     assert getattr(delegated_zone, "EA-Custom") == "custom_value"
@@ -78,9 +75,7 @@ def test_delegatedzone_extra_field():
 def test_delegatedzone_invalid_prefix():
     with pytest.raises(ValidationError):
         DelegatedZone(
-            fqdn="example.com",
-            zone_format=ZoneFormatTypeEnum.FORWARD,
-            prefix=-5
+            fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD, prefix=-5
         )
 
 
@@ -88,8 +83,10 @@ def test_delegatedzone_serialize_delegate_to():
     delegated_zone = DelegatedZone(
         fqdn="example.com",
         zone_format=ZoneFormatTypeEnum.FORWARD,
-        delegate_to=["ns1.example.com", "ns2.example.com"]
+        delegate_to=["ns1.example.com", "ns2.example.com"],
     )
-    assert delegated_zone.serialize_delegate_to(
-        delegated_zone.delegate_to) == "ns1.example.com,ns2.example.com"
+    assert (
+        delegated_zone.serialize_delegate_to(delegated_zone.delegate_to)
+        == "ns1.example.com,ns2.example.com"
+    )
     assert delegated_zone.serialize_delegate_to(None) is None

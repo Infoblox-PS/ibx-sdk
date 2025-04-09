@@ -1,12 +1,8 @@
-
 from src.ibx_sdk.logger.ibx_logger import init_remote_logger
 
 
 def test_init_remote_logger_default_values():
-    logger = init_remote_logger(
-        address=("192.168.1.53", 5140),
-        level="DEBUG"
-    )
+    logger = init_remote_logger(address=("192.168.1.53", 5140), level="DEBUG")
     logger.debug("Test DEBUG message")
     logger.info("Test INFO message")
     logger.warning("Test WARNING message")

@@ -6,8 +6,7 @@ from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum, ImportActionEnum
 
 def test_forwardzone_default_values():
     forward_zone = ForwardZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     assert forward_zone.forwardzone == "forwardzone"
     assert forward_zone.fqdn == "example.com"
@@ -39,7 +38,7 @@ def test_forwardzone_with_optional_values():
         ns_group="group1",
         ns_group_external="external_group",
         disable_ns_generation=False,
-        import_action=ImportActionEnum.INSERT
+        import_action=ImportActionEnum.INSERT,
     )
     assert forward_zone.view == "default"
     assert forward_zone.prefix == "192.168"
@@ -56,10 +55,7 @@ def test_forwardzone_with_optional_values():
 
 def test_forwardzone_invalid_fqdn():
     with pytest.raises(ValidationError):
-        ForwardZone(
-            fqdn="",
-            zone_format=ZoneFormatTypeEnum.FORWARD
-        )
+        ForwardZone(fqdn="", zone_format=ZoneFormatTypeEnum.FORWARD)
 
 
 def test_forwardzone_serialize_list_fields():
@@ -67,18 +63,21 @@ def test_forwardzone_serialize_list_fields():
         fqdn="example.com",
         zone_format=ZoneFormatTypeEnum.FORWARD,
         forward_to=["forwarder1.com", "forwarder2.com"],
-        forwarding_servers=["server1.com", "server2.com"]
+        forwarding_servers=["server1.com", "server2.com"],
     )
-    assert forward_zone.serialize_list_fields(
-        forward_zone.forward_to) == "forwarder1.com,forwarder2.com"
-    assert forward_zone.serialize_list_fields(
-        forward_zone.forwarding_servers) == "server1.com,server2.com"
+    assert (
+        forward_zone.serialize_list_fields(forward_zone.forward_to)
+        == "forwarder1.com,forwarder2.com"
+    )
+    assert (
+        forward_zone.serialize_list_fields(forward_zone.forwarding_servers)
+        == "server1.com,server2.com"
+    )
 
 
 def test_forwardzone_add_valid_property():
     forward_zone = ForwardZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     forward_zone.add_property("EA-test", "value")
     assert getattr(forward_zone, "EA-test") == "value"
@@ -86,8 +85,7 @@ def test_forwardzone_add_valid_property():
 
 def test_forwardzone_add_invalid_property():
     forward_zone = ForwardZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
+        fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD
     )
     with pytest.raises(Exception, match="Invalid field name: invalid_property"):
         forward_zone.add_property("invalid_property", "value")

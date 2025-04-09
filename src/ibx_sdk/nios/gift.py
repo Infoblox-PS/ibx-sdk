@@ -75,10 +75,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
     """
 
     def __init__(
-            self,
-            grid_mgr: str = None,
-            wapi_ver: str = "2.5",
-            ssl_verify: Union[bool, str] = False,
+        self,
+        grid_mgr: str = None,
+        wapi_ver: str = "2.5",
+        ssl_verify: Union[bool, str] = False,
     ) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
@@ -132,7 +132,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return ""
 
     def connect(
-            self, username: str = None, password: str = None, certificate: str = None
+        self, username: str = None, password: str = None, certificate: str = None
     ) -> None:
         """
         Make a connection to the grid manager using the WAPI instance
@@ -327,7 +327,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             setattr(self, "wapi_ver", max_wapi_ver)
 
     def get(
-            self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
     ) -> httpx.Response:
         """
         Return WAPI object(s).
@@ -355,7 +355,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return res
 
     def getone(
-            self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
     ) -> str:
         """
         Return the reference of a single WAPI object.
@@ -390,11 +390,11 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return data[0].get("_ref", "")
 
     def post(
-            self,
-            wapi_object: str,
-            data: Optional[Union[dict, str]] = None,
-            json: Optional[dict] = None,
-            **kwargs: Any,
+        self,
+        wapi_object: str,
+        data: Optional[Union[dict, str]] = None,
+        json: Optional[dict] = None,
+        **kwargs: Any,
     ) -> httpx.Response:
         """
         Create a POST request to create a WAPI object.
@@ -425,10 +425,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             return res
 
     def put(
-            self,
-            wapi_object_ref: str,
-            data: Optional[Union[dict, str]] = None,
-            **kwargs: Any,
+        self,
+        wapi_object_ref: str,
+        data: Optional[Union[dict, str]] = None,
+        **kwargs: Any,
     ) -> httpx.Response:
         """
         Create a PUT request to update a WAPI object by its _ref.

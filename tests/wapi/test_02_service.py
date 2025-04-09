@@ -1,6 +1,7 @@
 """
 WAPI test module
 """
+
 import logging
 import os
 
@@ -9,12 +10,12 @@ import urllib3
 log = logging.getLogger(__name__)
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-GRID_MGR = os.environ.get('GRID_MGR')
-WAPI_VER = os.environ.get('WAPI_VER')
-PASSWORD = os.environ.get('PASSWORD')
-USERNAME = os.environ.get('USERNAME')
-GRID_MEMBER = os.environ.get('GRID_MEMBER')
-SSL_VERIFY = False if os.environ.get('SSL_VERIFY') == 'False' else True
+GRID_MGR = os.environ.get("GRID_MGR")
+WAPI_VER = os.environ.get("WAPI_VER")
+PASSWORD = os.environ.get("PASSWORD")
+USERNAME = os.environ.get("USERNAME")
+GRID_MEMBER = os.environ.get("GRID_MEMBER")
+SSL_VERIFY = False if os.environ.get("SSL_VERIFY") == "False" else True
 CSV_TASK = {}
 
 

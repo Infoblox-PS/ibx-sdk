@@ -5,9 +5,7 @@ from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_forwardstubservernsgroup_default_values():
-    ns_group = ForwardStubServerNsGroup(
-        group_name="DefaultStubGroup"
-    )
+    ns_group = ForwardStubServerNsGroup(group_name="DefaultStubGroup")
     assert ns_group.forwardstubservernsgroup == "forwardstubservernsgroup"
     assert ns_group.group_name == "DefaultStubGroup"
     assert ns_group.import_action is None
@@ -22,7 +20,7 @@ def test_forwardstubservernsgroup_with_all_fields():
         new_group_name="NewStubGroup",
         comment="Test comment",
         external_servers=["192.168.0.1", "example.com"],
-        import_action=ImportActionEnum.OVERRIDE
+        import_action=ImportActionEnum.OVERRIDE,
     )
     assert ns_group.forwardstubservernsgroup == "forwardstubservernsgroup"
     assert ns_group.group_name == "StubGroup"
@@ -35,7 +33,7 @@ def test_forwardstubservernsgroup_with_all_fields():
 def test_forwardstubservernsgroup_external_servers_serialization():
     ns_group = ForwardStubServerNsGroup(
         group_name="SerializedGroup",
-        external_servers=["192.168.1.1", "dns.example.com"]
+        external_servers=["192.168.1.1", "dns.example.com"],
     )
     serialized_servers = ns_group.serialize_external_servers(ns_group.external_servers)
     assert serialized_servers == "192.168.1.1,dns.example.com"

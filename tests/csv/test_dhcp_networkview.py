@@ -14,7 +14,9 @@ def test_networkview_default_values():
 
 
 def test_networkview_custom_import_action():
-    network_view = NetworkView(name="test_name", import_action=ImportActionEnum.OVERRIDE)
+    network_view = NetworkView(
+        name="test_name", import_action=ImportActionEnum.OVERRIDE
+    )
     assert network_view.import_action == ImportActionEnum.OVERRIDE
 
 

@@ -7,10 +7,7 @@ from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_ipv6network_default_values():
-    ipv6_network = IPv6Network(
-        address=IPv6Address("::1"),
-        cidr=64
-    )
+    ipv6_network = IPv6Network(address=IPv6Address("::1"), cidr=64)
     assert ipv6_network.ipv6network == "ipv6network"
     assert ipv6_network.import_action is None
     assert ipv6_network.comment is None
@@ -49,7 +46,7 @@ def test_ipv6network_with_all_fields():
         discovery_member="test_member",
         discovery_exclusion_range=[
             IPv6Address("2001:db8::1"),
-            IPv6Address("2001:db8::2")
+            IPv6Address("2001:db8::2"),
         ],
         disabled=False,
         auto_create_reversezone=True,
@@ -68,7 +65,7 @@ def test_ipv6network_with_all_fields():
         update_dns_on_lease_renewal=True,
         vlans="default/1",
         rir_organization="RIROrg",
-        rir_registration_status="Registered"
+        rir_registration_status="Registered",
     )
     assert ipv6_network.address == IPv6Address("2001:db8::")
     assert ipv6_network.cidr == 48
@@ -79,7 +76,7 @@ def test_ipv6network_with_all_fields():
     assert ipv6_network.discovery_member == "test_member"
     assert ipv6_network.discovery_exclusion_range == [
         IPv6Address("2001:db8::1"),
-        IPv6Address("2001:db8::2")
+        IPv6Address("2001:db8::2"),
     ]
     assert ipv6_network.disabled is False
     assert ipv6_network.auto_create_reversezone is True
@@ -103,10 +100,7 @@ def test_ipv6network_with_all_fields():
 
 def test_ipv6network_invalid_cidr_value():
     with pytest.raises(ValidationError):
-        IPv6Network(
-            address=IPv6Address("2001:db8::"),
-            cidr=129
-        )
+        IPv6Network(address=IPv6Address("2001:db8::"), cidr=129)
 
 
 def test_ipv6network_missing_required_fields():
@@ -115,18 +109,12 @@ def test_ipv6network_missing_required_fields():
 
 
 def test_add_property_valid():
-    ipv6_network = IPv6Network(
-        address=IPv6Address("2001:db8::"),
-        cidr=48
-    )
+    ipv6_network = IPv6Network(address=IPv6Address("2001:db8::"), cidr=48)
     ipv6_network.add_property("OPTION-test", "value")
     assert getattr(ipv6_network, "OPTION-test") == "value"
 
 
 def test_add_property_invalid():
-    ipv6_network = IPv6Network(
-        address=IPv6Address("2001:db8::"),
-        cidr=48
-    )
+    ipv6_network = IPv6Network(address=IPv6Address("2001:db8::"), cidr=48)
     with pytest.raises(Exception, match="Invalid field name: invalid_code"):
         ipv6_network.add_property("invalid_code", "value")

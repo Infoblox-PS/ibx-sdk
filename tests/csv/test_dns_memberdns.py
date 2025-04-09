@@ -56,7 +56,8 @@ def test_memberdns_allow_forwarder_list():
         allow_forwarder=["192.168.1.1", "10.0.0.1"],
     )
     assert member_dns.allow_forwarder == [
-        "192.168.1.1", "10.0.0.1",
+        "192.168.1.1",
+        "10.0.0.1",
     ]
 
 
@@ -87,7 +88,8 @@ def test_memberdns_nxdomain_redirect_addresses():
         nxdomain_redirect_addresses=["192.0.2.1", "198.51.100.1"],
     )
     assert member_dns.nxdomain_redirect_addresses == [
-        "192.0.2.1", "198.51.100.1",
+        "192.0.2.1",
+        "198.51.100.1",
     ]
 
 

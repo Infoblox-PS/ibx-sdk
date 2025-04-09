@@ -956,11 +956,11 @@ class NiosFileopMixin:
     def __update_url(self, url: str) -> str:
         if self.grid_mgr in url:
             return url
-        elif '[' in url and ']' in url:
-            ipv6_pattern = r'https://(\[[a-zA-Z0-9:]+\])'
+        elif "[" in url and "]" in url:
+            ipv6_pattern = r"https://(\[[a-zA-Z0-9:]+\])"
             return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)
         else:
-            ipv4_pattern = r'https://(\d{1,3}\.){3}\d{1,3}'
+            ipv4_pattern = r"https://(\d{1,3}\.){3}\d{1,3}"
             return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
     def __upload_file(

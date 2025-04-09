@@ -7,10 +7,7 @@ from src.ibx_sdk.nios.csv.enums import ZoneFormatTypeEnum
 
 
 def test_authzone_default_values():
-    auth_zone = AuthZone(
-        fqdn="example.com",
-        zone_format=ZoneFormatTypeEnum.FORWARD
-    )
+    auth_zone = AuthZone(fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD)
 
     assert auth_zone.authzone == "authzone"
     assert auth_zone.fqdn == "example.com"
@@ -48,22 +45,15 @@ def test_authzone_default_values():
 
 def test_authzone_required_fields():
     with pytest.raises(ValidationError):
-        AuthZone(
-            zone_format=ZoneFormatTypeEnum.FORWARD
-        )
+        AuthZone(zone_format=ZoneFormatTypeEnum.FORWARD)
 
     with pytest.raises(ValidationError):
-        AuthZone(
-            fqdn="example.com"
-        )
+        AuthZone(fqdn="example.com")
 
 
 def test_authzone_invalid_fields():
     with pytest.raises(Exception, match="Invalid field name: INVALID-EA-FIELD"):
-        auth_zone = AuthZone(
-            fqdn="example.com",
-            zone_format=ZoneFormatTypeEnum.FORWARD
-        )
+        auth_zone = AuthZone(fqdn="example.com", zone_format=ZoneFormatTypeEnum.FORWARD)
         auth_zone.add_property("INVALID-EA-FIELD", "some_value")
 
 
