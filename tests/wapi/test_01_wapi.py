@@ -108,7 +108,7 @@ def test_wapi_basic_auth_connection_with_bad_password():
 
 def test_wapi_returns_cookie_connection(get_wapi):
     wapi = get_wapi
-    cookies = wapi.conn.cookies.get_dict()
+    cookies = wapi.conn.cookies
     assert 'ibapauth' in cookies.keys()
 
 
@@ -116,6 +116,7 @@ def test_wapi_get_invalid_object(get_wapi):
     wapi = get_wapi
     try:
         response = wapi.get('invalid_object')
+        log.debug(response.json())
         assert response.status_code == 400
     except WapiRequestException as err:
         log.debug(err)
