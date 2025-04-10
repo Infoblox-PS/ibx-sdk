@@ -16,11 +16,12 @@ limitations under the License.
 
 import logging
 import os
-import re
 import pprint
+import re
 from typing import Literal, Optional
 
-import requests.exceptions
+# import requests.exceptions
+import httpx
 
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.util import util
@@ -92,29 +93,29 @@ class NiosFileopMixin:
             )
             logging.debug(response.text)
             response.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
+        else:
+            obj = response.json()
 
-        obj = response.json()
         download_url = obj.get("url")
         download_token = obj.get("token")
 
         logging.info("downloading data from %s", download_url)
-        response = self.__download_file(download_url, self.__get_cookies())
 
         if not filename:
             filename = util.extract_filename_from_url(download_url)
 
-        NiosFileopMixin.__write_file(filename=filename, data=response)
+        self.__download_file(download_url, self.__get_cookies(), filename)
 
-        self.__download_complete(download_token, filename, self.__get_cookies())
+        self.__download_complete(download_token, filename)
 
     def file_download(
-        self,
-        token: str,
-        url: str,
-        filename: str = None,
+            self,
+            token: str,
+            url: str,
+            filename: str = None,
     ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
@@ -128,22 +129,20 @@ class NiosFileopMixin:
             None
         """
         logging.info("downloading data from %s", url)
-        try:
-            res = self.__download_file(url, self.__get_cookies())
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
         if not filename:
             filename = util.extract_filename_from_url(url)
 
-        NiosFileopMixin.__write_file(filename=filename, data=res)
+        try:
+            self.__download_file(url, self.__get_cookies(), filename)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         try:
-            self.__download_complete(token, filename, self.__get_cookies())
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+            self.__download_complete(token, filename)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
     def file_upload(self, filename: str) -> str:
         """
@@ -165,9 +164,9 @@ class NiosFileopMixin:
         logging.info("step 1 - request uploadinit %s", filename)
         try:
             obj = self.__upload_init(filename=valid_filename)
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         upload_url = obj.get("url")
         token = obj.get("token")
@@ -182,17 +181,17 @@ class NiosFileopMixin:
             logging.info("step 2 - post the files using the upload_url provided")
             try:
                 self.__upload_file(upload_url, upload_file, self.__get_cookies())
-            except requests.exceptions.RequestException as err:
-                logging.error(err)
-                raise WapiRequestException(err)
+            except httpx.RequestError as exc:
+                logging.error(exc)
+                raise WapiRequestException(exc)
             else:
                 return token
 
     def upload_certificate(
-        self,
-        member: str,
-        filename: str,
-        certificate_usage: SupportedCertTypes = "ADMIN",
+            self,
+            member: str,
+            filename: str,
+            certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Upload an SSL Certificate file to the Grid
@@ -219,19 +218,19 @@ class NiosFileopMixin:
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
-                cookies=self.__get_cookies(),
+                # cookies=self.__get_cookies(),
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
     def csv_import(
-        self,
-        task_operation: CsvOperation,
-        csv_import_file: str,
-        exit_on_error: bool = False,
+            self,
+            task_operation: CsvOperation,
+            csv_import_file: str,
+            exit_on_error: bool = False,
     ) -> dict:
         """
         Perform a CSV import task using the NIOS CSV Task Manager
@@ -261,9 +260,9 @@ class NiosFileopMixin:
             csvtask = self.__csv_import(
                 task_operation.upper(), token, self.__get_cookies(), exit_on_error
             )
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
         else:
             return csvtask
 
@@ -320,9 +319,9 @@ class NiosFileopMixin:
         try:
             res = self.get(_ref)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
         else:
             logging.debug(res.json())
 
@@ -351,35 +350,33 @@ class NiosFileopMixin:
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         token = obj.get("token")
         download_url = obj.get("url")
 
-        try:
-            res = self.__download_file(download_url, self.__get_cookies())
-            res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-
         csv_error_file = f"csv-errors-{filename}.csv"
-        NiosFileopMixin.__write_file(filename=csv_error_file, data=res)
+        try:
+            self.__download_file(download_url, self.__get_cookies(), csv_error_file)
+            res.raise_for_status()
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         # We're done - so post to downloadcomplete function
         try:
-            self.__download_complete(token, csv_error_file, self.__get_cookies())
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+            self.__download_complete(token, csv_error_file)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
     def download_certificate(
-        self,
-        member: str,
-        certificate_usage: SupportedCertTypes = "ADMIN",
+            self,
+            member: str,
+            certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Download SSL certificate from the Grid.
@@ -398,9 +395,9 @@ class NiosFileopMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -409,21 +406,21 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_selfsigned_cert(
-        self,
-        cn: str,
-        member: str,
-        days_valid: int = 365,
-        algorithm: SupportedAlgorithms = "SHA-256",
-        certificate_usage: SupportedCertUsages = "ADMIN",
-        comment: Optional[str] = None,
-        country: Optional[str] = None,
-        email: Optional[str] = None,
-        key_size: Optional[SupportedKeySizes] = 2048,
-        locality: Optional[str] = None,
-        org: Optional[str] = None,
-        org_unit: Optional[str] = None,
-        state: Optional[str] = None,
-        subject_alternative_names: Optional[list[dict]] = None,
+            self,
+            cn: str,
+            member: str,
+            days_valid: int = 365,
+            algorithm: SupportedAlgorithms = "SHA-256",
+            certificate_usage: SupportedCertUsages = "ADMIN",
+            comment: Optional[str] = None,
+            country: Optional[str] = None,
+            email: Optional[str] = None,
+            key_size: Optional[SupportedKeySizes] = 2048,
+            locality: Optional[str] = None,
+            org: Optional[str] = None,
+            org_unit: Optional[str] = None,
+            state: Optional[str] = None,
+            subject_alternative_names: Optional[list[dict]] = None,
     ):
         """
         Generate a Self-Signed Certificate on the Grid.
@@ -479,9 +476,9 @@ class NiosFileopMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -490,20 +487,20 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_csr(
-        self,
-        cn: str,
-        member: str,
-        algorithm: SupportedAlgorithms = "SHA-256",
-        certificate_usage: SupportedCertUsages = "ADMIN",
-        comment: Optional[str] = None,
-        country: Optional[str] = None,
-        email: Optional[str] = None,
-        key_size: Optional[SupportedKeySizes] = 2048,
-        locality: Optional[str] = None,
-        org: Optional[str] = None,
-        org_unit: Optional[str] = None,
-        state: Optional[str] = None,
-        subject_alternative_names: Optional[list[dict]] = None,
+            self,
+            cn: str,
+            member: str,
+            algorithm: SupportedAlgorithms = "SHA-256",
+            certificate_usage: SupportedCertUsages = "ADMIN",
+            comment: Optional[str] = None,
+            country: Optional[str] = None,
+            email: Optional[str] = None,
+            key_size: Optional[SupportedKeySizes] = 2048,
+            locality: Optional[str] = None,
+            org: Optional[str] = None,
+            org_unit: Optional[str] = None,
+            state: Optional[str] = None,
+            subject_alternative_names: Optional[list[dict]] = None,
     ) -> None:
         """
         Generate a Certificate Signing Request
@@ -560,9 +557,9 @@ class NiosFileopMixin:
             res = self.post("fileop", params={"_function": "generatecsr"}, json=payload)
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -571,14 +568,14 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def get_log_files(
-        self,
-        log_type: LogType,
-        filename: Optional[str] = None,
-        endpoint: Optional[str] = None,
-        include_rotated: bool = False,
-        member: Optional[str] = None,
-        msserver: Optional[str] = None,
-        node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
+            self,
+            log_type: LogType,
+            filename: Optional[str] = None,
+            endpoint: Optional[str] = None,
+            include_rotated: bool = False,
+            member: Optional[str] = None,
+            msserver: Optional[str] = None,
+            node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
     ):
         """
         Fetch the log files for the provided member or msserver
@@ -613,9 +610,9 @@ class NiosFileopMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -624,16 +621,16 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_support_bundle(
-        self,
-        member: str,
-        filename: Optional[str] = None,
-        cached_zone_data: bool = False,
-        core_files: bool = False,
-        log_files: bool = False,
-        nm_snmp_logs: bool = False,
-        recursive_cache_file: bool = False,
-        remote_url: Optional[str] = None,
-        rotate_log_files: bool = False,
+            self,
+            member: str,
+            filename: Optional[str] = None,
+            cached_zone_data: bool = False,
+            core_files: bool = False,
+            log_files: bool = False,
+            nm_snmp_logs: bool = False,
+            recursive_cache_file: bool = False,
+            remote_url: Optional[str] = None,
+            rotate_log_files: bool = False,
     ):
         """
         Get the support bundle for a member.
@@ -675,13 +672,13 @@ class NiosFileopMixin:
         logging.debug(pprint.pformat(payload))
         try:
             res = self.post(
-                "fileop", params={"_function": "get_support_bundle"}, json=payload
+                "fileop", params={"_function": "get_support_bundle"}, json=payload, timeout=None
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -707,9 +704,9 @@ class NiosFileopMixin:
         logging.info("step 1 - request gridbackup %s", filename)
         try:
             res = self.__getgriddata(payload, self.__get_cookies())
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         token = res.get("token")
         download_url = res.get("url")
@@ -718,10 +715,10 @@ class NiosFileopMixin:
         self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
-        self,
-        filename: str = "database.bak",
-        mode: GridRestoreMode = "NORMAL",
-        keep_grid_ip: bool = False,
+            self,
+            filename: str = "database.bak",
+            mode: GridRestoreMode = "NORMAL",
+            keep_grid_ip: bool = False,
     ):
         """
         Perform a NIOS Grid restore of a database using a given file.
@@ -739,17 +736,17 @@ class NiosFileopMixin:
         logging.info("step 3 - execute the grid restore")
         try:
             self.__restore_database(keep_grid_ip, mode, token, self.__get_cookies())
-        except requests.exceptions.RequestException as err:
-            logging.error("step 3 - Error: %s", err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error("step 3 - Error: %s", exc)
+            raise WapiRequestException(exc)
         logging.info("Grid restore successful!")
 
     def member_config(
-        self,
-        member: str,
-        conf_type: MemberDataType,
-        filename: Optional[str] = None,
-        remote_url: str = None,
+            self,
+            member: str,
+            conf_type: MemberDataType,
+            filename: Optional[str] = None,
+            remote_url: str = None,
     ) -> None:
         """
         Fetch member configuration file for given service type.
@@ -775,9 +772,9 @@ class NiosFileopMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -786,11 +783,11 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_lease_history(
-        self,
-        member: str,
-        start_time: int = None,
-        end_time: int = None,
-        remove_url: str = None,
+            self,
+            member: str,
+            start_time: int = None,
+            end_time: int = None,
+            remove_url: str = None,
     ) -> None:
         """
         fetch DHCP lease history files from a NIOS Grid Member
@@ -822,9 +819,9 @@ class NiosFileopMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         obj = res.json()
         download_url = obj.get("url")
@@ -833,11 +830,11 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def __csv_import(
-        self,
-        task_operation: str,
-        upload_token: str,
-        req_cookies: dict,
-        exit_on_error: bool = False,
+            self,
+            task_operation: str,
+            upload_token: str,
+            req_cookies: dict,
+            exit_on_error: bool = False,
     ) -> dict:
         headers = {"content-type": "application/json"}
 
@@ -866,17 +863,18 @@ class NiosFileopMixin:
                 params={"_function": "csv_import"},
                 json=payload,
                 headers=headers,
-                cookies=req_cookies,
+                timeout=None,
+                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         return res.json()
 
-    def __download_complete(self, token: str, filename: str, req_cookies: dict) -> None:
+    def __download_complete(self, token: str, filename: str) -> None:
         header = {"Content-type": "application/json"}
         payload = {"token": token}
         try:
@@ -885,30 +883,27 @@ class NiosFileopMixin:
                 params={"_function": "downloadcomplete"},
                 json=payload,
                 headers=header,
-                cookies=req_cookies,
             )
             logging.info("file %s download complete", filename)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
 
-    def __download_file(self, download_url, req_cookies):
+    def __download_file(self, download_url, req_cookies, filename=None) -> None:
         download_url = self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
-        res = None
-        try:
-            logging.info(download_url)
-            res = self.conn.get(
+        logging.info(download_url)
+        self.conn.verify = self.ssl_verify
+        # self.conn.cookies = req_cookies
+        with self.conn.stream(
+                "GET",
                 download_url,
                 headers=header,
-                stream=True,
-                cookies=req_cookies,
-                verify=self.ssl_verify,
-            )
+        ) as res:
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-        return res
+            with open(filename, "wb") as file_out:
+                for chunk in res.iter_bytes(chunk_size=1024):
+                    file_out.write(chunk)
 
     def __getgriddata(self, payload: dict, req_cookies) -> dict:
         headers = {"content-type": "application/json"}
@@ -918,18 +913,19 @@ class NiosFileopMixin:
                 params={"_function": "getgriddata"},
                 json=payload,
                 headers=headers,
-                cookies=req_cookies,
+                timeout=None,
+                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         return res.json()
 
     def __restore_database(
-        self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
+            self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
     ) -> dict:
         # set content type back to JSON
         headers = {"content-type": "application/json"}
@@ -944,13 +940,14 @@ class NiosFileopMixin:
                 params={"_function": "restoredatabase"},
                 json=payload,
                 headers=headers,
-                cookies=req_cookies,
+                timeout=None,
+                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
         return res
 
     def __update_url(self, url: str) -> str:
@@ -964,7 +961,7 @@ class NiosFileopMixin:
             return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
     def __upload_file(
-        self, upload_url: str, upload_file: dict, req_cookies: dict
+            self, upload_url: str, upload_file: dict, req_cookies: dict
     ) -> None:
         upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
@@ -972,14 +969,12 @@ class NiosFileopMixin:
             res = self.conn.post(
                 upload_url,
                 files=upload_file,
-                cookies=req_cookies,
-                verify=self.ssl_verify,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
     def __upload_init(self, filename: str) -> dict:
         headers = {"content-type": "application/json"}
@@ -993,19 +988,19 @@ class NiosFileopMixin:
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc)
 
         return res.json()
 
     def __get_cookies(self) -> dict:
         # save the authentication cookie for use in subsequent requests
-        ibapauth_cookie = self.conn.cookies["ibapauth"]
+        ibapauth_cookie = self.conn.cookies.get("ibapauth")
         return {"ibapauth": ibapauth_cookie}
 
     @staticmethod
-    def __write_file(filename: str, data: requests.Response) -> None:
+    def __write_file(filename: str, data: httpx.Response) -> None:
         logging.info("writing file: %s", filename)
         with open(filename, "wb") as file:
             for chunk in data.iter_content(chunk_size=1024):

@@ -413,6 +413,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         url = f"{self.url}/{wapi_object}"
         try:
             res = self.conn.request("post", url, data=data, json=json, **kwargs)
+            logging.info(kwargs)
         except httpx.HTTPStatusError as exc:
             logging.error(exc)
             raise WapiRequestException(exc) from exc
