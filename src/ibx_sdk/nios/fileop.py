@@ -26,7 +26,13 @@ from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.util import util
 
 CsvOperation = Literal[
-    "INSERT", "UPDATE", "DELETE", "REPLACE", "MERGE", "OVERRIDE", "CUSTOM"
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "REPLACE",
+    "MERGE",
+    "OVERRIDE",
+    "CUSTOM",
 ]
 GridRestoreMode = Literal["NORMAL", "FORCED", "CLONE"]
 SupportedAlgorithms = Literal["SHA-1", "SHA-256", "SHA-384", "SHA-512"]
@@ -35,7 +41,12 @@ SupportedCertUsages = Literal[
     "ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"
 ]
 SupportedCertTypes = Literal[
-    "ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"
+    "ADMIN",
+    "CAPTIVE_PORTAL",
+    "SFNT_CLIENT_CERT",
+    "IFMAP_DHCP",
+    "EAP_CA",
+    "TAE_CA",
 ]
 LogType = Literal[
     "SYSLOG",
@@ -62,22 +73,26 @@ class NiosFileopMixin:
     NiosFileopMixin class
     """
 
-    def csv_export(self, wapi_object: str, filename: Optional[str] = None) -> None:
+    def csv_export(
+        self, wapi_object: str, filename: Optional[str] = None
+    ) -> None:
         """
-        Perform a NIOS CSV Export Task for a given WAPI object
+        Exports data in CSV format for the specified WAPI object and saves it to a file.
 
-        Args:
-            wapi_object: The name of the WAPI object to perform a CSV export on.
-            filename: Optional. The name of the file to save the exported data to. If not
-                                provided, a default filename will be generated based on the
-                                download URL.
+        The method performs a CSV export operation for a specified WAPI object using the file
+        operation capabilities provided by the WAPI (Web Application Programming Interface),
+        downloads the resulting file from a given URL, and saves it to a user-specified filename
+        or a default filename derived from the download URL. Finally, it finalizes the download
+        process by notifying the completion.
+
+        Parameters:
+            wapi_object (str): The name of the WAPI object(s) whose data is to be exported.
+            filename (Optional[str]): The optional local file path to save the downloaded CSV
+                data. If not provided, the filename is automatically derived from the
+                downloaded URL.
 
         Raises:
-            requests.exceptions.RequestException: If there is an error in the request.
-
-        Returns:
-            None
-
+            WapiRequestException: If an HTTP request fails during the CSV export process.
         """
         if filename:
             (_, filename) = os.path.split(filename)
@@ -88,7 +103,9 @@ class NiosFileopMixin:
         payload = {"_object": wapi_object}
         try:
             response = self.post(
-                "fileop", params={"_function": "csv_export"}, json=payload
+                "fileop",
+                params={"_function": "csv_export"},
+                json=payload,
             )
             logging.debug(response.text)
             response.raise_for_status()
@@ -111,10 +128,10 @@ class NiosFileopMixin:
         self.__download_complete(download_token, filename)
 
     def file_download(
-            self,
-            token: str,
-            url: str,
-            filename: str = None,
+        self,
+        token: str,
+        url: str,
+        filename: str = None,
     ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
@@ -122,7 +139,8 @@ class NiosFileopMixin:
         Args:
             token: Authentication token required for the download completion.
             url: URL of the file to be downloaded.
-            filename: Optional; name for the downloaded file. If not provided, it will be extracted from the URL.
+            filename: Optional; name for the downloaded file. If not provided, it will be extracted
+            from the URL.
 
         Returns:
             None
@@ -177,7 +195,9 @@ class NiosFileopMixin:
             upload_file = {"file": fh.read()}
 
             # Upload the contents of the CSV file
-            logging.info("step 2 - post the files using the upload_url provided")
+            logging.info(
+                "step 2 - post the files using the upload_url provided"
+            )
             try:
                 self.__upload_file(upload_url, upload_file)
             except httpx.RequestError as exc:
@@ -187,10 +207,10 @@ class NiosFileopMixin:
                 return token
 
     def upload_certificate(
-            self,
-            member: str,
-            filename: str,
-            certificate_usage: SupportedCertTypes = "ADMIN",
+        self,
+        member: str,
+        filename: str,
+        certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Upload an SSL Certificate file to the Grid
@@ -206,7 +226,11 @@ class NiosFileopMixin:
         token = self.file_upload(filename=filename)
 
         # submit task to CSV Job Manager
-        logging.info("step 3 - upload %s certificate on %s", certificate_usage, member)
+        logging.info(
+            "step 3 - upload %s certificate on %s",
+            certificate_usage,
+            member,
+        )
         payload = {
             "certificate_usage": certificate_usage,
             "member": member,
@@ -225,10 +249,10 @@ class NiosFileopMixin:
             raise WapiRequestException(exc)
 
     def csv_import(
-            self,
-            task_operation: CsvOperation,
-            csv_import_file: str,
-            exit_on_error: bool = False,
+        self,
+        task_operation: CsvOperation,
+        csv_import_file: str,
+        exit_on_error: bool = False,
     ) -> dict:
         """
         Perform a CSV import task using the NIOS CSV Task Manager
@@ -344,7 +368,9 @@ class NiosFileopMixin:
         payload = {"import_id": job_id}
         try:
             res = self.post(
-                "fileop", params={"_function": "csv_error_log"}, json=payload
+                "fileop",
+                params={"_function": "csv_error_log"},
+                json=payload,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
@@ -372,9 +398,9 @@ class NiosFileopMixin:
             raise WapiRequestException(exc)
 
     def download_certificate(
-            self,
-            member: str,
-            certificate_usage: SupportedCertTypes = "ADMIN",
+        self,
+        member: str,
+        certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
         Download SSL certificate from the Grid.
@@ -383,13 +409,22 @@ class NiosFileopMixin:
             member: The identifier of the member for whom the certificate is being downloaded.
             certificate_usage: The type of certificate to be downloaded (e.g., "ADMIN").
         """
-        logging.info("Downloading %s certificate for %s", certificate_usage, member)
-        payload = {"member": member, "certificate_usage": certificate_usage}
+        logging.info(
+            "Downloading %s certificate for %s",
+            certificate_usage,
+            member,
+        )
+        payload = {
+            "member": member,
+            "certificate_usage": certificate_usage,
+        }
         logging.debug("json payload %s", payload)
 
         try:
             res = self.post(
-                "fileop", params={"_function": "downloadcertificate"}, json=payload
+                "fileop",
+                params={"_function": "downloadcertificate"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -404,21 +439,21 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_selfsigned_cert(
-            self,
-            cn: str,
-            member: str,
-            days_valid: int = 365,
-            algorithm: SupportedAlgorithms = "SHA-256",
-            certificate_usage: SupportedCertUsages = "ADMIN",
-            comment: Optional[str] = None,
-            country: Optional[str] = None,
-            email: Optional[str] = None,
-            key_size: Optional[SupportedKeySizes] = 2048,
-            locality: Optional[str] = None,
-            org: Optional[str] = None,
-            org_unit: Optional[str] = None,
-            state: Optional[str] = None,
-            subject_alternative_names: Optional[list[dict]] = None,
+        self,
+        cn: str,
+        member: str,
+        days_valid: int = 365,
+        algorithm: SupportedAlgorithms = "SHA-256",
+        certificate_usage: SupportedCertUsages = "ADMIN",
+        comment: Optional[str] = None,
+        country: Optional[str] = None,
+        email: Optional[str] = None,
+        key_size: Optional[SupportedKeySizes] = 2048,
+        locality: Optional[str] = None,
+        org: Optional[str] = None,
+        org_unit: Optional[str] = None,
+        state: Optional[str] = None,
+        subject_alternative_names: Optional[list[dict]] = None,
     ):
         """
         Generate a Self-Signed Certificate on the Grid.
@@ -470,7 +505,9 @@ class NiosFileopMixin:
 
         try:
             res = self.post(
-                "fileop", params={"_function": "generateselfsignedcert"}, json=payload
+                "fileop",
+                params={"_function": "generateselfsignedcert"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -485,26 +522,26 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def generate_csr(
-            self,
-            cn: str,
-            member: str,
-            algorithm: SupportedAlgorithms = "SHA-256",
-            certificate_usage: SupportedCertUsages = "ADMIN",
-            comment: Optional[str] = None,
-            country: Optional[str] = None,
-            email: Optional[str] = None,
-            key_size: Optional[SupportedKeySizes] = 2048,
-            locality: Optional[str] = None,
-            org: Optional[str] = None,
-            org_unit: Optional[str] = None,
-            state: Optional[str] = None,
-            subject_alternative_names: Optional[list[dict]] = None,
+        self,
+        cn: str,
+        member: str,
+        algorithm: SupportedAlgorithms = "SHA-256",
+        certificate_usage: SupportedCertUsages = "ADMIN",
+        comment: Optional[str] = None,
+        country: Optional[str] = None,
+        email: Optional[str] = None,
+        key_size: Optional[SupportedKeySizes] = 2048,
+        locality: Optional[str] = None,
+        org: Optional[str] = None,
+        org_unit: Optional[str] = None,
+        state: Optional[str] = None,
+        subject_alternative_names: Optional[list[dict]] = None,
     ) -> None:
         """
         Generate a Certificate Signing Request
 
-        Generate and download a CSR for a member of the grid. Once the CSR is generated it is downloaded and saved
-        locally to the current working directory.
+        Generate and download a CSR for a member of the grid. Once the CSR is generated it is
+        downloaded and saved locally to the current working directory.
 
         Args:
             cn: Common Name for the certificate.
@@ -519,11 +556,13 @@ class NiosFileopMixin:
             org: Optional organization name for the certificate.
             org_unit: Optional organizational unit for the certificate.
             state: Optional state or province for the certificate.
-            subject_alternative_names: Optional list of subject alternative names (SANs) for the certificate.
+            subject_alternative_names: Optional list of subject alternative names (SANs) for the
+                    certificate.
 
         Returns:
             None
         """
+        logging.info(locals())
         logging.info("generating %s csr for %s", certificate_usage, member)
         payload = {
             "cn": cn,
@@ -531,28 +570,29 @@ class NiosFileopMixin:
             "algorithm": algorithm,
             "certificate_usage": certificate_usage,
         }
-        if comment:
-            payload["comment"] = comment
-        if country:
-            payload["country"] = country
-        if email:
-            payload["email"] = email
-        if key_size:
-            payload["key_size"] = key_size
-        if locality:
-            payload["locality"] = locality
-        if org:
-            payload["org"] = org
-        if org_unit:
-            payload["org_unit"] = org_unit
-        if state:
-            payload["state"] = state
-        if subject_alternative_names:
-            payload["subject_alternative_names"] = subject_alternative_names
+        # optional params
+        for param in [
+            "country",
+            "email",
+            "key_size",
+            "comment",
+            "locality",
+            "org",
+            "org_unit",
+            "state",
+            "subject_alternative_names",
+        ]:
+            if locals()[param] is not None:
+                payload[param] = locals()[param]
+
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post("fileop", params={"_function": "generatecsr"}, json=payload)
+            res = self.post(
+                "fileop",
+                params={"_function": "generatecsr"},
+                json=payload,
+            )
             logging.debug(res.text)
             res.raise_for_status()
         except httpx.RequestError as exc:
@@ -566,14 +606,14 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def get_log_files(
-            self,
-            log_type: LogType,
-            filename: Optional[str] = None,
-            endpoint: Optional[str] = None,
-            include_rotated: bool = False,
-            member: Optional[str] = None,
-            msserver: Optional[str] = None,
-            node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
+        self,
+        log_type: LogType,
+        filename: Optional[str] = None,
+        endpoint: Optional[str] = None,
+        include_rotated: bool = False,
+        member: Optional[str] = None,
+        msserver: Optional[str] = None,
+        node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
     ):
         """
         Fetch the log files for the provided member or msserver
@@ -589,7 +629,10 @@ class NiosFileopMixin:
                        'BACKUP'. (Default: None)
         """
         logging.info("fetching %s log files for %s", log_type, member)
-        payload = {"log_type": log_type, "include_rotated": include_rotated}
+        payload = {
+            "log_type": log_type,
+            "include_rotated": include_rotated,
+        }
 
         if endpoint:
             payload["endpoint"] = endpoint
@@ -604,7 +647,9 @@ class NiosFileopMixin:
 
         try:
             res = self.post(
-                "fileop", params={"_function": "get_log_files"}, json=payload
+                "fileop",
+                params={"_function": "get_log_files"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -616,19 +661,21 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url, filename=filename)
+        self.file_download(
+            token=download_token, url=download_url, filename=filename
+        )
 
     def get_support_bundle(
-            self,
-            member: str,
-            filename: Optional[str] = None,
-            cached_zone_data: bool = False,
-            core_files: bool = False,
-            log_files: bool = False,
-            nm_snmp_logs: bool = False,
-            recursive_cache_file: bool = False,
-            remote_url: Optional[str] = None,
-            rotate_log_files: bool = False,
+        self,
+        member: str,
+        filename: Optional[str] = None,
+        cached_zone_data: bool = False,
+        core_files: bool = False,
+        log_files: bool = False,
+        nm_snmp_logs: bool = False,
+        recursive_cache_file: bool = False,
+        remote_url: Optional[str] = None,
+        rotate_log_files: bool = False,
     ):
         """
         Get the support bundle for a member.
@@ -670,7 +717,10 @@ class NiosFileopMixin:
         logging.debug(pprint.pformat(payload))
         try:
             res = self.post(
-                "fileop", params={"_function": "get_support_bundle"}, json=payload, timeout=None
+                "fileop",
+                params={"_function": "get_support_bundle"},
+                json=payload,
+                timeout=None,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -682,7 +732,9 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url, filename=filename)
+        self.file_download(
+            token=download_token, url=download_url, filename=filename
+        )
 
     def grid_backup(self, filename: Optional[str] = None) -> None:
         """
@@ -713,10 +765,10 @@ class NiosFileopMixin:
         self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
-            self,
-            filename: str = "database.bak",
-            mode: GridRestoreMode = "NORMAL",
-            keep_grid_ip: bool = False,
+        self,
+        filename: str = "database.bak",
+        mode: GridRestoreMode = "NORMAL",
+        keep_grid_ip: bool = False,
     ):
         """
         Perform a NIOS Grid restore of a database using a given file.
@@ -740,11 +792,11 @@ class NiosFileopMixin:
         logging.info("Grid restore successful!")
 
     def member_config(
-            self,
-            member: str,
-            conf_type: MemberDataType,
-            filename: Optional[str] = None,
-            remote_url: str = None,
+        self,
+        member: str,
+        conf_type: MemberDataType,
+        filename: Optional[str] = None,
+        remote_url: str = None,
     ) -> None:
         """
         Fetch member configuration file for given service type.
@@ -760,13 +812,19 @@ class NiosFileopMixin:
 
         """
         conf_type = conf_type.upper()
-        logging.info("fetching %s config file for grid member %s", conf_type, member)
+        logging.info(
+            "fetching %s config file for grid member %s",
+            conf_type,
+            member,
+        )
         payload = {"member": member, "type": conf_type}
         if remote_url:
             payload["remote_url"] = remote_url
         try:
             res = self.post(
-                "fileop", params={"_function": "getmemberdata"}, json=payload
+                "fileop",
+                params={"_function": "getmemberdata"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -778,14 +836,16 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url, filename=filename)
+        self.file_download(
+            token=download_token, url=download_url, filename=filename
+        )
 
     def get_lease_history(
-            self,
-            member: str,
-            start_time: int = None,
-            end_time: int = None,
-            remove_url: str = None,
+        self,
+        member: str,
+        start_time: int = None,
+        end_time: int = None,
+        remove_url: str = None,
     ) -> None:
         """
         fetch DHCP lease history files from a NIOS Grid Member
@@ -813,7 +873,9 @@ class NiosFileopMixin:
             payload["remove_url"] = remove_url
         try:
             res = self.post(
-                "fileop", params={"_function": "getleasehistoryfiles"}, json=payload
+                "fileop",
+                params={"_function": "getleasehistoryfiles"},
+                json=payload,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -828,10 +890,10 @@ class NiosFileopMixin:
         self.file_download(token=download_token, url=download_url)
 
     def __csv_import(
-            self,
-            task_operation: str,
-            upload_token: str,
-            exit_on_error: bool = False,
+        self,
+        task_operation: str,
+        upload_token: str,
+        exit_on_error: bool = False,
     ) -> dict:
         headers = {"content-type": "application/json"}
 
@@ -891,9 +953,9 @@ class NiosFileopMixin:
         logging.info(download_url)
         self.conn.verify = self.ssl_verify
         with self.conn.stream(
-                "GET",
-                download_url,
-                headers=header,
+            "GET",
+            download_url,
+            headers=header,
         ) as res:
             res.raise_for_status()
             with open(filename, "wb") as file_out:
@@ -919,13 +981,17 @@ class NiosFileopMixin:
         return res.json()
 
     def __restore_database(
-            self, keep_grid_ip: bool, mode: str, upload_token: str
+        self, keep_grid_ip: bool, mode: str, upload_token: str
     ) -> dict:
         # set content type back to JSON
         headers = {"content-type": "application/json"}
 
         # set the request parameters
-        payload = {"keep_grid_ip": keep_grid_ip, "mode": mode, "token": upload_token}
+        payload = {
+            "keep_grid_ip": keep_grid_ip,
+            "mode": mode,
+            "token": upload_token,
+        }
 
         # start the restore
         try:
@@ -953,9 +1019,7 @@ class NiosFileopMixin:
             ipv4_pattern = r"https://(\d{1,3}\.){3}\d{1,3}"
             return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
-    def __upload_file(
-            self, upload_url: str, upload_file: dict
-    ) -> None:
+    def __upload_file(self, upload_url: str, upload_file: dict) -> None:
         upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
         try:
