@@ -20,7 +20,6 @@ import pprint
 import re
 from typing import Literal, Optional
 
-# import requests.exceptions
 import httpx
 
 from ibx_sdk.nios.exceptions import WapiRequestException
@@ -107,7 +106,7 @@ class NiosFileopMixin:
         if not filename:
             filename = util.extract_filename_from_url(download_url)
 
-        self.__download_file(download_url, self.__get_cookies(), filename)
+        self.__download_file(download_url, filename)
 
         self.__download_complete(download_token, filename)
 
@@ -133,7 +132,7 @@ class NiosFileopMixin:
             filename = util.extract_filename_from_url(url)
 
         try:
-            self.__download_file(url, self.__get_cookies(), filename)
+            self.__download_file(url, filename)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
@@ -180,7 +179,7 @@ class NiosFileopMixin:
             # Upload the contents of the CSV file
             logging.info("step 2 - post the files using the upload_url provided")
             try:
-                self.__upload_file(upload_url, upload_file, self.__get_cookies())
+                self.__upload_file(upload_url, upload_file)
             except httpx.RequestError as exc:
                 logging.error(exc)
                 raise WapiRequestException(exc)
@@ -218,7 +217,6 @@ class NiosFileopMixin:
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
-                # cookies=self.__get_cookies(),
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
@@ -258,7 +256,7 @@ class NiosFileopMixin:
         )
         try:
             csvtask = self.__csv_import(
-                task_operation.upper(), token, self.__get_cookies(), exit_on_error
+                task_operation.upper(), token, exit_on_error
             )
         except httpx.RequestError as exc:
             logging.error(exc)
@@ -360,7 +358,7 @@ class NiosFileopMixin:
 
         csv_error_file = f"csv-errors-{filename}.csv"
         try:
-            self.__download_file(download_url, self.__get_cookies(), csv_error_file)
+            self.__download_file(download_url, csv_error_file)
             res.raise_for_status()
         except httpx.RequestError as exc:
             logging.error(exc)
@@ -703,7 +701,7 @@ class NiosFileopMixin:
 
         logging.info("step 1 - request gridbackup %s", filename)
         try:
-            res = self.__getgriddata(payload, self.__get_cookies())
+            res = self.__getgriddata(payload)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
@@ -735,7 +733,7 @@ class NiosFileopMixin:
         # Execute the restore
         logging.info("step 3 - execute the grid restore")
         try:
-            self.__restore_database(keep_grid_ip, mode, token, self.__get_cookies())
+            self.__restore_database(keep_grid_ip, mode, token)
         except httpx.RequestError as exc:
             logging.error("step 3 - Error: %s", exc)
             raise WapiRequestException(exc)
@@ -833,7 +831,6 @@ class NiosFileopMixin:
             self,
             task_operation: str,
             upload_token: str,
-            req_cookies: dict,
             exit_on_error: bool = False,
     ) -> dict:
         headers = {"content-type": "application/json"}
@@ -864,7 +861,6 @@ class NiosFileopMixin:
                 json=payload,
                 headers=headers,
                 timeout=None,
-                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
@@ -889,12 +885,11 @@ class NiosFileopMixin:
         except httpx.RequestError as exc:
             logging.error(exc)
 
-    def __download_file(self, download_url, req_cookies, filename=None) -> None:
+    def __download_file(self, download_url, filename=None) -> None:
         download_url = self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
         logging.info(download_url)
         self.conn.verify = self.ssl_verify
-        # self.conn.cookies = req_cookies
         with self.conn.stream(
                 "GET",
                 download_url,
@@ -905,7 +900,7 @@ class NiosFileopMixin:
                 for chunk in res.iter_bytes(chunk_size=1024):
                     file_out.write(chunk)
 
-    def __getgriddata(self, payload: dict, req_cookies) -> dict:
+    def __getgriddata(self, payload: dict) -> dict:
         headers = {"content-type": "application/json"}
         try:
             res = self.post(
@@ -914,7 +909,6 @@ class NiosFileopMixin:
                 json=payload,
                 headers=headers,
                 timeout=None,
-                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
@@ -925,7 +919,7 @@ class NiosFileopMixin:
         return res.json()
 
     def __restore_database(
-            self, keep_grid_ip: bool, mode: str, upload_token: str, req_cookies: dict
+            self, keep_grid_ip: bool, mode: str, upload_token: str
     ) -> dict:
         # set content type back to JSON
         headers = {"content-type": "application/json"}
@@ -941,7 +935,6 @@ class NiosFileopMixin:
                 json=payload,
                 headers=headers,
                 timeout=None,
-                # cookies=req_cookies,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
@@ -961,7 +954,7 @@ class NiosFileopMixin:
             return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
     def __upload_file(
-            self, upload_url: str, upload_file: dict, req_cookies: dict
+            self, upload_url: str, upload_file: dict
     ) -> None:
         upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
@@ -993,16 +986,3 @@ class NiosFileopMixin:
             raise WapiRequestException(exc)
 
         return res.json()
-
-    def __get_cookies(self) -> dict:
-        # save the authentication cookie for use in subsequent requests
-        ibapauth_cookie = self.conn.cookies.get("ibapauth")
-        return {"ibapauth": ibapauth_cookie}
-
-    @staticmethod
-    def __write_file(filename: str, data: httpx.Response) -> None:
-        logging.info("writing file: %s", filename)
-        with open(filename, "wb") as file:
-            for chunk in data.iter_content(chunk_size=1024):
-                if chunk:
-                    file.write(chunk)
