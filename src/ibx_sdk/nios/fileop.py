@@ -962,6 +962,7 @@ class NiosFileopMixin:
             res = self.conn.post(
                 upload_url,
                 files=upload_file,
+                timeout=None,
             )
             logging.debug(pprint.pformat(res.text))
             res.raise_for_status()
