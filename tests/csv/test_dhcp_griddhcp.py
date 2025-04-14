@@ -32,7 +32,7 @@ def test_griddhcp_override_values():
         domain_name="other.com",
         recycle_leases=True,
         pxe_lease_time=600,
-        import_action=ImportActionEnum.OVERRIDE
+        import_action=ImportActionEnum.OVERRIDE,
     )
     assert griddhcp.authority is False
     assert griddhcp.domain_name == "other.com"

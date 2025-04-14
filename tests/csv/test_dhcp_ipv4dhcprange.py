@@ -15,7 +15,7 @@ LOG = getLogger(__name__)
 def test_ipv4dhcprange_default_values():
     ipv4_dhcp_range = IPv4DhcpRange(
         start_address=IPv4Address("192.168.0.1"),
-        end_address=IPv4Address("192.168.0.100")
+        end_address=IPv4Address("192.168.0.100"),
     )
     assert ipv4_dhcp_range.dhcprange == "dhcprange"
     assert ipv4_dhcp_range.start_address == IPv4Address("192.168.0.1")
@@ -36,7 +36,7 @@ def test_ipv4dhcprange_custom_values():
         name="Test DHCP Range",
         network_view="default",
         import_action=ImportActionEnum.INSERT_OVERRIDE,
-        is_authoritative=True
+        is_authoritative=True,
     )
     assert ipv4_dhcp_range.start_address == IPv4Address("10.0.0.1")
     assert ipv4_dhcp_range.end_address == IPv4Address("10.0.0.50")
@@ -49,30 +49,26 @@ def test_ipv4dhcprange_custom_values():
 def test_ipv4dhcprange_invalid_start_address():
     with pytest.raises(ValidationError):
         IPv4DhcpRange(
-            start_address="invalid-ip",
-            end_address=IPv4Address("192.168.0.100")
+            start_address="invalid-ip", end_address=IPv4Address("192.168.0.100")
         )
 
 
 def test_ipv4dhcprange_invalid_end_address():
     with pytest.raises(ValidationError):
         IPv4DhcpRange(
-            start_address=IPv4Address("192.168.0.1"),
-            end_address="invalid-ip"
+            start_address=IPv4Address("192.168.0.1"), end_address="invalid-ip"
         )
 
 
 def test_ipv4dhcprange_missing_end_address():
     with pytest.raises(ValidationError):
-        IPv4DhcpRange(
-            start_address=IPv4Address("192.168.0.1")
-        )
+        IPv4DhcpRange(start_address=IPv4Address("192.168.0.1"))
 
 
 def test_ipv4dhcprange_valid_range():
     ipv4_dhcp_range = IPv4DhcpRange(
         start_address=IPv4Address("192.168.0.1"),
-        end_address=IPv4Address("192.168.0.100")
+        end_address=IPv4Address("192.168.0.100"),
     )
     assert ipv4_dhcp_range.start_address == IPv4Address("192.168.0.1")
     assert ipv4_dhcp_range.end_address == IPv4Address("192.168.0.100")
@@ -82,12 +78,16 @@ def test_ipv4dhcprange_exclusion_ranges():
     ipv4_dhcp_range = IPv4DhcpRange(
         start_address=IPv4Address("192.168.1.1"),
         end_address=IPv4Address("192.168.1.100"),
-        exclusion_ranges=["192.168.1.10-192.168.1.20", "192.168.1.30-192.168.1.40"]
+        exclusion_ranges=["192.168.1.10-192.168.1.20", "192.168.1.30-192.168.1.40"],
     )
-    LOG.debug(ipv4_dhcp_range.model_dump(exclude_none=True, exclude_unset=True, by_alias=False))
+    LOG.debug(
+        ipv4_dhcp_range.model_dump(
+            exclude_none=True, exclude_unset=True, by_alias=False
+        )
+    )
     assert ipv4_dhcp_range.exclusion_ranges == [
         "192.168.1.10-192.168.1.20",
-        "192.168.1.30-192.168.1.40"
+        "192.168.1.30-192.168.1.40",
     ]
     assert ipv4_dhcp_range.start_address == IPv4Address("192.168.1.1")
     assert ipv4_dhcp_range.end_address == IPv4Address("192.168.1.100")
@@ -98,7 +98,7 @@ def test_ipv4dhcprange_failover_association():
         start_address=IPv4Address("10.0.0.1"),
         end_address=IPv4Address("10.0.0.100"),
         server_association_type=ServerAssociationTypeEnum.FAILOVER,
-        failover_association="Test Failover"
+        failover_association="Test Failover",
     )
     assert ipv4_dhcp_range.server_association_type == ServerAssociationTypeEnum.FAILOVER
     assert ipv4_dhcp_range.failover_association == "Test Failover"
@@ -106,17 +106,15 @@ def test_ipv4dhcprange_failover_association():
 
 def test_ipv4dhcprange_add_property_valid():
     ipv4_dhcp_range = IPv4DhcpRange(
-        start_address=IPv4Address("10.10.10.1"),
-        end_address=IPv4Address("10.10.10.50")
+        start_address=IPv4Address("10.10.10.1"), end_address=IPv4Address("10.10.10.50")
     )
     ipv4_dhcp_range.add_property("OPTION-Custom1", "Custom Value")
-    assert getattr(ipv4_dhcp_range, 'OPTION-Custom1') == "Custom Value"
+    assert getattr(ipv4_dhcp_range, "OPTION-Custom1") == "Custom Value"
 
 
 def test_ipv4dhcprange_add_property_invalid():
     ipv4_dhcp_range = IPv4DhcpRange(
-        start_address=IPv4Address("10.10.10.1"),
-        end_address=IPv4Address("10.10.10.50")
+        start_address=IPv4Address("10.10.10.1"), end_address=IPv4Address("10.10.10.50")
     )
     with pytest.raises(Exception) as excinfo:
         ipv4_dhcp_range.add_property("InvalidCode", "Value")

@@ -42,9 +42,13 @@ class NamedACLItem(BaseModel):
         description="CSV custom import action",
     )
     parent: str = Field(..., description="Parent ACL name")
-    address: str = Field(..., description="IP address or network example 192.168.1.0/24/Allow|Deny")
+    address: str = Field(
+        ..., description="IP address or network example 192.168.1.0/24/Allow|Deny"
+    )
     new_address: Optional[str] = Field(
-        None, serialization_alias="_new_address", description="New address to overwrite address"
+        None,
+        serialization_alias="_new_address",
+        description="New address to overwrite address",
     )
     tsig_key: Optional[str] = Field(
         None, description="TSIG key as name/key/algorithm/use_2x_tsig_key"
@@ -52,9 +56,7 @@ class NamedACLItem(BaseModel):
     new_tsig_key: Optional[str] = Field(
         None, serialization_alias="_new_tsig_key", description="New TSIG key"
     )
-    defined_acl: Optional[str] = Field(
-        None, description="Pre-defined ACL name to nest"
-    )
+    defined_acl: Optional[str] = Field(None, description="Pre-defined ACL name to nest")
     new_named_acl: Optional[str] = Field(
         None, serialization_alias="_new_named_acl", description="New Defined ACL name"
     )

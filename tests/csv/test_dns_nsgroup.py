@@ -28,14 +28,16 @@ def test_nsgroup_with_all_values():
         external_secondaries=["ExtSecondary1"],
         grid_secondaries=["GridSecondary1"],
         is_grid_default=True,
-        comment="Test comment"
+        comment="Test comment",
     )
     assert nsgroup.group_name == "TestGroup"
     assert nsgroup.import_action == ImportActionEnum.INSERT_OVERRIDE
     assert nsgroup.new_group_name == "NewTestGroup"
     assert nsgroup.serialize_list_fields(nsgroup.grid_primaries) == "Primary1,Primary2"
     assert nsgroup.serialize_list_fields(nsgroup.external_primaries) == "ExtPrimary1"
-    assert nsgroup.serialize_list_fields(nsgroup.external_secondaries) == "ExtSecondary1"
+    assert (
+        nsgroup.serialize_list_fields(nsgroup.external_secondaries) == "ExtSecondary1"
+    )
     assert nsgroup.serialize_list_fields(nsgroup.grid_secondaries) == "GridSecondary1"
     assert nsgroup.is_grid_default is True
     assert nsgroup.comment == "Test comment"

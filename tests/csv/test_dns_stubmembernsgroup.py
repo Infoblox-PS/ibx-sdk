@@ -5,9 +5,7 @@ from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 
 
 def test_stubmembernsgroup_default_values():
-    ns_group = StubMemberNsGroup(
-        group_name="DefaultGroup"
-    )
+    ns_group = StubMemberNsGroup(group_name="DefaultGroup")
     assert ns_group.stubmembernsgroup == "stubmembernsgroup"
     assert ns_group.group_name == "DefaultGroup"
     assert ns_group.import_action is None
@@ -22,7 +20,7 @@ def test_stubmembernsgroup_with_all_fields():
         import_action=ImportActionEnum.OVERRIDE,
         new_group_name="NewGroup",
         comment="This is a test comment",
-        stub_members=["server1.example.com", "server2.example.com"]
+        stub_members=["server1.example.com", "server2.example.com"],
     )
     assert ns_group.stubmembernsgroup == "stubmembernsgroup"
     assert ns_group.group_name == "CustomGroup"
@@ -40,17 +38,14 @@ def test_stubmembernsgroup_invalid_group_name():
 def test_stubmembernsgroup_serialize_stub_members():
     ns_group = StubMemberNsGroup(
         group_name="GroupName",
-        stub_members=["server1.example.com", "server2.example.com"]
+        stub_members=["server1.example.com", "server2.example.com"],
     )
     serialized_stub_members = ns_group.serialize_stub_members(ns_group.stub_members)
     assert serialized_stub_members == "server1.example.com,server2.example.com"
 
 
 def test_stubmembernsgroup_serialize_stub_members_empty():
-    ns_group = StubMemberNsGroup(
-        group_name="GroupName",
-        stub_members=[]
-    )
+    ns_group = StubMemberNsGroup(group_name="GroupName", stub_members=[])
     serialized_stub_members = ns_group.serialize_stub_members(ns_group.stub_members)
     assert serialized_stub_members is None
 

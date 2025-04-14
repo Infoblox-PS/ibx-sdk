@@ -5,8 +5,7 @@ from src.ibx_sdk.nios.csv.enums import FingerprintTypeEnum, ProtocolTypeEnum
 
 def test_dhcpfingerprint_default_values():
     dhcp_fingerprint = DhcpFingerprint(
-        name="test_fingerprint",
-        protocol=ProtocolTypeEnum.IPV4
+        name="test_fingerprint", protocol=ProtocolTypeEnum.IPV4
     )
     assert dhcp_fingerprint.dhcpfingerprint == "dhcpfingerprint"
     assert dhcp_fingerprint.import_action is None
@@ -30,7 +29,7 @@ def test_dhcpfingerprint_custom_values():
         vendor_id="Custom Vendor",
         option_sequence="1,2,3/ipv4",
         device_class="CustomClass",
-        type=FingerprintTypeEnum.STANDARD
+        type=FingerprintTypeEnum.STANDARD,
     )
     assert dhcp_fingerprint.dhcpfingerprint == "dhcpfingerprint"
     assert dhcp_fingerprint.import_action is None
@@ -47,8 +46,7 @@ def test_dhcpfingerprint_custom_values():
 
 def test_dhcpfingerprint_invalid_add_property():
     dhcp_fingerprint = DhcpFingerprint(
-        name="test_fingerprint",
-        protocol=ProtocolTypeEnum.IPV4
+        name="test_fingerprint", protocol=ProtocolTypeEnum.IPV4
     )
     with pytest.raises(Exception, match="Invalid field name: invalid-code"):
         dhcp_fingerprint.add_property("invalid-code", "value")
@@ -56,8 +54,7 @@ def test_dhcpfingerprint_invalid_add_property():
 
 def test_dhcpfingerprint_valid_add_property():
     dhcp_fingerprint = DhcpFingerprint(
-        name="test_fingerprint",
-        protocol=ProtocolTypeEnum.IPV4
+        name="test_fingerprint", protocol=ProtocolTypeEnum.IPV4
     )
     dhcp_fingerprint.add_property("EA-CustomField", "CustomValue")
     assert getattr(dhcp_fingerprint, "EA-CustomField") == "CustomValue"

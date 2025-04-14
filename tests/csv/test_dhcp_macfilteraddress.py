@@ -5,10 +5,7 @@ from src.ibx_sdk.nios.csv.dhcp import MacFilterAddress
 
 
 def test_macfilteraddress_default_values():
-    mac_filter = MacFilterAddress(
-        parent="Filter1",
-        mac_address="00:1A:2B:3C:4D:5E"
-    )
+    mac_filter = MacFilterAddress(parent="Filter1", mac_address="00:1A:2B:3C:4D:5E")
     assert mac_filter.macfilteraddress == "macfilteraddress"
     assert mac_filter.import_action is None
     assert mac_filter.parent == "Filter1"
@@ -31,7 +28,7 @@ def test_macfilteraddress_custom_values():
         guest_phone="123456789",
         never_expires=False,
         expire_time=expire_time,
-        comment="This is a test comment"
+        comment="This is a test comment",
     )
     assert mac_filter.macfilteraddress == "macfilteraddress"
     assert mac_filter.parent == "Filter1"
@@ -47,20 +44,14 @@ def test_macfilteraddress_custom_values():
 
 
 def test_macfilteraddress_invalid_add_property():
-    mac_filter = MacFilterAddress(
-        parent="Filter1",
-        mac_address="00:1A:2B:3C:4D:5E"
-    )
+    mac_filter = MacFilterAddress(parent="Filter1", mac_address="00:1A:2B:3C:4D:5E")
     with pytest.raises(Exception) as exc_info:
         mac_filter.add_property("INVALID-CODE", "value")
     assert "Invalid field name" in str(exc_info.value)
 
 
 def test_macfilteraddress_valid_add_property():
-    mac_filter = MacFilterAddress(
-        parent="Filter1",
-        mac_address="00:1A:2B:3C:4D:5E"
-    )
+    mac_filter = MacFilterAddress(parent="Filter1", mac_address="00:1A:2B:3C:4D:5E")
     mac_filter.add_property("EA-Test", "value")
     assert getattr(mac_filter, "EA-Test") == "value"
     mac_filter.add_property("ADMGRP-Test", "value")

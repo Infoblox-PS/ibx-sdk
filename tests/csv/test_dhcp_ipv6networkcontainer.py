@@ -79,9 +79,12 @@ def test_ipv6networkcontainer_discovery_exclusion_range():
     container = IPv6NetworkContainer(
         address=IPv6Address("2001:db8::1"),
         cidr=64,
-        discovery_exclusion_range=[IPv4Address("192.168.0.1"), IPv4Address("192.168.0.2")]
+        discovery_exclusion_range=[
+            IPv4Address("192.168.0.1"),
+            IPv4Address("192.168.0.2"),
+        ],
     )
     assert container.discovery_exclusion_range == [
         IPv4Address("192.168.0.1"),
-        IPv4Address("192.168.0.2")
+        IPv4Address("192.168.0.2"),
     ]

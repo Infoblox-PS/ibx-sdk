@@ -9,7 +9,7 @@ from src.ibx_sdk.nios.csv.enums import IPv6AddressTypeEnum, ImportActionEnum
 def test_ipv6fixedaddress_default_values():
     ipv6_fixed_address = IPv6FixedAddress(
         ip_address=IPv6Address("2001:db8::1"),
-        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38"
+        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38",
     )
     assert ipv6_fixed_address.ipv6fixedaddress == "ipv6fixedaddress"
     assert ipv6_fixed_address.import_action is None
@@ -47,7 +47,7 @@ def test_ipv6fixedaddress_with_custom_values():
         domain_name="example.com",
         domain_name_servers="2001:4860:4860::8888",
         valid_lifetime=86400,
-        preferred_lifetime=43200
+        preferred_lifetime=43200,
     )
     assert ipv6_fixed_address.import_action == ImportActionEnum.INSERT
     assert ipv6_fixed_address.address_type == IPv6AddressTypeEnum.ADDRESS
@@ -65,8 +65,7 @@ def test_ipv6fixedaddress_with_custom_values():
 def test_ipv6fixedaddress_invalid_ip_address():
     with pytest.raises(ValidationError):
         IPv6FixedAddress(
-            ip_address="invalid-ip",
-            duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38"
+            ip_address="invalid-ip", duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38"
         )
 
 
@@ -75,14 +74,14 @@ def test_ipv6fixedaddress_invalid_prefix():
         IPv6FixedAddress(
             ip_address=IPv6Address("2001:db8::1"),
             duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38",
-            ipv6_prefix=129
+            ipv6_prefix=129,
         )
 
 
 def test_ipv6fixedaddress_add_property_valid():
     ipv6_fixed_address = IPv6FixedAddress(
         ip_address=IPv6Address("2001:db8::1"),
-        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38"
+        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38",
     )
     ipv6_fixed_address.add_property("OPTION-customer-vlan", "1001")
     assert getattr(ipv6_fixed_address, "OPTION-customer-vlan") == "1001"
@@ -91,7 +90,7 @@ def test_ipv6fixedaddress_add_property_valid():
 def test_ipv6fixedaddress_add_property_invalid():
     ipv6_fixed_address = IPv6FixedAddress(
         ip_address=IPv6Address("2001:db8::1"),
-        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38"
+        duid="00:01:00:01:1c:71:7a:64:00:0c:29:56:0e:38",
     )
     with pytest.raises(Exception, match="Invalid field name"):
         ipv6_fixed_address.add_property("INVALID-property", "xyz")

@@ -9,7 +9,7 @@ from src.ibx_sdk.nios.csv.enums import IPv6AddressTypeEnum, ServerAssociationTyp
 def test_ipv6dhcprange_default_values():
     ipv6_dhcp_range = IPv6DhcpRange(
         start_address=IPv6Address("2001:db8::1"),
-        end_address=IPv6Address("2001:db8::100")
+        end_address=IPv6Address("2001:db8::100"),
     )
     assert ipv6_dhcp_range.ipv6dhcprange == "ipv6dhcprange"
     assert ipv6_dhcp_range.import_action is None
@@ -42,7 +42,7 @@ def test_ipv6dhcprange_valid_values():
         address_type=IPv6AddressTypeEnum.ADDRESS,
         network_view="default",
         name="range-01",
-        disabled=False
+        disabled=False,
     )
     assert ipv6_dhcp_range.start_address == IPv6Address("2001:db8::1")
     assert ipv6_dhcp_range.end_address == IPv6Address("2001:db8::100")
@@ -55,16 +55,14 @@ def test_ipv6dhcprange_valid_values():
 def test_ipv6dhcprange_invalid_start_address():
     with pytest.raises(ValidationError):
         IPv6DhcpRange(
-            start_address="invalid-ip",
-            end_address=IPv6Address("2001:db8::100")
+            start_address="invalid-ip", end_address=IPv6Address("2001:db8::100")
         )
 
 
 def test_ipv6dhcprange_invalid_end_address():
     with pytest.raises(ValidationError):
         IPv6DhcpRange(
-            start_address=IPv6Address("2001:db8::1"),
-            end_address="invalid-ip"
+            start_address=IPv6Address("2001:db8::1"), end_address="invalid-ip"
         )
 
 
@@ -73,7 +71,7 @@ def test_ipv6dhcprange_invalid_prefix():
         IPv6DhcpRange(
             start_address=IPv6Address("2001:db8::1"),
             end_address=IPv6Address("2001:db8::100"),
-            ipv6_start_prefix=256
+            ipv6_start_prefix=256,
         )
 
 
@@ -81,7 +79,7 @@ def test_ipv6dhcprange_exclusion_ranges():
     ipv6_dhcp_range = IPv6DhcpRange(
         start_address=IPv6Address("2001:db8::1"),
         end_address=IPv6Address("2001:db8::100"),
-        exclusion_ranges=["2001:db8::10-2001:db8::20/comment"]
+        exclusion_ranges=["2001:db8::10-2001:db8::20/comment"],
     )
     assert ipv6_dhcp_range.exclusion_ranges == ["2001:db8::10-2001:db8::20/comment"]
 
@@ -90,6 +88,6 @@ def test_ipv6dhcprange_server_association_type():
     ipv6_dhcp_range = IPv6DhcpRange(
         start_address=IPv6Address("2001:db8::1"),
         end_address=IPv6Address("2001:db8::100"),
-        server_association_type=ServerAssociationTypeEnum.MEMBER
+        server_association_type=ServerAssociationTypeEnum.MEMBER,
     )
     assert ipv6_dhcp_range.server_association_type == ServerAssociationTypeEnum.MEMBER

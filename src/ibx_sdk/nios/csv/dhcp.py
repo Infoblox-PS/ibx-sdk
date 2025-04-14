@@ -473,9 +473,9 @@ class IPv4NetworkContainer(BaseModel):
 
     def add_property(self, prop: str, value: str):
         if (
-                prop.startswith("OPTION-")
-                or prop.startswith("EA-")
-                or prop.startswith("ADMGRP-")
+            prop.startswith("OPTION-")
+            or prop.startswith("EA-")
+            or prop.startswith("ADMGRP-")
         ):
             self.__setattr__(prop, value)
         else:
@@ -597,9 +597,9 @@ class IPv4Network(BaseModel):
     # ADMGRP-XXX string example of an admin group for permissions
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -679,9 +679,9 @@ class IPv6NetworkContainer(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -758,10 +758,10 @@ class IPv6Network(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("EAInherited-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("EAInherited-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -835,9 +835,9 @@ class IPv4SharedNetwork(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -891,9 +891,9 @@ class IPv6SharedNetwork(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -1014,9 +1014,9 @@ class IPv4DhcpRange(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -1092,10 +1092,10 @@ class IPv6DhcpRange(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("EAInherited-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("EAInherited-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -1171,9 +1171,9 @@ class IPv4FixedAddress(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -1237,10 +1237,10 @@ class IPv6FixedAddress(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-                code.startswith("OPTION-")
-                or code.startswith("EA-")
-                or code.startswith("EAInherited-")
-                or code.startswith("ADMGRP-")
+            code.startswith("OPTION-")
+            or code.startswith("EA-")
+            or code.startswith("EAInherited-")
+            or code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:

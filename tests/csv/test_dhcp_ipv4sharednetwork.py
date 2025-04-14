@@ -8,18 +8,14 @@ from src.ibx_sdk.nios.csv.enums import ImportActionEnum
 def test_ipv4sharednetwork_default_values():
     shared_network = IPv4SharedNetwork(
         name="test_network",
-        networks=[
-            "192.168.0.0/24",
-            "192.168.1.0/24",
-            "192.168.2.0/24"
-        ]
+        networks=["192.168.0.0/24", "192.168.1.0/24", "192.168.2.0/24"],
     )
     assert shared_network.sharednetwork == "sharednetwork"
     assert shared_network.name == "test_network"
     assert shared_network.networks == [
         "192.168.0.0/24",
         "192.168.1.0/24",
-        "192.168.2.0/24"
+        "192.168.2.0/24",
     ]
     assert shared_network.import_action is None
     assert shared_network.new_name is None
@@ -55,7 +51,7 @@ def test_ipv4sharednetwork_with_all_fields():
         pxe_lease_time=3600,
         routers="192.168.0.1",
         domain_name="example.com",
-        domain_name_servers="8.8.8.8,8.8.4.4"
+        domain_name_servers="8.8.8.8,8.8.4.4",
     )
     assert shared_network.network_view == "default"
     assert shared_network.import_action == ImportActionEnum.INSERT
@@ -90,18 +86,12 @@ def test_ipv4sharednetwork_missing_required_fields():
 
 
 def test_ipv4sharednetwork_invalid_field_name_in_add_property():
-    shared_network = IPv4SharedNetwork(
-        name="test_network",
-        networks=["192.168.0.0/24"]
-    )
+    shared_network = IPv4SharedNetwork(name="test_network", networks=["192.168.0.0/24"])
     with pytest.raises(Exception, match="Invalid field name: INVALID-FIELD"):
         shared_network.add_property("INVALID-FIELD", "value")
 
 
 def test_ipv4sharednetwork_valid_field_name_in_add_property():
-    shared_network = IPv4SharedNetwork(
-        name="test_network",
-        networks=["192.168.0.0/24"]
-    )
+    shared_network = IPv4SharedNetwork(name="test_network", networks=["192.168.0.0/24"])
     shared_network.add_property("OPTION-TestOption", "SomeValue")
     assert getattr(shared_network, "OPTION-TestOption") == "SomeValue"

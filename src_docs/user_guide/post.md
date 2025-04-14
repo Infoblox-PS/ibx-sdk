@@ -42,8 +42,8 @@ body = {
 response = wapi.post('network', json=body)
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and methods. The ones
-used most often in working with WAPI data are:
+Our `response` above is an `httpx Response` object, and it will contain a number of properties 
+and methods. The ones used most often in working with WAPI data are:
 
 | property/method | Description                                                                          |
 |-----------------|--------------------------------------------------------------------------------------|
