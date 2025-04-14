@@ -38,8 +38,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         grid_mgr (str): IP address or hostname of the Grid Manager.
         wapi_ver (str): Version of the Infoblox WAPI.
         ssl_verify (bool): Flag to determine SSL certificate verification.
-        conn (requests.sessions.Session, optional): Active session to the WAPI grid. Default is
-                                                    None.
+        conn (httpx.Client, optional): Active session to the WAPI grid. Default is None.
         grid_ref (str, optional): Reference ID of the connected grid. Default is None.
 
     Examples:
@@ -161,7 +160,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
     def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
         """
         This private method performs a certificate authentication request to the API. It uses the
-        provided certificate to establish a connection with the API server using the requests
+        provided certificate to establish a connection with the API server using the httpx
         library.
 
         Args:
@@ -204,7 +203,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         attribute 'conn*' and the grid reference in the instance attribute 'grid_ref'.
 
         Note:
-            This method requires the 'requests' library to be installed.
+            This method requires the 'httpx' library to be installed.
 
         Args:
             username (str): The username for basic authentication.

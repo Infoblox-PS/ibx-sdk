@@ -62,7 +62,8 @@ To delete the network we add the following to our script:
 response = wapi.delete(_ref)
 ```
 
-Our `response` above is a Requests response object, and it will contain a number of properties and methods.
+Our `response` above is an `httpx Response` object, and it will contain a number of properties 
+and methods.
 
 The ones used most often in working with WAPI data are:
 

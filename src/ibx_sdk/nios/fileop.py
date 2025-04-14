@@ -268,7 +268,7 @@ class NiosFileopMixin:
             A dictionary containing the result of the CSV import task.
 
         Raises:
-            requests.exceptions.RequestException: If an error occurs while making HTTP requests.
+            httpx.RequestError: If an error occurs while making HTTP requests.
         """
         token = self.file_upload(filename=csv_import_file)
 
@@ -361,7 +361,7 @@ class NiosFileopMixin:
             None
 
         Raises:
-            requests.exceptions.RequestException: If there is an error during the request.
+            httpx.RequestError: If there is an error during the request.
 
         """
         logging.debug("fetching csv-errors file for job id %s", job_id)
@@ -699,7 +699,7 @@ class NiosFileopMixin:
                                                support bundle. Defaults to False.
 
         Raises:
-            requests.exceptions.RequestException: If an error occurs during the request.
+            httpx.RequestError: If an error occurs during the request.
 
         """
         logging.info("performing get_support_bundle for %s object(s)", member)
@@ -747,7 +747,7 @@ class NiosFileopMixin:
             None
 
         Raises:
-            requests.exceptions.RequestException: If an error occurs during the backup process.
+            httpx.RequestError: If an error occurs during the backup process.
         """
         payload = {"type": "BACKUP"}
 

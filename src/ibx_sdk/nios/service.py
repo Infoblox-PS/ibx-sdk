@@ -18,7 +18,7 @@ import logging
 import pprint
 from typing import Literal, Optional
 
-import requests
+import httpx
 from ibx_sdk.nios.exceptions import WapiRequestException
 
 
@@ -58,7 +58,7 @@ class NiosServiceMixin:
             None
 
         Raises:
-            requests.exceptions.RequestException: If there is an error sending the restart request.
+            httpx.RequestError: If there is an error sending the restart request.
 
         Examples:
             # Restart services in a group
@@ -102,7 +102,7 @@ class NiosServiceMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
+        except httpx.RequestError as err:
             logging.error(err)
             raise WapiRequestException(err)
         else:
@@ -120,7 +120,7 @@ class NiosServiceMixin:
             None
 
         Raises:
-            requests.exceptions.RequestException: If an error occurs while making the request.
+            httpx.RequestError: If an error occurs while making the request.
         """
         payload = {"service_option": services}
         try:
@@ -131,7 +131,7 @@ class NiosServiceMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except requests.exceptions.RequestException as err:
+        except httpx.RequestError as err:
             logging.error(err)
             raise WapiRequestException(err)
 
@@ -146,21 +146,13 @@ class NiosServiceMixin:
             dict: A dictionary containing the service restart status information.
 
         Raises:
-            requests.exceptions.SSLError: If there is an SSL certificate error.
-            requests.exceptions.HTTPError: If there is an HTTP error.
-            requests.exceptions.RequestException: If there is a general request error.
+            httpx.RequestError: If there is a general request error.
         """
         try:
             response = self.get("restartservicestatus")
             logging.debug(response.text)
             response.raise_for_status()
-        except requests.exceptions.SSLError as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-        except requests.exceptions.HTTPError as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-        except requests.exceptions.RequestException as err:
+        except httpx.RequestError as err:
             logging.error(err)
             raise WapiRequestException(err)
         else:

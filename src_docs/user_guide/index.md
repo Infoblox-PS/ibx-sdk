@@ -3,7 +3,7 @@
 The Infoblox `ibx-sdk` is a library and SDK designed to assist users in developing efficient automation scripts for the
 Infoblox NIOS Web API (WAPI). The SDK offers a range of tools for effective API interaction, including the following:
 
-1. The `Gift` wrapper class - The `Gift` class is a wrapper around the Python `requests`, which
+1. The `Gift` wrapper class - The `Gift` class is a wrapper around the Python `httpx` library, which
    in turn makes it easier to access the Infoblox Web API module.
 2. Detailed usage and example documentation
 3. Sample operations scripts
@@ -12,8 +12,8 @@ Infoblox NIOS Web API (WAPI). The SDK offers a range of tools for effective API 
 
     **What is `Gift`??**
 
-    `Gift` is an object-oriented Python class which is a wrapper to the Python `requests` package. 
-    It specifically builds and extends the `requests.session` module. Why the name "Gift"? We 
+    `Gift` is an object-oriented Python class which is a wrapper to the Python `httpx` package. 
+    It specifically builds and extends the `httpx.client` module. Why the name "Gift"? We 
     named it `Gift` because of the fact it's a wrapper. Get it?? We'd like to think it will be the 
     "Gift" that keeps on giving... Other names considered were:
 
@@ -22,8 +22,8 @@ Infoblox NIOS Web API (WAPI). The SDK offers a range of tools for effective API 
 
     We hope you enjoy!
 
-The `Gift()` Python class is a wrapper for `requests.session`, supporting the same HTTP Request methods that are
-supported by the NIOS WAPI. See the table below:
+The `Gift()` Python class is a wrapper for `httpx.client`, supporting the same HTTP Request 
+methods that are supported by the NIOS WAPI. See the table below:
 
 | WAPI Method | Gift Request Method | Description                                                           |
 |:-----------:|---------------------|-----------------------------------------------------------------------|
