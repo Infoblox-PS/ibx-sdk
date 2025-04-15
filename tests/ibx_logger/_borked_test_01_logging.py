@@ -4,7 +4,7 @@ WAPI test module
 
 from random import randint
 
-from ibx_sdk.logger.ibx_logger import init_logger, CallCounted
+from ibx_sdk.logger.ibx_logger import init_logger, CountingHandler
 
 LOG = init_logger(
     level="DEBUG",
@@ -12,11 +12,11 @@ LOG = init_logger(
     logfile_name="test.log",
     console_log=True,
 )
-LOG.debug = CallCounted(LOG.debug)
-LOG.info = CallCounted(LOG.info)
-LOG.warning = CallCounted(LOG.warning)
-LOG.error = CallCounted(LOG.error)
-LOG.critical = CallCounted(LOG.critical)
+LOG.debug = CountingHandler(LOG.debug)
+LOG.info = CountingHandler(LOG.info)
+LOG.warning = CountingHandler(LOG.warning)
+LOG.error = CountingHandler(LOG.error)
+LOG.critical = CountingHandler(LOG.critical)
 
 
 def test_random_log_counts():

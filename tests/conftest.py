@@ -5,8 +5,10 @@ conftest.py - shared fixtures
 import os
 
 import pytest
+import pytest_asyncio
 
 from ibx_sdk.nios.gift import Gift
+from ibx_sdk.nios.asynchronous.gift import AsyncGift
 
 GRID_MGR = os.environ.get("GRID_MGR")
 WAPI_VER = os.environ.get("WAPI_VER")
@@ -30,3 +32,10 @@ def get_wapi():
     wapi = Gift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
     wapi.connect(username=USERNAME, password=PASSWORD)
     yield wapi
+
+@pytest_asyncio.fixture(scope="session")
+async def get_async_wapi():
+    wapi = AsyncGift(grid_mgr=GRID_MGR, wapi_ver=WAPI_VER, ssl_verify=SSL_VERIFY)
+    await wapi.connect(username=USERNAME, password=PASSWORD)
+    yield wapi
+    await wapi.aclose()
