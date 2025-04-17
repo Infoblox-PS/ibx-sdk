@@ -43,10 +43,14 @@ CSV Import Data
 
 @click.command(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"]
+    ),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
 @optgroup.option(
     "-f", "--filename", required=True, help="Infoblox WAPI CSV import file name"
 )
@@ -66,7 +70,11 @@ CSV Import Data
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")

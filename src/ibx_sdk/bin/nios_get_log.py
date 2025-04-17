@@ -79,11 +79,17 @@ def validate_rotated_logs(ctx, param, value):
 
 @click.command(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"]
+    ),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-m", "--member", required=True, help="Member to retrieve log from")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
+@optgroup.option(
+    "-m", "--member", required=True, help="Member to retrieve log from"
+)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -116,7 +122,11 @@ def validate_rotated_logs(ctx, param, value):
     callback=validate_rotated_logs,
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")

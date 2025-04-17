@@ -98,7 +98,9 @@ class NiosServiceMixin:
 
         try:
             res = self.post(
-                self.grid_ref, params={"_function": "restartservices"}, json=data
+                self.grid_ref,
+                params={"_function": "restartservices"},
+                json=data,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -106,7 +108,9 @@ class NiosServiceMixin:
             logging.error(err)
             raise WapiRequestException(err)
         else:
-            logging.info("successfully restarted %s services", data.get("services"))
+            logging.info(
+                "successfully restarted %s services", data.get("services")
+            )
 
     def update_service_status(self, services: str = "ALL") -> None:
         """

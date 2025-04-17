@@ -44,11 +44,17 @@ Get NIOS File from member
 
 @click.command(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"]
+    ),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-m", "--member", required=True, help="Member to retrieve file from")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
+@optgroup.option(
+    "-m", "--member", required=True, help="Member to retrieve file from"
+)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -66,12 +72,21 @@ Get NIOS File from member
     "DNS_RECURSING_CACHE",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def main(
-    grid_mgr: str, member: str, username: str, cfg_type: str, wapi_ver: str, debug: bool
+    grid_mgr: str,
+    member: str,
+    username: str,
+    cfg_type: str,
+    wapi_ver: str,
+    debug: bool,
 ) -> None:
     """
     Get NIOS Configuration from Member

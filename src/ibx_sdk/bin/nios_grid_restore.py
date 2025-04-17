@@ -47,14 +47,22 @@ Restore NIOS Grid.
 
 @click.command(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"]
+    ),
 )
 @optgroup.group("Required Parameters")
 @optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox NIOS Grid Manager IP/Hostname"
+    "-g",
+    "--grid-mgr",
+    required=True,
+    help="Infoblox NIOS Grid Manager IP/Hostname",
 )
 @optgroup.option(
-    "-f", "--filename", required=True, help="Infoblox NIOS Grid restore filename"
+    "-f",
+    "--filename",
+    required=True,
+    help="Infoblox NIOS Grid restore filename",
 )
 @optgroup.group("Optional Parameters")
 @optgroup.option(
@@ -73,10 +81,17 @@ Restore NIOS Grid.
     help="Grid Restore Mode [NORMAL|FORCED|CLONE]",
 )
 @optgroup.option(
-    "-k", "--keep", is_flag=True, help="Keep existing IP otherwise use IP from backup"
+    "-k",
+    "--keep",
+    is_flag=True,
+    help="Keep existing IP otherwise use IP from backup",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="Enable verbose logging")

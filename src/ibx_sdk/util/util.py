@@ -44,7 +44,9 @@ def named_checkconf(chroot_path: str, conf_path: str) -> None:
     if not os.path.exists(f"{chroot_path}/{conf_path}"):
         logging.error("%s does not exist", f"{chroot_path}/{conf_path}")
         raise FileNotFoundError
-    command = f"sudo named-checkconf -p -t {chroot_path} {conf_path} > name.conf"
+    command = (
+        f"sudo named-checkconf -p -t {chroot_path} {conf_path} > name.conf"
+    )
     logging.debug(command)
     res = subprocess.run(
         ["sudo", "named-checkconf", "-p", "-t", chroot_path, conf_path],
@@ -128,7 +130,10 @@ def named_compilezone(
             text=True,
         )
     except subprocess.CalledProcessError as err:
-        if int(err.returncode) > 0 and "not loaded due to errors." in err.stdout:
+        if (
+            int(err.returncode) > 0
+            and "not loaded due to errors." in err.stdout
+        ):
             logging.error("err_code: %s", err.returncode)
             for line in err.stdout.split("\n"):
                 if line:
@@ -190,7 +195,9 @@ def remove_lines_from_file(
                     fout.write(line)
                 else:
                     logging.warning(
-                        "file: %s - removing line: %s", output_path, line.strip()
+                        "file: %s - removing line: %s",
+                        output_path,
+                        line.strip(),
                     )
                 ptr += 1
             logging.info("file %s rewritten", output_path)
@@ -333,7 +340,9 @@ def ibx_csv_file_split(filename: str, output_path: str = "."):
     """
 
     if not os.path.exists(output_path):
-        logging.warning("output path %s does not exist, creating...", output_path)
+        logging.warning(
+            "output path %s does not exist, creating...", output_path
+        )
         try:
             os.makedirs(output_path, exist_ok=True)
         except Exception as err:
@@ -348,7 +357,9 @@ def ibx_csv_file_split(filename: str, output_path: str = "."):
             if row[0].lower().startswith("header-"):
                 obj_type = row[0].lower().replace("header-", "")
                 csv_output_file = f"{obj_type}.csv"
-                csv_output_file_path = os.path.join(output_path, csv_output_file)
+                csv_output_file_path = os.path.join(
+                    output_path, csv_output_file
+                )
                 csv_objects[obj_type] = {}
                 csv_objects[obj_type]["filename"] = csv_output_file
                 csv_objects[obj_type]["filepath"] = csv_output_file_path

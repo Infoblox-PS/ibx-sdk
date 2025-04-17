@@ -34,9 +34,18 @@ log = init_logger(
     num_logs=1,
 )
 ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
-USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"])
+USAGES = click.Choice(
+    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
+)
 ALL_USAGES = click.Choice(
-    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP", "EAP_CA", "TAE_CA"]
+    [
+        "ADMIN",
+        "CAPTIVE_PORTAL",
+        "SFNT_CLIENT_CERT",
+        "IFMAP_DHCP",
+        "EAP_CA",
+        "TAE_CA",
+    ]
 )
 wapi = Gift()
 help_text = """
@@ -47,7 +56,9 @@ NIOS SSL Certificate Tools
 @click.group(
     help=help_text,
     context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"], show_default=True
+        max_content_width=95,
+        help_option_names=["-h", "--help"],
+        show_default=True,
     ),
 )
 def cli():
@@ -56,14 +67,24 @@ def cli():
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
-    "-f", "--filename", required=True, help="Upload filename for the certificate"
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
+@optgroup.option(
+    "-m", "--member", required=True, help="Member for the certificate"
+)
+@optgroup.option(
+    "-f",
+    "--filename",
+    required=True,
+    help="Upload filename for the certificate",
 )
 @optgroup.group("Optional Parameters")
 @optgroup.option(
-    "--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage"
+    "--certificate-usage",
+    default="ADMIN",
+    type=ALL_USAGES,
+    help="Certificate Usage",
 )
 @optgroup.option(
     "-u",
@@ -72,7 +93,11 @@ def cli():
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def upload(
@@ -100,7 +125,9 @@ def upload(
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
     try:
         wapi.upload_certificate(
-            member=member, filename=filename, certificate_usage=certificate_usage
+            member=member,
+            filename=filename,
+            certificate_usage=certificate_usage,
         )
     except WapiRequestException as err:
         log.error(err)
@@ -112,11 +139,18 @@ def upload(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
+@optgroup.option(
+    "-m", "--member", required=True, help="Member for the certificate"
+)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
-    "--certificate-usage", default="ADMIN", type=ALL_USAGES, help="Certificate Usage"
+    "--certificate-usage",
+    default="ADMIN",
+    type=ALL_USAGES,
+    help="Certificate Usage",
 )
 @optgroup.option(
     "-u",
@@ -125,7 +159,11 @@ def upload(
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def download(
@@ -151,7 +189,9 @@ def download(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
     try:
-        wapi.download_certificate(member=member, certificate_usage=certificate_usage)
+        wapi.download_certificate(
+            member=member, certificate_usage=certificate_usage
+        )
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
@@ -162,11 +202,15 @@ def download(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
+@optgroup.option(
+    "-m", "--member", required=True, help="Member for the certificate"
+)
 @optgroup.option(
     "-d",
     "--days-valid",
@@ -181,14 +225,25 @@ def download(
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Optional Certificate Parameters")
 @optgroup.option(
-    "-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm"
+    "-a",
+    "--algorithm",
+    default="SHA-256",
+    type=ALGORITHMS,
+    help="The digest algorithm",
 )
 @optgroup.option(
-    "--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage"
+    "--certificate-usage",
+    default="ADMIN",
+    type=USAGES,
+    help="Certificate Usage",
 )
 @optgroup.option("-c", "--comment", help="Certificate comment")
 @optgroup.option("--country", default="US", help="Certificate country")
@@ -276,11 +331,15 @@ def selfsign(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
+@optgroup.option(
+    "-m", "--member", required=True, help="Member for the certificate"
+)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -289,14 +348,25 @@ def selfsign(
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Optional Certificate Parameters")
 @optgroup.option(
-    "-a", "--algorithm", default="SHA-256", type=ALGORITHMS, help="The digest algorithm"
+    "-a",
+    "--algorithm",
+    default="SHA-256",
+    type=ALGORITHMS,
+    help="The digest algorithm",
 )
 @optgroup.option(
-    "--certificate-usage", default="ADMIN", type=USAGES, help="Certificate Usage"
+    "--certificate-usage",
+    default="ADMIN",
+    type=USAGES,
+    help="Certificate Usage",
 )
 @optgroup.option("-c", "--comment", help="Certificate comment")
 @optgroup.option("--country", default="US", help="Certificate country")

@@ -21,7 +21,10 @@ from typing import Union, Any, Optional
 import httpx
 import urllib3
 
-from ibx_sdk.nios.exceptions import WapiInvalidParameterException, WapiRequestException
+from ibx_sdk.nios.exceptions import (
+    WapiInvalidParameterException,
+    WapiRequestException,
+)
 from ibx_sdk.nios.fileop import NiosFileopMixin
 from ibx_sdk.nios.service import NiosServiceMixin
 
@@ -131,7 +134,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return ""
 
     def connect(
-        self, username: str = None, password: str = None, certificate: str = None
+        self,
+        username: str = None,
+        password: str = None,
+        certificate: str = None,
     ) -> None:
         """
         Make a connection to the grid manager using the WAPI instance
@@ -196,7 +202,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             setattr(self, "grid_ref", grid[0].get("_ref"))
             return grid[0].get("_ref", "")
 
-    def __basic_auth_request(self, username: str, password: str) -> Union[dict, None]:
+    def __basic_auth_request(
+        self, username: str, password: str
+    ) -> Union[dict, None]:
         """
         This private method makes a request to the specified URL with basic authentication using
         the provided username and password. It stores the session connection in the instance
@@ -383,7 +391,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         else:
             data = response.json()
             if len(data) > 1:
-                raise WapiRequestException("Multiple data records were returned")
+                raise WapiRequestException(
+                    "Multiple data records were returned"
+                )
             elif len(data) == 0:
                 raise WapiRequestException("No data was returned")
         return data[0].get("_ref", "")
