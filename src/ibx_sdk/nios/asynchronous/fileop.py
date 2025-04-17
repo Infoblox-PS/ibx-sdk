@@ -762,7 +762,9 @@ class NiosFileopMixin(AsyncGift):
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-        await self.file_download(token=token, url=download_url, filename=filename)
+        await self.file_download(
+            token=token, url=download_url, filename=filename
+        )
 
     async def grid_restore(
         self,
@@ -836,7 +838,7 @@ class NiosFileopMixin(AsyncGift):
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        await  self.file_download(
+        await self.file_download(
             token=download_token, url=download_url, filename=filename
         )
 

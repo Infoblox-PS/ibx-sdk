@@ -34,13 +34,13 @@ class NiosServiceMixin(AsyncGift):
     RestartServices = Literal["ALL", "DNS", "DHCP", "DHCPV4", "DHCPV6"]
 
     async def service_restart(
-            self,
-            groups: Optional[list] = None,
-            members: Optional[list[str]] = None,
-            mode: Optional[RestartMode] = None,
-            restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
-            services: Optional[list[RestartServices]] = None,
-            user_name: Optional[str] = None,
+        self,
+        groups: Optional[list] = None,
+        members: Optional[list[str]] = None,
+        mode: Optional[RestartMode] = None,
+        restart_option: Optional[RestartOption] = "RESTART_IF_NEEDED",
+        services: Optional[list[RestartServices]] = None,
+        user_name: Optional[str] = None,
     ) -> None:
         """
         Restarts specified services on the grid.
@@ -100,7 +100,9 @@ class NiosServiceMixin(AsyncGift):
 
         try:
             res = await self.post(
-                self.grid_ref, params={"_function": "restartservices"}, json=data
+                self.grid_ref,
+                params={"_function": "restartservices"},
+                json=data,
             )
             logging.debug(res.text)
             res.raise_for_status()
@@ -108,7 +110,9 @@ class NiosServiceMixin(AsyncGift):
             logging.error(err)
             raise WapiRequestException(err)
         else:
-            logging.info("successfully restarted %s services", data.get("services"))
+            logging.info(
+                "successfully restarted %s services", data.get("services")
+            )
 
     async def update_service_status(self, services: str = "ALL") -> None:
         """
