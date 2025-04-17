@@ -78,22 +78,22 @@ class NiosFileopMixin(AsyncGift):
             self, wapi_object: str, filename: Optional[str] = None
     ) -> None:
         """
-        Exports data in CSV format for the specified WAPI object and saves it to a file.
+        Performs a CSV export for the provided WAPI object(s) and downloads the resulting file.
 
-        The method performs a CSV export operation for a specified WAPI object using the file
-        operation capabilities provided by the WAPI (Web Application Programming Interface),
-        downloads the resulting file from a given URL, and saves it to a user-specified filename
-        or a default filename derived from the download URL. Finally, it finalizes the download
-        process by notifying the completion.
+        This method sends a request to export data as CSV for the given WAPI object(s),
+        retrieving the download URL and associated token upon success.
 
-        Parameters:
-            wapi_object (str): The name of the WAPI object(s) whose data is to be exported.
-            filename (Optional[str]): The optional local file path to save the downloaded CSV
-                data. If not provided, the filename is automatically derived from the
-                downloaded URL.
+        It then downloads the CSV data file and notifies the server once the download is complete.
+
+        Args:
+            wapi_object (str): The WAPI object(s) to export.
+            filename (Optional[str]): The optional file path for saving the exported CSV.
+                If provided, hyphens in the filename are replaced with underscores.
 
         Raises:
-            WapiRequestException: If an HTTP request fails during the CSV export process.
+            WapiRequestException: If a request-related error occurs during exporting or
+                downloading the CSV file.
+
         """
         if filename:
             (_, filename) = os.path.split(filename)
