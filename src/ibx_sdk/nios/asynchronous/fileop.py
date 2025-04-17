@@ -22,7 +22,6 @@ from typing import Literal, Optional
 
 import httpx
 
-from ibx_sdk.nios.asynchronous.gift import AsyncGift
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.util import util
 
@@ -69,7 +68,7 @@ MemberDataType = Literal[
 ]
 
 
-class NiosFileopMixin(AsyncGift):
+class NiosFileopMixin:
     """
     NiosFileopMixin class
     """
@@ -958,14 +957,14 @@ class NiosFileopMixin(AsyncGift):
         header = {"Content-type": "application/force-download"}
         logging.info(download_url)
         self.conn.verify = self.ssl_verify
-        with await self.conn.stream(
+        async with self.conn.stream(
             "GET",
             download_url,
             headers=header,
         ) as res:
             res.raise_for_status()
             with open(filename, "wb") as file_out:
-                for chunk in res.iter_bytes(chunk_size=1024):
+                async for chunk in res.aiter_bytes(chunk_size=1024):
                     file_out.write(chunk)
 
     async def __getgriddata(self, payload: dict) -> dict:
