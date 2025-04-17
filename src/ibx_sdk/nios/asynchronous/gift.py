@@ -1,20 +1,20 @@
 import logging
 import ssl
-from typing import Union, Optional, Any
+from typing import Union, Optional
 
 import httpx
 
+from ibx_sdk.nios.asynchronous.fileop import NiosFileopMixin
 from ibx_sdk.nios.exceptions import WapiInvalidParameterException, WapiRequestException
-from ibx_sdk.nios.fileop import NiosFileopMixin
 from ibx_sdk.nios.service import NiosServiceMixin
 
 
 class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     def __init__(
-        self,
-        grid_mgr: str = None,
-        wapi_ver: str = "2.5",
-        ssl_verify: Union[bool, str] = False,
+            self,
+            grid_mgr: str = None,
+            wapi_ver: str = "2.5",
+            ssl_verify: Union[bool, str] = False,
     ):
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
@@ -85,7 +85,8 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
             grid = res.json()
             self.grid_ref = grid[0].get("_ref")
 
-    async def get(self, wapi_object: str, params: Optional[dict] = None, **kwargs) -> httpx.Response:
+    async def get(self, wapi_object: str, params: Optional[dict] = None,
+                  **kwargs) -> httpx.Response:
         res = await self.conn.get(f"{self.url}/{wapi_object}", params=params, **kwargs)
         res.raise_for_status()
         return res
@@ -103,7 +104,8 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
         res.raise_for_status()
         return res
 
-    async def put(self, wapi_object_ref: str, data: Optional[Union[dict, str]] = None, **kwargs) -> httpx.Response:
+    async def put(self, wapi_object_ref: str, data: Optional[Union[dict, str]] = None,
+                  **kwargs) -> httpx.Response:
         res = await self.conn.put(f"{self.url}/{wapi_object_ref}", data=data, **kwargs)
         res.raise_for_status()
         return res
