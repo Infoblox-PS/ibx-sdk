@@ -102,11 +102,16 @@ class NiosServiceMixin:
                 params={"_function": "restartservices"},
                 json=data,
             )
-            logging.debug(res.text)
             res.raise_for_status()
-        except httpx.RequestError as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.RequestError as exc:
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
         else:
             logging.info(
                 "successfully restarted %s services", data.get("services")
@@ -134,13 +139,15 @@ class NiosServiceMixin:
                 params={"_function": "requestrestartservicestatus"},
                 json=payload,
             )
-            logging.debug(res.text)
             res.raise_for_status()
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
     def get_service_restart_status(self) -> dict:
@@ -158,10 +165,18 @@ class NiosServiceMixin:
         """
         try:
             response = self.get("restartservicestatus")
-            logging.debug(response.text)
             response.raise_for_status()
-        except httpx.RequestError as err:
-            logging.error(err)
-            raise WapiRequestException(err)
-        else:
-            return response.json()
+            try:
+                return response.json()
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {exc}")
+                raise WapiRequestException(response.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.RequestError as exc:
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc

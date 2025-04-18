@@ -109,14 +109,20 @@ class NiosFileopMixin:
             )
             logging.debug(response.text)
             response.raise_for_status()
+            try:
+                obj = response.json()
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {exc}")
+                raise WapiRequestException(response.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
-            raise WapiRequestException(exc)
-        else:
-            obj = response.json()
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
 
         download_url = obj.get("url")
         download_token = obj.get("token")
@@ -154,15 +160,27 @@ class NiosFileopMixin:
 
         try:
             self.__download_file(url, filename)
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
-            raise WapiRequestException(exc)
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
 
         try:
             self.__download_complete(token, filename)
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
-            raise WapiRequestException(exc)
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
 
     def file_upload(self, filename: str) -> str:
         """
@@ -184,9 +202,15 @@ class NiosFileopMixin:
         logging.info("step 1 - request uploadinit %s", filename)
         try:
             obj = self.__upload_init(filename=valid_filename)
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
-            raise WapiRequestException(exc)
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
 
         upload_url = obj.get("url")
         token = obj.get("token")
@@ -203,9 +227,15 @@ class NiosFileopMixin:
             )
             try:
                 self.__upload_file(upload_url, upload_file)
+            except httpx.TimeoutException as exc:
+                logging.error(f"Timeout error: {exc}")
+                raise WapiRequestException(exc) from exc
+            except httpx.HTTPStatusError as exc:
+                logging.error(f"HTTP error: {exc}")
+                raise WapiRequestException(exc) from exc
             except httpx.RequestError as exc:
-                logging.error(exc)
-                raise WapiRequestException(exc)
+                logging.error(f"Request error: {exc}")
+                raise WapiRequestException(exc) from exc
             else:
                 return token
 
@@ -947,8 +977,15 @@ class NiosFileopMixin:
             )
             logging.info("file %s download complete", filename)
             res.raise_for_status()
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(exc) from exc
 
     def __download_file(self, download_url, filename=None) -> None:
         download_url = self.__update_url(url=download_url)
