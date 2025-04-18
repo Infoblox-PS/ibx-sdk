@@ -48,7 +48,7 @@ class NiosServiceMixin:
             groups (Optional[list]): List of group names. Default is None.
             members (Optional[list[str]]): List of member names. Default is None.
             mode (Optional[ServiceRestartMode]): Restart mode. Default is None.
-            restart_option (Optional[ServiceRestartOption]): Restart option. Default is
+            restart_option (Optional[ServiceRestartOption]): Restart option. The default is
                             'RESTART_IF_NEEDED'.
             services (Optional[list[ServiceRestartServices]]): List of services to restart.
                                                                Default is None.
@@ -58,7 +58,7 @@ class NiosServiceMixin:
             None
 
         Raises:
-            httpx.RequestError: If there is an error sending the restart request.
+            httpx.RequestError: If there is an error, send the restart request.
 
         Examples:
             # Restart services in a group
@@ -118,7 +118,8 @@ class NiosServiceMixin:
 
         Args:
             self (Gift): The instance of the class.
-            services (str): The service option to update the status for. Default value is 'ALL'.
+            services (str): The service option to update the status for.
+                            The default value is 'ALL'.
 
         Returns:
             None
@@ -135,9 +136,12 @@ class NiosServiceMixin:
             )
             logging.debug(res.text)
             res.raise_for_status()
-        except httpx.RequestError as err:
-            logging.error(err)
-            raise WapiRequestException(err)
+        except httpx.HTTPStatusError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
+        except httpx.RequestError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
 
     def get_service_restart_status(self) -> dict:
         """
