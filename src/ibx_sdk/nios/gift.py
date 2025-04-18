@@ -77,15 +77,17 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
     """
 
     def __init__(
-        self,
-        grid_mgr: str = None,
-        wapi_ver: str = "2.5",
-        ssl_verify: Union[bool, str] = False,
+            self,
+            grid_mgr: str = None,
+            wapi_ver: str = "2.5",
+            ssl_verify: bool | str = False,
+            timeout: httpx.Timeout = 10.0,
     ) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
         self.ssl_verify = ssl_verify
+        self.timeout = timeout
         self.conn = None
         self.grid_ref = None
 
@@ -134,10 +136,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return ""
 
     def connect(
-        self,
-        username: str = None,
-        password: str = None,
-        certificate: str = None,
+            self,
+            username: str = None,
+            password: str = None,
+            certificate: str = None,
     ) -> None:
         """
         Make a connection to the grid manager using the WAPI instance
@@ -146,7 +148,6 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             username: A string representing the username for the connection. (default: None)
             password: A string representing the password for the connection. (default: None)
             certificate: A string representing the certificate for the connection. (default: None)
-
         Raises:
             WapiInvalidParameterException: If neither a username and password nor a certificate
                                            is provided.
@@ -163,7 +164,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         else:
             raise WapiInvalidParameterException
 
-    def __certificate_auth_request(self, certificate: str) -> Union[dict, None]:
+    def __certificate_auth_request(self, certificate: str) -> dict | None:
         """
         This private method performs a certificate authentication request to the API. It uses the
         provided certificate to establish a connection with the API server using the httpx
@@ -187,24 +188,30 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
         try:
-            conn = httpx.Client(verify=ctx)
+            conn = httpx.Client(verify=ctx, timeout=self.timeout)
             res = conn.get(f"{self.url}/grid")
             res.raise_for_status()
+            try:
+                grid = res.json()
+                self.conn = conn
+                self.grid_ref = grid[0].get("_ref", "")
+                return self.grid_ref
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {res.text}")
+                raise WapiRequestException(res.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            grid = res.json()
-            setattr(self, "conn", conn)
-            setattr(self, "grid_ref", grid[0].get("_ref"))
-            return grid[0].get("_ref", "")
 
     def __basic_auth_request(
-        self, username: str, password: str
-    ) -> Union[dict, None]:
+            self, username: str, password: str
+    ) -> dict | None:
         """
         This private method makes a request to the specified URL with basic authentication using
         the provided username and password. It stores the session connection in the instance
@@ -232,20 +239,26 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
         try:
-            conn = httpx.Client(auth=auth, verify=ctx)
+            conn = httpx.Client(auth=auth, verify=ctx, timeout=self.timeout)
             res = conn.get(f"{self.url}/grid")
             res.raise_for_status()
+            try:
+                grid = res.json()
+                self.conn = conn
+                self.grid_ref = grid[0].get("_ref", "")
+                return self.grid_ref
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {exc}")
+                raise WapiRequestException(res.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            grid = res.json()
-            setattr(self, "conn", conn)
-            setattr(self, "grid_ref", grid[0].get("_ref"))
-            return grid[0].get("_ref", "")
 
     def object_fields(self, wapi_object: str) -> Union[str, None]:
         """
@@ -274,20 +287,26 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             logging.debug("trying %s/%s?_schema", self.url, wapi_object)
             res = self.conn.get(f"{self.url}/{wapi_object}?_schema")
             res.raise_for_status()
-            data = res.json()
+            try:
+                data = res.json()
+                fields = ",".join(
+                    field["name"]
+                    for field in data.get("fields")
+                    if "r" in field.get("supports")
+                )
+                return fields
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {exc}")
+                raise WapiRequestException(res.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            fields = ",".join(
-                field["name"]
-                for field in data.get("fields")
-                if "r" in field.get("supports")
-            )
-        return fields
 
     def max_wapi_ver(self) -> None:
         """
@@ -319,22 +338,28 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             logging.debug("trying %s", url)
             res = self.conn.get(url)
             res.raise_for_status()
-            data = res.json()
+            try:
+                data = res.json()
+                versions = data.get("supported_versions")
+                versions.sort(key=lambda s: list(map(int, s.split("."))))
+                logging.debug(versions)
+                max_wapi_ver = versions.pop()
+                self.wapi_ver = max_wapi_ver
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {exc}")
+                raise WapiRequestException(res.text) from ValueError
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            versions = data.get("supported_versions")
-            versions.sort(key=lambda s: list(map(int, s.split("."))))
-            logging.debug(versions)
-            max_wapi_ver = versions.pop()
-            setattr(self, "wapi_ver", max_wapi_ver)
 
     def get(
-        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+            self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
     ) -> httpx.Response:
         """
         Return WAPI object(s).
@@ -350,19 +375,19 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         try:
             res = self.conn.get(url, params=params, **kwargs)
             res.raise_for_status()
+            return res
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            if res.status_code != 200:
-                raise WapiRequestException(res.text)
-        return res
 
     def getone(
-        self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
+            self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
     ) -> str:
         """
         Return the reference of a single WAPI object.
@@ -382,14 +407,21 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         try:
             response = self.conn.request("get", url, params=params, **kwargs)
             response.raise_for_status()
+            try:
+                data = response.json()
+            except httpx.DecodingError as exc:
+                logging.error(f"DecodingError: {response.text}")
+                raise WapiRequestException(response.text) from exc
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
         else:
-            data = response.json()
             if len(data) > 1:
                 raise WapiRequestException(
                     "Multiple data records were returned"
@@ -399,11 +431,11 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         return data[0].get("_ref", "")
 
     def post(
-        self,
-        wapi_object: str,
-        data: Optional[Union[dict, str]] = None,
-        json: Optional[dict] = None,
-        **kwargs: Any,
+            self,
+            wapi_object: str,
+            data: Optional[Union[dict, str]] = None,
+            json: Optional[dict] = None,
+            **kwargs: Any,
     ) -> httpx.Response:
         """
         Create a POST request to create a WAPI object.
@@ -422,23 +454,22 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         url = f"{self.url}/{wapi_object}"
         try:
             res = self.conn.request("post", url, data=data, json=json, **kwargs)
-            logging.info(kwargs)
+            return res
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            if res.status_code not in [200, 201]:
-                raise WapiRequestException(res.text)
-            return res
 
     def put(
-        self,
-        wapi_object_ref: str,
-        data: Optional[Union[dict, str]] = None,
-        **kwargs: Any,
+            self,
+            wapi_object_ref: str,
+            data: Optional[Union[dict, str]] = None,
+            **kwargs: Any,
     ) -> httpx.Response:
         """
         Create a PUT request to update a WAPI object by its _ref.
@@ -454,13 +485,16 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         url = f"{self.url}/{wapi_object_ref}"
         try:
             res = self.conn.request("put", url, data=data, **kwargs)
+            return res
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        return res
 
     def delete(self, wapi_object_ref: str, **kwargs: Any) -> httpx.Response:
         """
@@ -477,11 +511,13 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         url = f"{self.url}/{wapi_object_ref}"
         try:
             res = self.conn.request("delete", url, **kwargs)
+            return res
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
-            logging.error(exc)
+            logging.error(f"HTTP error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
-            logging.error(exc)
+            logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
-        else:
-            return res
