@@ -14,6 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+
 import asyncio
 import getpass
 import sys
@@ -102,13 +103,13 @@ def cli():
 )
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def upload(
-        grid_mgr: str,
-        member: str,
-        filename: str,
-        username: str,
-        wapi_ver: str,
-        certificate_usage: str,
-        debug: bool,
+    grid_mgr: str,
+    member: str,
+    filename: str,
+    username: str,
+    wapi_ver: str,
+    certificate_usage: str,
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -168,23 +169,27 @@ def upload(
 )
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def download(
-        grid_mgr: str,
-        member: str,
-        username: str,
-        wapi_ver: str,
-        certificate_usage: Literal[str],
-        debug: bool,
+    grid_mgr: str,
+    member: str,
+    username: str,
+    wapi_ver: str,
+    certificate_usage: Literal[str],
+    debug: bool,
 ):
-    asyncio.run(async_download(grid_mgr, member, username, wapi_ver, certificate_usage, debug))
+    asyncio.run(
+        async_download(
+            grid_mgr, member, username, wapi_ver, certificate_usage, debug
+        )
+    )
 
 
 async def async_download(
-        grid_mgr: str,
-        member: str,
-        username: str,
-        wapi_ver: str,
-        certificate_usage: Literal[str],
-        debug: bool
+    grid_mgr: str,
+    member: str,
+    username: str,
+    wapi_ver: str,
+    certificate_usage: Literal[str],
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -271,24 +276,24 @@ async def async_download(
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def selfsign(
-        grid_mgr: str,
-        common_name: str,
-        member: str,
-        days_valid: int,
-        username: str,
-        wapi_ver: str,
-        algorithm: str,
-        certificate_usage: str,
-        comment: str,
-        country: str,
-        email: str,
-        key_size: int,
-        locality: str,
-        organization: str,
-        ou: str,
-        state: str,
-        san: str,
-        debug: bool,
+    grid_mgr: str,
+    common_name: str,
+    member: str,
+    days_valid: int,
+    username: str,
+    wapi_ver: str,
+    algorithm: str,
+    certificate_usage: str,
+    comment: str,
+    country: str,
+    email: str,
+    key_size: int,
+    locality: str,
+    organization: str,
+    ou: str,
+    state: str,
+    san: str,
+    debug: bool,
 ):
     if debug:
         increase_log_level()
@@ -394,23 +399,23 @@ def selfsign(
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def gencsr(
-        grid_mgr: str,
-        common_name: str,
-        member: str,
-        username: str,
-        wapi_ver: str,
-        algorithm: str,
-        certificate_usage: str,
-        comment: str,
-        country: str,
-        email: str,
-        key_size: int,
-        locality: str,
-        organization: str,
-        ou: str,
-        state: str,
-        san: str,
-        debug: bool,
+    grid_mgr: str,
+    common_name: str,
+    member: str,
+    username: str,
+    wapi_ver: str,
+    algorithm: str,
+    certificate_usage: str,
+    comment: str,
+    country: str,
+    email: str,
+    key_size: int,
+    locality: str,
+    organization: str,
+    ou: str,
+    state: str,
+    san: str,
+    debug: bool,
 ) -> None:
     if debug:
         increase_log_level()
