@@ -109,6 +109,9 @@ class NiosFileopMixin:
             )
             logging.debug(response.text)
             response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            logging.error(exc)
+            raise WapiRequestException(exc) from exc
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
