@@ -47,6 +47,18 @@ csvimport = 'ibx_sdk.bin.nios_csvimport:main'
 csvexport = 'ibx_sdk.bin.nios_csvexport:main'
 nios-certificate = 'ibx_sdk.bin.nios_certificate:cli'
 
+async-get-log = 'ibx_sdk.bin.async_nios_get_log:main'
+async-get-file = 'ibx_sdk.bin.async_nios_get_file:main'
+async-get-supportbundle = 'ibx_sdk.bin.async_nios_get_supportbundle:main'
+async-grid-backup = 'ibx_sdk.bin.async_nios_grid_backup:main'
+async-grid-restore = 'ibx_sdk.bin.async_nios_grid_restore:main'
+async-restart-service = 'ibx_sdk.bin.async_nios_restart_service:main'
+async-restart-status = 'ibx_sdk.bin.async_nios_restart_status:main'
+async-csvimport = 'ibx_sdk.bin.async_nios_csvimport:main'
+async-csvexport = 'ibx_sdk.bin.async_nios_csvexport:main'
+async-nios-certificate = 'ibx_sdk.bin.async_nios_certificate:cli'
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
