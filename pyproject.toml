@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ibx-sdk"
-version = "0.5.0"
+version = "0.6.0"
 authors = [
     "Patrick Piper <patrick@ddiguru.com>",
     "Patrick Piper <ppiper@infoblox.com>",
@@ -27,6 +27,7 @@ mkdocstrings-python = "^1.12.2"
 mkdocs-material = "^9.5.44"
 ruff = "0.11.4"
 pip-audit = "^2.8.0"
+pytest-asyncio = "^0.26.0"
 
 [tool.poetry.group.test.dependencies]
 coverage = "^7.6.4"
@@ -45,6 +46,18 @@ restart-status = 'ibx_sdk.bin.nios_restart_status:main'
 csvimport = 'ibx_sdk.bin.nios_csvimport:main'
 csvexport = 'ibx_sdk.bin.nios_csvexport:main'
 nios-certificate = 'ibx_sdk.bin.nios_certificate:cli'
+
+async-get-log = 'ibx_sdk.bin.async_nios_get_log:main'
+async-get-file = 'ibx_sdk.bin.async_nios_get_file:main'
+async-get-supportbundle = 'ibx_sdk.bin.async_nios_get_supportbundle:main'
+async-grid-backup = 'ibx_sdk.bin.async_nios_grid_backup:main'
+async-grid-restore = 'ibx_sdk.bin.async_nios_grid_restore:main'
+async-restart-service = 'ibx_sdk.bin.async_nios_restart_service:main'
+async-restart-status = 'ibx_sdk.bin.async_nios_restart_status:main'
+async-csvimport = 'ibx_sdk.bin.async_nios_csvimport:main'
+async-csvexport = 'ibx_sdk.bin.async_nios_csvexport:main'
+async-nios-certificate = 'ibx_sdk.bin.async_nios_certificate:cli'
+
 
 [build-system]
 requires = ["poetry-core"]

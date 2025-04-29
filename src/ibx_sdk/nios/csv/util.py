@@ -67,7 +67,9 @@ def output_to_file(
 
     # if there's no data do not write to file
     if len(data) == 0:
-        LOG.warning("Skipping %s file, no data to write to file", output_file_name)
+        LOG.warning(
+            "Skipping %s file, no data to write to file", output_file_name
+        )
         return
 
     header = get_header(data=data)
@@ -82,5 +84,7 @@ def output_to_file(
             if import_action is not None:
                 row.import_action = ImportActionEnum(import_action)
             mywriter.writerow(
-                row.model_dump(by_alias=True, exclude_defaults=False, exclude_none=True)
+                row.model_dump(
+                    by_alias=True, exclude_defaults=False, exclude_none=True
+                )
             )

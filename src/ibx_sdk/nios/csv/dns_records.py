@@ -23,7 +23,9 @@ class ARecord(BaseModel):
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     view: Optional[str] = None
     address: IPv4Address
-    new_address: Optional[IPv4Address] = Field(alias="_new_address", default=None)
+    new_address: Optional[IPv4Address] = Field(
+        alias="_new_address", default=None
+    )
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
@@ -49,7 +51,9 @@ class AAAARecord(BaseModel):
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     view: Optional[str] = None
     address: IPv6Address
-    new_address: Optional[IPv6Address] = Field(alias="_new_address", default=None)
+    new_address: Optional[IPv6Address] = Field(
+        alias="_new_address", default=None
+    )
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
@@ -74,7 +78,9 @@ class AliasRecord(BaseModel):
     fqdn: str
     new_fqdn: Optional[str] = Field(alias="_new_fqdn", default=None)
     target_name: str
-    new_target_name: Optional[str] = Field(alias="_new_target_name", default=None)
+    new_target_name: Optional[str] = Field(
+        alias="_new_target_name", default=None
+    )
     target_type: TargetRecordTypeEnum
     new_target_type: Optional[TargetRecordTypeEnum] = Field(
         alias="_new_target_type", default=None
@@ -177,7 +183,9 @@ class NAPTRRecord(BaseModel):
     order: PositiveInt
     new_order: Optional[PositiveInt] = Field(alias="_new_order", default=None)
     preference: PositiveInt
-    new_preference: Optional[PositiveInt] = Field(alias="_new_preference", default=None)
+    new_preference: Optional[PositiveInt] = Field(
+        alias="_new_preference", default=None
+    )
     flags: Optional[str] = None
     new_flags: Optional[str] = Field(alias="_new_flags", default=None)
     services: Optional[str] = None
@@ -185,7 +193,9 @@ class NAPTRRecord(BaseModel):
     regexp: Optional[str] = None
     new_regexp: Optional[str] = Field(alias="_new_regexp", default=None)
     replacement: str
-    new_replacement: Optional[str] = Field(alias="_new_replacement", default=None)
+    new_replacement: Optional[str] = Field(
+        alias="_new_replacement", default=None
+    )
     comment: Optional[str] = None
     disabled: Optional[bool] = None
     ttl: Optional[PositiveInt] = None
@@ -412,7 +422,9 @@ class HostAddress(BaseModel):
     view: Optional[str] = None
     network_view: Optional[str] = None
     address: IPv4Address
-    new_address: Optional[IPv4Address] = Field(alias="_new_address", default=None)
+    new_address: Optional[IPv4Address] = Field(
+        alias="_new_address", default=None
+    )
     mac_address: Optional[str] = None
     configure_for_dhcp: Optional[bool] = None
     configure_for_dns: Optional[bool] = None
@@ -456,7 +468,9 @@ class Ipv6HostAddress(BaseModel):
         default=IPv6AddressTypeEnum.ADDRESS
     )
     address: IPv6Address
-    new_address: Optional[IPv6Address] = Field(alias="_new_address", default=None)
+    new_address: Optional[IPv6Address] = Field(
+        alias="_new_address", default=None
+    )
     ipv6_prefix: Optional[PositiveInt] = Field(ge=0, le=128, default=None)
     new_ipv6_prefix: Optional[PositiveInt] = Field(
         alias="_new_ipv6_prefix", default=None

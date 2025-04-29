@@ -19,10 +19,12 @@ import pprint
 from typing import Literal, Optional
 
 import httpx
+
+from ibx_sdk.nios.asynchronous.gift import AsyncGift
 from ibx_sdk.nios.exceptions import WapiRequestException
 
 
-class NiosServiceMixin:
+class NiosServiceMixin(AsyncGift):
     """
     NIOS Service Mixin class
     """
@@ -31,7 +33,7 @@ class NiosServiceMixin:
     RestartOption = Literal["FORCE_RESTART", "RESTART_IF_NEEDED"]
     RestartServices = Literal["ALL", "DNS", "DHCP", "DHCPV4", "DHCPV6"]
 
-    def service_restart(
+    async def service_restart(
         self,
         groups: Optional[list] = None,
         members: Optional[list[str]] = None,
@@ -97,11 +99,12 @@ class NiosServiceMixin:
         logging.debug(pprint.pformat(data))
 
         try:
-            res = self.post(
+            res = await self.post(
                 self.grid_ref,
                 params={"_function": "restartservices"},
                 json=data,
             )
+            logging.debug(res.text)
             res.raise_for_status()
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
@@ -117,14 +120,13 @@ class NiosServiceMixin:
                 "successfully restarted %s services", data.get("services")
             )
 
-    def update_service_status(self, services: str = "ALL") -> None:
+    async def update_service_status(self, services: str = "ALL") -> None:
         """
         Updates the status of a service.
 
         Args:
             self (Gift): The instance of the class.
-            services (str): The service option to update the status for.
-                            The default value is 'ALL'.
+            services (str): The service option to update the status for. The default value is 'ALL'.
 
         Returns:
             None
@@ -134,11 +136,12 @@ class NiosServiceMixin:
         """
         payload = {"service_option": services}
         try:
-            res = self.post(
+            res = await self.post(
                 self.grid_ref,
                 params={"_function": "requestrestartservicestatus"},
                 json=payload,
             )
+            logging.debug(res.text)
             res.raise_for_status()
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
@@ -150,7 +153,7 @@ class NiosServiceMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
-    def get_service_restart_status(self) -> dict:
+    async def get_service_restart_status(self) -> dict:
         """
         Retrieves the status of a service restart.
 
@@ -164,7 +167,8 @@ class NiosServiceMixin:
             httpx.RequestError: If there is a general request error.
         """
         try:
-            response = self.get("restartservicestatus")
+            response = await self.get("restartservicestatus")
+            logging.debug(response.text)
             response.raise_for_status()
             try:
                 return response.json()

@@ -40,10 +40,18 @@ class MemberDns(BaseModel):
     dns_over_mgmt: Optional[bool] = Field(
         None, description="DNS over management interface"
     )
-    dns_over_lan2: Optional[bool] = Field(None, description="DNS over LAN2 interface")
-    minimal_response: Optional[bool] = Field(None, description="Minimal response flag")
-    forwarders_only: Optional[bool] = Field(None, description="Forwarders only flag")
-    allow_forwarder: Optional[List[str]] = Field(None, description="List of forwarders")
+    dns_over_lan2: Optional[bool] = Field(
+        None, description="DNS over LAN2 interface"
+    )
+    minimal_response: Optional[bool] = Field(
+        None, description="Minimal response flag"
+    )
+    forwarders_only: Optional[bool] = Field(
+        None, description="Forwarders only flag"
+    )
+    allow_forwarder: Optional[List[str]] = Field(
+        None, description="List of forwarders"
+    )
     member_view_nats: Optional[List[str]] = Field(
         None, description="List of member view NATs VIEW/INTERFACE/IP"
     )
@@ -59,11 +67,16 @@ class MemberDns(BaseModel):
     query_source_port: Optional[PositiveInt] = Field(
         None, description="Query source port"
     )
-    lame_ttl: Optional[PositiveInt] = Field(600, gt=0, lt=1800, description="Lame TTL")
-    auto_sort_views: Optional[bool] = Field(None, description="Auto sort views flag")
+    lame_ttl: Optional[PositiveInt] = Field(
+        600, gt=0, lt=1800, description="Lame TTL"
+    )
+    auto_sort_views: Optional[bool] = Field(
+        None, description="Auto sort views flag"
+    )
     member_views: Optional[List[str]] = Field(None, description="Member views")
     allow_transfer: Optional[List[str]] = Field(
-        None, description="List of allowed transfer servers ITEM/Allow or ITEM/Deny"
+        None,
+        description="List of allowed transfer servers ITEM/Allow or ITEM/Deny",
     )
     excluded_servers: Optional[List[IPvAnyAddress]] = Field(
         None, description="List of excluded transfer servers"
@@ -101,7 +114,9 @@ class MemberDns(BaseModel):
     root_name_servers: Optional[List[str]] = Field(
         None, description="List of custom root name servers"
     )
-    enable_blackhole: Optional[bool] = Field(None, description="Enable blackhole flag")
+    enable_blackhole: Optional[bool] = Field(
+        None, description="Enable blackhole flag"
+    )
     blackhole: Optional[List[str]] = Field(
         None, description="List of blackhole servers"
     )
@@ -123,7 +138,9 @@ class MemberDns(BaseModel):
     nxdomain_rulesets: Optional[List[str]] = Field(
         None, description="List of nxdomain rulesets"
     )
-    enable_blacklist: Optional[bool] = Field(None, description="Enable blacklist flag")
+    enable_blacklist: Optional[bool] = Field(
+        None, description="Enable blacklist flag"
+    )
     blacklist_redirect_addresses: Optional[List[str]] = Field(
         None, description="List of blacklist redirect addresses"
     )
@@ -140,7 +157,9 @@ class MemberDns(BaseModel):
         None, description="List of blacklist rulesets"
     )
     enable_dns64: Optional[bool] = Field(None, description="Enable DNS64 flag")
-    dns64_groups: Optional[List[str]] = Field(None, description="List of DNS64 groups")
+    dns64_groups: Optional[List[str]] = Field(
+        None, description="List of DNS64 groups"
+    )
     max_cached_lifetime: Optional[PositiveInt] = Field(
         86400, ge=60, le=86400, description="Max cached lifetime in seconds"
     )
@@ -150,7 +169,9 @@ class MemberDns(BaseModel):
     dns_over_v6_lan2: Optional[bool] = Field(
         None, description="DNS over v6 LAN2 interface"
     )
-    filter_aaaa: Optional[bool] = Field(None, description="Enable filter AAAA flag")
+    filter_aaaa: Optional[bool] = Field(
+        None, description="Enable filter AAAA flag"
+    )
     filter_aaaa_list: Optional[List[str]] = Field(
         None,
         description="List of filter AAAA addresses '12.0.0.12/Deny,10.0.0.0/8/Allow,NACL/Allow'",
@@ -232,7 +253,9 @@ class MemberDns(BaseModel):
         "filter_aaaa_list",
         when_used="always",
     )
-    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+    def serialize_list_fields(
+        self, values: Optional[List[str]]
+    ) -> Optional[str]:
         return self.list_to_csv(values)
 
 
@@ -249,7 +272,9 @@ class DnsView(BaseModel):
     new_name: Optional[str] = Field(
         None, serialization_alias="_new_name", description="New view name"
     )
-    comment: Optional[str] = Field(None, description="Optional view comment field")
+    comment: Optional[str] = Field(
+        None, description="Optional view comment field"
+    )
     network_view: Optional[str] = Field(None, description="Network view name")
     disable: Optional[bool] = Field(None, description="Disable view flag")
     recursion: Optional[bool] = Field(None, description="Enable recursion flag")
@@ -281,7 +306,9 @@ class DnsView(BaseModel):
     nxdomain_rulesets: Optional[List[str]] = Field(
         None, description="List of NXDOMAIN rulesets [FQDNs,...]"
     )
-    enable_blacklist: Optional[bool] = Field(None, description="Enable blacklist flag")
+    enable_blacklist: Optional[bool] = Field(
+        None, description="Enable blacklist flag"
+    )
     blacklist_redirect_addresses: Optional[List[str]] = Field(
         None, description="List of blacklist redirect addresses [IP,...]"
     )
@@ -301,7 +328,9 @@ class DnsView(BaseModel):
     dns64_groups: Optional[List[str]] = Field(
         None, description="List of DNS64 groups [GROUP,...]"
     )
-    forwarders_only: Optional[bool] = Field(None, description="Forwarders only flag")
+    forwarders_only: Optional[bool] = Field(
+        None, description="Forwarders only flag"
+    )
     forwarders: Optional[List[str]] = Field(
         None, description="List of forwarders [IP,...]"
     )
@@ -418,7 +447,9 @@ class AuthZone(BaseModel):
         serialization_alias="_new_prefix",
         description="New RFC2317 classless reverse zone Prefix",
     )
-    is_multimaster: Optional[bool] = Field(None, description="Is multimaster flag")
+    is_multimaster: Optional[bool] = Field(
+        None, description="Is multimaster flag"
+    )
     grid_primaries: Optional[List[str]] = Field(
         None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
     )
@@ -427,7 +458,8 @@ class AuthZone(BaseModel):
         description="External primary servers [FQDN/IP/USE_2X_TSIG/USE_TSIG/NAME/KEY/ALGO,...]",
     )
     grid_secondaries: Optional[List[str]] = Field(
-        None, description="Grid secondary servers [FQDN/STEALTH/LEAD/GRID_SYNC,...] "
+        None,
+        description="Grid secondary servers [FQDN/STEALTH/LEAD/GRID_SYNC,...] ",
     )
     external_secondaries: Optional[List[str]] = Field(
         None,
@@ -442,9 +474,15 @@ class AuthZone(BaseModel):
     allow_active_dir: Optional[List[str]] = Field(
         None, description="List of allowed Active Directory servers"
     )
-    soa_refresh: Optional[PositiveInt] = Field(None, description="SOA refresh value")
-    soa_retry: Optional[PositiveInt] = Field(None, description="SOA retry value")
-    soa_expire: Optional[PositiveInt] = Field(None, description="SOA expire value")
+    soa_refresh: Optional[PositiveInt] = Field(
+        None, description="SOA refresh value"
+    )
+    soa_retry: Optional[PositiveInt] = Field(
+        None, description="SOA retry value"
+    )
+    soa_expire: Optional[PositiveInt] = Field(
+        None, description="SOA expire value"
+    )
     soa_default_ttl: Optional[PositiveInt] = Field(
         None, description="SOA default TTL value"
     )
@@ -465,10 +503,12 @@ class AuthZone(BaseModel):
         None, description="Allow update forwarding flag"
     )
     update_forwarding: Optional[List[str]] = Field(
-        None, description="List of update forwarding servers [ITEM/PERMISSION,...]"
+        None,
+        description="List of update forwarding servers [ITEM/PERMISSION,...]",
     )
     allow_transfer: Optional[List[str]] = Field(
-        None, description="List of allowed transfer servers [ITEM/PERMISSION,...]"
+        None,
+        description="List of allowed transfer servers [ITEM/PERMISSION,...]",
     )
     allow_update: Optional[List[str]] = Field(
         None, description="List of allowed update servers [ITEM/PERMISSION,...]"
@@ -498,7 +538,9 @@ class AuthZone(BaseModel):
         "allow_update",
         "allow_query",
     )
-    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+    def serialize_list_fields(
+        self, values: Optional[List[str]]
+    ) -> Optional[str]:
         return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
@@ -563,8 +605,12 @@ class ForwardZone(BaseModel):
     forwarding_servers: Optional[List[str]] = Field(
         None, description="List of forwarding servers [FQDN,...]"
     )
-    forwarders_only: Optional[bool] = Field(True, description="Forwarders only flag")
-    ns_group: Optional[str] = Field(None, description="Forwarding Members NS Group")
+    forwarders_only: Optional[bool] = Field(
+        True, description="Forwarders only flag"
+    )
+    ns_group: Optional[str] = Field(
+        None, description="Forwarding Members NS Group"
+    )
     ns_group_external: Optional[str] = Field(
         None, description="Forward-to NS group name"
     )
@@ -579,7 +625,9 @@ class ForwardZone(BaseModel):
         return ",".join(items)
 
     @field_serializer("forward_to", "forwarding_servers", when_used="always")
-    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+    def serialize_list_fields(
+        self, values: Optional[List[str]]
+    ) -> Optional[str]:
         return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
@@ -674,7 +722,9 @@ class StubZone(BaseModel):
         return ",".join(items)
 
     @field_serializer("stub_from", "stub_members", when_used="always")
-    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+    def serialize_list_fields(
+        self, values: Optional[List[str]]
+    ) -> Optional[str]:
         return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
@@ -700,7 +750,9 @@ class NsGroup(BaseModel):
     )
     group_name: str = Field(..., description="NS group name")
     new_group_name: Optional[str] = Field(
-        None, serialization_alias="_new_group_name", description="New NS group name"
+        None,
+        serialization_alias="_new_group_name",
+        description="New NS group name",
     )
     grid_primaries: Optional[List[str]] = Field(
         None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
@@ -714,9 +766,12 @@ class NsGroup(BaseModel):
         description="External secondary servers [FQDN/IP/STEALTH/USE_2X_TSIG/USE_TSIG/NAME/KEY,...]",
     )
     grid_secondaries: Optional[List[str]] = Field(
-        None, description="Grid secondary servers [FQDN/IS_STEALTH/LEAD/GRID_SYNC,...] "
+        None,
+        description="Grid secondary servers [FQDN/IS_STEALTH/LEAD/GRID_SYNC,...] ",
     )
-    is_grid_default: Optional[bool] = Field(None, description="Is grid default flag")
+    is_grid_default: Optional[bool] = Field(
+        None, description="Is grid default flag"
+    )
     comment: Optional[str] = Field(None, description="Optional comment")
 
     @staticmethod
@@ -732,7 +787,9 @@ class NsGroup(BaseModel):
         "grid_secondaries",
         when_used="always",
     )
-    def serialize_list_fields(self, values: Optional[List[str]]) -> Optional[str]:
+    def serialize_list_fields(
+        self, values: Optional[List[str]]
+    ) -> Optional[str]:
         return self.list_to_csv(values)
 
     def add_property(self, prop: str, value: str):
@@ -802,14 +859,20 @@ class DelegatedZone(BaseModel):
     delegate_to: Optional[List[str]] = Field(
         None, description="List of delegated servers [FQDN/IP,...]"
     )
-    delegated_ttl: Optional[PositiveInt] = Field(None, description="Delegated TTL")
-    ns_group: Optional[str] = Field(None, description="Delegated Members NS Group")
+    delegated_ttl: Optional[PositiveInt] = Field(
+        None, description="Delegated TTL"
+    )
+    ns_group: Optional[str] = Field(
+        None, description="Delegated Members NS Group"
+    )
     new_prefix: Optional[PositiveInt] = Field(
         None,
         serialization_alias="_new_prefix",
         description="New RFC2317 classless reverse zone Prefix",
     )
-    ddns_protected: Optional[bool] = Field(None, description="DDNS protected flag")
+    ddns_protected: Optional[bool] = Field(
+        None, description="DDNS protected flag"
+    )
     ddns_principal: Optional[str] = Field(None, description="DDNS principal")
 
     @field_serializer("delegate_to", when_used="always")
@@ -841,7 +904,9 @@ class DelegationNsGroup(BaseModel):
     )
     group_name: str = Field(..., description="NS group name")
     new_group_name: Optional[str] = Field(
-        None, serialization_alias="_new_group_name", description="New NS group name"
+        None,
+        serialization_alias="_new_group_name",
+        description="New NS group name",
     )
     delegate_to: Optional[List[str]] = Field(
         None, description="List of delegated servers [FQDN/IP,...]"
@@ -871,7 +936,9 @@ class ForwardingMemberNsGroup(BaseModel):
     )
     group_name: str = Field(..., description="NS group name")
     new_group_name: Optional[str] = Field(
-        None, serialization_alias="_new_group_name", description="New NS group name"
+        None,
+        serialization_alias="_new_group_name",
+        description="New NS group name",
     )
     comment: Optional[str] = Field(None, description="Optional comment")
     forwarding_servers: Optional[List[str]] = Field(
@@ -879,7 +946,9 @@ class ForwardingMemberNsGroup(BaseModel):
     )
 
     @field_serializer("forwarding_servers", when_used="always")
-    def serialize_forwarding_servers(self, items: Optional[List[str]]) -> str | None:
+    def serialize_forwarding_servers(
+        self, items: Optional[List[str]]
+    ) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -907,7 +976,9 @@ class ForwardStubServerNsGroup(BaseModel):
     )
     group_name: str = Field(..., description="NS group name")
     new_group_name: Optional[str] = Field(
-        None, serialization_alias="_new_group_name", description="New NS group name"
+        None,
+        serialization_alias="_new_group_name",
+        description="New NS group name",
     )
     comment: Optional[str] = Field(None, description="Optional comment")
     external_servers: Optional[List[str]] = Field(
@@ -915,7 +986,9 @@ class ForwardStubServerNsGroup(BaseModel):
     )
 
     @field_serializer("external_servers", when_used="always")
-    def serialize_external_servers(self, items: Optional[List[str]]) -> str | None:
+    def serialize_external_servers(
+        self, items: Optional[List[str]]
+    ) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -943,7 +1016,9 @@ class StubMemberNsGroup(BaseModel):
     )
     group_name: str = Field(..., description="NS group name", min_length=1)
     new_group_name: Optional[str] = Field(
-        None, serialization_alias="_new_group_name", description="New NS group name"
+        None,
+        serialization_alias="_new_group_name",
+        description="New NS group name",
     )
     comment: Optional[str] = Field(None, description="Optional comment")
     stub_members: Optional[List[str]] = Field(

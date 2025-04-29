@@ -73,26 +73,26 @@ class NiosFileopMixin:
     NiosFileopMixin class
     """
 
-    def csv_export(
+    async def csv_export(
         self, wapi_object: str, filename: Optional[str] = None
     ) -> None:
         """
-        Exports data in CSV format for the specified WAPI object and saves it to a file.
+        Performs a CSV export for the provided WAPI object(s) and downloads the resulting file.
 
-        The method performs a CSV export operation for a specified WAPI object using the file
-        operation capabilities provided by the WAPI (Web Application Programming Interface),
-        downloads the resulting file from a given URL, and saves it to a user-specified filename
-        or a default filename derived from the download URL. Finally, it finalizes the download
-        process by notifying the completion.
+        This method sends a request to export data as CSV for the given WAPI object(s),
+        retrieving the download URL and associated token upon success.
 
-        Parameters:
-            wapi_object (str): The name of the WAPI object(s) whose data is to be exported.
-            filename (Optional[str]): The optional local file path to save the downloaded CSV
-                data. If not provided, the filename is automatically derived from the
-                downloaded URL.
+        It then downloads the CSV data file and notifies the server once the download is complete.
+
+        Args:
+            wapi_object (str): The WAPI object(s) to export.
+            filename (Optional[str]): The optional file path for saving the exported CSV.
+                If provided, hyphens in the filename are replaced with underscores.
 
         Raises:
-            WapiRequestException: If an HTTP request fails during the CSV export process.
+            WapiRequestException: If a request-related error occurs during exporting or
+                downloading the CSV file.
+
         """
         if filename:
             (_, filename) = os.path.split(filename)
@@ -102,7 +102,7 @@ class NiosFileopMixin:
         logging.info("performing csv export for %s object(s)", wapi_object)
         payload = {"_object": wapi_object}
         try:
-            response = self.post(
+            response = await self.post(
                 "fileop",
                 params={"_function": "csv_export"},
                 json=payload,
@@ -132,11 +132,11 @@ class NiosFileopMixin:
         if not filename:
             filename = util.extract_filename_from_url(download_url)
 
-        self.__download_file(download_url, filename)
+        await self.__download_file(download_url, filename)
 
-        self.__download_complete(download_token, filename)
+        await self.__download_complete(download_token, filename)
 
-    def file_download(
+    async def file_download(
         self,
         token: str,
         url: str,
@@ -159,7 +159,7 @@ class NiosFileopMixin:
             filename = util.extract_filename_from_url(url)
 
         try:
-            self.__download_file(url, filename)
+            await self.__download_file(url, filename)
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
             raise WapiRequestException(exc) from exc
@@ -171,7 +171,7 @@ class NiosFileopMixin:
             raise WapiRequestException(exc) from exc
 
         try:
-            self.__download_complete(token, filename)
+            await self.__download_complete(token, filename)
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
             raise WapiRequestException(exc) from exc
@@ -182,7 +182,7 @@ class NiosFileopMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
-    def file_upload(self, filename: str) -> str:
+    async def file_upload(self, filename: str) -> str:
         """
         Perform a file upload into the NIOS Grid.
 
@@ -201,7 +201,7 @@ class NiosFileopMixin:
         # Call WAPI fileop Upload INIT
         logging.info("step 1 - request uploadinit %s", filename)
         try:
-            obj = self.__upload_init(filename=valid_filename)
+            obj = await self.__upload_init(filename=valid_filename)
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
             raise WapiRequestException(exc) from exc
@@ -217,7 +217,6 @@ class NiosFileopMixin:
 
         # specify a file handle for the file data to be uploaded
         with open(os.path.join(path, filename), "rb") as fh:
-            # reset to top of the file
             fh.seek(0)
             upload_file = {"file": fh.read()}
 
@@ -226,7 +225,7 @@ class NiosFileopMixin:
                 "step 2 - post the files using the upload_url provided"
             )
             try:
-                self.__upload_file(upload_url, upload_file)
+                await self.__upload_file(upload_url, upload_file)
             except httpx.TimeoutException as exc:
                 logging.error(f"Timeout error: {exc}")
                 raise WapiRequestException(exc) from exc
@@ -239,7 +238,7 @@ class NiosFileopMixin:
             else:
                 return token
 
-    def upload_certificate(
+    async def upload_certificate(
         self,
         member: str,
         filename: str,
@@ -251,14 +250,16 @@ class NiosFileopMixin:
         Args:
             member: The member identifier to which the certificate will be uploaded.
             filename: The filename of the certificate to be uploaded.
-            certificate_usage: The usage type of the certificate. Default is "ADMIN".
+            certificate_usage: The usage type of the certificate.
+            The default is "ADMIN".
 
         Raises:
-            WapiRequestException: If there is an error during the request to upload the certificate.
+            WapiRequestException:
+            If there is an error during the request to upload the certificate.
         """
         token = self.file_upload(filename=filename)
 
-        # submit task to CSV Job Manager
+        # submit the task to CSV Job Manager
         logging.info(
             "step 3 - upload %s certificate on %s",
             certificate_usage,
@@ -281,7 +282,7 @@ class NiosFileopMixin:
             logging.error(exc)
             raise WapiRequestException(exc)
 
-    def csv_import(
+    async def csv_import(
         self,
         task_operation: CsvOperation,
         csv_import_file: str,
@@ -295,7 +296,7 @@ class NiosFileopMixin:
                                            a value from the `CsvOperation` enum.
             csv_import_file (str): The path to the CSV file to be imported.
             exit_on_error (bool): Indicates whether the program should exit if an error occurs
-                                  during the import process. Default value is `False`.
+                                  during the import process. The default value is `False`.
 
         Returns:
             A dictionary containing the result of the CSV import task.
@@ -303,16 +304,16 @@ class NiosFileopMixin:
         Raises:
             httpx.RequestError: If an error occurs while making HTTP requests.
         """
-        token = self.file_upload(filename=csv_import_file)
+        token = await self.file_upload(filename=csv_import_file)
 
-        # submit task to CSV Job Manager
+        # submit the task to CSV Job Manager
         logging.info(
             "step 3 - execute the csv_import %s job on %s",
             task_operation,
             csv_import_file,
         )
         try:
-            csvtask = self.__csv_import(
+            csvtask = await self.__csv_import(
                 task_operation.upper(), token, exit_on_error
             )
         except httpx.RequestError as exc:
@@ -321,7 +322,7 @@ class NiosFileopMixin:
         else:
             return csvtask
 
-    def csvtask_status(self, csvtask: dict) -> dict:
+    async def csvtask_status(self, csvtask: dict) -> dict:
         """
         Fetch the status of a CSV submitted task
 
@@ -382,7 +383,7 @@ class NiosFileopMixin:
 
         return res.json()
 
-    def get_csv_errors_file(self, filename: str, job_id: str) -> None:
+    async def get_csv_errors_file(self, filename: str, job_id: str) -> None:
         """
         Fetches the csv-errors file for a specific job ID.
 
@@ -400,7 +401,7 @@ class NiosFileopMixin:
         logging.debug("fetching csv-errors file for job id %s", job_id)
         payload = {"import_id": job_id}
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "csv_error_log"},
                 json=payload,
@@ -417,7 +418,7 @@ class NiosFileopMixin:
 
         csv_error_file = f"csv-errors-{filename}.csv"
         try:
-            self.__download_file(download_url, csv_error_file)
+            await self.__download_file(download_url, csv_error_file)
             res.raise_for_status()
         except httpx.RequestError as exc:
             logging.error(exc)
@@ -425,18 +426,18 @@ class NiosFileopMixin:
 
         # We're done - so post to downloadcomplete function
         try:
-            self.__download_complete(token, csv_error_file)
+            await self.__download_complete(token, csv_error_file)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
 
-    def download_certificate(
+    async def download_certificate(
         self,
         member: str,
         certificate_usage: SupportedCertTypes = "ADMIN",
     ):
         """
-        Download SSL certificate from the Grid.
+        Download the SSL certificate from the Grid.
 
         Args:
             member: The identifier of the member for whom the certificate is being downloaded.
@@ -454,7 +455,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "downloadcertificate"},
                 json=payload,
@@ -469,9 +470,9 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url)
+        await self.file_download(token=download_token, url=download_url)
 
-    def generate_selfsigned_cert(
+    async def generate_selfsigned_cert(
         self,
         cn: str,
         member: str,
@@ -486,7 +487,7 @@ class NiosFileopMixin:
         org: Optional[str] = None,
         org_unit: Optional[str] = None,
         state: Optional[str] = None,
-        subject_alternative_names: Optional[list[dict]] = None,
+        subject_alternative_names: Optional[list[dict[str, str]]] = None,
     ):
         """
         Generate a Self-Signed Certificate on the Grid.
@@ -495,8 +496,8 @@ class NiosFileopMixin:
             cn: The common name for the certificate.
             member: The member name for the certificate.
             days_valid: The number of days the certificate is valid for. Default is 365.
-            algorithm: The algorithm used for certificate generation. Default is "SHA-256".
-            certificate_usage: The usage type of the certificate. Default is "ADMIN".
+            algorithm: The algorithm used for certificate generation. The default is "SHA-256".
+            certificate_usage: The usage type of the certificate. The default is "ADMIN".
             comment: Optional comment associated with the certificate.
             country: Optional country code.
             email: Optional email address.
@@ -509,7 +510,7 @@ class NiosFileopMixin:
 
         """
         logging.info("generating self-signed certificate for %s", member)
-        payload = {
+        payload: dict[str, str | int | list[dict[str, str]]] = {
             "cn": cn,
             "member": member,
             "algorithm": algorithm,
@@ -537,7 +538,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "generateselfsignedcert"},
                 json=payload,
@@ -552,9 +553,9 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url)
+        await self.file_download(token=download_token, url=download_url)
 
-    def generate_csr(
+    async def generate_csr(
         self,
         cn: str,
         member: str,
@@ -573,8 +574,9 @@ class NiosFileopMixin:
         """
         Generate a Certificate Signing Request
 
-        Generate and download a CSR for a member of the grid. Once the CSR is generated it is
-        downloaded and saved locally to the current working directory.
+        Generate and download a CSR for a member of the grid.
+        Once the CSR is generated, it is downloaded and saved locally to the
+        current working directory.
 
         Args:
             cn: Common Name for the certificate.
@@ -589,7 +591,8 @@ class NiosFileopMixin:
             org: Optional organization name for the certificate.
             org_unit: Optional organizational unit for the certificate.
             state: Optional state or province for the certificate.
-            subject_alternative_names: Optional list of subject alternative names (SANs) for the
+            subject_alternative_names:
+            Optional list of subject alternative names (SANs) for the
                     certificate.
 
         Returns:
@@ -621,7 +624,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "generatecsr"},
                 json=payload,
@@ -636,9 +639,9 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url)
+        await self.file_download(token=download_token, url=download_url)
 
-    def get_log_files(
+    async def get_log_files(
         self,
         log_type: LogType,
         filename: Optional[str] = None,
@@ -679,7 +682,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "get_log_files"},
                 json=payload,
@@ -694,11 +697,11 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
+        await self.file_download(
             token=download_token, url=download_url, filename=filename
         )
 
-    def get_support_bundle(
+    async def get_support_bundle(
         self,
         member: str,
         filename: Optional[str] = None,
@@ -724,7 +727,7 @@ class NiosFileopMixin:
                                         Defaults to False.
             nm_snmp_logs (bool, optional): Whether to include NM SNMP logs in the support bundle.
                                            Defaults to False.
-            recursive_cache_file (bool, optional): Whether to include recursive cache file in the
+            recursive_cache_file (bool, optional): Whether to include a recursive cache file in the
                                                    support bundle. Defaults to False.
             remote_url (str, optional): The remote URL where the support bundle will be uploaded.
                                         Defaults to None.
@@ -749,7 +752,7 @@ class NiosFileopMixin:
             payload["remote_url"] = remote_url
         logging.debug(pprint.pformat(payload))
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "get_support_bundle"},
                 json=payload,
@@ -765,16 +768,16 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
+        await self.file_download(
             token=download_token, url=download_url, filename=filename
         )
 
-    def grid_backup(self, filename: Optional[str] = None) -> None:
+    async def grid_backup(self, filename: Optional[str] = None) -> None:
         """
         Perform a NIOS Grid Backup.
 
         Args:
-            filename: str, optional. The name of the backup file. Default is 'database.bak'.
+            filename: str, optional. The name of the backup file. The default is 'database.bak'.
 
         Returns:
             None
@@ -786,7 +789,7 @@ class NiosFileopMixin:
 
         logging.info("step 1 - request gridbackup %s", filename)
         try:
-            res = self.__getgriddata(payload)
+            res = await self.__getgriddata(payload)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
@@ -795,9 +798,11 @@ class NiosFileopMixin:
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-        self.file_download(token=token, url=download_url, filename=filename)
+        await self.file_download(
+            token=token, url=download_url, filename=filename
+        )
 
-    def grid_restore(
+    async def grid_restore(
         self,
         filename: str = "database.bak",
         mode: GridRestoreMode = "NORMAL",
@@ -807,24 +812,24 @@ class NiosFileopMixin:
         Perform a NIOS Grid restore of a database using a given file.
 
         Args:
-            filename (str): The filename of the database file to be restored. Default is
-                            "database.bak".
+            filename (str): The filename of the database file to be restored.
+                The default is "database.bak".
             mode (GridRestoreMode): The restore mode to be used. Default is "NORMAL".
             keep_grid_ip (bool): Indicates whether to keep the grid IP address. Default is False.
 
         """
-        token = self.file_upload(filename=filename)
+        token = await self.file_upload(filename=filename)
 
         # Execute the restore
         logging.info("step 3 - execute the grid restore")
         try:
-            self.__restore_database(keep_grid_ip, mode, token)
+            await self.__restore_database(keep_grid_ip, mode, token)
         except httpx.RequestError as exc:
             logging.error("step 3 - Error: %s", exc)
             raise WapiRequestException(exc)
         logging.info("Grid restore successful!")
 
-    def member_config(
+    async def member_config(
         self,
         member: str,
         conf_type: MemberDataType,
@@ -832,11 +837,11 @@ class NiosFileopMixin:
         remote_url: str = None,
     ) -> None:
         """
-        Fetch member configuration file for given service type.
+        Fetch member configuration file for a given service type.
 
         Args:
             member: A string representing the grid member.
-            conf_type: An enum representing the type of config file.
+            conf_type: An enum representing the type of the config file.
             filename: A string value of the filename to save
             remote_url: An optional string representing the remote URL.
 
@@ -854,7 +859,7 @@ class NiosFileopMixin:
         if remote_url:
             payload["remote_url"] = remote_url
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "getmemberdata"},
                 json=payload,
@@ -869,11 +874,11 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
+        await self.file_download(
             token=download_token, url=download_url, filename=filename
         )
 
-    def get_lease_history(
+    async def get_lease_history(
         self,
         member: str,
         start_time: int = None,
@@ -897,7 +902,7 @@ class NiosFileopMixin:
 
         """
         logging.info("fetching DHCP lease history from grid member %s", member)
-        payload = {"member": member}
+        payload: dict[str, str | int] = {"member": member}
         if start_time is not None:
             payload["start_time"] = start_time
         if end_time is not None:
@@ -905,7 +910,7 @@ class NiosFileopMixin:
         if remove_url is not None:
             payload["remove_url"] = remove_url
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "getleasehistoryfiles"},
                 json=payload,
@@ -920,9 +925,9 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(token=download_token, url=download_url)
+        await self.file_download(token=download_token, url=download_url)
 
-    def __csv_import(
+    async def __csv_import(
         self,
         task_operation: str,
         upload_token: str,
@@ -950,7 +955,7 @@ class NiosFileopMixin:
 
         # start the CSV task in job manager
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "csv_import"},
                 json=payload,
@@ -965,11 +970,11 @@ class NiosFileopMixin:
 
         return res.json()
 
-    def __download_complete(self, token: str, filename: str) -> None:
+    async def __download_complete(self, token: str, filename: str) -> None:
         header = {"Content-type": "application/json"}
         payload = {"token": token}
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "downloadcomplete"},
                 json=payload,
@@ -987,25 +992,25 @@ class NiosFileopMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
-    def __download_file(self, download_url, filename=None) -> None:
-        download_url = self.__update_url(url=download_url)
+    async def __download_file(self, download_url, filename=None) -> None:
+        download_url = await self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
         logging.info(download_url)
         self.conn.verify = self.ssl_verify
-        with self.conn.stream(
+        async with self.conn.stream(
             "GET",
             download_url,
             headers=header,
         ) as res:
             res.raise_for_status()
             with open(filename, "wb") as file_out:
-                for chunk in res.iter_bytes(chunk_size=1024):
+                async for chunk in res.aiter_bytes(chunk_size=1024):
                     file_out.write(chunk)
 
-    def __getgriddata(self, payload: dict) -> dict:
+    async def __getgriddata(self, payload: dict) -> dict:
         headers = {"content-type": "application/json"}
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "getgriddata"},
                 json=payload,
@@ -1020,10 +1025,10 @@ class NiosFileopMixin:
 
         return res.json()
 
-    def __restore_database(
+    async def __restore_database(
         self, keep_grid_ip: bool, mode: str, upload_token: str
     ) -> dict:
-        # set content type back to JSON
+        # set the content type back to JSON
         headers = {"content-type": "application/json"}
 
         # set the request parameters
@@ -1035,7 +1040,7 @@ class NiosFileopMixin:
 
         # start the restore
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "restoredatabase"},
                 json=payload,
@@ -1049,7 +1054,7 @@ class NiosFileopMixin:
             raise WapiRequestException(exc)
         return res
 
-    def __update_url(self, url: str) -> str:
+    async def __update_url(self, url: str) -> str:
         if self.grid_mgr in url:
             return url
         elif "[" in url and "]" in url:
@@ -1059,11 +1064,11 @@ class NiosFileopMixin:
             ipv4_pattern = r"https://(\d{1,3}\.){3}\d{1,3}"
             return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
-    def __upload_file(self, upload_url: str, upload_file: dict) -> None:
-        upload_url = self.__update_url(upload_url)
+    async def __upload_file(self, upload_url: str, upload_file: dict) -> None:
+        upload_url = await self.__update_url(upload_url)
         logging.debug(upload_url)
         try:
-            res = self.conn.post(
+            res = await self.conn.post(
                 upload_url,
                 files=upload_file,
                 timeout=None,
@@ -1074,11 +1079,11 @@ class NiosFileopMixin:
             logging.error(exc)
             raise WapiRequestException(exc)
 
-    def __upload_init(self, filename: str) -> dict:
+    async def __upload_init(self, filename: str) -> dict:
         headers = {"content-type": "application/json"}
         payload = {"filename": filename}
         try:
-            res = self.post(
+            res = await self.post(
                 "fileop",
                 params={"_function": "uploadinit"},
                 headers=headers,

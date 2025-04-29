@@ -43,11 +43,17 @@ Retrieve Support Bundle from Member
 
 @click.command(
     help=help_text,
-    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
+    context_settings=dict(
+        max_content_width=95, help_option_names=["-h", "--help"]
+    ),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
-@optgroup.option("-m", "--member", required=True, help="Member to retrieve log from")
+@optgroup.option(
+    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
+)
+@optgroup.option(
+    "-m", "--member", required=True, help="Member to retrieve log from"
+)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -56,10 +62,16 @@ Retrieve Support Bundle from Member
     show_default=True,
     help="Infoblox admin username",
 )
-@optgroup.option("-r", "--rotated-logs", is_flag=True, help="Include Rotated Logs")
+@optgroup.option(
+    "-r", "--rotated-logs", is_flag=True, help="Include Rotated Logs"
+)
 @optgroup.option("-l", "--log-files", is_flag=True, help="Include Log Files")
 @optgroup.option(
-    "-w", "--wapi-ver", default="2.11", show_default=True, help="Infoblox WAPI version"
+    "-w",
+    "--wapi-ver",
+    default="2.11",
+    show_default=True,
+    help="Infoblox WAPI version",
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")

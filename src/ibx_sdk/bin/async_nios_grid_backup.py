@@ -15,6 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import asyncio
 import getpass
 import sys
 
@@ -23,58 +24,22 @@ from click_option_group import optgroup
 
 from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
 from ibx_sdk.nios.exceptions import WapiRequestException
-from ibx_sdk.nios.gift import Gift
+from ibx_sdk.nios.asynchronous.gift import AsyncGift
 
 log = init_logger(
     logfile_name="wapi.log",
     logfile_mode="a",
     console_log=True,
     level="info",
-    max_size=100000,
+    max_size=10000,
     num_logs=1,
 )
 
-wapi = Gift()
-
-
-class LogType(click.ParamType):
-    name = "log_type"
-    log_types = [
-        "SYSLOG",
-        "AUDITLOG",
-        "MSMGMTLOG",
-        "DELTALOG",
-        "OUTBOUND",
-        "PTOPLOG",
-        "DISCOVERY_CSV_ERRLOG",
-    ]
-
-    def convert(self, value, param, ctx):
-        if value.upper() in self.log_types:
-            return value.upper()
-        self.fail(f"{value} is not a valid log type")
-
+wapi = AsyncGift()
 
 help_text = """
-Get NIOS Log from Member
+Backup NIOS Grid
 """
-
-
-def validate_rotated_logs(ctx, param, value):
-    """
-    Args:
-        ctx: A Click context object containing information about the current invocation of the
-        command.
-        param: The Click parameter object being validated.
-        value: The value passed to the parameter being validated.
-
-    """
-    log_type = ctx.params.get("log_type")
-    if value and log_type != "SYSLOG":
-        raise click.BadParameter(
-            "--rotated-logs can only be set when --log-type is SYSLOG"
-        )
-    return value
 
 
 @click.command(
@@ -87,9 +52,6 @@ def validate_rotated_logs(ctx, param, value):
 @optgroup.option(
     "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member to retrieve log from"
-)
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -99,27 +61,11 @@ def validate_rotated_logs(ctx, param, value):
     help="Infoblox admin username",
 )
 @optgroup.option(
-    "-t",
-    "--log-type",
-    default="SYSLOG",
-    type=LogType(),
+    "-f",
+    "--file",
+    default="database.bak",
     show_default=True,
-    help="select log type",
-)
-@optgroup.option(
-    "-n",
-    "--node-type",
-    type=click.Choice(["ACTIVE", "PASSIVE"]),
-    default="ACTIVE",
-    show_default=True,
-    help="Node: ACTIVE | PASSIVE",
-)
-@optgroup.option(
-    "-r",
-    "--rotated-logs",
-    is_flag=True,
-    help="Include Rotated Logs",
-    callback=validate_rotated_logs,
+    help="Infoblox backup file name",
 )
 @optgroup.option(
     "-w",
@@ -130,28 +76,18 @@ def validate_rotated_logs(ctx, param, value):
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
-def main(
-    grid_mgr: str,
-    member: str,
-    username: str,
-    log_type: str,
-    node_type: str,
-    rotated_logs: bool,
-    wapi_ver: str,
-    debug: bool,
+async def main(
+    grid_mgr: str, username: str, file: str, wapi_ver: str, debug: bool
 ) -> None:
     """
-    Get NIOS Log from Member.
+    Backup NIOS Grid
 
     Args:
         debug (bool): If True, it sets the log level to DEBUG. Default is False.
         grid_mgr (str): Manager for the wapi grid.
-        member (str): Grid Member
         username (str): Username for the wapi connection.
-        log_type (str): Log type
-        node_type (str) Node Type [ ACTIVE | PASSIVE ]
         wapi_ver (str): Version of wapi.
-        rotated_logs (bool):
+        file (str): Filename/path where the backup will be saved.
 
     Returns:
         None
@@ -169,7 +105,7 @@ def main(
     password = getpass.getpass(f"Enter password for [{username}]: ")
 
     try:
-        wapi.connect(username=username, password=password)
+        await wapi.connect(username=username, password=password)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
@@ -177,19 +113,13 @@ def main(
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
     try:
-        wapi.get_log_files(
-            member=member,
-            log_type=log_type,
-            node_type=node_type,
-            include_rotated=rotated_logs,
-        )
+        await wapi.grid_backup(filename=file)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
 
-    log.info("finished!")
     sys.exit()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

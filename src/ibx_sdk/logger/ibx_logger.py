@@ -104,7 +104,9 @@ def init_logger(
     if log_format:
         log_fmt = log_format
     else:
-        log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+        log_fmt = (
+            "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+        )
 
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
@@ -165,7 +167,9 @@ def init_remote_logger(
     return root_logger
 
 
-def init_console_logger(level: Optional[str] = None, log_format: Optional[str] = None):
+def init_console_logger(
+    level: Optional[str] = None, log_format: Optional[str] = None
+):
     """
     Initialize a colored console logger with optional custom logging level.
 
@@ -196,7 +200,9 @@ def init_console_logger(level: Optional[str] = None, log_format: Optional[str] =
     if log_format:
         log_fmt = log_format
     else:
-        log_fmt = "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+        log_fmt = (
+            "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+        )
     root_logger = logging.getLogger()
     root_logger.setLevel(log_level)
     coloredlogs.install(logger=root_logger, level=log_level, fmt=log_fmt)
@@ -236,7 +242,9 @@ def increase_log_level(handler_type: str = "both") -> None:
     selected_index = max(0, current_index - 1)
     root_logger.setLevel(defined_levels[selected_index])
     for handle in root_logger.handlers:
-        if isinstance(handle, coloredlogs.StandardErrorHandler) and handler_type in [
+        if isinstance(
+            handle, coloredlogs.StandardErrorHandler
+        ) and handler_type in [
             "both",
             "console",
         ]:
@@ -289,7 +297,9 @@ def set_log_level(level: str, handler_type: str = "both") -> None:
     if handler_type == "both":
         root_logger.setLevel(log_level)
     for handle in root_logger.handlers:
-        if isinstance(handle, coloredlogs.StandardErrorHandler) and handler_type in [
+        if isinstance(
+            handle, coloredlogs.StandardErrorHandler
+        ) and handler_type in [
             "both",
             "console",
         ]:
