@@ -74,12 +74,21 @@ class Gift:
         api_spec_file (str): Path to a cached Swagger JSON index file.
         load_live (bool): If True, fetch Swagger metadata at runtime.
         base_path (str): The base URL for Infoblox API (default: https://csp.infoblox.com)
+        extra_api_data (dict): Optional additional endpoint definitions to merge in.
     """
-    def __init__(self, api_key: str = None, api_spec_file: str = "infoblox_api_calls.json", load_live: bool = False, base_path: str = "https://csp.infoblox.com"):
+    def __init__(
+        self,
+        api_key: str = None,
+        api_spec_file: str = "infoblox_api_calls.json",
+        load_live: bool = False,
+        base_path: str = "https://csp.infoblox.com",
+        extra_api_data: dict | None = None,
+    ):
         self.api_key = api_key
         self.session = None
         self.base_path = base_path
 
+        # load or fetch the swagger index
         if load_live or not os.path.exists(api_spec_file):
             self.api_data = asyncio.run(build_swagger_index(base_path))
             with open(api_spec_file, "w") as f:
@@ -88,17 +97,12 @@ class Gift:
             with open(api_spec_file) as f:
                 self.api_data = json.load(f)
 
-        # Inject hidden /current_user/accounts endpoint manually
-        self.api_data["Identity GET /current_user/accounts"] = {
-            "api": "Identity",
-            "method": "GET",
-            "l_path": "/current_user/accounts",
-            "s_path": "/current_user/accounts",
-            "summary": "CurrentUserGet returns the current user.",
-            "operation_id": "UsersCurrentUserGet",
-            "base_url": "https://csp.infoblox.com/v2"
-        }
+        # merge in any extra definitions passed by the user
+        if extra_api_data:
+            # extra_api_data should be a dict of key -> endpoint-dict
+            self.api_data.update(extra_api_data)
 
+        # ...then build your url_map as before
         self.url_map = self._build_url_map()
 
     def _build_url_map(self) -> dict:
