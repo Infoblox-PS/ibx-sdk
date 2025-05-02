@@ -1,10 +1,9 @@
 import json
-import time
 import os
 import asyncio
 import httpx
 
-from ibx_sdk.cloud.exceptions import ( ApiInvalidParameterException, ApiRequestException)
+from ibx_sdk.cloud.exceptions import ApiInvalidParameterException, ApiRequestException
 
 API_NAMES = [
     "BootstrapApp", "Infrastructure", "Locations", "NIOSXasaService", "NTPService",
@@ -99,10 +98,8 @@ class Gift:
 
         # merge in any extra definitions passed by the user
         if extra_api_data:
-            # extra_api_data should be a dict of key -> endpoint-dict
             self.api_data.update(extra_api_data)
 
-        # ...then build your url_map as before
         self.url_map = self._build_url_map()
 
     def _build_url_map(self) -> dict:
@@ -142,42 +139,30 @@ class Gift:
             request_fn = getattr(self.session, method.lower())
             url = entry["full_url"]
 
-            retries = 3
-            backoff = 1.0
-            for attempt in range(1, retries + 1):
-                try:
-                    # Handle body/json logic
-                    if "json" in kwargs:
-                        response = request_fn(url, **kwargs)
-                    elif method in {"POST", "PUT", "PATCH"}:
-                        response = request_fn(url, **kwargs)
-                    else:
-                        params = kwargs.pop("params", {})
-                        for key in ("_fields", "_filter", "_order_by", "_torder_by"):
-                            if key in kwargs:
-                                params[key] = kwargs.pop(key)
-                        response = request_fn(url, params=params, **kwargs)
+            try:
+                if "json" in kwargs:
+                    response = request_fn(url, **kwargs)
+                elif method in {"POST", "PUT", "PATCH"}:
+                    response = request_fn(url, **kwargs)
+                else:
+                    params = kwargs.pop("params", {})
+                    for key in ("_fields", "_filter", "_order_by", "_torder_by"):
+                        if key in kwargs:
+                            params[key] = kwargs.pop(key)
+                    response = request_fn(url, params=params, **kwargs)
 
-                    response.raise_for_status()
-                    return response
+                response.raise_for_status()
+                return response
 
-                except httpx.HTTPStatusError as e:
-                    if e.response.status_code in {502, 503, 504} and attempt < retries:
-                        time.sleep(backoff)
-                        backoff *= 2
-                        continue
-                    raise ApiRequestException(
-                        f"[{e.response.status_code}] {short_path} failed: {e.response.text}"
-                    ) from e
+            except httpx.HTTPStatusError as e:
+                raise ApiRequestException(
+                    f"[{e.response.status_code}] {short_path} failed: {e.response.text}"
+                ) from e
 
-                except httpx.RequestError as e:
-                    if attempt < retries:
-                        time.sleep(backoff)
-                        backoff *= 2
-                        continue
-                    raise ApiRequestException(
-                        f"Request error on '{short_path}': {str(e)}"
-                    ) from e
+            except httpx.RequestError as e:
+                raise ApiRequestException(
+                    f"Request error on '{short_path}': {str(e)}"
+                ) from e
 
         raise ApiInvalidParameterException(f"No {method} method available for '{short_path}'")
 

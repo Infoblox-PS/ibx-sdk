@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ibx-sdk"
-version = "0.6.1"
+version = "0.7.0"
 authors = [
     "Patrick Piper <patrick@ddiguru.com>",
     "Patrick Piper <ppiper@infoblox.com>",
@@ -22,6 +22,7 @@ urllib3 = "^2.2.3"
 syslog-rfc5424-formatter = "^1.2.3"
 pydantic = "^2.10.4"
 httpx = "^0.28.1"
+tenacity = "^9.1.2"
 
 [tool.poetry.group.dev.dependencies]
 mkdocstrings-python = "^1.12.2"
