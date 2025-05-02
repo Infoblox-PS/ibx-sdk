@@ -370,19 +370,20 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             Response: The response object containing the result of the request.
         """
         url = f"{self.url}/{wapi_object}"
+        res = None
         try:
             res = self.conn.get(url, params=params, **kwargs)
             res.raise_for_status()
-            return res
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
+        return res
 
     def getone(
         self, wapi_object: str, params: Optional[dict] = None, **kwargs: Any
@@ -402,6 +403,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             WapiRequestException: If multiple data records were returned or no data was returned.
         """
         url = f"{self.url}/{wapi_object}"
+        response = None
         try:
             response = self.conn.request("get", url, params=params, **kwargs)
             response.raise_for_status()
@@ -415,10 +417,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(response.text) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(response.text) from exc
         else:
             if len(data) > 1:
                 raise WapiRequestException(
@@ -450,6 +452,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             Response: The response object containing the server's response to the POST request.
         """
         url = f"{self.url}/{wapi_object}"
+        res = None
         try:
             res = self.conn.request("post", url, data=data, json=json, **kwargs)
             return res
@@ -458,10 +461,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
 
     def put(
         self,
@@ -481,6 +484,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             Response: The response object for the PUT request.
         """
         url = f"{self.url}/{wapi_object_ref}"
+        res = None
         try:
             res = self.conn.request("put", url, data=data, **kwargs)
             return res
@@ -489,10 +493,10 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
 
     def delete(self, wapi_object_ref: str, **kwargs: Any) -> httpx.Response:
         """
@@ -507,6 +511,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
 
         """
         url = f"{self.url}/{wapi_object_ref}"
+        res = None
         try:
             res = self.conn.request("delete", url, **kwargs)
             return res
@@ -515,7 +520,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(exc) from exc
+            raise WapiRequestException(res.text) from exc
