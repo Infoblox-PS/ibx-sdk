@@ -60,7 +60,7 @@ class Gift:
     def __init__(
         self,
         api_key: str,
-        api_spec_file: str = os.environ.get("INFOBLOX_API_SPEC_FILE", "infoblox_api_calls.json"),
+        api_spec_file: str = os.environ.get("INFOBLOX_API_SPEC_FILE", "ibx_cloud_api_map.json"),
         load_live: bool = False,
         base_path: str = os.environ.get("INFOBLOX_BASE_PATH", "https://csp.infoblox.com"),
         extra_api_data: Optional[Dict] = None,
@@ -88,7 +88,7 @@ class Gift:
         # Ensure cache lives in OS cache dir if no directory was provided
         cache = Path(api_spec_file)
         if cache.parent == Path('.'):
-            cache_dir = Path(appdirs.user_cache_dir("Gift", "Infoblox"))
+            cache_dir = Path(appdirs.user_cache_dir("com.infoblox.ibx-sdk", "Infoblox Professional Services"))
             cache_dir.mkdir(parents=True, exist_ok=True)
             cache = cache_dir / cache.name
         self._cache_path = cache
