@@ -38,7 +38,7 @@ from typing import Dict, List, Tuple, Optional
 import httpx
 import appdirs
 from ibx_sdk.cloud.exceptions import ApiInvalidParameterException, ApiRequestException
-from ibx_sdk.util.swagger_utils import build_swagger_index, fetch_swagger_json, API_NAMES
+from ibx_sdk.cloud.swagger import build_swagger_index, fetch_swagger_json, API_NAMES
 
 class Gift:
     """
