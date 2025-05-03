@@ -29,7 +29,7 @@ repo_url: https://github.com/Infoblox-PS/ibx-sdk
 
 # Copyright
 copyright: |
-  &copy; 2023 <a href="https://infoblox.com" target= "_blank" rel="noopener">Infoblox</a>
+  &copy; 2025 <a href="https://infoblox.com" target= "_blank" rel="noopener">Infoblox</a>
 
 # Configuration
 theme:
@@ -138,6 +138,7 @@ nav:
       - wapi: classes/nios/gift.md
       - fileop: classes/nios/fileop.md
       - service: classes/nios/service.md
+      - cloud-api: classes/cloud/gift.md
   - Modules:
       - util: modules/util.md
       - ibx_logger: modules/logger.md
