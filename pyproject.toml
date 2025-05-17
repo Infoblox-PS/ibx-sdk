@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ibx-sdk"
-version = "0.7.0a"
+version = "0.7.0"
 authors = [
     "Patrick Piper <patrick@ddiguru.com>",
     "Patrick Piper <ppiper@infoblox.com>",
