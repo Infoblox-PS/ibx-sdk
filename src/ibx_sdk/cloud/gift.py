@@ -168,15 +168,17 @@ class Gift:
 
     def _normalize_path(self, path: str) -> str:
         """
-        Normalize a path by removing leading/trailing slashes.
+        Normalize a path by removing leading/trailing slashes and query parameters.
 
         Args:
-            path: Input path to normalize (e.g., "/path/" or "path/to/resource").
+            path: Input path to normalize (e.g., "/path/?query" or "path/to/resource").
 
         Returns:
             Normalized path string (e.g., "path" or "path/to/resource").
         """
-        return path.lstrip("/").rstrip("/")
+        # Split on '?' to remove query parameters
+        normalized_path = path.split('?')[0]
+        return normalized_path.lstrip("/").rstrip("/")
 
     def _resolve_endpoint(self, path: str, method: str) -> Tuple[str, Dict[str, str], Optional[Dict[str, str]]]:
         """
@@ -411,7 +413,7 @@ class Gift:
 
         Args:
             method: HTTP method (GET, POST, PUT, PATCH, DELETE).
-            path: Endpoint path (e.g., "locations" or "service/config/abc123").
+            path: Endpoint path (e.g., "locations" or "service/config/abc123?query").
             **kwargs: Additional arguments passed to httpx.Client request.
 
         Returns:
@@ -421,26 +423,37 @@ class Gift:
             RuntimeError: If session is not established via connect().
             ApiInvalidParameterException: If no matching endpoint found.
             ApiRequestException: On HTTP or request errors.
-
-        Example:
-            >>> response = client._call("GET", "locations", params={"_limit": 10})
-            >>> print(response.json())
         """
         if not self.session:
             raise RuntimeError("Must call connect() before making API calls.")
 
-        full_url, _, _ = self._resolve_endpoint(path, method)
+        # Split path to separate query parameters
+        path_parts = path.split('?', 1)
+        endpoint_path = path_parts[0]
+        query_params = kwargs.pop('params', {})  # Remove params from kwargs to avoid duplication
+
+        # If query parameters are present in the path, parse and merge
+        if len(path_parts) > 1:
+            from urllib.parse import parse_qs
+            query_string = path_parts[1]
+            parsed_params = parse_qs(query_string)
+            # Flatten parsed params (convert lists to single values or keep as lists if needed)
+            for key, value in parsed_params.items():
+                query_params[key] = value[0] if len(value) == 1 else value
+
+        full_url, _, _ = self._resolve_endpoint(endpoint_path, method)
         func = getattr(self.session, method.lower())
-        logging.debug(f"Calling {method} {full_url} with kwargs: {kwargs}")
+        logging.debug(f"Calling {method} {full_url} with params: {query_params}, kwargs: {kwargs}")
 
         try:
-            response = func(full_url, **kwargs)
+            # Pass query parameters via params argument
+            response = func(full_url, params=query_params, **kwargs)
             response.raise_for_status()
             return response
         except httpx.HTTPStatusError as e:
-            raise ApiRequestException(f"[{e.response.status_code}] {path}: {e.response.text}")
+            raise ApiRequestException(f"[{e.response.status_code}] {endpoint_path}: {e.response.text}")
         except httpx.RequestError as e:
-            raise ApiRequestException(f"Request failed for {path}: {e}")
+            raise ApiRequestException(f"Request failed for {endpoint_path}: {e}")
 
     def get(self, path: str, **kwargs) -> httpx.Response:
         """
