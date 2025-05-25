@@ -79,7 +79,8 @@ def extract_endpoints(api_name: str, swagger_json: Optional[Dict]) -> Dict[str, 
                 "s_path": clean_path,
                 "summary": details.get("summary", ""),
                 "operation_id": details.get("operationId", ""),
-                "base_url": base_url
+                "base_url": base_url,
+                "api_path": f"{base_path}{clean_path}"
             }
     return endpoints
 

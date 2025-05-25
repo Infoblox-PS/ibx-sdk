@@ -23,7 +23,7 @@ from ibx_sdk.cloud.gift import Gift
     "--url-map", "show_map", is_flag=True, default=False,
     help="Print the short-path to full URL mappings instead of raw endpoints."
 )
-def cli(api_spec_file, base_path, live, show_map):
+def main(api_spec_file, base_path, live, show_map):
     """
     Print all Infoblox Cloud API endpoints or URL map using the Gift wrapper methods.
     """
@@ -35,10 +35,13 @@ def cli(api_spec_file, base_path, live, show_map):
         base_path=base_path
     )
 
+    endpoints = g.get_all_endpoints()
+
     if show_map:
-        mappings = g.get_url_map()
-        for m in mappings:
-            click.echo(f"{m['method']} {m['short_path']} → {m['full_url']}")
+        endpoints = g.get_all_endpoints()
+
+        for m in endpoints:
+            click.echo(f"{m['method']} {m['path']} → {m['full_url']}")
     else:
         endpoints = g.get_all_endpoints()
         for ep in endpoints:
@@ -46,4 +49,4 @@ def cli(api_spec_file, base_path, live, show_map):
 
 
 if __name__ == "__main__":
-    cli()
+    main()
