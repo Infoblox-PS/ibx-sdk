@@ -524,3 +524,49 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(res.text) from exc
+
+    def get_paginated(
+            self,
+            wapi_object: str,
+            limit: int = 1000,
+            next_page_id: Optional[str] = None,
+            params: Optional[dict] = None,
+            **kwargs: Any
+    ) -> list:
+
+        results = []
+        params.update({
+            "_paging": 1,
+            "_return_as_object": 1,
+            "_max_results": limit,
+        })
+
+        if next_page_id:
+            params.update({"_page_id": next_page_id})
+
+        url = f"{self.url}/{wapi_object}"
+        res = None
+        try:
+            res = self.conn.get(url, params=params, **kwargs)
+            res.raise_for_status()
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP error: {exc}")
+            raise WapiRequestException(res.text) from exc
+        except httpx.RequestError as exc:
+            logging.error(f"Request error: {exc}")
+            raise WapiRequestException(res.text) from exc
+        else:
+            data = res.json()
+            results.extend(data.get("result", []))
+            next_page = data.get("next_page_id", None)
+            while next_page:
+                params.update({"_page_id": next_page})
+                res1 = self.conn.get(url, params=params, **kwargs)
+                data = res1.json()
+                results.extend(data.get("result", []))
+                next_page = data.get("next_page_id", None)
+        return results
+
