@@ -1,6 +1,6 @@
 import logging
 import ssl
-from typing import Union, Optional
+from typing import Union, Optional, List, Any
 
 import httpx
 
@@ -176,3 +176,69 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
             versions.sort(key=lambda s: list(map(int, s.split("."))))
             max_wapi_ver = versions.pop()
             setattr(self, "wapi_ver", max_wapi_ver)
+
+    async def get_paginated(
+            self,
+            wapi_object: str,
+            limit: int = 1000,
+            params: Optional[dict] = None,
+            **kwargs: Any
+    ) -> List[dict]:
+        """
+        Fetches paginated data from the WAPI API.
+
+        This method retrieves data in chunks using a pagination mechanism. The function
+        handles API responses, manages pagination parameters, and consolidates the
+        results into a list. It raises exceptions if timeout, HTTP status errors, or
+        request errors are encountered during the process.
+
+        Args:
+            wapi_object: The name of the WAPI object to fetch data from.
+            limit: Maximum number of records to retrieve per API request. Defaults to 1000.
+            params: Additional query parameters to include in the request. Defaults to None.
+            **kwargs: Additional keyword arguments passed to the HTTP GET request.
+
+        Returns:
+            A list of dictionaries containing the retrieved data from the WAPI API.
+
+        Raises:
+            WapiRequestException: If there is a timeout, HTTP status error, or
+            request-related error during the API call.
+        """
+        results = []
+        params = params.copy() if params else {}
+
+        params.update({
+            "_paging": 1,
+            "_return_as_object": 1,
+            "_max_results": limit,
+        })
+
+        url = f"{self.url}/{wapi_object}"
+        response = None
+
+        try:
+            while True:
+                response = await self.conn.get(url, params=params, **kwargs)
+                response.raise_for_status()
+
+                data = response.json()
+                results.extend(data.get("result", []))
+
+                next_page_id = data.get("next_page_id")
+                if not next_page_id:
+                    break
+
+                params["_page_id"] = next_page_id
+
+        except httpx.TimeoutException as exc:
+            logging.error(f"Timeout error while fetching {url}: {exc}")
+            raise WapiRequestException(exc) from exc
+        except httpx.HTTPStatusError as exc:
+            logging.error(f"HTTP status error while fetching {url}: {exc}")
+            raise WapiRequestException(response.text) from exc
+        except httpx.RequestError as exc:
+            logging.error(f"Request error while fetching {url}: {exc}")
+            raise WapiRequestException(str(exc)) from exc
+
+        return results
