@@ -105,7 +105,7 @@ def init_logger(
         log_fmt = log_format
     else:
         log_fmt = (
-            "%(asctime)s [%(filename)s:%(lineno)d] %(levelname)s %(message)s"
+            "%(asctime)s [%(filename)s:%(lineno)d - %(funcName)s()] %(levelname)s %(message)s"
         )
 
     root_logger = logging.getLogger()
