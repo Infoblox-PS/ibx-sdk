@@ -268,6 +268,11 @@ class DnsView(BaseModel):
         serialization_alias="header-view",
         description="CSV header for view object",
     )
+    import_action: Optional[ImportActionEnum] = Field(
+        None,
+        serialization_alias="import-action",
+        description="CSV Custom import action",
+    )
     name: str = Field(..., description="View name")
     new_name: Optional[str] = Field(
         None, serialization_alias="_new_name", description="New view name"
