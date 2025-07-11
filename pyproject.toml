@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "ibx-sdk"
-version = "0.7.5"
+version = "0.7.6"
 authors = [
     "Michael Smith <michaels@infoblox.com>",
     "Patrick Piper <patrick@ddiguru.com>",
     "Patrick Piper <ppiper@infoblox.com>",
-    "Michael Smith <mjsmithkc@gmial.com>",
+    "Michael Smith <mjsmithkc@gmail.com>",
 ]
 description = "Infoblox API software development kit"
 repository = "https://github.com/Infoblox-PS/ibx-sdk"
