@@ -10,6 +10,7 @@ authors = [
 description = "Infoblox API software development kit"
 repository = "https://github.com/Infoblox-PS/ibx-sdk"
 documentation = "https://infoblox-ps.github.io/ibx-sdk/"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
