@@ -455,7 +455,6 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         res = None
         try:
             res = self.conn.request("post", url, data=data, json=json, **kwargs)
-            return res
         except httpx.TimeoutException as exc:
             logging.error(f"Timeout error: {exc}")
             raise WapiRequestException(exc) from exc
@@ -465,6 +464,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(res.text) from exc
+        return res
 
     def put(
         self,
