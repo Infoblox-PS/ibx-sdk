@@ -14,17 +14,17 @@ class NamedACL(BaseModel):
         serialization_alias="header-namedacl",
         description="CSV header for namedacl object",
     )
-    import_action: Optional[ImportActionEnum] = Field(
-        serialization_alias="import-action",
+    import_action: ImportActionEnum | None = Field(
         default=None,
+        serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="Name of ACL")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None, serialization_alias="_new_name", description="New ACL name"
     )
-    comment: Optional[str] = Field(None, description="Optional comment field")
-    network_view: Optional[str] = Field(None, description="Network view name")
+    comment: str | None = Field(None, description="Optional comment field")
+    network_view: str | None = Field(None, description="Network view name")
 
 
 class NamedACLItem(BaseModel):
