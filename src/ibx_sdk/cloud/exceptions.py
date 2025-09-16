@@ -55,7 +55,7 @@ class ApiRequestException(BaseCloudException):
             payload: Parsed JSON payload returned by the API.
             original_exception: Underlying exception instance, for chaining.
         """
-        full_msg = f"Request failed"
+        full_msg = "Request failed"
         if status_code is not None:
             full_msg += f" [{status_code}]"
         full_msg += f": {message}"
