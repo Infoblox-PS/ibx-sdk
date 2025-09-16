@@ -68,4 +68,4 @@ class NamedACLItem(BaseModel):
         serialization_alias="_new_named_acl",
         description="New Defined ACL name",
     )
-    # comment: Optional[str] = Field(None, description="Optional comment field")
+    # comment: str | None = Field(None, description="Optional comment field")

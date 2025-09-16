@@ -1,14 +1,13 @@
 import re
 from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address
-from typing import List, Optional
+from typing import List
 
 from pydantic import (
     BaseModel,
     Field,
     ConfigDict,
     model_validator,
-    PositiveInt,
     field_serializer,
 )
 from typing_extensions import Self
@@ -35,172 +34,172 @@ class GridDhcp(BaseModel):
         serialization_alias="header-griddhcp",
         description="Default header for griddhcp",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
-    authority: Optional[bool] = Field(None, description="DHCP Authority flag")
-    domain_name: Optional[str] = Field(
+    authority: bool | None = Field(None, description="DHCP Authority flag")
+    domain_name: str | None = Field(
         None, description="Option domain-name option"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    ignore_dhcp_option_list_request: Optional[bool] = Field(
+    ignore_dhcp_option_list_request: bool | None = Field(
         None, description="Ignore DHCP option list request flag"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    pxe_lease_time: Optional[PositiveInt] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="PXE lease time option in seconds"
     )
-    bootfile: Optional[str] = Field(None, description="Legacy boot-file option")
-    bootserver: Optional[str] = Field(
+    bootfile: str | None = Field(None, description="Legacy boot-file option")
+    bootserver: str | None = Field(
         None, description="Legacy boot-server option"
     )
-    nextserver: Optional[str] = Field(
+    nextserver: str | None = Field(
         None, description="Legacy next-server option"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    ddns_use_option81: Optional[bool] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    ddns_use_option81: bool | None = Field(
         None, description="Enable option81 flag"
     )
-    ddns_server_always_updates: Optional[bool] = Field(
+    ddns_server_always_updates: bool | None = Field(
         None, description="DNS server always updates flag"
     )
-    ddns_generate_hostname: Optional[bool] = Field(
+    ddns_generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    retry_ddns_updates: Optional[bool] = Field(
+    retry_ddns_updates: bool | None = Field(
         None, description="Retry DDNS updates flag"
     )
-    ddns_retry_interval: Optional[PositiveInt] = Field(
+    ddns_retry_interval: int | None = Field(
         None, description="Retry DDNS updates interval in seconds"
     )
-    enable_dhcp_thresholds: Optional[bool] = Field(
+    enable_dhcp_thresholds: bool | None = Field(
         None, description="Enable DHCP thresholds flag"
     )
-    high_water_mark: Optional[PositiveInt] = Field(
+    high_water_mark: int | None = Field(
         None, description="High water mark option"
     )
-    high_water_mark_reset: Optional[PositiveInt] = Field(
+    high_water_mark_reset: int | None = Field(
         None, description="High water mark reset option"
     )
-    low_water_mark: Optional[PositiveInt] = Field(
+    low_water_mark: int | None = Field(
         None, description="Low water mark option"
     )
-    low_water_mark_reset: Optional[PositiveInt] = Field(
+    low_water_mark_reset: int | None = Field(
         None, description="Low water mark reset option"
     )
-    enable_email_warnings: Optional[bool] = Field(
+    enable_email_warnings: bool | None = Field(
         None, description="Enable email warnings flag"
     )
-    enable_snmp_warnings: Optional[bool] = Field(
+    enable_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    email_list: Optional[str] = Field(
+    email_list: str | None = Field(
         None, description="Email addresses to send warnings"
     )
-    ipv6_domain_name_servers: Optional[str] = Field(
+    ipv6_domain_name_servers: str | None = Field(
         None, description="IPv6 domain name servers option"
     )
-    ping_count: Optional[PositiveInt] = Field(
+    ping_count: int | None = Field(
         None, description="Ping count option"
     )
-    ping_timeout: Optional[PositiveInt] = Field(
+    ping_timeout: int | None = Field(
         None, description="Ping timeout option in seconds"
     )
-    capture_hostname: Optional[bool] = Field(
+    capture_hostname: bool | None = Field(
         None, description="Capture hostname flag"
     )
-    enable_leasequery: Optional[bool] = Field(
+    enable_leasequery: bool | None = Field(
         None, description="Enable leasequery flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    ipv6_update_dns_on_lease_renewal: Optional[bool] = Field(
+    ipv6_update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    txt_record_handling: Optional[str] = Field(
+    txt_record_handling: str | None = Field(
         None, description="TXT record handling option"
     )
-    lease_scavenge_time: Optional[PositiveInt] = Field(
+    lease_scavenge_time: int | None = Field(
         None, description="DHCP lease scavenge time"
     )
-    failover_port: Optional[PositiveInt] = Field(
+    failover_port: int | None = Field(
         None, description="Failover port option"
     )
-    enable_fingerprint: Optional[bool] = Field(
+    enable_fingerprint: bool | None = Field(
         None, description="enable DHCP fingerprint flag"
     )
-    ipv6_enable_ddns: Optional[bool] = Field(
+    ipv6_enable_ddns: bool | None = Field(
         None, description="Enable DDNS flag"
     )
-    ipv6_enable_option_fqdn: Optional[bool] = Field(
+    ipv6_enable_option_fqdn: bool | None = Field(
         None, description="Enable option fqdn flag"
     )
-    ipv6_ddns_server_always_updates: Optional[bool] = Field(
+    ipv6_ddns_server_always_updates: bool | None = Field(
         None, description="Enable DDNS server always updates flag"
     )
-    ipv6_generate_hostname: Optional[bool] = Field(
+    ipv6_generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    ipv6_ddns_domainname: Optional[str] = Field(
+    ipv6_ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    ipv6_ddns_ttl: Optional[PositiveInt] = Field(
+    ipv6_ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option"
     )
-    ipv6_domain_name: Optional[str] = Field(
+    ipv6_domain_name: str | None = Field(
         None, description="IPv6 domain name option"
     )
-    ipv6_txt_record_handling: Optional[str] = Field(
+    ipv6_txt_record_handling: str | None = Field(
         None, description="IPv6 TXT record handling option"
     )
-    ipv6_capture_hostname: Optional[bool] = Field(
+    ipv6_capture_hostname: bool | None = Field(
         None, description="Capture hostname flag"
     )
-    ipv6_recycle_leases: Optional[bool] = Field(
+    ipv6_recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    ipv6_enable_retry_updates: Optional[bool] = Field(
+    ipv6_enable_retry_updates: bool | None = Field(
         None, description="Enable retry updates flag"
     )
-    ipv6_retry_updates_interval: Optional[PositiveInt] = Field(
+    ipv6_retry_updates_interval: int | None = Field(
         None, description="Retry updates interval"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    leases_per_client_settings: Optional[LeasePerClientSettingsEnum] = Field(
+    leases_per_client_settings: LeasePerClientSettingsEnum | None = Field(
         None, description="DHCP Leases per client settings"
     )
-    ignore_client_identifier: Optional[bool] = Field(
+    ignore_client_identifier: bool | None = Field(
         None, description="Ignore client identifier flag"
     )
-    disable_all_nac_filters: Optional[bool] = Field(
+    disable_all_nac_filters: bool | None = Field(
         None, description="Disable all NAC filters flag"
     )
-    format_log_option_82: Optional[bool] = Field(
+    format_log_option_82: bool | None = Field(
         None, description="Format log option 82 flag"
     )
-    v6_leases_scavenging_enabled: Optional[bool] = Field(
+    v6_leases_scavenging_enabled: bool | None = Field(
         None, description="Enable IPv6 leases scavenging flag"
     )
-    v6_leases_scavenging_grace_period: Optional[PositiveInt] = Field(
+    v6_leases_scavenging_grace_period: int | None = Field(
         None, description="IPv6 leases scavenging grace period option"
     )
 
@@ -220,162 +219,162 @@ class MemberDhcp(BaseModel):
         serialization_alias="header-memberdhcp",
         description="Default header for memberdhcp",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
-    broadcast_address: Optional[IPv4Address] = Field(
+    broadcast_address: IPv4Address | None = Field(
         None, description="Broadcast address option"
     )
-    domain_name_servers: Optional[str] = Field(
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    ignore_client_requested_options: Optional[bool] = Field(
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options"
     )
-    pxe_lease_time: Optional[PositiveInt] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="PXE lease time option"
     )
-    lease_time: Optional[PositiveInt] = Field(
+    lease_time: int | None = Field(
         None, description="DHCP lease time option"
     )
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    routers: Optional[str] = Field(None, description="Routers option")
-    option_logic_filters: Optional[list[str]] = Field(
+    domain_name: str | None = Field(None, description="Domain name option")
+    routers: str | None = Field(None, description="Routers option")
+    option_logic_filters: list[str | None] = Field(
         None, description="List of option logic filters"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    bootfile: Optional[str] = Field(None, description="Legacy bootfile option")
-    bootserver: Optional[str] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    bootfile: str | None = Field(None, description="Legacy bootfile option")
+    bootserver: str | None = Field(
         None, description="Legacy bootserver option"
     )
-    nextserver: Optional[str] = Field(None, description="Next server option")
-    enable_thresholds: Optional[bool] = Field(
+    nextserver: str | None = Field(None, description="Next server option")
+    enable_thresholds: bool | None = Field(
         None, description="Enable thresholds flag"
     )
-    range_high_water_mark: Optional[PositiveInt] = Field(
+    range_high_water_mark: int | None = Field(
         None, description="Range high water mark option"
     )
-    range_high_water_mark_reset: Optional[PositiveInt] = Field(
+    range_high_water_mark_reset: int | None = Field(
         None, description="Range high water mark reset option"
     )
-    range_low_water_mark: Optional[PositiveInt] = Field(
+    range_low_water_mark: int | None = Field(
         None, description="Range low water mark option"
     )
-    range_low_water_mark_reset: Optional[PositiveInt] = Field(
+    range_low_water_mark_reset: int | None = Field(
         None, description="Range low water mark reset option"
     )
-    enable_threshold_email_warnings: Optional[bool] = Field(
+    enable_threshold_email_warnings: bool | None = Field(
         None, description="Enable email warnings flag"
     )
-    enable_threshold_snmp_warnings: Optional[bool] = Field(
+    enable_threshold_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: Optional[list[str]] = Field(
+    threshold_email_addresses: list[str | None] = Field(
         None, description="Email addresses to send warnings"
     )
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    ddns_use_option81: Optional[bool] = Field(
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    ddns_use_option81: bool | None = Field(
         None, description="Use option81 flag"
     )
-    always_update_dns: Optional[bool] = Field(
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    update_static_leases: Optional[bool] = Field(
+    update_static_leases: bool | None = Field(
         None, description="Update static leases flag"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option in seconds"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option in seconds"
     )
     name: str = Field(..., description="DHCP member name")
-    is_authoritative: Optional[bool] = Field(
+    is_authoritative: bool | None = Field(
         None, description="DHCP authoritative flag"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    ping_count: Optional[int] = Field(None, description="Ping count")
-    ping_timeout: Optional[int] = Field(None, description="Ping timeout")
-    enable_leasequery: Optional[bool] = Field(
+    ping_count: int | None = Field(None, description="Ping count")
+    ping_timeout: int | None = Field(None, description="Ping timeout")
+    enable_leasequery: bool | None = Field(
         None, description="Enable lease query flag"
     )
-    retry_ddns_updates: Optional[bool] = Field(
+    retry_ddns_updates: bool | None = Field(
         None, description="Enable DDNS updates flag"
     )
-    ddns_retry_interval: Optional[int] = Field(
+    ddns_retry_interval: int | None = Field(
         None, description="DDNS retry interval option in seconds"
     )
-    lease_scavenge_time: Optional[PositiveInt] = Field(
+    lease_scavenge_time: int | None = Field(
         None, description="DHCP lease scavenge time option in seconds"
     )
-    enable_fingerprint: Optional[bool] = Field(
+    enable_fingerprint: bool | None = Field(
         None, description="Enable fingerprint detection flag"
     )
-    ipv6_enable_ddns: Optional[bool] = Field(
+    ipv6_enable_ddns: bool | None = Field(
         None, description="Enable IPv6 DDNS flag"
     )
-    ipv6_ddns_enable_option_fqdn: Optional[bool] = Field(
+    ipv6_ddns_enable_option_fqdn: bool | None = Field(
         None, description="Enable IPv6 DDNS FQDN flag"
     )
-    ipv6_generate_hostname: Optional[bool] = Field(
+    ipv6_generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    ipv6_ddns_domainname: Optional[str] = Field(
+    ipv6_ddns_domainname: str | None = Field(
         None, description="IPv6 DDNS domain name option"
     )
-    ipv6_ddns_ttl: Optional[PositiveInt] = Field(
+    ipv6_ddns_ttl: int | None = Field(
         None, description="IPv6 DDNS TTL option in seconds"
     )
-    ipv6_domain_name_servers: Optional[str] = Field(
+    ipv6_domain_name_servers: str | None = Field(
         None, description="IPv6 domain name servers option"
     )
-    ipv6_domain_name: Optional[str] = Field(
+    ipv6_domain_name: str | None = Field(
         None, description="IPv6 domain name option"
     )
-    ipv6_recycle_leases: Optional[bool] = Field(
+    ipv6_recycle_leases: bool | None = Field(
         None, description="Recycle IPv6 leases flag"
     )
-    ipv6_server_duid: Optional[str] = Field(
+    ipv6_server_duid: str | None = Field(
         None, description="IPv6 server DUID option"
     )
-    ipv6_enable_retry_updates: Optional[bool] = Field(
+    ipv6_enable_retry_updates: bool | None = Field(
         None, description="Enable IPv6 retry updates flag"
     )
-    ipv6_retry_updates_interval: Optional[int] = Field(
+    ipv6_retry_updates_interval: int | None = Field(
         None, description="IPv6 retry updates interval option in seconds"
     )
-    ipv6_update_dns_on_lease_renewal: Optional[bool] = Field(
+    ipv6_update_dns_on_lease_renewal: bool | None = Field(
         None, description="IPv6 update DNS on lease renewal flag"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    leases_per_client_settings: Optional[LeasePerClientSettingsEnum] = Field(
+    leases_per_client_settings: LeasePerClientSettingsEnum | None = Field(
         None, description="Leases per client settings"
     )
-    ignore_client_identifier: Optional[bool] = Field(
+    ignore_client_identifier: bool | None = Field(
         None, description="Ignore client identifier flag"
     )
-    v6_leases_scavenging_enabled: Optional[bool] = Field(
+    v6_leases_scavenging_enabled: bool | None = Field(
         None, description="IPv6 lease scavenging enabled flag"
     )
-    v6_leases_scavenging_grace_period: Optional[int] = Field(
+    v6_leases_scavenging_grace_period: int | None = Field(
         None, description="IPv6 lease scavenging grace period option in seconds"
     )
 
@@ -395,18 +394,18 @@ class NetworkView(BaseModel):
         serialization_alias="header-networkview",
         description="Default header for networkview",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="Network view name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New network view name",
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
+    comment: str | None = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
@@ -424,7 +423,7 @@ class IPv4NetworkContainer(BaseModel):
         serialization_alias="header-networkcontainer",
         description="Default header for networkcontainer",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action ",
@@ -435,96 +434,96 @@ class IPv4NetworkContainer(BaseModel):
     netmask: IPv4Address = Field(
         ..., description="Subnet mask address of the network container"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    lease_time: Optional[int] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    routers: Optional[str] = Field(None, description="List of routers option")
-    domain_name: Optional[str] = Field(None, description="domain-name option")
-    domain_name_servers: Optional[str] = Field(
+    routers: str | None = Field(None, description="List of routers option")
+    domain_name: str | None = Field(None, description="domain-name option")
+    domain_name_servers: str | None = Field(
         None, description="domain-name-servers option"
     )
-    broadcast_address: Optional[IPv4Address] = Field(
+    broadcast_address: IPv4Address | None = Field(
         None, description="Broadcast address option"
     )
-    enable_ddns: Optional[bool] = Field(
+    enable_ddns: bool | None = Field(
         None, description="Enable DDNS Updates flag"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    ddns_ttl: Optional[int] = Field(None, description="DDNS TTL option")
-    ddns_generate_hostname: Optional[bool] = Field(
+    ddns_ttl: int | None = Field(None, description="DDNS TTL option")
+    ddns_generate_hostname: bool | None = Field(
         None, description="DDNS generate hostname flag"
     )
-    update_static_leases: Optional[bool] = Field(
+    update_static_leases: bool | None = Field(
         None, description="DDNS Update static leases flag"
     )
-    enable_option81: Optional[bool] = Field(
+    enable_option81: bool | None = Field(
         None, description="Enable option81 flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Enable option81 flag"
     )
-    enable_dhcp_thresholds: Optional[bool] = Field(
+    enable_dhcp_thresholds: bool | None = Field(
         None, description="Enable DHCP thresholds flag"
     )
-    enable_email_warnings: Optional[bool] = Field(
+    enable_email_warnings: bool | None = Field(
         None, description="Enable email warnings flag"
     )
-    enable_snmp_warnings: Optional[bool] = Field(
+    enable_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: Optional[List[str]] = Field(
+    threshold_email_addresses: List[str | None] = Field(
         None, description="List of email addresses to send warnings"
     )
-    pxe_lease_time: Optional[int] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="PXE DHCP lease time option in seconds"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    boot_file: Optional[str] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    boot_file: str | None = Field(
         None, description="Legacy boot-file option"
     )
-    boot_server: Optional[str] = Field(
+    boot_server: str | None = Field(
         None, description="Legacy boot-server option"
     )
-    next_server: Optional[str] = Field(
+    next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    option_logic_filters: Optional[list[str]] = Field(
+    option_logic_filters: list[str | None] = Field(
         None, description="List of option logic filters"
     )
-    lease_scavenge_time: Optional[PositiveInt] = Field(
+    lease_scavenge_time: int | None = Field(
         None, description="DHCP lease scavenge time option in seconds"
     )
-    is_authoritative: Optional[bool] = Field(
+    is_authoritative: bool | None = Field(
         None, description="DHCP authoritative flag"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    ignore_client_requested_options: Optional[bool] = Field(
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options flag"
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    rir_organization: Optional[str] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    rir_organization: str | None = Field(
         None, description="RIR organization"
     )
-    rir_registration_status: Optional[str] = Field(
+    rir_registration_status: str | None = Field(
         None, description="RIR registration status"
     )
     # last_rir_registration_update_sent: str | None = None # Read-only
     # last_rir_registration_update_status: str | None = None # Read-only
-    enable_discovery: Optional[bool] = Field(
+    enable_discovery: bool | None = Field(
         None, description="Enable discovery flag"
     )
-    discovery_member: Optional[str] = Field(
+    discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(
+    discovery_exclusion_range: List[IPv4Address | None] = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
-    remove_subnets: Optional[bool] = Field(
+    remove_subnets: bool | None = Field(
         None,
         description="Remove subnets flag, specify False to keep subnets or True to remove them.",
     )
@@ -549,7 +548,7 @@ class IPv4Network(BaseModel):
         serialization_alias="header-network",
         description="Default header for network",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
@@ -558,111 +557,111 @@ class IPv4Network(BaseModel):
     netmask: IPv4Address = Field(
         ..., description="Subnet mask address of the network"
     )
-    rir_organization: Optional[str] = Field(
+    rir_organization: str | None = Field(
         None, description="RIR Organization name"
     )
-    rir_registration_status: Optional[str] = Field(
+    rir_registration_status: str | None = Field(
         None, description="RIR Registration status"
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    enable_discovery: Optional[bool] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    enable_discovery: bool | None = Field(
         None, description="Enable discovery flag"
     )
-    discovery_member: Optional[str] = Field(
+    discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(
+    discovery_exclusion_range: List[IPv4Address | None] = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    auto_create_reversezone: Optional[bool] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    auto_create_reversezone: bool | None = Field(
         None, description="Auto create reverse zone flag"
     )
-    is_authoritative: Optional[bool] = Field(
+    is_authoritative: bool | None = Field(
         None, description="DHCP authoritative flag"
     )
-    option_logic_filters: Optional[List[str]] = Field(
+    option_logic_filters: List[str | None] = Field(
         None, description="List of option logic filters"
     )
-    boot_file: Optional[str] = Field(
+    boot_file: str | None = Field(
         None, description="Legacy boot-file option"
     )
-    boot_server: Optional[str] = Field(
+    boot_server: str | None = Field(
         None, description="Legacy boot-server option"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    always_update_dns: Optional[bool] = Field(
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    update_static_leases: Optional[bool] = Field(
+    update_static_leases: bool | None = Field(
         None, description="Update static leases flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    ddns_ttl: Optional[int] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    enable_option81: Optional[bool] = Field(
+    enable_option81: bool | None = Field(
         None, description="Enable option81 flag"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    broadcast_address: Optional[IPv4Address] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    broadcast_address: IPv4Address | None = Field(
         None, description="Broadcast address option"
     )
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    enable_thresholds: Optional[bool] = Field(
+    disabled: bool | None = Field(None, description="Disabled flag")
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    enable_thresholds: bool | None = Field(
         None, description="Enable thresholds flag"
     )
-    enable_threshold_email_warnings: Optional[bool] = Field(
+    enable_threshold_email_warnings: bool | None = Field(
         None, description="Enable email warnings flag"
     )
-    enable_threshold_snmp_warnings: Optional[bool] = Field(
+    enable_threshold_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    range_high_water_mark: Optional[int] = Field(
+    range_high_water_mark: int | None = Field(
         None, description="Range high water mark option"
     )
-    ignore_client_requested_options: Optional[bool] = Field(
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options flag"
     )
-    range_low_water_mark: Optional[int] = Field(
+    range_low_water_mark: int | None = Field(
         None, description="Range low water mark option"
     )
-    next_server: Optional[str] = Field(None, description="Next server option")
-    lease_time: Optional[int] = Field(
+    next_server: str | None = Field(None, description="Next server option")
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    pxe_lease_time: Optional[int] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    threshold_email_addresses: Optional[list[str]] = Field(
+    threshold_email_addresses: list[str | None] = Field(
         None, description="Email addresses to send warnings"
     )
-    dhcp_members: Optional[List[str]] = Field(None, description="DHCP members")
-    routers: Optional[str] = Field(None, description="DHCP routers option")
-    domain_name: Optional[str] = Field(
+    dhcp_members: List[str | None] = Field(None, description="DHCP members")
+    routers: str | None = Field(None, description="DHCP routers option")
+    domain_name: str | None = Field(
         None, description="DHCP option domain-name"
     )
-    domain_name_servers: Optional[str] = Field(
+    domain_name_servers: str | None = Field(
         None, description="DHCP option domain-name-servers"
     )
-    zone_associations: Optional[List[str]] = Field(
+    zone_associations: List[str | None] = Field(
         None, description="List of DNS zone associations"
     )
-    vlans: Optional[str] = Field(
+    vlans: str | None = Field(
         None, description="VLAN assignments - Example: default/1/4094/1"
     )
 
@@ -684,7 +683,7 @@ class IPv4Network(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
     @staticmethod
-    def list_to_csv(items: Optional[List[str]]) -> str | None:
+    def list_to_csv(items: List[str | None]) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -693,8 +692,8 @@ class IPv4Network(BaseModel):
         "option_logic_filters", "dhcp_members", when_used="always"
     )
     def serialize_list_fields(
-        self, values: Optional[List[str]]
-    ) -> Optional[str]:
+        self, values: List[str | None]
+    ) -> str | None:
         return self.list_to_csv(values)
 
 
@@ -707,65 +706,65 @@ class IPv6NetworkContainer(BaseModel):
         serialization_alias="header-ipv6networkcontainer",
         description="Default header for IPv6 network container",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     address: IPv6Address = Field(..., description="IP Address of the network")
-    cidr: PositiveInt = Field(
+    cidr: int = Field(
         ..., ge=0, le=128, description="CIDR mask address of the network"
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    comment: Optional[str] = Field(None, description="Optional comment")
-    zone_associations: Optional[str] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    comment: str | None = Field(None, description="Optional comment")
+    zone_associations: str | None = Field(
         None, description="List of DNS zone associations"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option in seconds"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option in seconds"
     )
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    ddns_domainname: Optional[str] = Field(
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    ddns_domainname: str | None = Field(
         None, description="DDNS domain name option"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    always_update_dns: Optional[bool] = Field(
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    rir_organization: Optional[str] = Field(
+    rir_organization: str | None = Field(
         None, description="RIR Organization name"
     )
-    rir_registration_status: Optional[str] = Field(
+    rir_registration_status: str | None = Field(
         None, description="RIR Registration status"
     )
-    enable_discovery: Optional[bool] = Field(
+    enable_discovery: bool | None = Field(
         None, description="Enable discovery flag"
     )
-    discovery_member: Optional[str] = Field(
+    discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: Optional[List[IPv4Address]] = Field(
+    discovery_exclusion_range: List[IPv4Address | None] = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
-    remove_subnets: Optional[bool] = Field(
+    remove_subnets: bool | None = Field(
         None, description="Remove subnets flag"
     )
 
@@ -789,70 +788,70 @@ class IPv6Network(BaseModel):
         serialization_alias="header-ipv6network",
         description="Default header for IPv6 network",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     address: IPv6Address = Field(..., description="IPv Address of the network")
-    cidr: PositiveInt = Field(
+    cidr: int = Field(
         ..., ge=0, le=128, description="CIDR mask address of the network"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    network_view: Optional[str] = Field(None, description="Network view")
-    enable_discovery: Optional[bool] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    network_view: str | None = Field(None, description="Network view")
+    enable_discovery: bool | None = Field(
         None, description="Enable discovery flag"
     )
-    discovery_member: Optional[str] = Field(
+    discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: Optional[List[IPv6Address]] = Field(
+    discovery_exclusion_range: List[IPv6Address | None] = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    auto_create_reversezone: Optional[bool] = Field(
+    disabled: bool | None = Field(None, description="Disabled flag")
+    auto_create_reversezone: bool | None = Field(
         None, description="Auto create reverse zone flag"
     )
-    zone_associations: Optional[List[str]] = Field(
+    zone_associations: List[str | None] = Field(
         None, description="List of DNS zone associations"
     )
-    dhcp_members: Optional[str] = Field(None, description="DHCP members")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    dhcp_members: str | None = Field(None, description="DHCP members")
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option in seconds"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option in seconds"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    always_update_dns: Optional[bool] = Field(
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="Domain name option"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal"
     )
-    vlans: Optional[str] = Field(
+    vlans: str | None = Field(
         None, description="VLAN assignments - Example: default/1/4094/1"
     )
-    rir_organization: Optional[str] = Field(
+    rir_organization: str | None = Field(
         None, description="RIR Organization name"
     )
-    rir_registration_status: Optional[str] = Field(
+    rir_registration_status: str | None = Field(
         None, description="RIR Registration status"
     )
 
@@ -877,67 +876,67 @@ class IPv4SharedNetwork(BaseModel):
         serialization_alias="header-sharednetwork",
         description="Default header for sharednetwork",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="Shared network name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New shared network name",
     )
     networks: List[str] = Field(..., description="List of networks")
-    network_view: Optional[str] = Field(None, description="Network view")
-    is_authoritative: Optional[bool] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    is_authoritative: bool | None = Field(
         None, description="Is authoritative flag"
     )
-    option_logic_filters: Optional[List[str]] = Field(
+    option_logic_filters: List[str | None] = Field(
         None, description="List of option logic filters"
     )
-    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
-    boot_server: Optional[str] = Field(
+    boot_file: str | None = Field(None, description="Legacy bootfile option")
+    boot_server: str | None = Field(
         None, description="Legacy bootserver option"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    generate_hostname: Optional[bool] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    always_update_dns: Optional[bool] = Field(
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    update_static_leases: Optional[bool] = Field(
+    update_static_leases: bool | None = Field(
         None, description="Update static leases flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal flag"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    enable_option81: Optional[bool] = Field(None, description="Enable option81")
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    ignore_client_requested_options: Optional[bool] = Field(
+    enable_option81: bool | None = Field(None, description="Enable option81")
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    disabled: bool | None = Field(None, description="Disabled flag")
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options"
     )
-    next_server: Optional[str] = Field(
+    next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    lease_time: Optional[PositiveInt] = Field(
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    pxe_lease_time: Optional[PositiveInt] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    routers: Optional[str] = Field(None, description="DHCP routers option")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    routers: str | None = Field(None, description="DHCP routers option")
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
 
@@ -961,45 +960,45 @@ class IPv6SharedNetwork(BaseModel):
         serialization_alias="header-ipv6sharednetwork",
         description="Default header for IPv6 shared network",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="Shared network name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New shared network name",
     )
     networks: List[str] = Field(..., description="List of networks")
-    network_view: Optional[str] = Field(None, description="Network view")
-    comment: Optional[str] = Field(None, description="Optional comment")
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    comment: str | None = Field(None, description="Optional comment")
+    disabled: bool | None = Field(None, description="Disabled flag")
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name option"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option in seconds"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option in seconds"
     )
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    always_update_dns: Optional[bool] = Field(
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    ddns_domain_name: Optional[str] = Field(
+    ddns_domain_name: str | None = Field(
         None, description="DDNS domain name option"
     )
-    ddns_ttl: Optional[PositiveInt] = Field(
+    ddns_ttl: int | None = Field(
         None, description="DDNS TTL option in seconds"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal"
     )
 
@@ -1023,7 +1022,7 @@ class IPv4DhcpRange(BaseModel):
         serialization_alias="header-dhcprange",
         description="Default header for dhcprange",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
@@ -1031,113 +1030,113 @@ class IPv4DhcpRange(BaseModel):
     start_address: IPv4Address = Field(
         ..., description="DHCP range start address"
     )
-    new_start_address: Optional[IPv4Address] = Field(
+    new_start_address: IPv4Address | None = Field(
         None,
         serialization_alias="_new_start_address",
         description="New DHCP range start address",
     )
     end_address: IPv4Address = Field(..., description="DHCP range end address")
-    new_end_address: Optional[IPv4Address] = Field(
+    new_end_address: IPv4Address | None = Field(
         None,
         serialization_alias="_new_end_address",
         description="New DHCP range end address",
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    name: Optional[str] = Field(None, description="DHCP range name")
-    comment: Optional[str] = Field(None, description="Optional comment")
-    is_authoritative: Optional[bool] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    name: str | None = Field(None, description="DHCP range name")
+    comment: str | None = Field(None, description="Optional comment")
+    is_authoritative: bool | None = Field(
         None, description="Is authoritative flag"
     )
-    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
-    boot_server: Optional[str] = Field(
+    boot_file: str | None = Field(None, description="Legacy bootfile option")
+    boot_server: str | None = Field(
         None, description="Legacy bootserver option"
     )
-    ddns_domainname: Optional[str] = Field(
+    ddns_domainname: str | None = Field(
         None, description="DDNS Domain name option"
     )
-    generate_hostname: Optional[bool] = Field(
+    generate_hostname: bool | None = Field(
         None, description="Generate hostname flag"
     )
-    deny_all_clients: Optional[bool] = Field(
+    deny_all_clients: bool | None = Field(
         None, description="Deny all clients flag"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    domain_name_servers: Optional[str] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    disabled: bool | None = Field(None, description="Disabled flag")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    enable_thresholds: Optional[bool] = Field(
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    enable_thresholds: bool | None = Field(
         None, description="Enable thresholds flag"
     )
-    enable_threshold_email_warnings: Optional[bool] = Field(
+    enable_threshold_email_warnings: bool | None = Field(
         None, description="Enable email warnings flag"
     )
-    enable_threshold_snmp_warnings: Optional[bool] = Field(
+    enable_threshold_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: Optional[list[str]] = Field(
+    threshold_email_addresses: list[str | None] = Field(
         None, description="Email addresses to send warnings"
     )
-    range_high_water_mark: Optional[int] = Field(
+    range_high_water_mark: int | None = Field(
         None, description="Range high water mark option"
     )
-    ignore_client_requested_options: Optional[bool] = Field(
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options flag"
     )
-    range_low_water_mark: Optional[int] = Field(
+    range_low_water_mark: int | None = Field(
         None, description="Range low water mark option"
     )
-    next_server: Optional[str] = Field(
+    next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    lease_time: Optional[PositiveInt] = Field(
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    pxe_lease_time: Optional[PositiveInt] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    unknown_clients_option: Optional[str] = Field(
+    unknown_clients_option: str | None = Field(
         None, description="Unknown clients option"
     )
-    known_clients_option: Optional[str] = Field(
+    known_clients_option: str | None = Field(
         None, description="Known clients option"
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    update_dns_on_lease_renewal: Optional[bool] = Field(
+    update_dns_on_lease_renewal: bool | None = Field(
         None, description="Update DNS on lease renewal"
     )
-    always_update_dns: Optional[bool] = Field(
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    exclusion_ranges: Optional[List[str]] = Field(
+    exclusion_ranges: List[str | None] = Field(
         None,
         description="List of exclusion ranges in 'start-end/comment' format",
     )
-    member: Optional[str] = Field(None, description="DHCP member name")
-    server_association_type: Optional[ServerAssociationTypeEnum] = Field(
+    member: str | None = Field(None, description="DHCP member name")
+    server_association_type: ServerAssociationTypeEnum | None = Field(
         None,
         description="DHCP server association type MEMBER, FAILOVER, or NONE",
     )
-    failover_association: Optional[str] = Field(
+    failover_association: str | None = Field(
         None, description="DHCP failover association name"
     )
-    broadcast_address: Optional[IPv4Address] = Field(
+    broadcast_address: IPv4Address | None = Field(
         None, description="DHCP broadcast address option"
     )
-    routers: Optional[list] = Field(None, description="List of routers")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    option_logic_filters: Optional[List[str]] = Field(
+    routers: list | None = Field(None, description="List of routers")
+    domain_name: str | None = Field(None, description="Domain name option")
+    option_logic_filters: List[str | None] = Field(
         None, description="List of option logic filters"
     )
 
     @field_serializer("exclusion_ranges", when_used="always")
-    def serialize_exclusion_ranges(self, exclusion_ranges: str):
+    def serialize_exclusion_ranges(self):
         if self.exclusion_ranges is None:
             return None
         return ",".join(self.exclusion_ranges)
@@ -1162,66 +1161,66 @@ class IPv6DhcpRange(BaseModel):
         serialization_alias="header-ipv6dhcprange",
         description="Default header for IPv6 dhcprange",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
-    address_type: Optional[IPv6AddressTypeEnum] = Field(
+    address_type: IPv6AddressTypeEnum | None = Field(
         None, description="IPv6 address type option"
     )
-    parent: Optional[str] = Field(None, description="Parent v6 block")
+    parent: str | None = Field(None, description="Parent v6 block")
     start_address: IPv6Address = Field(
         ..., description="DHCP range start address"
     )
-    new_start_address: Optional[IPv6Address] = Field(
+    new_start_address: IPv6Address | None = Field(
         None,
         serialization_alias="_new_start_address",
         description="New DHCP range start address",
     )
     end_address: IPv6Address = Field(..., description="DHCP range end address")
-    new_end_address: Optional[IPv6Address] = Field(
+    new_end_address: IPv6Address | None = Field(
         None,
         serialization_alias="_new_end_address",
         description="New DHCP range end address",
     )
-    ipv6_start_prefix: Optional[PositiveInt] = Field(
+    ipv6_start_prefix: int | None = Field(
         None, ge=0, le=128, description="IPv6 start prefix option"
     )
-    new_ipv6_start_prefix: Optional[PositiveInt] = Field(
+    new_ipv6_start_prefix: int | None = Field(
         None,
         serialization_alias="_new_ipv6_start_prefix",
         description="New IPv6 start prefix",
     )
-    ipv6_end_prefix: Optional[PositiveInt] = Field(
+    ipv6_end_prefix: int | None = Field(
         None, ge=0, le=128, description="IPv6 end prefix option"
     )
-    new_ipv6_end_prefix: Optional[PositiveInt] = Field(
+    new_ipv6_end_prefix: int | None = Field(
         None,
         serialization_alias="_new_ipv6_end_prefix",
         description="New IPv6 end prefix",
     )
-    ipv6_prefix_bits: Optional[PositiveInt] = Field(
+    ipv6_prefix_bits: int | None = Field(
         None, ge=0, le=128, description="IPv6 prefix bits option"
     )
-    new_ipv6_prefix_bits: Optional[PositiveInt] = Field(
+    new_ipv6_prefix_bits: int | None = Field(
         None,
         serialization_alias="_new_ipv6_prefix_bits",
         description="New IPv6 prefix bits",
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    name: Optional[str] = Field(None, description="DHCP range name")
-    comment: Optional[str] = Field(None, description="Optional comment")
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    member: Optional[str] = Field(None, description="DHCP member name")
-    server_association_type: Optional[ServerAssociationTypeEnum] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    name: str | None = Field(None, description="DHCP range name")
+    comment: str | None = Field(None, description="Optional comment")
+    disabled: bool | None = Field(None, description="Disabled flag")
+    member: str | None = Field(None, description="DHCP member name")
+    server_association_type: ServerAssociationTypeEnum | None = Field(
         None, description="DHCP server association type MEMBER, or NONE"
     )
-    exclusion_ranges: Optional[List[str]] = Field(
+    exclusion_ranges: List[str | None] = Field(
         None,
         description="List of exclusion ranges in 'start-end/comment' format",
     )
-    recycle_leases: Optional[bool] = Field(
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
 
@@ -1246,73 +1245,73 @@ class IPv4FixedAddress(BaseModel):
         serialization_alias="header-fixedaddress",
         description="Default header for IPv4 fixed address",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     ip_address: IPv4Address = Field(..., description="IP address")
-    ms_server: Optional[IPv4Address] = Field(None, description="MS server name")
-    new_ip_address: Optional[IPv4Address] = Field(
+    ms_server: IPv4Address | None = Field(None, description="MS server name")
+    new_ip_address: IPv4Address | None = Field(
         None,
         serialization_alias="_new_ip_address",
         description="New IP address of fixed address",
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    name: Optional[str] = Field(None, description="Fixed address name")
-    always_update_dns: Optional[bool] = Field(
+    network_view: str | None = Field(None, description="Network view")
+    name: str | None = Field(None, description="Fixed address name")
+    always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    option_logic_filters: Optional[List[str]] = Field(
+    option_logic_filters: List[str | None] = Field(
         None, description="List of option logic filters"
     )
-    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
-    boot_server: Optional[str] = Field(
+    boot_file: str | None = Field(None, description="Legacy bootfile option")
+    boot_server: str | None = Field(
         None, description="Legacy bootserver option"
     )
-    prepared_zero: Optional[bool] = Field(
+    prepared_zero: bool | None = Field(
         None, description="Prepared zero flag"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    ddns_domainname: Optional[str] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    ddns_domainname: str | None = Field(
         None, description="DDNS Domain name option"
     )
-    deny_bootp: Optional[bool] = Field(None, description="Deny bootp flag")
-    broadcast_address: Optional[IPv4Address] = Field(
+    deny_bootp: bool | None = Field(None, description="Deny bootp flag")
+    broadcast_address: IPv4Address | None = Field(
         None, description="Broadcast address option"
     )
-    routers: Optional[str] = Field(None, description="List of routers")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    routers: str | None = Field(None, description="List of routers")
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    dhcp_client_identifier: Optional[str] = Field(
+    dhcp_client_identifier: str | None = Field(
         None, description="DHCP client identifier option"
     )
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    enable_ddns: Optional[bool] = Field(None, description="Enable DDNS flag")
-    ignore_client_requested_options: Optional[bool] = Field(
+    disabled: bool | None = Field(None, description="Disabled flag")
+    enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
+    ignore_client_requested_options: bool | None = Field(
         None, description="Ignore client requested options"
     )
-    circuit_id: Optional[str] = Field(None, description="Circuit ID option")
-    remote_id: Optional[str] = Field(None, description="Remote ID option")
-    mac_address: Optional[str] = Field(None, description="MAC address option")
-    match_option: Optional[MatchOptionEnum] = Field(
+    circuit_id: str | None = Field(None, description="Circuit ID option")
+    remote_id: str | None = Field(None, description="Remote ID option")
+    mac_address: str | None = Field(None, description="MAC address option")
+    match_option: MatchOptionEnum | None = Field(
         None, description="Match option"
     )
-    next_server: Optional[str] = Field(
+    next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    lease_time: Optional[PositiveInt] = Field(
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    enable_pxe_lease_time: Optional[bool] = Field(
+    enable_pxe_lease_time: bool | None = Field(
         None, description="Enable PXE lease time flag"
     )
-    ddns_hostname: Optional[str] = Field(
+    ddns_hostname: str | None = Field(
         None, description="DDNS hostname option"
     )
-    pxe_lease_time: Optional[PositiveInt] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
 
@@ -1336,51 +1335,51 @@ class IPv6FixedAddress(BaseModel):
         serialization_alias="header-ipv6fixedaddress",
         description="Default header for IPv6 fixed address",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
-    address_type: Optional[IPv6AddressTypeEnum] = Field(
+    address_type: IPv6AddressTypeEnum | None = Field(
         None, description="IPv6 address type option"
     )
-    parent: Optional[IPv6Network] = Field(None, description="Parent v6 block")
+    parent: IPv6Network | None = Field(None, description="Parent v6 block")
     ip_address: IPv6Address = Field(..., description="IP address")
-    new_ip_address: Optional[IPv6Address] = Field(
+    new_ip_address: IPv6Address | None = Field(
         None,
         serialization_alias="_new_ip_address",
         description="New IP address of fixed address",
     )
-    ipv6_prefix: Optional[PositiveInt] = Field(
+    ipv6_prefix: int | None = Field(
         None, ge=0, le=128, description="IPv6 prefix option"
     )
-    new_ipv6_prefix: Optional[PositiveInt] = Field(
+    new_ipv6_prefix: int | None = Field(
         None,
         serialization_alias="_new_ipv6_prefix",
         description="New IPv6 prefix",
     )
-    ipv6_prefix_bits: Optional[PositiveInt] = Field(
+    ipv6_prefix_bits: int | None = Field(
         None, ge=0, le=128, description="IPv6 prefix bits option"
     )
-    new_ipv6_prefix_bits: Optional[PositiveInt] = Field(
+    new_ipv6_prefix_bits: int | None = Field(
         None,
         serialization_alias="_new_ipv6_prefix_bits",
         description="New IPv6 prefix bits",
     )
-    network_view: Optional[str] = Field(None, description="Network view")
-    name: Optional[str] = Field(None, description="Fixed address name")
-    comment: Optional[str] = Field(None, description="Optional comment")
-    disabled: Optional[bool] = Field(None, description="Disabled flag")
-    match_option: Optional[str] = Field("DUID", description="Match option")
+    network_view: str | None = Field(None, description="Network view")
+    name: str | None = Field(None, description="Fixed address name")
+    comment: str | None = Field(None, description="Optional comment")
+    disabled: bool | None = Field(None, description="Disabled flag")
+    match_option: str | None = Field("DUID", description="Match option")
     duid: str = Field(..., description="DUID string")
-    domain_name: Optional[str] = Field(None, description="Domain name option")
-    domain_name_servers: Optional[str] = Field(
+    domain_name: str | None = Field(None, description="Domain name option")
+    domain_name_servers: str | None = Field(
         None, description="Domain name servers option"
     )
-    valid_lifetime: Optional[PositiveInt] = Field(
+    valid_lifetime: int | None = Field(
         None, description="Valid lifetime option in seconds"
     )
-    preferred_lifetime: Optional[PositiveInt] = Field(
+    preferred_lifetime: int | None = Field(
         None, description="Preferred lifetime option in seconds"
     )
 
@@ -1405,27 +1404,27 @@ class DhcpFingerprint(BaseModel):
         serialization_alias="header-dhcpfingerprint",
         description="Default header for DHCP fingerprint",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="DHCP Fingerprint name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name for DHCP Fingerprint",
     )
-    type: Optional[FingerprintTypeEnum] = Field(
+    type: FingerprintTypeEnum | None = Field(
         FingerprintTypeEnum.CUSTOM, description="DHCP Fingerprint type"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    disable: Optional[bool] = Field(None, description="Disabled flag")
-    vendor_id: Optional[str] = Field(None, description="Vendor ID string")
-    option_sequence: Optional[str] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    disable: bool | None = Field(None, description="Disabled flag")
+    vendor_id: str | None = Field(None, description="Vendor ID string")
+    option_sequence: str | None = Field(
         None, description="Option sequence ['1,2,3/ipv4']"
     )
-    device_class: Optional[str] = Field(
+    device_class: str | None = Field(
         None, description="DHCP Device class used for filtering"
     )
     protocol: ProtocolTypeEnum = Field(
@@ -1448,27 +1447,27 @@ class DhcpMacFilter(BaseModel):
         serialization_alias="header-dhcpmacfilter",
         description="Default header for dhcpmacfilter",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="DHCP Mac filter name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name for DHCP Mac filter",
     )
-    never_expires: Optional[bool] = Field(
+    never_expires: bool | None = Field(
         None, description="Never expires flag"
     )
-    expiration_interval: Optional[PositiveInt] = Field(
+    expiration_interval: int | None = Field(
         None, description="Expiration interval option"
     )
-    enforce_expiration_time: Optional[bool] = Field(
+    enforce_expiration_time: bool | None = Field(
         None, description="Enforce expiration time flag"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
+    comment: str | None = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
@@ -1486,52 +1485,52 @@ class MacFilterAddress(BaseModel):
         serialization_alias="header-macfilteraddress",
         description="Default header for macfilteraddress",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     parent: str = Field(..., description="Mac Filter name")
     mac_address: str = Field(..., description="MAC address")
-    new_mac_address: Optional[str] = Field(
+    new_mac_address: str | None = Field(
         None,
         serialization_alias="_new_mac_address",
         description="New MAC address",
     )
-    is_registered_user: Optional[bool] = Field(
+    is_registered_user: bool | None = Field(
         None, description="Is registered user flag"
     )
-    registered_user: Optional[str] = Field(
+    registered_user: str | None = Field(
         None, description="Registered user name"
     )
-    guest_first_name: Optional[str] = Field(
+    guest_first_name: str | None = Field(
         None, description="Guest first name"
     )
-    guest_middle_name: Optional[str] = Field(
+    guest_middle_name: str | None = Field(
         None, description="Guest middle name"
     )
-    guest_last_name: Optional[str] = Field(None, description="Guest last name")
-    guest_email: Optional[str] = Field(None, description="Guest email")
-    guest_phone: Optional[str] = Field(None, description="Guest phone")
-    guest_custom_field1: Optional[str] = Field(
+    guest_last_name: str | None = Field(None, description="Guest last name")
+    guest_email: str | None = Field(None, description="Guest email")
+    guest_phone: str | None = Field(None, description="Guest phone")
+    guest_custom_field1: str | None = Field(
         None, description="Guest custom field 1"
     )
-    guest_custom_field2: Optional[str] = Field(
+    guest_custom_field2: str | None = Field(
         None, description="Guest custom field 2"
     )
-    guest_custom_field3: Optional[str] = Field(
+    guest_custom_field3: str | None = Field(
         None, description="Guest custom field 3"
     )
-    guest_custom_field4: Optional[str] = Field(
+    guest_custom_field4: str | None = Field(
         None, description="Guest custom field 4"
     )
-    never_expires: Optional[bool] = Field(
+    never_expires: bool | None = Field(
         None, description="Never expires flag"
     )
-    expire_time: Optional[datetime] = Field(
+    expire_time: datetime | None = Field(
         None, description="Expiration time option"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
+    comment: str | None = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-") or code.startswith("ADMGRP-"):
@@ -1549,33 +1548,33 @@ class OptionFilter(BaseModel):
         serialization_alias="header-optionfilter",
         description="Default header for optionfilter",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV custom import action",
     )
     name: str = Field(..., description="Option filter name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name for Option filter",
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
-    expression: Optional[str] = Field(None, description="Expression")
-    boot_file: Optional[str] = Field(None, description="Legacy bootfile option")
-    boot_server: Optional[str] = Field(
+    comment: str | None = Field(None, description="Optional comment")
+    expression: str | None = Field(None, description="Expression")
+    boot_file: str | None = Field(None, description="Legacy bootfile option")
+    boot_server: str | None = Field(
         None, description="Legacy bootserver option"
     )
-    lease_time: Optional[int] = Field(
+    lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    pxe_lease_time: Optional[int] = Field(
+    pxe_lease_time: int | None = Field(
         None, description="DHCP lease time option in seconds"
     )
-    next_server: Optional[str] = Field(
+    next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    option_space: Optional[str] = Field(None, description="Option space")
+    option_space: str | None = Field(None, description="Option space")
 
     def add_property(self, code: str, value: str):
         if code.startswith("OPTION-") or code.startswith("EA-"):
@@ -1593,33 +1592,33 @@ class OptionFilterMatchRule(BaseModel):
         serialization_alias="header-optionfiltermatchrule",
         description="CSV Header for optionfiltermatchrule",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="Custom CSV Import action",
     )
     parent: str = Field(..., description="Parent option filter")
-    match_option: Optional[str] = Field(
+    match_option: str | None = Field(
         None, description="Option filter match option"
     )
-    match_value: Optional[str] = Field(
+    match_value: str | None = Field(
         None, description="Option filter match value"
     )
-    new_match_value: Optional[str] = Field(
+    new_match_value: str | None = Field(
         None,
         serialization_alias="_new_match_value",
         description="New option filter match value",
     )
-    comment: Optional[str] = Field(
+    comment: str | None = Field(
         None, description="Option filter match comment"
     )
-    is_substring: Optional[bool] = Field(
+    is_substring: bool | None = Field(
         None, description="Is option filter match substring"
     )
-    substring_offset: Optional[int] = Field(
+    substring_offset: int | None = Field(
         None, description="Substring offset"
     )
-    substring_length: Optional[int] = Field(
+    substring_length: int | None = Field(
         None, description="Substring length"
     )
 
@@ -1633,30 +1632,30 @@ class RelayAgentFilter(BaseModel):
         serialization_alias="header-relayagentfilter",
         description="The header of the relayagentfilter",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="Custom CSV import action",
     )
     name: str = Field(..., description="The name of the relay agent filter")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="The new name of the relay agent filter",
     )
-    comment: Optional[str] = Field(
+    comment: str | None = Field(
         None, description="The comment of the relay agent filter"
     )
-    circuit_id_rule: Optional[str] = Field(
+    circuit_id_rule: str | None = Field(
         None, description="The circuit id rule of the relay agent filter"
     )
-    circuit_id: Optional[str] = Field(
+    circuit_id: str | None = Field(
         None, description="The circuit id of the relay agent filter"
     )
-    remote_id_rule: Optional[str] = Field(
+    remote_id_rule: str | None = Field(
         None, description="The remote id rule of the relay agent filter"
     )
-    remote_id: Optional[str] = Field(
+    remote_id: str | None = Field(
         None, description="The remote id of the relay agent filter"
     )
 
@@ -1676,22 +1675,22 @@ class DhcpFingerprintFilter(BaseModel):
         serialization_alias="header-dhcpfingerprintfilter",
         description="Header for dhcpfingerprintfilter",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="Custom CSV import action",
     )
     name: str = Field(..., description="DHCP Fingerprint Filter name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New DHCP Fingerprint Filter name",
     )
-    fingerprint: Optional[str] = Field(None, description="DHCP Fingerprint")
-    new_fingerprint: Optional[str] = Field(
+    fingerprint: str | None = Field(None, description="DHCP Fingerprint")
+    new_fingerprint: str | None = Field(
         None, serialization_alias="_new_fingerprint"
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
+    comment: str | None = Field(None, description="Optional comment")
 
     def add_property(self, code: str, value: str):
         if code.startswith("EA-"):
@@ -1709,18 +1708,18 @@ class IPv4OptionSpace(BaseModel):
         frozen=True,
         description="Header for optionspace",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV Custom import action",
     )
     name: str = Field(..., description="Name of the IPv4 optionspace")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name of the optionspace",
     )
-    comment: Optional[str] = Field(
+    comment: str | None = Field(
         None, description="Comment for the optionspace"
     )
 
@@ -1740,19 +1739,19 @@ class IPv4OptionDefinition(BaseModel):
         serialization_alias="header-optiondefinition",
         description="Header for optiondefinition",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV Custom import action",
     )
     space: str = Field(..., description="IPv4 DHCP Option Space")
-    new_space: Optional[str] = Field(
+    new_space: str | None = Field(
         None,
         serialization_alias="_new_space",
         description="New name of the optionspace",
     )
     name: str = Field(..., description="IPv4 DHCP Option name")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New IPv4 DHCP Option name",
@@ -1770,21 +1769,21 @@ class IPv6Optionspace(BaseModel):
         serialization_alias="header-ipv6optionspace",
         description="Header for ipv6optionspace",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV Custom import action",
     )
     name: str = Field(..., description="Name of the IPv6 optionspace")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name of the optionspace",
     )
-    comment: Optional[str] = Field(
+    comment: str | None = Field(
         None, description="Comment for the optionspace"
     )
-    ipv6_enterprise_number: Optional[PositiveInt] = Field(
+    ipv6_enterprise_number: int | None = Field(
         None, description="Enterprise number for IPv6 options"
     )
 
@@ -1798,19 +1797,19 @@ class IPv6OptionDefinition(BaseModel):
         serialization_alias="header-ipv6optiondefinition",
         description="Header for ipv6optiondefinition",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV Custom import action",
     )
     space: str = Field(..., description="IPv6 DHCP Option Space")
-    new_space: Optional[str] = Field(
+    new_space: str | None = Field(
         None,
         serialization_alias="_new_space",
         description="New name of the optionspace",
     )
     name: str = Field(..., description="IPv6 DHCP Option name")
-    new_name: Optional[str] = Field(None, serialization_alias="_new_name")
+    new_name: str | None = Field(None, serialization_alias="_new_name")
     code: str = Field(..., description="IPv6 DHCP option code number")
     type: DhcpTypeEnum = Field(..., description="DHCP option type enumeration")
 
@@ -1824,44 +1823,44 @@ class DhcpFailoverAssociation(BaseModel):
         serialization_alias="header-dhcpfailoverassociation",
         description="Header for dhcpfailoverassociation object",
     )
-    import_action: Optional[ImportActionEnum] = Field(
+    import_action: ImportActionEnum | None = Field(
         None,
         serialization_alias="import-action",
         description="CSV Custom import action",
     )
     name: str = Field(..., description="Name of the DHCP failover association")
-    new_name: Optional[str] = Field(
+    new_name: str | None = Field(
         None,
         serialization_alias="_new_name",
         description="New name of the DHCP failover association",
     )
-    comment: Optional[str] = Field(None, description="Optional comment")
+    comment: str | None = Field(None, description="Optional comment")
     primary_server_type: FailoverServerTypeEnum = Field(
         ..., description="Primary server type"
     )
-    grid_primary: Optional[str] = Field(
+    grid_primary: str | None = Field(
         None, description="Primary Grid Member FQDN"
     )
-    external_primary: Optional[str] = Field(
+    external_primary: str | None = Field(
         None, description="Primary External Server FQDN"
     )
     secondary_server_type: FailoverServerTypeEnum = Field(
         ..., description="Secondary server type"
     )
-    grid_secondary: Optional[str] = Field(
+    grid_secondary: str | None = Field(
         None, description="Secondary Grid Member FQDN"
     )
-    external_secondary: Optional[str] = Field(
+    external_secondary: str | None = Field(
         None, description="Secondary External Server FQDN"
     )
-    failover_port: Optional[PositiveInt] = Field(647, gt=0, lt=63999)
-    max_response_delay: Optional[PositiveInt] = Field(60, ge=1)
-    mclt: Optional[PositiveInt] = Field(3600, ge=0, le=4294967295)
-    max_load_balance_delay: Optional[PositiveInt] = Field(
+    failover_port: int | None = Field(647, gt=0, lt=63999)
+    max_response_delay: int | None = Field(60, ge=1)
+    mclt: int | None = Field(3600, ge=0, le=4294967295)
+    max_load_balance_delay: int | None = Field(
         3, ge=0, le=4294967295
     )
-    load_balance_split: Optional[PositiveInt] = Field(128, ge=0, le=255)
-    recycle_leases: Optional[bool] = Field(
+    load_balance_split: int | None = Field(128, ge=0, le=255)
+    recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
 
