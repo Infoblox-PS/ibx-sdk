@@ -1136,10 +1136,10 @@ class IPv4DhcpRange(BaseModel):
     )
 
     @field_serializer("exclusion_ranges", when_used="always")
-    def serialize_exclusion_ranges(self):
-        if self.exclusion_ranges is None:
+    def serialize_exclusion_ranges(self, value):
+        if value is None:
             return None
-        return ",".join(self.exclusion_ranges)
+        return ",".join(value)
 
     def add_property(self, code: str, value: str):
         if (
