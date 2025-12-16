@@ -241,7 +241,7 @@ class MemberDhcp(BaseModel):
     )
     domain_name: str | None = Field(None, description="Domain name option")
     routers: str | None = Field(None, description="Routers option")
-    option_logic_filters: list[str | None] = Field(
+    option_logic_filters: list[str] | None = Field(
         None, description="List of option logic filters"
     )
     enable_pxe_lease_time: bool | None = Field(
@@ -274,7 +274,7 @@ class MemberDhcp(BaseModel):
     enable_threshold_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: list[str | None] = Field(
+    threshold_email_addresses: list[str] | None = Field(
         None, description="Email addresses to send warnings"
     )
     enable_ddns: bool | None = Field(None, description="Enable DDNS flag")
@@ -474,7 +474,7 @@ class IPv4NetworkContainer(BaseModel):
     enable_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: List[str | None] = Field(
+    threshold_email_addresses: List[str] | None = Field(
         None, description="List of email addresses to send warnings"
     )
     pxe_lease_time: int | None = Field(
@@ -490,7 +490,7 @@ class IPv4NetworkContainer(BaseModel):
     next_server: str | None = Field(
         None, description="Legacy next-server option"
     )
-    option_logic_filters: list[str | None] = Field(
+    option_logic_filters: list[str] | None = Field(
         None, description="List of option logic filters"
     )
     lease_scavenge_time: int | None = Field(
@@ -520,7 +520,7 @@ class IPv4NetworkContainer(BaseModel):
     discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: List[IPv4Address | None] = Field(
+    discovery_exclusion_range: List[IPv4Address] | None = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
     remove_subnets: bool | None = Field(
@@ -570,7 +570,7 @@ class IPv4Network(BaseModel):
     discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: List[IPv4Address | None] = Field(
+    discovery_exclusion_range: List[IPv4Address] | None = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
     comment: str | None = Field(None, description="Optional comment")
@@ -580,7 +580,7 @@ class IPv4Network(BaseModel):
     is_authoritative: bool | None = Field(
         None, description="DHCP authoritative flag"
     )
-    option_logic_filters: List[str | None] = Field(
+    option_logic_filters: List[str] | None = Field(
         None, description="List of option logic filters"
     )
     boot_file: str | None = Field(
@@ -647,10 +647,10 @@ class IPv4Network(BaseModel):
     recycle_leases: bool | None = Field(
         None, description="Recycle leases flag"
     )
-    threshold_email_addresses: list[str | None] = Field(
+    threshold_email_addresses: list[str] | None = Field(
         None, description="Email addresses to send warnings"
     )
-    dhcp_members: List[str | None] = Field(None, description="DHCP members")
+    dhcp_members: List[str] | None = Field(None, description="DHCP members")
     routers: str | None = Field(None, description="DHCP routers option")
     domain_name: str | None = Field(
         None, description="DHCP option domain-name"
@@ -658,7 +658,7 @@ class IPv4Network(BaseModel):
     domain_name_servers: str | None = Field(
         None, description="DHCP option domain-name-servers"
     )
-    zone_associations: List[str | None] = Field(
+    zone_associations: List[str] | None = Field(
         None, description="List of DNS zone associations"
     )
     vlans: str | None = Field(
@@ -683,7 +683,7 @@ class IPv4Network(BaseModel):
             raise Exception(f"Invalid field name: {code}")
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -692,7 +692,7 @@ class IPv4Network(BaseModel):
         "option_logic_filters", "dhcp_members", when_used="always"
     )
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -761,7 +761,7 @@ class IPv6NetworkContainer(BaseModel):
     discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: List[IPv4Address | None] = Field(
+    discovery_exclusion_range: List[IPv4Address] | None = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
     remove_subnets: bool | None = Field(
@@ -770,9 +770,9 @@ class IPv6NetworkContainer(BaseModel):
 
     def add_property(self, code: str, value: str):
         if (
-            code.startswith("OPTION-")
-            or code.startswith("EA-")
-            or code.startswith("ADMGRP-")
+            code.startswith("OPTION-") or
+            code.startswith("EA-") or
+            code.startswith("ADMGRP-")
         ):
             self.__setattr__(code, value)
         else:
@@ -805,14 +805,14 @@ class IPv6Network(BaseModel):
     discovery_member: str | None = Field(
         None, description="Discovery member name if discovery is enabled"
     )
-    discovery_exclusion_range: List[IPv6Address | None] = Field(
+    discovery_exclusion_range: List[IPv6Address] | None = Field(
         None, description="List of IP Ranges to be excluded from discovery"
     )
     disabled: bool | None = Field(None, description="Disabled flag")
     auto_create_reversezone: bool | None = Field(
         None, description="Auto create reverse zone flag"
     )
-    zone_associations: List[str | None] = Field(
+    zone_associations: List[str] | None = Field(
         None, description="List of DNS zone associations"
     )
     dhcp_members: str | None = Field(None, description="DHCP members")
@@ -892,7 +892,7 @@ class IPv4SharedNetwork(BaseModel):
     is_authoritative: bool | None = Field(
         None, description="Is authoritative flag"
     )
-    option_logic_filters: List[str | None] = Field(
+    option_logic_filters: List[str] | None = Field(
         None, description="List of option logic filters"
     )
     boot_file: str | None = Field(None, description="Legacy bootfile option")
@@ -1075,7 +1075,7 @@ class IPv4DhcpRange(BaseModel):
     enable_threshold_snmp_warnings: bool | None = Field(
         None, description="Enable SNMP warnings flag"
     )
-    threshold_email_addresses: list[str | None] = Field(
+    threshold_email_addresses: list[str] | None = Field(
         None, description="Email addresses to send warnings"
     )
     range_high_water_mark: int | None = Field(
@@ -1114,7 +1114,7 @@ class IPv4DhcpRange(BaseModel):
     always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    exclusion_ranges: List[str | None] = Field(
+    exclusion_ranges: List[str] | None = Field(
         None,
         description="List of exclusion ranges in 'start-end/comment' format",
     )
@@ -1131,7 +1131,7 @@ class IPv4DhcpRange(BaseModel):
     )
     routers: list | None = Field(None, description="List of routers")
     domain_name: str | None = Field(None, description="Domain name option")
-    option_logic_filters: List[str | None] = Field(
+    option_logic_filters: List[str] | None = Field(
         None, description="List of option logic filters"
     )
 
@@ -1216,7 +1216,7 @@ class IPv6DhcpRange(BaseModel):
     server_association_type: ServerAssociationTypeEnum | None = Field(
         None, description="DHCP server association type MEMBER, or NONE"
     )
-    exclusion_ranges: List[str | None] = Field(
+    exclusion_ranges: List[str] | None = Field(
         None,
         description="List of exclusion ranges in 'start-end/comment' format",
     )
@@ -1262,7 +1262,7 @@ class IPv4FixedAddress(BaseModel):
     always_update_dns: bool | None = Field(
         None, description="Always update DNS flag"
     )
-    option_logic_filters: List[str | None] = Field(
+    option_logic_filters: List[str] | None = Field(
         None, description="List of option logic filters"
     )
     boot_file: str | None = Field(None, description="Legacy bootfile option")
