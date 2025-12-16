@@ -31,9 +31,9 @@ def output_to_file(
     *,
     filename: str,
     data: list,
-    import_action: str = None,
-    output_dir: str = None,
-    file_prefix: str = None,
+    import_action: str | None = None,
+    output_dir: str | None = None,
+    file_prefix: str | None = None,
 ) -> None:
     """
     Generate a CSV file from the given data.
