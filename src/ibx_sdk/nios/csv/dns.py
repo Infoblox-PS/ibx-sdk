@@ -48,10 +48,10 @@ class MemberDns(BaseModel):
     forwarders_only: bool | None = Field(
         None, description="Forwarders only flag"
     )
-    allow_forwarder: List[str | None] = Field(
+    allow_forwarder: List[str] | None = Field(
         None, description="List of forwarders"
     )
-    member_view_nats: List[str | None] = Field(
+    member_view_nats: List[str] | None = Field(
         None, description="List of member view NATs VIEW/INTERFACE/IP"
     )
     enable_notify_source_port: bool | None = Field(
@@ -72,12 +72,12 @@ class MemberDns(BaseModel):
     auto_sort_views: bool | None = Field(
         None, description="Auto sort views flag"
     )
-    member_views: List[str | None] = Field(None, description="Member views")
-    allow_transfer: List[str | None] = Field(
+    member_views: List[str] | None = Field(None, description="Member views")
+    allow_transfer: List[str] | None = Field(
         None,
         description="List of allowed transfer servers ITEM/Allow or ITEM/Deny",
     )
-    excluded_servers: List[IPvAnyAddress | None] = Field(
+    excluded_servers: List[IPvAnyAddress] | None = Field(
         None, description="List of excluded transfer servers"
     )
     zone_transfer_format_option: str | None = Field(
@@ -86,10 +86,10 @@ class MemberDns(BaseModel):
     recursion_enabled: bool | None = Field(
         None, description="Recursion enabled flag"
     )
-    allow_query: List[str | None] = Field(
+    allow_query: List[str] | None = Field(
         None, description="List of allowed query servers"
     )
-    allow_recursive_query: List[str | None] = Field(
+    allow_recursive_query: List[str] | None = Field(
         None, description="List of allowed recursive query servers"
     )
     limit_concurrent_recursive_clients: bool | None = Field(
@@ -98,7 +98,7 @@ class MemberDns(BaseModel):
     concurrent_recursive_clients: int | None = Field(
         1000, description="Concurrent recursive clients"
     )
-    allow_update: List[str | None] = Field(
+    allow_update: List[str] | None = Field(
         None, description="List of allowed update servers"
     )
     allow_gss_tsig_zone_updates: bool | None = Field(
@@ -110,13 +110,13 @@ class MemberDns(BaseModel):
     enable_custom_root_server: bool | None = Field(
         None, description="Enable custom root server"
     )
-    root_name_servers: List[str | None] = Field(
+    root_name_servers: List[str] | None = Field(
         None, description="List of custom root name servers"
     )
     enable_blackhole: bool | None = Field(
         None, description="Enable blackhole flag"
     )
-    blackhole: List[str | None] = Field(
+    blackhole: List[str] | None = Field(
         None, description="List of blackhole servers"
     )
     notify_delay: int | None = Field(
@@ -125,7 +125,7 @@ class MemberDns(BaseModel):
     enable_nxdomain_redirect: bool | None = Field(
         None, description="Enable nxdomain redirect flag"
     )
-    nxdomain_redirect_addresses: List[str | None] = Field(
+    nxdomain_redirect_addresses: List[str] | None = Field(
         None, description="List of nxdomain redirect addresses"
     )
     nxdomain_redirect_ttl: int | None = Field(
@@ -134,13 +134,13 @@ class MemberDns(BaseModel):
     nxdomain_log_query: bool | None = Field(
         None, description="Enable nxdomain log query flag"
     )
-    nxdomain_rulesets: List[str | None] = Field(
+    nxdomain_rulesets: List[str] | None = Field(
         None, description="List of nxdomain rulesets"
     )
     enable_blacklist: bool | None = Field(
         None, description="Enable blacklist flag"
     )
-    blacklist_redirect_addresses: List[str | None] = Field(
+    blacklist_redirect_addresses: List[str] | None = Field(
         None, description="List of blacklist redirect addresses"
     )
     blacklist_action: str | None = Field(
@@ -152,11 +152,11 @@ class MemberDns(BaseModel):
     blacklist_log_query: bool | None = Field(
         None, description="Enable blacklist log query flag"
     )
-    blacklist_rulesets: List[str | None] = Field(
+    blacklist_rulesets: List[str] | None = Field(
         None, description="List of blacklist rulesets"
     )
     enable_dns64: bool | None = Field(None, description="Enable DNS64 flag")
-    dns64_groups: List[str | None] = Field(
+    dns64_groups: List[str] | None = Field(
         None, description="List of DNS64 groups"
     )
     max_cached_lifetime: int | None = Field(
@@ -171,7 +171,7 @@ class MemberDns(BaseModel):
     filter_aaaa: bool | None = Field(
         None, description="Enable filter AAAA flag"
     )
-    filter_aaaa_list: List[str | None] = Field(
+    filter_aaaa_list: List[str] | None = Field(
         None,
         description="List of filter AAAA addresses '12.0.0.12/Deny,10.0.0.0/8/Allow,NACL/Allow'",
     )
@@ -228,7 +228,7 @@ class MemberDns(BaseModel):
     )
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -253,7 +253,7 @@ class MemberDns(BaseModel):
         when_used="always",
     )
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -285,20 +285,20 @@ class DnsView(BaseModel):
     root_name_server_type: str | None = Field(
         None, description="Root name server type, i.e. Custom"
     )
-    match_clients: List[str | None] = Field(
+    match_clients: List[str] | None = Field(
         None, description="List of clients to match [IP|NET|ACL,...]"
     )
-    match_destinations: List[str | None] = Field(
+    match_destinations: List[str] | None = Field(
         None, description="List of destinations to match [IP|NET|ACL,...]"
     )
-    custom_root_name_servers: List[str | None] = Field(
+    custom_root_name_servers: List[str] | None = Field(
         None, description="List of custom root name servers [FQDN/IP,...]"
     )
     lame_ttl: int | None = Field(None, description="Lame TTL value")
     nxdomain_redirect: bool | None = Field(
         None, description="Enable NXDOMAIN redirect flag"
     )
-    nxdomain_redirect_addresses: List[str | None] = Field(
+    nxdomain_redirect_addresses: List[str] | None = Field(
         None, description="List of NXDOMAIN redirect addresses [IP,...]"
     )
     nxdomain_redirect_ttl: int | None = Field(
@@ -307,13 +307,13 @@ class DnsView(BaseModel):
     nxdomain_log_query: bool | None = Field(
         None, description="Enable NXDOMAIN log query flag"
     )
-    nxdomain_rulesets: List[str | None] = Field(
+    nxdomain_rulesets: List[str] | None = Field(
         None, description="List of NXDOMAIN rulesets [FQDNs,...]"
     )
     enable_blacklist: bool | None = Field(
         None, description="Enable blacklist flag"
     )
-    blacklist_redirect_addresses: List[str | None] = Field(
+    blacklist_redirect_addresses: List[str] | None = Field(
         None, description="List of blacklist redirect addresses [IP,...]"
     )
     blacklist_action: str | None = Field(
@@ -325,23 +325,23 @@ class DnsView(BaseModel):
     blacklist_log_query: bool | None = Field(
         None, description="Enable blacklist log query flag"
     )
-    blacklist_rulesets: List[str | None] = Field(
+    blacklist_rulesets: List[str] | None = Field(
         None, description="List of blacklist rulesets [FQDNs,...]"
     )
     enable_dns64: bool | None = Field(None, description="Enable DNS64 flag")
-    dns64_groups: List[str | None] = Field(
+    dns64_groups: List[str] | None = Field(
         None, description="List of DNS64 groups [GROUP,...]"
     )
     forwarders_only: bool | None = Field(
         None, description="Forwarders only flag"
     )
-    forwarders: List[str | None] = Field(
+    forwarders: List[str] | None = Field(
         None, description="List of forwarders [IP,...]"
     )
     filter_aaaa: str | None = Field(
         None, description="Enable filter AAAA flag, i.e. Yes or No"
     )
-    filter_aaaa_list: List[str | None] = Field(
+    filter_aaaa_list: List[str] | None = Field(
         None, description="List of filter AAAA addresses [IP/Deny|Allow,...]"
     )
     max_cache_ttl: int | None = Field(
@@ -387,37 +387,37 @@ class AuthZone(BaseModel):
         prefix (str | None): RFC2317 classless reverse zone Prefix.
         new_prefix (str | None): New RFC2317 classless reverse zone Prefix.
         is_multimaster (bool | None): Flag indicating multimaster setup.
-        grid_primaries (List[str | None]): List of grid primary servers.
-        external_primaries (List[str | None]): List of external primary servers.
-        grid_secondaries (List[str | None]): List of grid secondary servers.
-        external_secondaries (List[str | None]): List of external secondary servers.
+        grid_primaries (List[str] | None): List of grid primary servers.
+        external_primaries (List[str] | None): List of external primary servers.
+        grid_secondaries (List[str] | None): List of grid secondary servers.
+        external_secondaries (List[str] | None): List of external secondary servers.
         ns_group (str | None): Name of the NS group.
         comment (str | None): Optional comment on the DNS zone.
         disabled (bool | None): Flag indicating whether the zone is disabled.
         create_underscore_zones (bool | None): Flag to create underscore zones.
-        allow_active_dir (List[str | None]): List of allowed Active Directory servers.
+        allow_active_dir (List[str] | None): List of allowed Active Directory servers.
         soa_refresh (int | None): SOA refresh value in seconds.
         soa_retry (int | None): SOA retry value in seconds.
         soa_expire (int | None): SOA expire value in seconds.
         soa_default_ttl (int | None): Default TTL value for SOA.
         soa_negative_ttl (int | None): Negative TTL value for SOA.
-        soa_mnames (List[str | None]): List of SOA primary names.
+        soa_mnames (List[str] | None): List of SOA primary names.
         soa_email (str | None): Email address for the SOA records.
         soa_serial_number (int | None): Serial number of the SOA.
         disable_forwarding (bool | None): Flag to disable forwarding.
         allow_update_forwarding (bool | None): Flag to permit update forwarding.
-        update_forwarding (List[str | None]): Update a forwarding server list.
-        allow_transfer (List[str | None]): List of allowed transfer servers.
-        allow_update (List[str | None]): List of allowed update servers.
-        allow_query (List[str | None]): List of allowed query servers.
+        update_forwarding (List[str] | None): Update a forwarding server list.
+        allow_transfer (List[str] | None): List of allowed transfer servers.
+        allow_update (List[str] | None): List of allowed update servers.
+        allow_query (List[str] | None): List of allowed query servers.
         notify_delay (int | None): Notify delay in seconds (5-86400).
 
     Methods:
-        list_to_csv(items: List[str | None]) -> str | None:
+        list_to_csv(items: List[str] | None) -> str | None:
             Converts a list of strings to a CSV-formatted string.
             Returns None if the list is empty or None.
 
-        serialize_list_fields(values: List[str | None]) -> str | None:
+        serialize_list_fields(values: List[str] | None) -> str | None:
             Serializes specific list fields to a CSV format using list_to_csv.
             Applicable on attributes such as `grid_primaries`, `external_primaries`,
             `grid_secondaries`, and others explicitly defined in the decorator.
@@ -454,18 +454,18 @@ class AuthZone(BaseModel):
     is_multimaster: bool | None = Field(
         None, description="Is multimaster flag"
     )
-    grid_primaries: List[str | None] = Field(
+    grid_primaries: List[str] | None = Field(
         None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
     )
-    external_primaries: List[str | None] = Field(
+    external_primaries: List[str] | None = Field(
         None,
         description="External primary servers [FQDN/IP/USE_2X_TSIG/USE_TSIG/NAME/KEY/ALGO,...]",
     )
-    grid_secondaries: List[str | None] = Field(
+    grid_secondaries: List[str] | None = Field(
         None,
         description="Grid secondary servers [FQDN/STEALTH/LEAD/GRID_SYNC,...] ",
     )
-    external_secondaries: List[str | None] = Field(
+    external_secondaries: List[str] | None = Field(
         None,
         description="External secondary servers [FQDN/IP/USE_2X_TSIG/USE_TSIG/NAME/KEY/ALGO,...]",
     )
@@ -475,7 +475,7 @@ class AuthZone(BaseModel):
     create_underscore_zones: bool | None = Field(
         None, description="Create underscore zones flag"
     )
-    allow_active_dir: List[str | None] = Field(
+    allow_active_dir: List[str] | None = Field(
         None, description="List of allowed Active Directory servers"
     )
     soa_refresh: int | None = Field(
@@ -493,7 +493,7 @@ class AuthZone(BaseModel):
     soa_negative_ttl: int | None = Field(
         None, description="SOA negative TTL value"
     )
-    soa_mnames: List[str | None] = Field(
+    soa_mnames: List[str] | None = Field(
         None, description="List of SOA mnames [ZONE/FQDN,...]"
     )
     soa_email: str | None = Field(None, description="SOA email address")
@@ -506,18 +506,18 @@ class AuthZone(BaseModel):
     allow_update_forwarding: bool | None = Field(
         None, description="Allow update forwarding flag"
     )
-    update_forwarding: List[str | None] = Field(
+    update_forwarding: List[str] | None = Field(
         None,
         description="List of update forwarding servers [ITEM/PERMISSION,...]",
     )
-    allow_transfer: List[str | None] = Field(
+    allow_transfer: List[str] | None = Field(
         None,
         description="List of allowed transfer servers [ITEM/PERMISSION,...]",
     )
-    allow_update: List[str | None] = Field(
+    allow_update: List[str] | None = Field(
         None, description="List of allowed update servers [ITEM/PERMISSION,...]"
     )
-    allow_query: List[str | None] = Field(
+    allow_query: List[str] | None = Field(
         None, description="List of allowed query servers [ITEM/PERMISSION,...]"
     )
     notify_delay: int | None = Field(
@@ -525,7 +525,7 @@ class AuthZone(BaseModel):
     )
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -543,7 +543,7 @@ class AuthZone(BaseModel):
         "allow_query",
     )
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -574,8 +574,8 @@ class ForwardZone(BaseModel):
         prefix (str | None): RFC2317 classless reverse zone prefix.
         disabled (bool | None): Indicates whether the zone is disabled.
         comment (str | None): Optional comment or description for the zone.
-        forward_to (List[str | None]): List of forwarders in FQDN/IP format.
-        forwarding_servers (List[str | None]): List of forwarding servers in FQDN format.
+        forward_to (List[str] | None): List of forwarders in FQDN/IP format.
+        forwarding_servers (List[str] | None): List of forwarding servers in FQDN format.
         forwarders_only (bool | None): Indicates if only forwarders are used.
         ns_group (str | None): Group of nameservers for forwarding members.
         ns_group_external (str | None): External group name for forward-to nameservers.
@@ -603,10 +603,10 @@ class ForwardZone(BaseModel):
     )
     disabled: bool | None = Field(None, description="Disabled flag")
     comment: str | None = Field(None, description="Optional comment")
-    forward_to: List[str | None] = Field(
+    forward_to: List[str] | None = Field(
         None, description="List of forwarders [FQDN/IP,...]"
     )
-    forwarding_servers: List[str | None] = Field(
+    forwarding_servers: List[str] | None = Field(
         None, description="List of forwarding servers [FQDN,...]"
     )
     forwarders_only: bool | None = Field(
@@ -623,14 +623,14 @@ class ForwardZone(BaseModel):
     )
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
 
     @field_serializer("forward_to", "forwarding_servers", when_used="always")
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -661,20 +661,20 @@ class StubZone(BaseModel):
         disabled (bool | None): Indicates whether the stub zone is disabled.
         comment (str | None): Optional comment for additional information.
         disable_forwarding (bool | None): Indicates if forwarding is disabled.
-        stub_from (List[str | None]): List of stub-from servers represented as
+        stub_from (List[str] | None): List of stub-from servers represented as
             FQDN or IP addresses.
-        stub_members (List[str | None]): List of stub-members servers represented
+        stub_members (List[str] | None): List of stub-members servers represented
             as FQDN values.
         ns_group (str | None): Specifies the Stub Members NS Group.
         ns_group_external (str | None): Specifies the NS group name for stub-from
             servers.
 
     Methods:
-        list_to_csv(items: List[str | None]) -> str | None
+        list_to_csv(items: List[str] | None) -> str | None
             Converts a list of strings to a single CSV string. Returns None if the
             input is empty or None.
 
-        serialize_list_fields(values: List[str | None]) -> str | None
+        serialize_list_fields(values: List[str] | None) -> str | None
             Field serializer for stub_from and stub_members attributes. Serializes
             lists into CSV strings for consistent representation during serialization.
 
@@ -708,10 +708,10 @@ class StubZone(BaseModel):
     disable_forwarding: bool | None = Field(
         None, description="Disable forwarding flag"
     )
-    stub_from: List[str | None] = Field(
+    stub_from: List[str] | None = Field(
         None, description="List of stub-from servers [FQDN/IP,...]"
     )
-    stub_members: List[str | None] = Field(
+    stub_members: List[str] | None = Field(
         None, description="List of stub-members servers [FQDN,...]"
     )
     ns_group: str | None = Field(None, description="Stub Members NS Group")
@@ -720,14 +720,14 @@ class StubZone(BaseModel):
     )
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
 
     @field_serializer("stub_from", "stub_members", when_used="always")
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -758,18 +758,18 @@ class NsGroup(BaseModel):
         serialization_alias="_new_group_name",
         description="New NS group name",
     )
-    grid_primaries: List[str | None] = Field(
+    grid_primaries: List[str] | None = Field(
         None, description="Grid primary servers [MEMBER/IS_STEALTH,...]"
     )
-    external_primaries: List[str | None] = Field(
+    external_primaries: List[str] | None = Field(
         None,
         description="External primary servers [FQDN/IP/STEALTH/USE_2X_TSIG/USE_TSIG/NAME/KEY,...]",
     )
-    external_secondaries: List[str | None] = Field(
+    external_secondaries: List[str] | None = Field(
         None,
         description="External secondary servers [FQDN/IP/STEALTH/USE_2X_TSIG/USE_TSIG/NAME/KEY,...]",
     )
-    grid_secondaries: List[str | None] = Field(
+    grid_secondaries: List[str] | None = Field(
         None,
         description="Grid secondary servers [FQDN/IS_STEALTH/LEAD/GRID_SYNC,...] ",
     )
@@ -779,7 +779,7 @@ class NsGroup(BaseModel):
     comment: str | None = Field(None, description="Optional comment")
 
     @staticmethod
-    def list_to_csv(items: List[str | None]) -> str | None:
+    def list_to_csv(items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -792,7 +792,7 @@ class NsGroup(BaseModel):
         when_used="always",
     )
     def serialize_list_fields(
-        self, values: List[str | None]
+        self, values: List[str] | None
     ) -> str | None:
         return self.list_to_csv(values)
 
@@ -860,7 +860,7 @@ class DelegatedZone(BaseModel):
     )
     disabled: bool | None = Field(None, description="Disabled flag")
     comment: str | None = Field(None, description="Optional comment")
-    delegate_to: List[str | None] = Field(
+    delegate_to: List[str] | None = Field(
         None, description="List of delegated servers [FQDN/IP,...]"
     )
     delegated_ttl: int | None = Field(
@@ -880,7 +880,7 @@ class DelegatedZone(BaseModel):
     ddns_principal: str | None = Field(None, description="DDNS principal")
 
     @field_serializer("delegate_to", when_used="always")
-    def serialize_delegate_to(self, items: List[str | None]) -> str | None:
+    def serialize_delegate_to(self, items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -912,13 +912,13 @@ class DelegationNsGroup(BaseModel):
         serialization_alias="_new_group_name",
         description="New NS group name",
     )
-    delegate_to: List[str | None] = Field(
+    delegate_to: List[str] | None = Field(
         None, description="List of delegated servers [FQDN/IP,...]"
     )
     comment: str | None = Field(None, description="Optional comment")
 
     @field_serializer("delegate_to", when_used="always")
-    def serialize_delegate_to(self, items: List[str | None]) -> str | None:
+    def serialize_delegate_to(self, items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
@@ -945,13 +945,13 @@ class ForwardingMemberNsGroup(BaseModel):
         description="New NS group name",
     )
     comment: str | None = Field(None, description="Optional comment")
-    forwarding_servers: List[str | None] = Field(
+    forwarding_servers: List[str] | None = Field(
         None, description="List of forwarding servers [FQDN/IP,...]"
     )
 
     @field_serializer("forwarding_servers", when_used="always")
     def serialize_forwarding_servers(
-        self, items: List[str | None]
+        self, items: List[str] | None
     ) -> str | None:
         if not items:
             return None
@@ -985,13 +985,13 @@ class ForwardStubServerNsGroup(BaseModel):
         description="New NS group name",
     )
     comment: str | None = Field(None, description="Optional comment")
-    external_servers: List[str | None] = Field(
+    external_servers: List[str] | None = Field(
         None, description="List of external servers [FQDN/IP,...]"
     )
 
     @field_serializer("external_servers", when_used="always")
     def serialize_external_servers(
-        self, items: List[str | None]
+        self, items: List[str] | None
     ) -> str | None:
         if not items:
             return None
@@ -1025,12 +1025,12 @@ class StubMemberNsGroup(BaseModel):
         description="New NS group name",
     )
     comment: str | None = Field(None, description="Optional comment")
-    stub_members: List[str | None] = Field(
+    stub_members: List[str] | None = Field(
         None, description="List of stub-members servers [FQDN,...]"
     )
 
     @field_serializer("stub_members", when_used="always")
-    def serialize_stub_members(self, items: List[str | None]) -> str | None:
+    def serialize_stub_members(self, items: List[str] | None) -> str | None:
         if not items:
             return None
         return ",".join(items)
