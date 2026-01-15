@@ -16,7 +16,7 @@ limitations under the License.
 
 import logging
 import ssl
-from typing import Union, Any, Optional, List
+from typing import Any, List, Optional, Union
 
 import httpx
 import urllib3

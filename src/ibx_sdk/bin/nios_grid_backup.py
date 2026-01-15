@@ -21,7 +21,7 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
 
