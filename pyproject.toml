@@ -1,44 +1,49 @@
-[tool.poetry]
+[project]
 name = "ibx-sdk"
 version = "0.7.7"
-authors = [
-    "Michael Smith <michaels@infoblox.com>",
-    "Patrick Piper <patrick@ddiguru.com>",
-    "Patrick Piper <ppiper@infoblox.com>",
-    "Michael Smith <mjsmithkc@gmail.com>",
-]
 description = "Infoblox API software development kit"
-repository = "https://github.com/Infoblox-PS/ibx-sdk"
-documentation = "https://infoblox-ps.github.io/ibx-sdk/"
 readme = "README.md"
+requires-python = ">=3.10,<4.0"
+license = {file = "LICENSE.md"}
+authors = [
+    {name = "Michael Smith", email = "michaels@infoblox.com"},
+    {name = "Patrick Piper", email = "patrick@ddiguru.com"},
+    {name = "Patrick Piper", email = "ppiper@infoblox.com"},
+    {name = "Michael Smith", email = "mjsmithkc@gmail.com"},
+]
+dependencies = [
+    "click>=8.1.7",
+    "click-option-group>=0.5.6",
+    "coloredlogs>=15.0.1",
+    "dnspython>=2.7.0",
+    "netaddr>=1.3.0",
+    "urllib3>=2.2.3",
+    "syslog-rfc5424-formatter>=1.2.3",
+    "pydantic>=2.10.4",
+    "httpx>=0.28.1",
+    "appdirs>=1.4.4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-click = "^8.1.7"
-click-option-group = "^0.5.6"
-coloredlogs = "^15.0.1"
-dnspython = "^2.7.0"
-netaddr = "^1.3.0"
-urllib3 = "^2.2.3"
-syslog-rfc5424-formatter = "^1.2.3"
-pydantic = "^2.10.4"
-httpx = "^0.28.1"
-appdirs = "^1.4.4"
+[project.urls]
+homepage = "https://infoblox-ps.github.io/ibx-sdk/"
+documentation = "https://infoblox-ps.github.io/ibx-sdk/"
+repository = "https://github.com/Infoblox-PS/ibx-sdk"
 
-[tool.poetry.group.dev.dependencies]
-mkdocstrings-python = "^1.12.2"
-mkdocs-material = "^9.5.44"
-ruff = "0.13.0"
-pip-audit = "^2.8.0"
-pytest-asyncio = "^0.26.0"
+[project.optional-dependencies]
+dev = [
+    "mkdocstrings-python>=1.12.2",
+    "mkdocs-material>=9.5.44",
+    "ruff>=0.13.0",
+    "pip-audit>=2.8.0",
+    "pytest-asyncio>=0.26.0",
+    "coverage>=7.6.4",
+    "pytest>=8.3.3",
+    "pytest-env>=1.1.5",
+    "pytest-dotenv>=0.5.2",
+]
 
-[tool.poetry.group.test.dependencies]
-coverage = "^7.6.4"
-pytest = "^8.3.3"
-pytest-env = "^1.1.5"
-pytest-dotenv = "^0.5.2"
 
-[tool.poetry.scripts]
+[project.scripts]
 get-log = 'ibx_sdk.bin.nios_get_log:main'
 get-file = 'ibx_sdk.bin.nios_get_file:main'
 get-supportbundle = 'ibx_sdk.bin.nios_get_supportbundle:main'
@@ -63,5 +68,8 @@ async-nios-certificate = 'ibx_sdk.bin.async_nios_certificate:cli'
 
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# [tool.hatch.build.targets.wheel]
+# packages = ["src/ibx_sdk"]
