@@ -19,7 +19,6 @@ import ssl
 from typing import Any, List, Optional, Union
 
 import httpx
-import urllib3
 
 from ibx_sdk.nios.exceptions import (
     WapiInvalidParameterException,
@@ -27,8 +26,6 @@ from ibx_sdk.nios.exceptions import (
 )
 from ibx_sdk.nios.fileop import NiosFileopMixin
 from ibx_sdk.nios.service import NiosServiceMixin
-
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
@@ -78,8 +75,8 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
 
     def __init__(
         self,
-        grid_mgr: str = None,
-        wapi_ver: str = "2.5",
+        grid_mgr: str | None = None,
+        wapi_ver: str | None = "2.5",
         ssl_verify: bool | str = False,
         timeout: httpx.Timeout = 10.0,
     ) -> None:
@@ -137,9 +134,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
 
     def connect(
         self,
-        username: str = None,
-        password: str = None,
-        certificate: str = None,
+        username: str | None = None,
+        password: str | None = None,
+        certificate: str | None = None,
     ) -> None:
         """
         Make a connection to the grid manager using the WAPI instance
@@ -182,8 +179,11 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         """
         ctx = ssl.create_default_context()
         ctx.load_cert_chain(certfile=certificate)
-        if self.ssl_verify:
+        if isinstance(self.ssl_verify, str):
             ctx.load_verify_locations(cafile=self.ssl_verify)
+        elif self.ssl_verify:
+            ctx.check_hostname = True
+            ctx.verify_mode = ssl.CERT_REQUIRED
         else:
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
@@ -231,8 +231,11 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         auth = httpx.BasicAuth(username, password)
 
         ctx = ssl.create_default_context()
-        if self.ssl_verify:
+        if isinstance(self.ssl_verify, str):
             ctx.load_verify_locations(cafile=self.ssl_verify)
+        elif self.ssl_verify:
+            ctx.check_hostname = True
+            ctx.verify_mode = ssl.CERT_REQUIRED
         else:
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
@@ -423,9 +426,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(response.text) from exc
         else:
             if len(data) > 1:
-                raise WapiRequestException(
-                    "Multiple data records were returned"
-                )
+                raise WapiRequestException("Multiple data records were returned")
             elif len(data) == 0:
                 raise WapiRequestException("No data was returned")
         return data[0].get("_ref", "")
@@ -530,7 +531,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         wapi_object: str,
         limit: int = 1000,
         params: Optional[dict] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> List[dict]:
         """
         Fetches paginated data from the WAPI API.
@@ -556,11 +557,13 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         results = []
         params = params.copy() if params else {}
 
-        params.update({
-            "_paging": 1,
-            "_return_as_object": 1,
-            "_max_results": limit,
-        })
+        params.update(
+            {
+                "_paging": 1,
+                "_return_as_object": 1,
+                "_max_results": limit,
+            }
+        )
 
         url = f"{self.url}/{wapi_object}"
         response = None
