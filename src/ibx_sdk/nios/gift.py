@@ -28,7 +28,7 @@ from ibx_sdk.nios.fileop import NiosFileopMixin
 from ibx_sdk.nios.service import NiosServiceMixin
 
 
-class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
+class Gift(NiosServiceMixin, NiosFileopMixin):
     """Handles interactions with the Infoblox WAPI.
 
     This class provides a range of classes to interact with Infoblox WAPI,
@@ -78,15 +78,16 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         grid_mgr: str | None = None,
         wapi_ver: str | None = "2.5",
         ssl_verify: bool | str = False,
-        timeout: httpx.Timeout = 10.0,
+        timeout: float = 10.0,
     ) -> None:
         super().__init__()
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
         self.ssl_verify = ssl_verify
         self.timeout = timeout
-        self.conn = None
-        self.grid_ref = None
+        self.conn: httpx.Client | None = None
+        self.grid_ref: str | None = None
+
 
     def __repr__(self):
         args = []
@@ -284,6 +285,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             print(f"Fields: {fields}")
         ```
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         try:
             logging.debug("trying %s/%s?_schema", self.url, wapi_object)
             res = self.conn.get(f"{self.url}/{wapi_object}?_schema")
@@ -334,6 +338,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             This method updates the `wapi_ver` attribute of the WAPI session instance.
         """
 
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"https://{self.grid_mgr}/wapi/v1.0/?_schema"
         try:
             logging.debug("trying %s", url)
@@ -372,6 +379,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object containing the result of the request.
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"{self.url}/{wapi_object}"
         res = None
         try:
@@ -382,10 +392,14 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         return res
 
     def getone(
@@ -405,6 +419,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         Raises:
             WapiRequestException: If multiple data records were returned or no data was returned.
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"{self.url}/{wapi_object}"
         response = None
         try:
@@ -420,10 +437,14 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(response.text) from exc
+            if response:
+                raise WapiRequestException(response.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(response.text) from exc
+            if response:
+                raise WapiRequestException(response.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         else:
             if len(data) > 1:
                 raise WapiRequestException("Multiple data records were returned")
@@ -434,7 +455,7 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
     def post(
         self,
         wapi_object: str,
-        data: Optional[Union[dict, str]] = None,
+        data: Optional[dict] = None,
         json: Optional[dict] = None,
         **kwargs: Any,
     ) -> httpx.Response:
@@ -452,6 +473,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object containing the server's response to the POST request.
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"{self.url}/{wapi_object}"
         res = None
         try:
@@ -461,16 +485,20 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         return res
 
     def put(
         self,
         wapi_object_ref: str,
-        data: Optional[Union[dict, str]] = None,
+        data: Optional[dict] = None,
         **kwargs: Any,
     ) -> httpx.Response:
         """
@@ -484,6 +512,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
         Returns:
             Response: The response object for the PUT request.
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"{self.url}/{wapi_object_ref}"
         res = None
         try:
@@ -494,10 +525,14 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
 
     def delete(self, wapi_object_ref: str, **kwargs: Any) -> httpx.Response:
         """
@@ -511,6 +546,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             A `Response` object representing the response received from the server.
 
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         url = f"{self.url}/{wapi_object_ref}"
         res = None
         try:
@@ -521,10 +559,14 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error: {exc}")
-            raise WapiRequestException(res.text) from exc
+            if res:
+                raise WapiRequestException(res.text) from exc
+            raise WapiRequestException(str(exc)) from exc
 
     def get_paginated(
         self,
@@ -554,6 +596,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             WapiRequestException: If there is a timeout, HTTP status error, or
             request-related error during the API call.
         """
+        if not self.conn:
+            raise WapiRequestException("Connection not initialized")
+
         results = []
         params = params.copy() if params else {}
 
@@ -587,7 +632,9 @@ class Gift(httpx.Client, NiosServiceMixin, NiosFileopMixin):
             raise WapiRequestException(exc) from exc
         except httpx.HTTPStatusError as exc:
             logging.error(f"HTTP status error while fetching {url}: {exc}")
-            raise WapiRequestException(response.text) from exc
+            if response:
+                raise WapiRequestException(response.text) from exc
+            raise WapiRequestException(str(exc)) from exc
         except httpx.RequestError as exc:
             logging.error(f"Request error while fetching {url}: {exc}")
             raise WapiRequestException(str(exc)) from exc
