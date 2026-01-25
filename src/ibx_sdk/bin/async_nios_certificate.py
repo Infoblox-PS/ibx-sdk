@@ -35,18 +35,16 @@ log = init_logger(
     max_size=100000,
     num_logs=1,
 )
-ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
-USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"])
-ALL_USAGES = click.Choice(
-    [
-        "ADMIN",
-        "CAPTIVE_PORTAL",
-        "SFNT_CLIENT_CERT",
-        "IFMAP_DHCP",
-        "EAP_CA",
-        "TAE_CA",
-    ]
-)
+ALGORITHMS = ["SHA-256", "SHA-384", "SHA-512"]
+USAGES = ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
+ALL_USAGES = [
+    "ADMIN",
+    "CAPTIVE_PORTAL",
+    "SFNT_CLIENT_CERT",
+    "IFMAP_DHCP",
+    "EAP_CA",
+    "TAE_CA",
+]
 wapi = AsyncGift()
 help_text = """
 NIOS SSL Certificate Tools
@@ -79,7 +77,7 @@ def cli():
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=ALL_USAGES,
+    type=click.Choice(ALL_USAGES),
     help="Certificate Usage",
 )
 @optgroup.option(
@@ -102,7 +100,7 @@ def upload(
     filename: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: str,
+    certificate_usage: Literal[None],
     debug: bool,
 ):
     if debug:
@@ -163,7 +161,7 @@ def download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: Literal[str],
+    certificate_usage: str,
     debug: bool,
 ):
     asyncio.run(
@@ -176,7 +174,7 @@ async def async_download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: Literal[str],
+    certificate_usage: str,
     debug: bool,
 ):
     if debug:
@@ -237,13 +235,13 @@ async def async_download(
     "-a",
     "--algorithm",
     default="SHA-256",
-    type=ALGORITHMS,
+    type=click.Choice(ALGORITHMS),
     help="The digest algorithm",
 )
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=USAGES,
+    type=click.Choice(USAGES),
     help="Certificate Usage",
 )
 @optgroup.option("-c", "--comment", help="Certificate comment")
