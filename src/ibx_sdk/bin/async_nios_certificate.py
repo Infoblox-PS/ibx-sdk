@@ -23,7 +23,7 @@ from typing import Literal
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.asynchronous.gift import AsyncGift
 from ibx_sdk.nios.exceptions import WapiRequestException
 
@@ -36,9 +36,7 @@ log = init_logger(
     num_logs=1,
 )
 ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
-USAGES = click.Choice(
-    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
-)
+USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"])
 ALL_USAGES = click.Choice(
     [
         "ADMIN",
@@ -69,12 +67,8 @@ def cli():
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-f",
     "--filename",
@@ -141,12 +135,8 @@ def upload(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "--certificate-usage",
@@ -177,9 +167,7 @@ def download(
     debug: bool,
 ):
     asyncio.run(
-        async_download(
-            grid_mgr, member, username, wapi_ver, certificate_usage, debug
-        )
+        async_download(grid_mgr, member, username, wapi_ver, certificate_usage, debug)
     )
 
 
@@ -219,15 +207,11 @@ async def async_download(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-d",
     "--days-valid",
@@ -348,15 +332,11 @@ def selfsign(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
