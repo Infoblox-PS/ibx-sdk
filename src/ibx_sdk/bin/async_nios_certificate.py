@@ -100,7 +100,7 @@ def upload(
     filename: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: Literal[None],
+    certificate_usage: str,
     debug: bool,
 ):
     if debug:
