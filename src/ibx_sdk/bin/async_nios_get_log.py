@@ -105,10 +105,10 @@ def validate_rotated_logs(ctx, param, value):
 @optgroup.option(
     "-n",
     "--node-type",
-    type=click.Choice(["ACTIVE", "PASSIVE"]),
+    type=click.Choice(["ACTIVE", "BACKUP"]),
     default="ACTIVE",
     show_default=True,
-    help="Node: ACTIVE | PASSIVE",
+    help="Node: ACTIVE | BACKUP",
 )
 @optgroup.option(
     "-r",
@@ -131,7 +131,7 @@ async def main(
     member: str,
     username: str,
     log_type: LogType,
-    node_type: Literal["ACTIVE", "PASSIVE"] | None,
+    node_type: Literal["ACTIVE", "BACKUP"] | None,
     rotated_logs: bool,
     wapi_ver: str,
     debug: bool,
@@ -145,7 +145,7 @@ async def main(
         member (str): Grid Member
         username (str): Username for the wapi connection.
         log_type (Literal[str]): Log type
-        node_type (Literal[str]) Node Type [ ACTIVE | PASSIVE ]
+        node_type (Literal[str]) Node Type [ ACTIVE | BACKUP ]
         wapi_ver (str): Version of wapi.
         rotated_logs (bool):
 

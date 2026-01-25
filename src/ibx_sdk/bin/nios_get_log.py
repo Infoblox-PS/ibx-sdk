@@ -24,6 +24,7 @@ from click_option_group import optgroup
 from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
+from ibx_sdk.nios.fileop import LogType, 
 
 log = init_logger(
     logfile_name="wapi.log",
@@ -37,22 +38,22 @@ log = init_logger(
 wapi = Gift()
 
 
-class LogType(click.ParamType):
-    name = "log_type"
-    log_types = [
-        "SYSLOG",
-        "AUDITLOG",
-        "MSMGMTLOG",
-        "DELTALOG",
-        "OUTBOUND",
-        "PTOPLOG",
-        "DISCOVERY_CSV_ERRLOG",
-    ]
+# class LogType(click.ParamType):
+#     name = "log_type"
+#     log_types = [
+#         "SYSLOG",
+#         "AUDITLOG",
+#         "MSMGMTLOG",
+#         "DELTALOG",
+#         "OUTBOUND",
+#         "PTOPLOG",
+#         "DISCOVERY_CSV_ERRLOG",
+#     ]
 
-    def convert(self, value, param, ctx):
-        if value.upper() in self.log_types:
-            return value.upper()
-        self.fail(f"{value} is not a valid log type")
+#     def convert(self, value, param, ctx):
+#         if value.upper() in self.log_types:
+#             return value.upper()
+#         self.fail(f"{value} is not a valid log type")
 
 
 help_text = """
@@ -96,17 +97,17 @@ def validate_rotated_logs(ctx, param, value):
     "-t",
     "--log-type",
     default="SYSLOG",
-    type=LogType(),
+    type=LogType,
     show_default=True,
     help="select log type",
 )
 @optgroup.option(
     "-n",
     "--node-type",
-    type=click.Choice(["ACTIVE", "PASSIVE"]),
+    type=click.Choice(["ACTIVE", "BACKUP"]),
     default="ACTIVE",
     show_default=True,
-    help="Node: ACTIVE | PASSIVE",
+    help="Node: ACTIVE | BACKUP",
 )
 @optgroup.option(
     "-r",
@@ -128,7 +129,7 @@ def main(
     grid_mgr: str,
     member: str,
     username: str,
-    log_type: str,
+    log_type: LogType,
     node_type: str,
     rotated_logs: bool,
     wapi_ver: str,
@@ -143,7 +144,7 @@ def main(
         member (str): Grid Member
         username (str): Username for the wapi connection.
         log_type (str): Log type
-        node_type (str) Node Type [ ACTIVE | PASSIVE ]
+        node_type (str) Node Type [ ACTIVE | BACKUP ]
         wapi_ver (str): Version of wapi.
         rotated_logs (bool):
 

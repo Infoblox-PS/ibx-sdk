@@ -649,7 +649,7 @@ class NiosFileopMixin:
         include_rotated: bool = False,
         member: Optional[str] = None,
         msserver: Optional[str] = None,
-        node_type: Optional[Literal["ACTIVE", "PASSIVE"]] = None,
+        node_type: Optional[Literal["ACTIVE", "BACKUP"]] = None,
     ):
         """
         Fetch the log files for the provided member or msserver
