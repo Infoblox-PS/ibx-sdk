@@ -541,7 +541,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "generateselfsignedcert"},
                 json=payload,
@@ -625,7 +625,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "generatecsr"},
                 json=payload,
@@ -683,7 +683,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "get_log_files"},
                 json=payload,
@@ -753,7 +753,7 @@ class NiosFileopMixin:
             payload["remote_url"] = remote_url
         logging.debug(pprint.pformat(payload))
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "get_support_bundle"},
                 json=payload,
@@ -819,6 +819,8 @@ class NiosFileopMixin:
 
         """
         token = self.file_upload(filename=filename)
+        if not token:
+            raise ValueError("Failed to upload file - no token received")
 
         # Execute the restore
         logging.info("step 3 - execute the grid restore")
@@ -834,7 +836,7 @@ class NiosFileopMixin:
         member: str,
         conf_type: MemberDataType,
         filename: Optional[str] = None,
-        remote_url: str = None,
+        remote_url: str | None = None,
     ) -> None:
         """
         Fetch member configuration file for given service type.
@@ -849,7 +851,6 @@ class NiosFileopMixin:
             A string representing the downloaded file.
 
         """
-        conf_type = conf_type.upper()
         logging.info(
             "fetching %s config file for grid member %s",
             conf_type,
@@ -859,7 +860,7 @@ class NiosFileopMixin:
         if remote_url:
             payload["remote_url"] = remote_url
         try:
-            res = self.post(
+            res = self.post(  # type:ignore[attr-defined]
                 "fileop",
                 params={"_function": "getmemberdata"},
                 json=payload,
@@ -878,12 +879,13 @@ class NiosFileopMixin:
             token=download_token, url=download_url, filename=filename
         )
 
+
     def get_lease_history(
         self,
         member: str,
-        start_time: int = None,
-        end_time: int = None,
-        remove_url: str = None,
+        start_time: int | None = None,
+        end_time: int | None = None,
+        remove_url: str | None = None,
     ) -> None:
         """
         fetch DHCP lease history files from a NIOS Grid Member
@@ -910,7 +912,7 @@ class NiosFileopMixin:
         if remove_url is not None:
             payload["remove_url"] = remove_url
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "getleasehistoryfiles"},
                 json=payload,
@@ -955,7 +957,7 @@ class NiosFileopMixin:
 
         # start the CSV task in job manager
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_import"},
                 json=payload,
@@ -974,7 +976,7 @@ class NiosFileopMixin:
         header = {"Content-type": "application/json"}
         payload = {"token": token}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "downloadcomplete"},
                 json=payload,
@@ -996,21 +998,21 @@ class NiosFileopMixin:
         download_url = self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
         logging.info(download_url)
-        self.conn.verify = self.ssl_verify
-        with self.conn.stream(
+        self.conn.verify = self.ssl_verify  # ty:ignore[unresolved-attribute]
+        with self.conn.stream(  # ty:ignore[unresolved-attribute]
             "GET",
             download_url,
             headers=header,
         ) as res:
             res.raise_for_status()
-            with open(filename, "wb") as file_out:
+            with open(file=filename, mode="wb") as file_out:  # ty:ignore[no-matching-overload]
                 for chunk in res.iter_bytes(chunk_size=1024):
                     file_out.write(chunk)
 
     def __getgriddata(self, payload: dict) -> dict:
         headers = {"content-type": "application/json"}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "getgriddata"},
                 json=payload,
@@ -1040,7 +1042,7 @@ class NiosFileopMixin:
 
         # start the restore
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "restoredatabase"},
                 json=payload,
@@ -1055,20 +1057,20 @@ class NiosFileopMixin:
         return res
 
     def __update_url(self, url: str) -> str:
-        if self.grid_mgr in url:
+        if self.grid_mgr in url:  # ty:ignore[unresolved-attribute]
             return url
         elif "[" in url and "]" in url:
             ipv6_pattern = r"https://(\[[a-zA-Z0-9:]+\])"
-            return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)
+            return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)  # ty:ignore[unresolved-attribute]
         else:
             ipv4_pattern = r"https://(\d{1,3}\.){3}\d{1,3}"
-            return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
+            return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)  # ty:ignore[unresolved-attribute]
 
     def __upload_file(self, upload_url: str, upload_file: dict) -> None:
         upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
         try:
-            res = self.conn.post(
+            res = self.conn.post(  # ty:ignore[unresolved-attribute]
                 upload_url,
                 files=upload_file,
                 timeout=None,
@@ -1083,7 +1085,7 @@ class NiosFileopMixin:
         headers = {"content-type": "application/json"}
         payload = {"filename": filename}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "uploadinit"},
                 headers=headers,
