@@ -146,7 +146,7 @@ rewrite_zone_file = named_compilezone
 
 
 def remove_lines_from_file(
-    file_path: str, lines_to_remove: list, output_path: str = None
+    file_path: str, lines_to_remove: list, output_path: str | None = None
 ) -> None:
     """
     The function remove_lines_from_file removes specific lines from a file.
