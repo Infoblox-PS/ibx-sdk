@@ -23,9 +23,11 @@ from typing import Literal
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
-from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.asynchronous.gift import AsyncGift
+from ibx_sdk.nios.exceptions import WapiRequestException
+
+IMPORT_ACTION = Literal["INSERT", "OVERRIDE", "MERGE", "DELETE", "CUSTOM"]
 
 log = init_logger(
     logfile_name="wapi.log",
@@ -45,14 +47,10 @@ CSV Import Data
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-f", "--filename", required=True, help="Infoblox WAPI CSV import file name"
 )
@@ -60,7 +58,7 @@ CSV Import Data
     "-o",
     "--operation",
     required=True,
-    type=click.Choice(["INSERT", "OVERRIDE", "MERGE", "DELETE", "CUSTOM"]),
+    type=IMPORT_ACTION,
     help="CSV import mode",
 )
 @optgroup.group("Optional Parameters")
@@ -83,7 +81,7 @@ CSV Import Data
 async def main(
     grid_mgr: str,
     filename: str,
-    operation: Literal[str],
+    operation: IMPORT_ACTION,
     username: str,
     wapi_ver: str,
     debug: bool,
