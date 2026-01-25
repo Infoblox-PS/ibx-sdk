@@ -19,6 +19,7 @@ import pprint
 from typing import Literal, Optional
 
 import httpx
+
 from ibx_sdk.nios.exceptions import WapiRequestException
 
 
@@ -113,9 +114,7 @@ class NiosServiceMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
         else:
-            logging.info(
-                "successfully restarted %s services", data.get("services")
-            )
+            logging.info("successfully restarted %s services", data.get("services"))
 
     def update_service_status(self, services: str = "ALL") -> None:
         """
