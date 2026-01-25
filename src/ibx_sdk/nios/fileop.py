@@ -102,7 +102,7 @@ class NiosFileopMixin:
         logging.info("performing csv export for %s object(s)", wapi_object)
         payload = {"_object": wapi_object}
         try:
-            response = self.post(
+            response = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_export"},
                 json=payload,
@@ -140,7 +140,7 @@ class NiosFileopMixin:
         self,
         token: str,
         url: str,
-        filename: str = None,
+        filename: str | None = None,
     ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
@@ -182,7 +182,7 @@ class NiosFileopMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
-    def file_upload(self, filename: str) -> str:
+    def file_upload(self, filename: str) -> str | None:
         """
         Perform a file upload into the NIOS Grid.
 
@@ -214,6 +214,9 @@ class NiosFileopMixin:
 
         upload_url = obj.get("url")
         token = obj.get("token")
+        
+        if not token or not upload_url:
+            raise ValueError("Invalid token or upload URL")
 
         # specify a file handle for the file data to be uploaded
         with open(os.path.join(path, filename), "rb") as fh:
@@ -236,8 +239,7 @@ class NiosFileopMixin:
             except httpx.RequestError as exc:
                 logging.error(f"Request error: {exc}")
                 raise WapiRequestException(exc) from exc
-            else:
-                return token
+        return token
 
     def upload_certificate(
         self,
@@ -270,7 +272,7 @@ class NiosFileopMixin:
             "token": token,
         }
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
@@ -304,6 +306,8 @@ class NiosFileopMixin:
             httpx.RequestError: If an error occurs while making HTTP requests.
         """
         token = self.file_upload(filename=csv_import_file)
+        if not token:
+            raise ValueError("Invalid token")
 
         # submit task to CSV Job Manager
         logging.info(
@@ -372,7 +376,7 @@ class NiosFileopMixin:
         _ref = csvtask["csv_import_task"]["_ref"]
         logging.debug("Checking status of csvimporttask %s", _ref)
         try:
-            res = self.get(_ref)
+            res = self.get(_ref)  # ty:ignore[unresolved-attribute]
             res.raise_for_status()
         except httpx.RequestError as exc:
             logging.error(exc)
@@ -795,7 +799,8 @@ class NiosFileopMixin:
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-        self.file_download(token=token, url=download_url, filename=filename)
+        if token and download_url:
+            self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
         self,
