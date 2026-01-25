@@ -21,7 +21,7 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
 
@@ -79,17 +79,11 @@ def validate_rotated_logs(ctx, param, value):
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member to retrieve log from"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member to retrieve log from")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
