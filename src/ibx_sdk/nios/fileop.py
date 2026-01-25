@@ -404,7 +404,7 @@ class NiosFileopMixin:
         logging.debug("fetching csv-errors file for job id %s", job_id)
         payload = {"import_id": job_id}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_error_log"},
                 json=payload,
@@ -458,7 +458,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "downloadcertificate"},
                 json=payload,
