@@ -21,7 +21,7 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
 
@@ -43,14 +43,10 @@ CSV Export by object
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option("-f", "--filename", help="Infoblox WAPI CSV export file name")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
@@ -67,9 +63,8 @@ CSV Export by object
     show_default=True,
     help="Infoblox WAPI version",
 )
-@optgroup.option(
-    "-o", "--obj", default="network", help="WAPI export object type"
-)
+@optgroup.option("-t", "--timeout", default=30, show_default=True, help="WAPI request timeout")
+@optgroup.option("-o", "--obj", default="network", help="WAPI export object type")
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 def main(
@@ -78,6 +73,7 @@ def main(
     username: str,
     wapi_ver: str,
     obj: str,
+    timeout: int,
     debug: bool,
 ) -> None:
     """
@@ -89,6 +85,7 @@ def main(
         username (str): Username for the wapi connection.
         wapi_ver (str): Version of wapi.
         obj (str): Object to be exported to CSV.
+        timeout (int): Timeout for WAPI requests.
         filename (str): Filename/path where the CSV will be exported.
 
     Returns:
@@ -104,6 +101,8 @@ def main(
 
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
+    wapi.timeout = timeout
+    
     password = getpass.getpass(f"Enter password for [{username}]: ")
 
     try:

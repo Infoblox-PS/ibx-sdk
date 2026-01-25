@@ -23,8 +23,8 @@ from click_option_group import optgroup
 
 from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.nios.fileop import LogType
 from ibx_sdk.nios.gift import Gift
-from ibx_sdk.nios.fileop import LogType, 
 
 log = init_logger(
     logfile_name="wapi.log",
@@ -97,7 +97,7 @@ def validate_rotated_logs(ctx, param, value):
     "-t",
     "--log-type",
     default="SYSLOG",
-    type=LogType,
+    type=click.Choice(["SYSLOG", "AUDIT", "AUDIT_DETAIL", "AUDIT_DETAIL_DETAIL"]),
     show_default=True,
     help="select log type",
 )
