@@ -35,9 +35,10 @@ log = init_logger(
     max_size=100000,
     num_logs=1,
 )
-ALGORITHMS = ["SHA-256", "SHA-384", "SHA-512"]
-USAGES = ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
-ALL_USAGES = [
+KEY_SIZES = Literal[1024, 2048, 4096]
+ALGORITHMS = Literal["SHA-256", "SHA-384", "SHA-512"]
+USAGES = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
+ALL_USAGES = Literal[
     "ADMIN",
     "CAPTIVE_PORTAL",
     "SFNT_CLIENT_CERT",
@@ -77,7 +78,7 @@ def cli():
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=click.Choice(ALL_USAGES),
+    type=ALL_USAGES,
     help="Certificate Usage",
 )
 @optgroup.option(
@@ -100,7 +101,7 @@ def upload(
     filename: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: str,
+    certificate_usage: USAGES,
     debug: bool,
 ):
     if debug:
@@ -139,7 +140,7 @@ def upload(
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=ALL_USAGES,
+    type=USAGES,
     help="Certificate Usage",
 )
 @optgroup.option(
@@ -161,7 +162,7 @@ def download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: str,
+    certificate_usage: USAGES,
     debug: bool,
 ):
     asyncio.run(
@@ -174,7 +175,7 @@ async def async_download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: str,
+    certificate_usage: USAGES,
     debug: bool,
 ):
     if debug:
@@ -235,13 +236,13 @@ async def async_download(
     "-a",
     "--algorithm",
     default="SHA-256",
-    type=click.Choice(ALGORITHMS),
+    type=ALGORITHMS,
     help="The digest algorithm",
 )
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=click.Choice(USAGES),
+    type=USAGES,
     help="Certificate Usage",
 )
 @optgroup.option("-c", "--comment", help="Certificate comment")
@@ -264,12 +265,12 @@ def selfsign(
     days_valid: int,
     username: str,
     wapi_ver: str,
-    algorithm: str,
-    certificate_usage: str,
+    algorithm: ALGORITHMS,
+    certificate_usage: USAGES,
     comment: str,
     country: str,
     email: str,
-    key_size: int,
+    key_size: KEY_SIZES,
     locality: str,
     organization: str,
     ou: str,
@@ -292,16 +293,16 @@ def selfsign(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
-    subject_alt_names = san.split(",") if san else None
-    if subject_alt_names:
-        new_list = []
-        for san in subject_alt_names:
-            san_type, san_value = san.split("/")
+    if not san:
+        subject_alt_names = None
+    else:
+        subject_alt_names = []
+        for item in san.split(","):
+            san_type, san_value = item.split("/")
             if san_type not in ["DNS", "IP", "URI", "EMAIL"]:
                 log.error(f"Invalid subject alternative name type: {san_type}")
                 sys.exit(1)
-            new_list.append({"type": san_type, "value": san_value})
-        subject_alt_names = new_list
+            subject_alt_names.append({"type": san_type, "value": san_value})
 
     try:
         wapi.generate_selfsigned_cert(
@@ -382,12 +383,12 @@ def gencsr(
     member: str,
     username: str,
     wapi_ver: str,
-    algorithm: str,
-    certificate_usage: str,
+    algorithm: ALGORITHMS,
+    certificate_usage: USAGES,
     comment: str,
     country: str,
     email: str,
-    key_size: int,
+    key_size: KEY_SIZES,
     locality: str,
     organization: str,
     ou: str,
@@ -410,16 +411,16 @@ def gencsr(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
-    subject_alt_names = san.split(",") if san else None
-    if subject_alt_names:
-        new_list = []
-        for san in subject_alt_names:
-            san_type, san_value = san.split("/")
+    if not san:
+        subject_alt_names = None
+    else:
+        subject_alt_names = []
+        for item in san.split(","):
+            san_type, san_value = item.split("/")
             if san_type not in ["DNS", "IP", "URI", "EMAIL"]:
                 log.error(f"Invalid subject alternative name type: {san_type}")
                 sys.exit(1)
-            new_list.append({"type": san_type, "value": san_value})
-        subject_alt_names = new_list
+            subject_alt_names.append({"type": san_type, "value": san_value})
 
     try:
         wapi.generate_csr(
