@@ -73,9 +73,7 @@ class NiosFileopMixin:
     NiosFileopMixin class
     """
 
-    def csv_export(
-        self, wapi_object: str, filename: Optional[str] = None
-    ) -> None:
+    def csv_export(self, wapi_object: str, filename: Optional[str] = None) -> None:
         """
         Exports data in CSV format for the specified WAPI object and saves it to a file.
 
@@ -214,7 +212,7 @@ class NiosFileopMixin:
 
         upload_url = obj.get("url")
         token = obj.get("token")
-        
+
         if not token or not upload_url:
             raise ValueError("Invalid token or upload URL")
 
@@ -225,9 +223,7 @@ class NiosFileopMixin:
             upload_file = {"file": fh.read()}
 
             # Upload the contents of the CSV file
-            logging.info(
-                "step 2 - post the files using the upload_url provided"
-            )
+            logging.info("step 2 - post the files using the upload_url provided")
             try:
                 self.__upload_file(upload_url, upload_file)
             except httpx.TimeoutException as exc:
@@ -316,9 +312,7 @@ class NiosFileopMixin:
             csv_import_file,
         )
         try:
-            csvtask = self.__csv_import(
-                task_operation.upper(), token, exit_on_error
-            )
+            csvtask = self.__csv_import(task_operation.upper(), token, exit_on_error)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
@@ -698,9 +692,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_support_bundle(
         self,
@@ -769,9 +761,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def grid_backup(self, filename: Optional[str] = None) -> None:
         """
@@ -875,10 +865,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
-
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_lease_history(
         self,

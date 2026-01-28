@@ -116,9 +116,7 @@ class NiosServiceMixin(AsyncGift):
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
         else:
-            logging.info(
-                "successfully restarted %s services", data.get("services")
-            )
+            logging.info("successfully restarted %s services", data.get("services"))
 
     async def update_service_status(self, services: str = "ALL") -> None:
         """

@@ -63,7 +63,9 @@ CSV Export by object
     show_default=True,
     help="Infoblox WAPI version",
 )
-@optgroup.option("-t", "--timeout", default=30, show_default=True, help="WAPI request timeout")
+@optgroup.option(
+    "-t", "--timeout", default=30, show_default=True, help="WAPI request timeout"
+)
 @optgroup.option("-o", "--obj", default="network", help="WAPI export object type")
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
@@ -102,7 +104,7 @@ def main(
     wapi.grid_mgr = grid_mgr
     wapi.wapi_ver = wapi_ver
     wapi.timeout = timeout
-    
+
     password = getpass.getpass(f"Enter password for [{username}]: ")
 
     try:

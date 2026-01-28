@@ -44,14 +44,10 @@ CSV Export by object
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option("-f", "--filename", help="Infoblox WAPI CSV export file name")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
@@ -68,9 +64,7 @@ CSV Export by object
     show_default=True,
     help="Infoblox WAPI version",
 )
-@optgroup.option(
-    "-o", "--obj", default="network", help="WAPI export object type"
-)
+@optgroup.option("-o", "--obj", default="network", help="WAPI export object type")
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
 async def main(

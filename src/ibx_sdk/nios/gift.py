@@ -88,7 +88,6 @@ class Gift(NiosServiceMixin, NiosFileopMixin):
         self.conn: httpx.Client | None = None
         self.grid_ref: str | None = None
 
-
     def __repr__(self):
         args = []
         for key, value in self.__dict__.items():
