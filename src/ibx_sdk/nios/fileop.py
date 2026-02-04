@@ -268,7 +268,7 @@ class NiosFileopMixin:
             "token": token,
         }
         try:
-            res = self.post(  # ty:ignore[unresolved-attribute]
+            res = self.post(    # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
@@ -1072,7 +1072,7 @@ class NiosFileopMixin:
         headers = {"content-type": "application/json"}
         payload = {"filename": filename}
         try:
-            res = self.post(  # ty:ignore[unresolved-attribute]
+            res = self.post(    # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadinit"},
                 headers=headers,
