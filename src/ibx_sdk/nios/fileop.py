@@ -268,7 +268,7 @@ class NiosFileopMixin:
             "token": token,
         }
         try:
-            res = self.post(    # pyright: ignore[reportAttributeAccessIssue]
+            res = self.post(  # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
@@ -1044,14 +1044,14 @@ class NiosFileopMixin:
         return res
 
     def __update_url(self, url: str) -> str:
-        if self.grid_mgr in url:  # ty:ignore[unresolved-attribute]
+        if self.grid_mgr in url:
             return url
         elif "[" in url and "]" in url:
             ipv6_pattern = r"https://(\[[a-zA-Z0-9:]+\])"
-            return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)  # ty:ignore[unresolved-attribute]
+            return re.sub(ipv6_pattern, f"https://{self.grid_mgr}", url)
         else:
             ipv4_pattern = r"https://(\d{1,3}\.){3}\d{1,3}"
-            return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)  # ty:ignore[unresolved-attribute]
+            return re.sub(ipv4_pattern, f"https://{self.grid_mgr}", url)
 
     def __upload_file(self, upload_url: str, upload_file: dict) -> None:
         upload_url = self.__update_url(upload_url)
@@ -1072,7 +1072,7 @@ class NiosFileopMixin:
         headers = {"content-type": "application/json"}
         payload = {"filename": filename}
         try:
-            res = self.post(    # pyright: ignore[reportAttributeAccessIssue]
+            res = self.post(  # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadinit"},
                 headers=headers,
