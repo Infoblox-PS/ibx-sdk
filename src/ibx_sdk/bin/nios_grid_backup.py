@@ -21,7 +21,7 @@ import sys
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.exceptions import WapiRequestException
 from ibx_sdk.nios.gift import Gift
 
@@ -43,14 +43,10 @@ Backup NIOS Grid
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -75,9 +71,7 @@ Backup NIOS Grid
 )
 @optgroup.group("Logging Parameters")
 @optgroup.option("--debug", is_flag=True, help="enable verbose debug output")
-def main(
-    grid_mgr: str, username: str, file: str, wapi_ver: str, debug: bool
-) -> None:
+def main(grid_mgr: str, username: str, file: str, wapi_ver: str, debug: bool) -> None:
     """
     Backup NIOS Grid
 

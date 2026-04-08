@@ -221,9 +221,7 @@ class NiosFileopMixin:
             upload_file = {"file": fh.read()}
 
             # Upload the contents of the CSV file
-            logging.info(
-                "step 2 - post the files using the upload_url provided"
-            )
+            logging.info("step 2 - post the files using the upload_url provided")
             try:
                 await self.__upload_file(upload_url, upload_file)
             except httpx.TimeoutException as exc:
@@ -798,9 +796,7 @@ class NiosFileopMixin:
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-        await self.file_download(
-            token=token, url=download_url, filename=filename
-        )
+        await self.file_download(token=token, url=download_url, filename=filename)
 
     async def grid_restore(
         self,

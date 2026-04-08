@@ -19,6 +19,7 @@ import pprint
 from typing import Literal, Optional
 
 import httpx
+
 from ibx_sdk.nios.exceptions import WapiRequestException
 
 
@@ -97,8 +98,8 @@ class NiosServiceMixin:
         logging.debug(pprint.pformat(data))
 
         try:
-            res = self.post(
-                self.grid_ref,
+            res = self.post(  # ty:ignore[unresolved-attribute]
+                self.grid_ref,  # ty:ignore[unresolved-attribute]
                 params={"_function": "restartservices"},
                 json=data,
             )
@@ -113,9 +114,7 @@ class NiosServiceMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
         else:
-            logging.info(
-                "successfully restarted %s services", data.get("services")
-            )
+            logging.info("successfully restarted %s services", data.get("services"))
 
     def update_service_status(self, services: str = "ALL") -> None:
         """
@@ -134,8 +133,8 @@ class NiosServiceMixin:
         """
         payload = {"service_option": services}
         try:
-            res = self.post(
-                self.grid_ref,
+            res = self.post(  # ty:ignore[unresolved-attribute]
+                self.grid_ref,  # ty:ignore[unresolved-attribute]
                 params={"_function": "requestrestartservicestatus"},
                 json=payload,
             )
@@ -164,7 +163,7 @@ class NiosServiceMixin:
             httpx.RequestError: If there is a general request error.
         """
         try:
-            response = self.get("restartservicestatus")
+            response = self.get("restartservicestatus")  # ty:ignore[unresolved-attribute]
             response.raise_for_status()
             try:
                 return response.json()

@@ -23,10 +23,19 @@ from typing import Literal
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
-from ibx_sdk.nios.exceptions import WapiRequestException
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.asynchronous.gift import AsyncGift
+from ibx_sdk.nios.exceptions import WapiRequestException
 
+CONFIG_TYPES = Literal[
+    "DNS_CACHE",
+    "DNS_CFG",
+    "DHCP_CFG",
+    "DHCPV6_CFG",
+    "TRAFFIC_CAPTURE_FILE",
+    "DNS_STATS",
+    "DNS_RECURSING_CACHE",
+]
 log = init_logger(
     logfile_name="wapi.log",
     logfile_mode="a",
@@ -40,23 +49,17 @@ wapi = AsyncGift()
 
 help_text = """
 Get NIOS File from member
-    
+
 """
 
 
 @click.command(
     help=help_text,
-    context_settings=dict(
-        max_content_width=95, help_option_names=["-h", "--help"]
-    ),
+    context_settings=dict(max_content_width=95, help_option_names=["-h", "--help"]),
 )
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member to retrieve file from"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member to retrieve file from")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -69,6 +72,7 @@ Get NIOS File from member
     "-t",
     "--cfg-type",
     default="DNS_CFG",
+    type=CONFIG_TYPES,
     show_default=True,
     help="Configuration Type: DNS_CACHE | DNS_CFG | DHCP_CFG | DHCPV6_CFG | TRAFFIC_CAPTURE_FILE | DNS_STATS | "
     "DNS_RECURSING_CACHE",
@@ -86,7 +90,7 @@ async def main(
     grid_mgr: str,
     member: str,
     username: str,
-    cfg_type: Literal[str],
+    cfg_type: CONFIG_TYPES,
     wapi_ver: str,
     debug: bool,
 ) -> None:

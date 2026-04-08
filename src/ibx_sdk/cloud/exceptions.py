@@ -10,13 +10,16 @@ __all__ = [
     "ApiRequestException",
 ]
 
+
 class BaseCloudException(Exception):
     """
     Base exception for all Infoblox Cloud SDK errors.
 
     Inherit from this class to create SDK-specific exceptions.
     """
+
     pass
+
 
 class ApiInvalidParameterException(BaseCloudException):
     """
@@ -25,9 +28,11 @@ class ApiInvalidParameterException(BaseCloudException):
     Indicates that the caller provided bad input that the SDK cannot
     resolve into a valid API call (e.g., unknown resource path).
     """
+
     def __init__(self, message: str):
         super().__init__(f"Invalid parameter: {message}")
         self.message = message
+
 
 class ApiRequestException(BaseCloudException):
     """
@@ -39,6 +44,7 @@ class ApiRequestException(BaseCloudException):
         status_code (int | None): HTTP status code of the failed response.
         payload (Any | None): Parsed JSON payload if available.
     """
+
     def __init__(
         self,
         message: str,

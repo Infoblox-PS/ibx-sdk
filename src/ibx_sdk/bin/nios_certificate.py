@@ -34,9 +34,7 @@ log = init_logger(
     num_logs=1,
 )
 ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
-USAGES = click.Choice(
-    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
-)
+USAGES = click.Choice(["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"])
 ALL_USAGES = click.Choice(
     [
         "ADMIN",
@@ -67,12 +65,8 @@ def cli():
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-f",
     "--filename",
@@ -139,12 +133,8 @@ def upload(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "--certificate-usage",
@@ -189,9 +179,7 @@ def download(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
     try:
-        wapi.download_certificate(
-            member=member, certificate_usage=certificate_usage
-        )
+        wapi.download_certificate(member=member, certificate_usage=certificate_usage)
     except WapiRequestException as err:
         log.error(err)
         sys.exit(1)
@@ -202,15 +190,11 @@ def download(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-d",
     "--days-valid",
@@ -331,15 +315,11 @@ def selfsign(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",

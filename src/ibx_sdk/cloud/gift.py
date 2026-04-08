@@ -60,10 +60,12 @@ Additional Examples:
 """
 
 import logging
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 import httpx
-from ..cloud.exceptions import ApiRequestException
+
+from ibx_sdk.cloud.exceptions import ApiRequestException
+
 
 class Gift:
     """
@@ -172,7 +174,9 @@ class Gift:
             response.raise_for_status()
             return response
         except httpx.HTTPStatusError as e:
-            raise ApiRequestException(f"[{e.response.status_code}] {path}: {e.response.text}")
+            raise ApiRequestException(
+                f"[{e.response.status_code}] {path}: {e.response.text}"
+            )
         except httpx.RequestError as e:
             raise ApiRequestException(f"Request failed for {path}: {e}")
 
@@ -199,12 +203,12 @@ class Gift:
         return self._call("GET", path, **kwargs)
 
     def get_paginated(
-            self,
-            path: str,
-            limit: int = 100,
-            fields: Optional[List[str]] = None,
-            d_filter: Optional[str] = None,
-            **kwargs
+        self,
+        path: str,
+        limit: int = 100,
+        fields: Optional[List[str]] = None,
+        d_filter: Optional[str] = None,
+        **kwargs,
     ) -> List[Dict]:
         """
         Fetch all pages of resources from the API using pagination.
@@ -233,21 +237,21 @@ class Gift:
         offset = 0
 
         while True:
-            params = kwargs.get('params', {})
-            params['_limit'] = limit
-            params['_offset'] = offset
+            params = kwargs.get("params", {})
+            params["_limit"] = limit
+            params["_offset"] = offset
             if fields:
-                params['_fields'] = ','.join(fields)
+                params["_fields"] = ",".join(fields)
             if d_filter:
-                params['_filter'] = d_filter
+                params["_filter"] = d_filter
 
             response = self.get(path, params=params)
             data = response.json()
 
-            if 'results' in data:
-                page_results = data['results']
-            elif 'result' in data:
-                page_results = data['result']
+            if "results" in data:
+                page_results = data["results"]
+            elif "result" in data:
+                page_results = data["result"]
             else:
                 page_results = data
 

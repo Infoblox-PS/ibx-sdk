@@ -73,9 +73,7 @@ class NiosFileopMixin:
     NiosFileopMixin class
     """
 
-    def csv_export(
-        self, wapi_object: str, filename: Optional[str] = None
-    ) -> None:
+    def csv_export(self, wapi_object: str, filename: Optional[str] = None) -> None:
         """
         Exports data in CSV format for the specified WAPI object and saves it to a file.
 
@@ -102,7 +100,7 @@ class NiosFileopMixin:
         logging.info("performing csv export for %s object(s)", wapi_object)
         payload = {"_object": wapi_object}
         try:
-            response = self.post(
+            response = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_export"},
                 json=payload,
@@ -140,7 +138,7 @@ class NiosFileopMixin:
         self,
         token: str,
         url: str,
-        filename: str = None,
+        filename: str | None = None,
     ) -> None:
         """
         file_download downloads the generated file from the NIOS Grid using a token and url
@@ -182,7 +180,7 @@ class NiosFileopMixin:
             logging.error(f"Request error: {exc}")
             raise WapiRequestException(exc) from exc
 
-    def file_upload(self, filename: str) -> str:
+    def file_upload(self, filename: str) -> str | None:
         """
         Perform a file upload into the NIOS Grid.
 
@@ -215,6 +213,9 @@ class NiosFileopMixin:
         upload_url = obj.get("url")
         token = obj.get("token")
 
+        if not token or not upload_url:
+            raise ValueError("Invalid token or upload URL")
+
         # specify a file handle for the file data to be uploaded
         with open(os.path.join(path, filename), "rb") as fh:
             # reset to top of the file
@@ -222,9 +223,7 @@ class NiosFileopMixin:
             upload_file = {"file": fh.read()}
 
             # Upload the contents of the CSV file
-            logging.info(
-                "step 2 - post the files using the upload_url provided"
-            )
+            logging.info("step 2 - post the files using the upload_url provided")
             try:
                 self.__upload_file(upload_url, upload_file)
             except httpx.TimeoutException as exc:
@@ -236,8 +235,7 @@ class NiosFileopMixin:
             except httpx.RequestError as exc:
                 logging.error(f"Request error: {exc}")
                 raise WapiRequestException(exc) from exc
-            else:
-                return token
+        return token
 
     def upload_certificate(
         self,
@@ -270,7 +268,7 @@ class NiosFileopMixin:
             "token": token,
         }
         try:
-            res = self.post(
+            res = self.post(  # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadcertificate"},
                 json=payload,
@@ -304,6 +302,8 @@ class NiosFileopMixin:
             httpx.RequestError: If an error occurs while making HTTP requests.
         """
         token = self.file_upload(filename=csv_import_file)
+        if not token:
+            raise ValueError("Invalid token")
 
         # submit task to CSV Job Manager
         logging.info(
@@ -312,9 +312,7 @@ class NiosFileopMixin:
             csv_import_file,
         )
         try:
-            csvtask = self.__csv_import(
-                task_operation.upper(), token, exit_on_error
-            )
+            csvtask = self.__csv_import(task_operation.upper(), token, exit_on_error)
         except httpx.RequestError as exc:
             logging.error(exc)
             raise WapiRequestException(exc)
@@ -372,7 +370,7 @@ class NiosFileopMixin:
         _ref = csvtask["csv_import_task"]["_ref"]
         logging.debug("Checking status of csvimporttask %s", _ref)
         try:
-            res = self.get(_ref)
+            res = self.get(_ref)  # ty:ignore[unresolved-attribute]
             res.raise_for_status()
         except httpx.RequestError as exc:
             logging.error(exc)
@@ -400,7 +398,7 @@ class NiosFileopMixin:
         logging.debug("fetching csv-errors file for job id %s", job_id)
         payload = {"import_id": job_id}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_error_log"},
                 json=payload,
@@ -454,7 +452,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "downloadcertificate"},
                 json=payload,
@@ -537,7 +535,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "generateselfsignedcert"},
                 json=payload,
@@ -621,7 +619,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "generatecsr"},
                 json=payload,
@@ -679,7 +677,7 @@ class NiosFileopMixin:
         logging.debug("json payload %s", payload)
 
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "get_log_files"},
                 json=payload,
@@ -694,9 +692,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_support_bundle(
         self,
@@ -749,7 +745,7 @@ class NiosFileopMixin:
             payload["remote_url"] = remote_url
         logging.debug(pprint.pformat(payload))
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "get_support_bundle"},
                 json=payload,
@@ -765,9 +761,7 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def grid_backup(self, filename: Optional[str] = None) -> None:
         """
@@ -795,7 +789,8 @@ class NiosFileopMixin:
         download_url = res.get("url")
 
         logging.info("step 2 - saving backup to %s", filename)
-        self.file_download(token=token, url=download_url, filename=filename)
+        if token and download_url:
+            self.file_download(token=token, url=download_url, filename=filename)
 
     def grid_restore(
         self,
@@ -814,6 +809,8 @@ class NiosFileopMixin:
 
         """
         token = self.file_upload(filename=filename)
+        if not token:
+            raise ValueError("Failed to upload file - no token received")
 
         # Execute the restore
         logging.info("step 3 - execute the grid restore")
@@ -829,7 +826,7 @@ class NiosFileopMixin:
         member: str,
         conf_type: MemberDataType,
         filename: Optional[str] = None,
-        remote_url: str = None,
+        remote_url: str | None = None,
     ) -> None:
         """
         Fetch member configuration file for given service type.
@@ -844,7 +841,6 @@ class NiosFileopMixin:
             A string representing the downloaded file.
 
         """
-        conf_type = conf_type.upper()
         logging.info(
             "fetching %s config file for grid member %s",
             conf_type,
@@ -854,7 +850,7 @@ class NiosFileopMixin:
         if remote_url:
             payload["remote_url"] = remote_url
         try:
-            res = self.post(
+            res = self.post(  # type:ignore[attr-defined]
                 "fileop",
                 params={"_function": "getmemberdata"},
                 json=payload,
@@ -869,16 +865,14 @@ class NiosFileopMixin:
         download_url = obj.get("url")
         download_token = obj.get("token")
 
-        self.file_download(
-            token=download_token, url=download_url, filename=filename
-        )
+        self.file_download(token=download_token, url=download_url, filename=filename)
 
     def get_lease_history(
         self,
         member: str,
-        start_time: int = None,
-        end_time: int = None,
-        remove_url: str = None,
+        start_time: int | None = None,
+        end_time: int | None = None,
+        remove_url: str | None = None,
     ) -> None:
         """
         fetch DHCP lease history files from a NIOS Grid Member
@@ -905,7 +899,7 @@ class NiosFileopMixin:
         if remove_url is not None:
             payload["remove_url"] = remove_url
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "getleasehistoryfiles"},
                 json=payload,
@@ -950,7 +944,7 @@ class NiosFileopMixin:
 
         # start the CSV task in job manager
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "csv_import"},
                 json=payload,
@@ -969,7 +963,7 @@ class NiosFileopMixin:
         header = {"Content-type": "application/json"}
         payload = {"token": token}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "downloadcomplete"},
                 json=payload,
@@ -991,21 +985,21 @@ class NiosFileopMixin:
         download_url = self.__update_url(url=download_url)
         header = {"Content-type": "application/force-download"}
         logging.info(download_url)
-        self.conn.verify = self.ssl_verify
-        with self.conn.stream(
+        self.conn.verify = self.ssl_verify  # ty:ignore[unresolved-attribute]
+        with self.conn.stream(  # ty:ignore[unresolved-attribute]
             "GET",
             download_url,
             headers=header,
         ) as res:
             res.raise_for_status()
-            with open(filename, "wb") as file_out:
+            with open(file=filename, mode="wb") as file_out:  # ty:ignore[no-matching-overload]
                 for chunk in res.iter_bytes(chunk_size=1024):
                     file_out.write(chunk)
 
     def __getgriddata(self, payload: dict) -> dict:
         headers = {"content-type": "application/json"}
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "getgriddata"},
                 json=payload,
@@ -1035,7 +1029,7 @@ class NiosFileopMixin:
 
         # start the restore
         try:
-            res = self.post(
+            res = self.post(  # ty:ignore[unresolved-attribute]
                 "fileop",
                 params={"_function": "restoredatabase"},
                 json=payload,
@@ -1063,7 +1057,7 @@ class NiosFileopMixin:
         upload_url = self.__update_url(upload_url)
         logging.debug(upload_url)
         try:
-            res = self.conn.post(
+            res = self.conn.post(  # ty:ignore[unresolved-attribute]
                 upload_url,
                 files=upload_file,
                 timeout=None,
@@ -1078,7 +1072,7 @@ class NiosFileopMixin:
         headers = {"content-type": "application/json"}
         payload = {"filename": filename}
         try:
-            res = self.post(
+            res = self.post(  # pyright: ignore[reportAttributeAccessIssue]
                 "fileop",
                 params={"_function": "uploadinit"},
                 headers=headers,

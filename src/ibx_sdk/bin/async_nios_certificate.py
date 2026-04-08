@@ -23,7 +23,7 @@ from typing import Literal
 import click
 from click_option_group import optgroup
 
-from ibx_sdk.logger.ibx_logger import init_logger, increase_log_level
+from ibx_sdk.logger.ibx_logger import increase_log_level, init_logger
 from ibx_sdk.nios.asynchronous.gift import AsyncGift
 from ibx_sdk.nios.exceptions import WapiRequestException
 
@@ -35,20 +35,17 @@ log = init_logger(
     max_size=100000,
     num_logs=1,
 )
-ALGORITHMS = click.Choice(["SHA-256", "SHA-384", "SHA-512"])
-USAGES = click.Choice(
-    ["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
-)
-ALL_USAGES = click.Choice(
-    [
-        "ADMIN",
-        "CAPTIVE_PORTAL",
-        "SFNT_CLIENT_CERT",
-        "IFMAP_DHCP",
-        "EAP_CA",
-        "TAE_CA",
-    ]
-)
+KEY_SIZES = Literal[1024, 2048, 4096]
+ALGORITHMS = Literal["SHA-256", "SHA-384", "SHA-512"]
+USAGES = Literal["ADMIN", "CAPTIVE_PORTAL", "SFNT_CLIENT_CERT", "IFMAP_DHCP"]
+ALL_USAGES = Literal[
+    "ADMIN",
+    "CAPTIVE_PORTAL",
+    "SFNT_CLIENT_CERT",
+    "IFMAP_DHCP",
+    "EAP_CA",
+    "TAE_CA",
+]
 wapi = AsyncGift()
 help_text = """
 NIOS SSL Certificate Tools
@@ -69,12 +66,8 @@ def cli():
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-f",
     "--filename",
@@ -108,7 +101,7 @@ def upload(
     filename: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: str,
+    certificate_usage: USAGES,
     debug: bool,
 ):
     if debug:
@@ -141,17 +134,13 @@ def upload(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "--certificate-usage",
     default="ADMIN",
-    type=ALL_USAGES,
+    type=USAGES,
     help="Certificate Usage",
 )
 @optgroup.option(
@@ -173,13 +162,11 @@ def download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: Literal[str],
+    certificate_usage: USAGES,
     debug: bool,
 ):
     asyncio.run(
-        async_download(
-            grid_mgr, member, username, wapi_ver, certificate_usage, debug
-        )
+        async_download(grid_mgr, member, username, wapi_ver, certificate_usage, debug)
     )
 
 
@@ -188,7 +175,7 @@ async def async_download(
     member: str,
     username: str,
     wapi_ver: str,
-    certificate_usage: Literal[str],
+    certificate_usage: USAGES,
     debug: bool,
 ):
     if debug:
@@ -219,15 +206,11 @@ async def async_download(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.option(
     "-d",
     "--days-valid",
@@ -282,12 +265,12 @@ def selfsign(
     days_valid: int,
     username: str,
     wapi_ver: str,
-    algorithm: str,
-    certificate_usage: str,
+    algorithm: ALGORITHMS,
+    certificate_usage: USAGES,
     comment: str,
     country: str,
     email: str,
-    key_size: int,
+    key_size: KEY_SIZES,
     locality: str,
     organization: str,
     ou: str,
@@ -310,16 +293,16 @@ def selfsign(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
-    subject_alt_names = san.split(",") if san else None
-    if subject_alt_names:
-        new_list = []
-        for san in subject_alt_names:
-            san_type, san_value = san.split("/")
+    if not san:
+        subject_alt_names = None
+    else:
+        subject_alt_names = []
+        for item in san.split(","):
+            san_type, san_value = item.split("/")
             if san_type not in ["DNS", "IP", "URI", "EMAIL"]:
                 log.error(f"Invalid subject alternative name type: {san_type}")
                 sys.exit(1)
-            new_list.append({"type": san_type, "value": san_value})
-        subject_alt_names = new_list
+            subject_alt_names.append({"type": san_type, "value": san_value})
 
     try:
         wapi.generate_selfsigned_cert(
@@ -348,15 +331,11 @@ def selfsign(
 
 @cli.command()
 @optgroup.group("Required Parameters")
-@optgroup.option(
-    "-g", "--grid-mgr", required=True, help="Infoblox Grid Manager"
-)
+@optgroup.option("-g", "--grid-mgr", required=True, help="Infoblox Grid Manager")
 @optgroup.option(
     "-n", "--common-name", required=True, help="Common Name for the certificate"
 )
-@optgroup.option(
-    "-m", "--member", required=True, help="Member for the certificate"
-)
+@optgroup.option("-m", "--member", required=True, help="Member for the certificate")
 @optgroup.group("Optional Parameters")
 @optgroup.option(
     "-u",
@@ -404,12 +383,12 @@ def gencsr(
     member: str,
     username: str,
     wapi_ver: str,
-    algorithm: str,
-    certificate_usage: str,
+    algorithm: ALGORITHMS,
+    certificate_usage: USAGES,
     comment: str,
     country: str,
     email: str,
-    key_size: int,
+    key_size: KEY_SIZES,
     locality: str,
     organization: str,
     ou: str,
@@ -432,16 +411,16 @@ def gencsr(
     else:
         log.info("connected to Infoblox grid manager %s", wapi.grid_mgr)
 
-    subject_alt_names = san.split(",") if san else None
-    if subject_alt_names:
-        new_list = []
-        for san in subject_alt_names:
-            san_type, san_value = san.split("/")
+    if not san:
+        subject_alt_names = None
+    else:
+        subject_alt_names = []
+        for item in san.split(","):
+            san_type, san_value = item.split("/")
             if san_type not in ["DNS", "IP", "URI", "EMAIL"]:
                 log.error(f"Invalid subject alternative name type: {san_type}")
                 sys.exit(1)
-            new_list.append({"type": san_type, "value": san_value})
-        subject_alt_names = new_list
+            subject_alt_names.append({"type": san_type, "value": san_value})
 
     try:
         wapi.generate_csr(

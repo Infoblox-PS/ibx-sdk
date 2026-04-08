@@ -1,6 +1,6 @@
 import logging
 import ssl
-from typing import Union, Optional, List, Any
+from typing import Any, List, Optional, Union
 
 import httpx
 
@@ -15,9 +15,9 @@ from ibx_sdk.nios.service import NiosServiceMixin
 class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     def __init__(
         self,
-        grid_mgr: str = None,
-        wapi_ver: str = "2.5",
-        ssl_verify: Union[bool, str] = False,
+        grid_mgr: str | None = None,
+        wapi_ver: str | None = "2.5",
+        ssl_verify: bool | str | None = False,
     ):
         self.grid_mgr = grid_mgr
         self.wapi_ver = wapi_ver
@@ -42,9 +42,9 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
 
     async def connect(
         self,
-        username: str = None,
-        password: str = None,
-        certificate: str = None,
+        username: str | None = None,
+        password: str | None = None,
+        certificate: str | None = None,
     ):
         if not self.url:
             logging.error("invalid url %s - unable to connect!", self.url)
@@ -60,8 +60,11 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     async def __basic_auth_request(self, username: str, password: str):
         auth = httpx.BasicAuth(username, password)
         ctx = ssl.create_default_context()
-        if self.ssl_verify:
+        if isinstance(self.ssl_verify, str):
             ctx.load_verify_locations(cafile=self.ssl_verify)
+        elif self.ssl_verify:
+            ctx.check_hostname = True
+            ctx.verify_mode = ssl.CERT_REQUIRED
         else:
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
@@ -80,8 +83,11 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     async def __certificate_auth_request(self, certificate: str):
         ctx = ssl.create_default_context()
         ctx.load_cert_chain(certfile=certificate)
-        if self.ssl_verify:
+        if isinstance(self.ssl_verify, str):
             ctx.load_verify_locations(cafile=self.ssl_verify)
+        elif self.ssl_verify:
+            ctx.check_hostname = True
+            ctx.verify_mode = ssl.CERT_REQUIRED
         else:
             ctx.check_hostname = False
             ctx.verify_mode = ssl.CERT_NONE
@@ -100,18 +106,14 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     async def get(
         self, wapi_object: str, params: Optional[dict] = None, **kwargs
     ) -> httpx.Response:
-        res = await self.conn.get(
-            f"{self.url}/{wapi_object}", params=params, **kwargs
-        )
+        res = await self.conn.get(f"{self.url}/{wapi_object}", params=params, **kwargs)
         res.raise_for_status()
         return res
 
     async def getone(
         self, wapi_object: str, params: Optional[dict] = None, **kwargs
     ) -> str:
-        res = await self.conn.get(
-            f"{self.url}/{wapi_object}", params=params, **kwargs
-        )
+        res = await self.conn.get(f"{self.url}/{wapi_object}", params=params, **kwargs)
         res.raise_for_status()
         data = res.json()
         if len(data) != 1:
@@ -121,9 +123,7 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
     async def post(
         self, wapi_object: str, json: Optional[dict] = None, **kwargs
     ) -> httpx.Response:
-        res = await self.conn.post(
-            f"{self.url}/{wapi_object}", json=json, **kwargs
-        )
+        res = await self.conn.post(f"{self.url}/{wapi_object}", json=json, **kwargs)
         res.raise_for_status()
         return res
 
@@ -133,9 +133,7 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
         data: Optional[Union[dict, str]] = None,
         **kwargs,
     ) -> httpx.Response:
-        res = await self.conn.put(
-            f"{self.url}/{wapi_object_ref}", data=data, **kwargs
-        )
+        res = await self.conn.put(f"{self.url}/{wapi_object_ref}", data=data, **kwargs)
         res.raise_for_status()
         return res
 
@@ -178,11 +176,11 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
             setattr(self, "wapi_ver", max_wapi_ver)
 
     async def get_paginated(
-            self,
-            wapi_object: str,
-            limit: int = 1000,
-            params: Optional[dict] = None,
-            **kwargs: Any
+        self,
+        wapi_object: str,
+        limit: int = 1000,
+        params: Optional[dict] = None,
+        **kwargs: Any,
     ) -> List[dict]:
         """
         Fetches paginated data from the WAPI API.
@@ -208,11 +206,13 @@ class AsyncGift(httpx.AsyncClient, NiosServiceMixin, NiosFileopMixin):
         results = []
         params = params.copy() if params else {}
 
-        params.update({
-            "_paging": 1,
-            "_return_as_object": 1,
-            "_max_results": limit,
-        })
+        params.update(
+            {
+                "_paging": 1,
+                "_return_as_object": 1,
+                "_max_results": limit,
+            }
+        )
 
         url = f"{self.url}/{wapi_object}"
         response = None
