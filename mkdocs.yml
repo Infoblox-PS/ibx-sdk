@@ -33,6 +33,7 @@ copyright: |
 
 # Configuration
 theme:
+  variant: classic
   name: material
   sticky_navigation: true
   features:
