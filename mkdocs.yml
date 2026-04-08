@@ -58,19 +58,21 @@ theme:
   palette:
     - media: "(prefers-color-scheme)"
       toggle:
-        icon: material/link
+        icon: lucide/sun-moon
         name: Switch to light mode
+        
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: black
       toggle:
-        icon: material/toggle-switch
+        icon: lucide/sun
         name: Switch to dark mode
+        
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: black
       toggle:
-        icon: material/toggle-switch-off
+        icon: lucide/moon
         name: Switch to system preference
   font:
     text: Lato
